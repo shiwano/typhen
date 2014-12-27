@@ -114,13 +114,6 @@ And you can create a custom plugin in typhenfile.js.
 
 ```js
 module.exports = function(typhen, Handlebars) {
-  Handlebars.registerHelper('link', function(text, url) {
-    text = Handlebars.Utils.escapeExpression(text);
-    url = Handlebars.Utils.escapeExpression(url);
-    var result = '[' + text + '](' + url + ')';
-    return new Handlebars.SafeString(result);
-  });
-
   var plugin = typhen.createPlugin({
     pluginDirectory: __dirname,
     defaultLibFileName: 'lib.d.ts',
