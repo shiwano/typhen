@@ -2,7 +2,6 @@
 
 import _ = require('lodash');
 import inflection = require('inflection');
-import chalk = require('chalk');
 import Handlebars = require('handlebars');
 import Swag = require('swag');
 
