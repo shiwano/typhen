@@ -21,7 +21,7 @@ TypeArguments is empty.
 ## Properties
 
 Name|TypeName|IsOptional|Tags|Comment
----|---|---|---
+---|---|---|---|---
 color|Color|false|default:Color.Red |Default color is red.
 center|Point|false||
 margin|number|true||

@@ -21,7 +21,7 @@ TypeArguments is empty.
 ## Properties
 
 Name|TypeName|IsOptional|Tags|Comment
----|---|---|---
+---|---|---|---|---
 x|number|false||
 y|number|false||
 

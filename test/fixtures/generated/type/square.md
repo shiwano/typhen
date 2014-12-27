@@ -21,7 +21,7 @@ TypeArguments is empty.
 ## Properties
 
 Name|TypeName|IsOptional|Tags|Comment
----|---|---|---
+---|---|---|---|---
 center|Point|false||
 margin|number|true||
 size|integer|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).

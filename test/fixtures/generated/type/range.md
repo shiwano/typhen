@@ -23,7 +23,7 @@ TypeArguments is empty.
 ## Properties
 
 Name|TypeName|IsOptional|Tags|Comment
----|---|---|---
+---|---|---|---|---
 start|T|false||
 end|T|false||
 
