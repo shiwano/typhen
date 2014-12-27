@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var _ = require('lodash'),
+    fs = require('fs'),
+    path = require('path'),
+    nopt = require('nopt'),
+    here = require('here').here,
+    knownOptions = {
+      plugin: String,
+      dest: path,
+      help: Boolean,
+      version: Boolean,
+      __main: path, // For test
+    },
+    shortHands = {
+      p: '--plugin',
+      d: '--dest',
+      h: '--help',
+      v: '--version',
+    },
+    options = nopt(knownOptions, shortHands, process.argv, 2);
+
+if (options.help) {
+  console.info(
+    'Version:\n  ' + require('../package.json').version + '\n\n' +
+    here(/*
+      Usage:
+        typhen [options] [typhenfile or declaration-source-file]
+
+      Examples:
+        typhen
+        typhen typhenfile.js
+        typhen --plugin typhen-json-schema --dest generated definitions.d.ts
+
+      Options:
+        -p, --plugin   Specify plugin name or file path.
+        -d, --dest     Generate files to the directory.
+        -h, --help     Print this message.
+        -v, --version  Print the package's version.*/).unindent());
+   return;
+}
+
+if (options.version) {
+  console.info('v' + require('../package.json').version);
+  return;
+}
+
+if (options.argv.remain.length === 0) {
+  if (fs.existsSync('./typhenfile.js')) {
+    require('./typhenfile.js')();
+  } else {
+    console.info('No typhenfile found');
+  }
+} else {
+  var fileName = path.resolve(options.argv.remain[0]);
+
+  if (fs.existsSync(fileName)) {
+    var typhen = _.isString(options.__main) ? require(options.__main) : require('../lib/index.js');
+
+    if (_.contains(fileName, 'typhenfile.js')) {
+      typhen.runByTyphenfile(fileName);
+    } else if (_.isString(options.dest) && _.isString(options.plugin)) {
+      var plugin = typhen.loadPlugin(options.plugin);
+      typhen.run({
+        plugin: plugin,
+        src: fileName,
+        dest: options.dest
+      });
+    } else {
+      console.info('Insufficient arguments');
+    }
+  } else {
+    console.info('Not found the file: ' + fileName);
+  }
+}

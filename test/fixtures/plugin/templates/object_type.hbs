@@ -1,0 +1,53 @@
+# {{fullName}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+ObjectType
+
+## Properties
+
+{{#empty properties}}
+Properties is empty.
+{{else}}
+Name|TypeName|IsOptional|Comment
+---|---|---|---
+{{#each properties}}
+{{name}}|{{type.name}}|{{isOptional}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## Methods
+
+{{#empty methods}}
+Methods is empty.
+{{else}}
+Name|Parameter(TypeName - IsOptional)|ReturnTypeName|IsOptional|Comment
+---|---|---|---|---
+{{#each methods}}
+{{#each callSignatures}}
+{{../name}}|{{#each parameters}}{{name}}({{type.name}} - {{isOptional}}) {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{/each}}
+{{/each}}
+{{/empty}}
+
+## StringIndexType
+
+{{#if stringIndexType}}
+{{stringIndexType.name}}
+{{else}}
+StringIndexType is undefined.
+{{/if}}
+
+## NumberIndexType
+
+{{#if numberIndexType}}
+{{numberIndexType.name}}
+{{else}}
+NumberIndexType is undefined.
+{{/if}}

@@ -1,0 +1,19 @@
+# {{fullName}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+Enum
+
+## Members
+
+Name|Value|Comment
+---|---|---
+{{#each members}}
+{{name}}|{{value}}|{{comment}}
+{{/each}}

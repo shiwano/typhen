@@ -1,0 +1,19 @@
+# {{fullName}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+Function
+
+## CallSignatures
+
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
+---|---|---|---|---
+{{#each callSignatures}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{/each}}

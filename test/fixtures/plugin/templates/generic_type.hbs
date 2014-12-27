@@ -1,0 +1,87 @@
+# {{fullName}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+GenericType
+
+## BaseTypes
+
+{{#empty baseTypes}}
+BaseTypes is empty.
+{{else}}
+{{#each baseTypes}}
+* {{name}}
+{{/each}}
+{{/empty}}
+
+## TypeParameters
+
+{{#empty typeParameters}}
+TypeParameters is empty.
+{{else}}
+Name|ConstraintTypeName|Comment
+---|---|---
+{{#each typeParameters}}
+{{name}}|{{constraint.name}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## TypeArugments
+
+{{#empty typeArguments}}
+TypeArguments is empty.
+{{else}}
+Name|Comment
+---|---
+{{#each typeArguments}}
+{{name}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## Properties
+
+{{#empty properties}}
+Properties is empty.
+{{else}}
+Name|TypeName|IsOptional|Tags|Comment
+---|---|---|---
+{{#each properties}}
+{{name}}|{{type.name}}|{{isOptional}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## Methods
+
+{{#empty methods}}
+Methods is empty.
+{{else}}
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
+---|---|---|---|---
+{{#each methods}}
+{{#each callSignatures}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{/each}}
+{{/each}}
+{{/empty}}
+
+## StringIndexType
+
+{{#if stringIndexType}}
+{{stringIndexType.name}}
+{{else}}
+StringIndexType is undefined.
+{{/if}}
+
+## NumberIndexType
+
+{{#if numberIndexType}}
+{{numberIndexType.name}}
+{{else}}
+NumberIndexType is undefined.
+{{/if}}

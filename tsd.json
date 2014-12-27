@@ -1,0 +1,48 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "node/node.d.ts": {
+      "commit": "9d2478b8a80febe1d89a5d35cdf6051d121f5437"
+    },
+    "mocha/mocha.d.ts": {
+      "commit": "9d2478b8a80febe1d89a5d35cdf6051d121f5437"
+    },
+    "sinon/sinon.d.ts": {
+      "commit": "9d2478b8a80febe1d89a5d35cdf6051d121f5437"
+    },
+    "assert/assert.d.ts": {
+      "commit": "44a5ac12c6d919fba2c088510592d2b5416bf209"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "b0b4af1223f4f9449012688fa0c18f20cc3267e7"
+    },
+    "inflection/inflection.d.ts": {
+      "commit": "bba33bcb0b363ae41db8517a09d1a4d07828616b"
+    },
+    "handlebars/handlebars.d.ts": {
+      "commit": "bd9a1922e44ddf35953587a92c5caf4242bf6ea5"
+    },
+    "mkdirp/mkdirp.d.ts": {
+      "commit": "23a67881980a84b34bf0be9e69b93584e0093618"
+    },
+    "glob/glob.d.ts": {
+      "commit": "23a67881980a84b34bf0be9e69b93584e0093618"
+    },
+    "rimraf/rimraf.d.ts": {
+      "commit": "23a67881980a84b34bf0be9e69b93584e0093618"
+    },
+    "minimatch/minimatch.d.ts": {
+      "commit": "23a67881980a84b34bf0be9e69b93584e0093618"
+    },
+    "chalk/chalk.d.ts": {
+      "commit": "c8f3fe257908ae25fde1f1f27139716a3e95c92a"
+    },
+    "swag/swag.d.ts": {
+      "commit": "a8e45e394dda6e11cfd648233bc53e3934fde555"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "lib/*.js": {
+    "type": "lib",
+    "alternate": "src/{}.ts"
+  },
+  "src/*.ts": {
+    "type": "src",
+    "alternate": "test/src/{}_test.ts"
+  },
+  "test/src/*_test.ts": {
+    "type": "test",
+    "alternate": "src/{}.ts"
+  },
+  "README.md": {
+    "type": "doc"
+  }
+}
