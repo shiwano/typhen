@@ -1,6 +1,6 @@
 # typhen [![Build Status](https://secure.travis-ci.org/shiwano/typhen.png?branch=master)](http://travis-ci.org/shiwano/typhen) [![npm version](https://badge.fury.io/js/typhen.svg)](http://badge.fury.io/js/typhen)
 
-Generates the code from the TypeScript declaration source files.
+> Generates the code from the TypeScript declaration source files.
 
 For example, from the TypeScript definition:
 
@@ -11,7 +11,7 @@ interface Foo {
 }
 ```
 
-Generates the code in another language like this.
+Generates the code in another language like this:
 
 ```cs
 class Foo {
@@ -65,7 +65,7 @@ A Sample is [here](test/fixtures/plugin/typhen-test.js)
 The typhen has used [Handlebars template engine](http://handlebarsjs.com/) to render the code. So you can use the following built-in helpers and custom helpers which are defined in the typhenfile.js or the plugin.
 
 #### Swag library helpers
-See [Documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
+See [documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
 
 #### underscore
 Transforms a string to underscore.
