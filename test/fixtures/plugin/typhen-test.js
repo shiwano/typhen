@@ -1,16 +1,19 @@
 'use strict';
 
 module.exports = function(typhen, Handlebars) {
-  Handlebars.registerHelper('link', function(text, url) {
-    text = Handlebars.Utils.escapeExpression(text);
-    url = Handlebars.Utils.escapeExpression(url);
-    var result = '[' + text + '](' + url + ')';
-    return new Handlebars.SafeString(result);
-  });
-
   return typhen.createPlugin({
     pluginDirectory: __dirname,
     defaultLibFileName: 'lib.d.ts',
+    handlebarsOptions: {
+      helpers: {
+        'link': function(text, url) {
+          text = Handlebars.Utils.escapeExpression(text);
+          url = Handlebars.Utils.escapeExpression(url);
+          var result = '[' + text + '](' + url + ')';
+          return new Handlebars.SafeString(result);
+        }
+      }
+    },
 
     generate: function(types, generator) {
       generator.generateUnlessExist('templates/README.md', 'README.md');

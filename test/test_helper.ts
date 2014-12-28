@@ -78,7 +78,7 @@ export function createGenerator(): Generator  {
     'enum.hbs': '{{name}}\n{{#each members}}{{name}}: {{value}}\n{{/each}}',
     'README.md': 'This is README.'
   });
-  return new Generator('generated', env, pluginEnv);
+  return new Generator('generated', env, pluginEnv, null);
 }
 
 export function createRunner(): Runner.Runner {

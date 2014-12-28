@@ -19,6 +19,13 @@ export interface IDisallowOptions {
   property?: boolean;
 }
 
+// For details, see: http://handlebarsjs.com/execution.html
+export interface IHandlebarsOptions {
+  data?: any;
+  helpers?: { [helperName: string]: (...args: any[]) => any };
+  partials: { [partialName: string]: any }
+}
+
 export interface IPlugin {
   pluginDirectory: string;
   env?: IEnvironment;
@@ -27,6 +34,7 @@ export interface IPlugin {
   aliases?: Runner.IAliasesOptions;
   newLine?: string;
   namespaceSeparator?: string;
+  handlebarsOptions?: IHandlebarsOptions;
   generate(types: Symbol.Type[], generator: Generator): void;
 }
 
@@ -38,6 +46,7 @@ export class Plugin implements IPlugin {
   public aliases: Runner.IAliasesOptions = {};
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';
+  public handlebarsOptions: IHandlebarsOptions = null;
 
   constructor(args: IPlugin) {
     _.assign(this, args);

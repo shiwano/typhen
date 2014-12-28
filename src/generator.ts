@@ -7,6 +7,7 @@ import Swag = require('swag');
 
 import IEnvironment = require('./environments/i_environment');
 import Symbol = require('./symbol');
+import Plugin = require('./plugin');
 import HandlebarsHelpers = require('./handlebars_helpers');
 
 Swag.registerHelpers(Handlebars);
@@ -20,6 +21,7 @@ class Generator {
       public outputDirectory: string,
       public env: IEnvironment,
       public pluginEnv: IEnvironment,
+      private handlebarsOptions: Plugin.IHandlebarsOptions,
       private onGenerate?: (fileName: string) => void) {
   }
 
@@ -36,7 +38,7 @@ class Generator {
     }
 
     var data = context !== null && /^.+\.hbs$/.test(src) ?
-      this.getTemplate(src)(context) :
+      this.getTemplate(src)(context, this.handlebarsOptions) :
       this.getFile(src);
 
     if (context instanceof Symbol.Type) {

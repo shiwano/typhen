@@ -46,10 +46,11 @@ export class Runner {
     });
 
     console.info(chalk.underline('Generating files'));
-    var generator = new Generator(this.config.dest, this.config.env, this.plugin.env, (fileName) => {
-      fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
-      console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' generated.');
-    });
+    var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
+        this.plugin.handlebarsOptions, (fileName) => {
+          fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
+          console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' generated.');
+        });
     this.plugin.generate(parser.types, generator);
 
     console.info('\n' + chalk.green('✓') + ' Finished successfully!');
