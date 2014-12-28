@@ -3,15 +3,10 @@
 import _ = require('lodash');
 import inflection = require('inflection');
 import Handlebars = require('handlebars');
-import Swag = require('swag');
 
 import IEnvironment = require('./environments/i_environment');
 import Symbol = require('./symbol');
 import Plugin = require('./plugin');
-import HandlebarsHelpers = require('./handlebars_helpers');
-
-Swag.registerHelpers(Handlebars);
-HandlebarsHelpers.registerHelpers(Handlebars);
 
 class Generator {
   private fileDataCache: { [index: string]: string } = {};

@@ -8,6 +8,12 @@ import Config = require('./config');
 import Runner = require('./runner');
 import Symbol = require('./symbol');
 
+import Swag = require('swag');
+import HandlebarsHelpers = require('./handlebars_helpers');
+
+Swag.registerHelpers(Handlebars);
+HandlebarsHelpers.registerHelpers(Handlebars);
+
 module Typhen {
   export import SymbolFlags = Symbol.SymbolFlags;
 
