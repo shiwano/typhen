@@ -106,6 +106,13 @@ module.exports = function(typhen, Handlebars) {
     aliases: {                      // Optional. Default value is {}.
       '^(.+)Class$': '$1'
     },
+    handlebarsOptions: {            // Optional. Default value is null.
+      helpers: {                    // For details, see: http://handlebarsjs.com/execution.html
+        'baz': function(str) {
+          return str + '-baz';
+        }
+      }
+    },
 
     generate: function(types, generator) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
@@ -131,7 +138,7 @@ module.exports = function(typhen, Handlebars) {
 ```
 
 ### Templating
-The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following built-in helpers and custom helpers which are defined in the typhenfile.js or a plugin.
+The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following global helpers and custom helpers which are defined in the typhenfile.js or a plugin.
 
 #### Swag Helpers
 See the [documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
