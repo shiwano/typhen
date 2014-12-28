@@ -7,8 +7,10 @@ import Symbol = require('../../src/symbol');
 
 describe('TypeScriptParser', () => {
   var instance: TypeScriptParser;
+
   var definitionPath = 'test/fixtures/typings/definitions.d.ts';
   var colorPath = 'test/fixtures/typings/color/color.d.ts';
+
   var runner = helper.createRunner();
 
   beforeEach(() => {
@@ -16,18 +18,44 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#sourceFiles', () => {
-    it('should return loaded instances of TypeScript.Document', () => {
+    it('should return loaded instances of ts.SourceFile', () => {
       var expected = [colorPath, definitionPath];
       assert.deepEqual(instance.sourceFiles.map(d => d.filename), expected);
     });
   });
 
   describe('#parse', () => {
-    it('should return all Typhen types', () => {
-      instance.parse();
-      assert.strictEqual(instance.types.length, 20);
-      instance.types.forEach(type => {
-        assert(type instanceof Symbol.Type);
+    context('in general', () => {
+      it('should return all Typhen types', () => {
+        instance.parse();
+        assert.strictEqual(instance.types.length, 20);
+        instance.types.forEach(type => {
+          assert(type instanceof Symbol.Type);
+        });
+      });
+    });
+    context('when it has a source file', () => {
+      beforeEach(() => {
+        var invalidPath = 'test/fixtures/typings/invalid.ts';
+        instance = new TypeScriptParser([invalidPath], runner);
+      });
+
+      it('should raise a error', () => {
+        assert.throws(() => {
+          instance.parse();
+        });
+      });
+    });
+    context('when it has a declaration source file which has error diagnostics', () => {
+      beforeEach(() => {
+        var invalidPath = 'test/fixtures/typings/invalid.d.ts';
+        instance = new TypeScriptParser([invalidPath], runner);
+      });
+
+      it('should raise a error', () => {
+        assert.throws(() => {
+          instance.parse();
+        });
       });
     });
   });

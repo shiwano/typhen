@@ -21,9 +21,6 @@ class TypeScriptParser {
   ];
 
   constructor(fileNames: string[], private runner: Runner.Runner) {
-    if (_.any(fileNames, f => f.match(/.*\.d\.ts$/) === null)) {
-      throw new Error('Not supported *.ts file: ' + fileNames.join(','));
-    }
     this.program = ts.createProgram(fileNames, runner.compilerOptions, runner.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
   }
@@ -38,6 +35,15 @@ class TypeScriptParser {
   }
 
   public parse(): Symbol.Type[] {
+    var invalidSourceFileNames = this.sourceFiles.filter(s => s.filename.match(/.*\.d\.ts$/) === null);
+    if (invalidSourceFileNames.length > 0) {
+      throw new Error('Unsupported *.ts file: ' + invalidSourceFileNames.join(', '));
+    }
+    this.program.getDiagnostics()
+      .filter(d => d.category === ts.DiagnosticCategory.Error)
+      .forEach(d => {
+        throw new Error([d.file.filename, ' (', d.start, ',', d.length, '): ', d.messageText].join(''));
+      });
     this.sourceFiles.forEach(s => this.parseSourceFile(s));
     return this.types;
   }

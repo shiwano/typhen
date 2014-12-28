@@ -14,7 +14,7 @@ var paths = {
   test: 'test/{src,integrations}/**/*_test.ts',
   dest: 'lib/',
   testDest: '.tmp/',
-  typescriptFiles: '{src,test}/**/*.ts'
+  typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts']
 };
 
 var tsProject = plugins.typescript.createProject({
