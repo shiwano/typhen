@@ -110,7 +110,7 @@ module.exports = function(typhen) {
 };
 ```
 
-And you can create a custom plugin in typhenfile.js.
+You can create a custom plugin in typhenfile.js.
 
 ```js
 module.exports = function(typhen, Handlebars) {
@@ -146,6 +146,10 @@ module.exports = function(typhen, Handlebars) {
   });
 };
 ```
+
+## TypeScript Version
+
+1.3.0
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).
