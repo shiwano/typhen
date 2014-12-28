@@ -2,7 +2,7 @@
 
 > Generates the code from the TypeScript declaration source files.
 
-For example, from the TypeScript definition:
+The definition and the template given:
 
 ```ts
 interface Foo {
@@ -11,7 +11,22 @@ interface Foo {
 }
 ```
 
-Generates the code in another language like this:
+```hbs
+class {{name}} {
+  {{#each properties}}
+  public {{type}} {{upperCamelCase name}} { get; set; }
+  {{/each}}
+  {{#each methods}}
+  {{#each callSignatures}}
+  public {{returnType}} {{upperCamelCase ../name}}({{#each parameters}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}): {
+    // do something
+  }
+  {{/each}}
+  {{/each}}
+}
+```
+
+Will generate this below:
 
 ```cs
 class Foo {
@@ -31,7 +46,7 @@ If typhenfile.js exists in the current directory:
 $ typhen
 ```
 
-else:
+Otherwise:
 
 ```sh
 $ typhen foo/bar/typhenfile.js
@@ -47,76 +62,50 @@ $ typhen --plugin typhen-json-schema --dest generated definitions.d.ts
 
 The typhenfile.js is a valid JavaScript file that belongs in the root directory of your project, and should be committed with your project source.
 
-A typhenfile.js is comprised of the following parts:
+The typhenfile.js is comprised of the following parts:
 
 * The "wrapper" function which takes `typhen` and `Handlebars` as arguments.
 * Loading or creating a plugin.
 * Running configuration.
 
-A Sample is [here](test/fixtures/typhenfile.js)
-
-### Plugin
-
-A typhen plugin can be defined in typhenfile.js, or external module.
-
-A Sample is [here](test/fixtures/plugin/typhen-test.js)
-
-### Templating
-The typhen has used [Handlebars template engine](http://handlebarsjs.com/) to render the code. So you can use the following built-in helpers and custom helpers which are defined in the typhenfile.js or the plugin.
-
-#### Swag library helpers
-See [documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
-
-#### underscore
-Transforms a string to underscore.
-
-Usage:
-```hbs
-    {{underscore 'FooBarBaz'}}
-                  foo_bar_baz
-```
-
-#### upperCamelCase
-Transforms a string to upper camel case.
-
-Usage:
-```hbs
-    {{upperCamelCase 'foo_bar_baz'}}
-                      FooBarBaz
-```
-
-#### lowerCamelCase
-Transforms a string to lower camel case.
-
-Usage:
-```hbs
-    {{lowerCamelCase 'foo_bar_baz'}}
-                      fooBarBaz
-```
-
-## Examples
-
-The typhenfile.js in general.
+Example:
 
 ```js
 module.exports = function(typhen) {
-  var plugin = typhen.loadPlugin('typhen-json-schema');
+  var plugin = typhen.loadPlugin('typhen-awesome-plugin');
 
   typhen.run({
     plugin: plugin,
     src: 'definitions.d.ts',
-    dest: 'schemata'
+    dest: 'generated',
+    cwd: '../other/current', // Optional. Default value is process.cwd().
+    aliases: {               // Optional. Default value is {}.
+      'Foo': 'Bar'
+    }
   });
 };
 ```
 
-You can create a custom plugin in typhenfile.js.
+### Plugin
+
+A typhen plugin can be defined in the typhenfile.js or an external module.
+
+Example:
 
 ```js
 module.exports = function(typhen, Handlebars) {
-  var plugin = typhen.createPlugin({
+  return typhen.createPlugin({
     pluginDirectory: __dirname,
-    defaultLibFileName: 'lib.d.ts',
+    defaultLibFileName: 'lib.d.ts', // Optional. Default value is ''.
+    newLine: '\r\n',                // Optional. Default value is '\n'.
+    namespaceSeparator: '::',       // Optional. Default value is '.'.
+    disallow: {                     // Optional. Default value is {}.
+      typeParameter: true;
+      method: true;
+    },
+    aliases: {                      // Optional. Default value is {}.
+      '^(.+)Class$': '$1'
+    },
 
     generate: function(types, generator) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
@@ -138,13 +127,40 @@ module.exports = function(typhen, Handlebars) {
       });
     }
   });
-
-  typhen.run({
-    plugin: plugin,
-    src: 'definitions.d.ts',
-    dest: 'generated'
-  });
 };
+```
+
+### Templating
+The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following built-in helpers and custom helpers which are defined in the typhenfile.js or a plugin.
+
+#### Swag Helpers
+See the [documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
+
+#### underscore Helper
+Transforms a string to underscore.
+
+Usage:
+```hbs
+    {{underscore 'FooBarBaz'}}
+                  foo_bar_baz
+```
+
+#### upperCamelCase Helper
+Transforms a string to upper camel case.
+
+Usage:
+```hbs
+    {{upperCamelCase 'foo_bar_baz'}}
+                      FooBarBaz
+```
+
+#### lowerCamelCase Helper
+Transforms a string to lower camel case.
+
+Usage:
+```hbs
+    {{lowerCamelCase 'foo_bar_baz'}}
+                      fooBarBaz
 ```
 
 ## TypeScript Version
