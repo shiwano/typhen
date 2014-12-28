@@ -47,9 +47,11 @@ if (options.version) {
   return;
 }
 
+var typhen = _.isString(options.__main) ? require(options.__main) : require('../lib/index.js');
+
 if (options.argv.remain.length === 0) {
-  if (fs.existsSync('./typhenfile.js')) {
-    require('./typhenfile.js')();
+  if (fs.existsSync(process.cwd() + '/typhenfile.js')) {
+    typhen.runByTyphenfile(process.cwd() + '/typhenfile.js');
   } else {
     console.info('No typhenfile found');
   }
@@ -57,8 +59,6 @@ if (options.argv.remain.length === 0) {
   var fileName = path.resolve(options.argv.remain[0]);
 
   if (fs.existsSync(fileName)) {
-    var typhen = _.isString(options.__main) ? require(options.__main) : require('../lib/index.js');
-
     if (_.contains(fileName, 'typhenfile.js')) {
       typhen.runByTyphenfile(fileName);
     } else if (_.isString(options.dest) && _.isString(options.plugin)) {
