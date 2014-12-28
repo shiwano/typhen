@@ -11,18 +11,15 @@ export function registerHelpers(handlebars: typeof Handlebars): void {
 }
 
 module HandlebarsHelpers {
-  export function underscore(str: string): hbs.SafeString {
-    var result = inflection.underscore(str);
-    return new Handlebars.SafeString(result);
+  export function underscore(str: string): string {
+    return inflection.underscore(str);
   }
 
-  export function upperCamelCase(str: string): hbs.SafeString {
-    var result = inflection.camelize(str);
-    return new Handlebars.SafeString(result);
+  export function upperCamelCase(str: string): string {
+    return inflection.camelize(str);
   }
 
-  export function lowerCamelCase(str: string): hbs.SafeString {
-    var result = inflection.camelize(str, true);
-    return new Handlebars.SafeString(result);
+  export function lowerCamelCase(str: string): string {
+    return inflection.camelize(str, true);
   }
 }
