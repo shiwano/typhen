@@ -152,7 +152,6 @@ export class EnumMember extends Symbol {
 export class Function extends Type {
   public flags: SymbolFlags = SymbolFlags.Function;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.function; }
-  public get firstCallSignature(): Signature { return this.callSignatures[0]; }
 
   constructor(
       runner: Runner.Runner,
@@ -257,7 +256,6 @@ export class Property extends Symbol {
 export class Method extends Symbol {
   public flags: SymbolFlags = SymbolFlags.Method;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.method; }
-  public get firstCallSignature(): Signature { return this.callSignatures[0]; }
 
   constructor(
       runner: Runner.Runner,
