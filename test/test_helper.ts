@@ -4,8 +4,8 @@ require('source-map-support').install();
 
 global.assert = require('power-assert');
 global.sinon = require('sinon');
-global._ = require('lodash');
 
+import _ = require('lodash');
 import path = require('path');
 
 import Symbol = require('../src/symbol');
