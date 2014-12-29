@@ -164,7 +164,25 @@ export class Function extends Type {
   }
 }
 
-export class Interface extends Type {
+export class ObjectType extends Type {
+  public flags: SymbolFlags = SymbolFlags.ObjectType;
+  public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
+
+  constructor(
+      runner: Runner.Runner,
+      rawName: string,
+      docComment: string[],
+      moduleNames: string[],
+      assumedName: string,
+      public properties: Property[],
+      public methods: Method[],
+      public stringIndexType: Type,
+      public numberIndexType: Type) {
+    super(runner, rawName, docComment, moduleNames, assumedName);
+  }
+}
+
+export class Interface extends ObjectType {
   public flags: SymbolFlags = SymbolFlags.Interface;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
   public get isGenericType(): boolean { return this.typeParameters.length > 0; }
@@ -187,38 +205,21 @@ export class Interface extends Type {
       rawName: string,
       docComment: string[],
       moduleNames: string[],
+      properties: Property[],
+      methods: Method[],
+      stringIndexType: Type,
+      numberIndexType: Type,
       public baseTypes: Interface[],
       public typeParameters: TypeParameter[],
-      public rawTypeArguments: Type[],
-      public properties: Property[],
-      public methods: Method[],
-      public stringIndexType: Type,
-      public numberIndexType: Type) {
-    super(runner, rawName, docComment, moduleNames);
+      public rawTypeArguments: Type[]) {
+    super(runner, rawName, docComment, moduleNames, '',
+        properties, methods, stringIndexType, numberIndexType);
   }
 }
 
 export class Class extends Interface {
   public flags: SymbolFlags = SymbolFlags.Class;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.class; }
-}
-
-export class ObjectType extends Type {
-  public flags: SymbolFlags = SymbolFlags.ObjectType;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
-
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      assumedName: string,
-      public properties: Property[],
-      public methods: Method[],
-      public stringIndexType: Type,
-      public numberIndexType: Type) {
-    super(runner, rawName, docComment, moduleNames, assumedName);
-  }
 }
 
 export class TypeParameter extends Type {

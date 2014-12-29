@@ -184,13 +184,7 @@ class TypeScriptParser {
 
     var name = symbol === undefined || type.flags & ts.TypeFlags.Anonymous ? '' : symbol.name;
     var moduleNames = this.getModuleNames(symbol);
-    var typeArguments = type.typeArguments === undefined ? [] :
-      type.typeArguments.map(t => this.parseType(t));
 
-    var baseTypes = genericType.baseTypes === undefined ? [] :
-      genericType.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
-    var typeParameters = genericType.typeParameters === undefined ? [] :
-      genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var properties = genericType.getProperties()
         .filter(s => s.flags === ts.SymbolFlags.Property)
         .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
@@ -200,9 +194,16 @@ class TypeScriptParser {
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
-    return new genericTypeClass(this.runner, name, this.getDocComment(symbol),
-        moduleNames, baseTypes, typeParameters, typeArguments, properties,
-        methods, stringIndexType, numberIndexType);
+    var baseTypes = genericType.baseTypes === undefined ? [] :
+      genericType.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
+    var typeParameters = genericType.typeParameters === undefined ? [] :
+      genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
+    var typeArguments = type.typeArguments === undefined ? [] :
+      type.typeArguments.map(t => this.parseType(t));
+
+    return new genericTypeClass(this.runner, name, this.getDocComment(symbol), moduleNames,
+        properties, methods, stringIndexType, numberIndexType,
+        baseTypes, typeParameters, typeArguments);
   }
 
   private parseInterface(type: ts.GenericType): Symbol.Interface {
