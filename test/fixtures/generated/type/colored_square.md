@@ -4,7 +4,7 @@ No comment.
 
 ## Type
 
-GenericType
+Interface or Class (isGenericType: false)
 
 ## BaseTypes
 
@@ -20,12 +20,12 @@ TypeArguments is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|Tags|Comment
+Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
-color|Color|false|default:Color.Red |Default color is red.
-center|Point|false||
-margin|number|true||
-size|integer|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+color|Color|false|true|default:Color.Red |Default color is red.
+center|Point|false|false||
+margin|number|true|false||
+size|integer|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 

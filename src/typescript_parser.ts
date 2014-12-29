@@ -193,10 +193,10 @@ class TypeScriptParser {
       genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var properties = genericType.getProperties()
         .filter(s => s.flags === ts.SymbolFlags.Property)
-        .map(s => this.parseProperty(s));
+        .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
     var methods = genericType.getProperties()
         .filter(s => s.flags === ts.SymbolFlags.Method)
-        .map(s => this.parseMethod(s));
+        .map(s => this.parseMethod(s, _.contains(genericType.declaredProperties, s)));
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
@@ -254,20 +254,20 @@ class TypeScriptParser {
         this.getDocComment(typeParameter.symbol), moduleNames, constraint);
   }
 
-  private parseProperty(symbol: ts.Symbol): Symbol.Property {
+  private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var propertyType = this.parseType(type);
     var isOptional = symbol.valueDeclaration.flags === ts.NodeFlags.QuestionMark;
     return new Symbol.Property(this.runner, symbol.name, this.getDocComment(symbol),
-        propertyType, isOptional);
+        propertyType, isOptional, isOwn);
   }
 
-  private parseMethod(symbol: ts.Symbol): Symbol.Method {
+  private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     var isOptional = symbol.valueDeclaration.flags === ts.NodeFlags.QuestionMark;
     return new Symbol.Method(this.runner, symbol.name, this.getDocComment(symbol),
-        callSignatures, isOptional);
+        callSignatures, isOptional, isOwn);
   }
 
   private parseSignature(signature: ts.Signature): Symbol.Signature {

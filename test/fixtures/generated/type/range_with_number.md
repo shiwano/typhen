@@ -4,7 +4,7 @@ No comment.
 
 ## Type
 
-GenericType
+Interface or Class (isGenericType: true)
 
 ## BaseTypes
 
@@ -24,10 +24,10 @@ number|
 
 ## Properties
 
-Name|TypeName|IsOptional|Tags|Comment
+Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
-start|T|false||
-end|T|false||
+start|T|false|true||
+end|T|false|true||
 
 ## Methods
 

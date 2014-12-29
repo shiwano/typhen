@@ -8,7 +8,7 @@ No comment.
 
 ## Type
 
-GenericType
+Interface or Class (isGenericType: {{isGenericType}})
 
 ## BaseTypes
 
@@ -49,10 +49,10 @@ Name|Comment
 {{#empty properties}}
 Properties is empty.
 {{else}}
-Name|TypeName|IsOptional|Tags|Comment
+Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
 {{#each properties}}
-{{name}}|{{type.name}}|{{isOptional}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
 {{/empty}}
 

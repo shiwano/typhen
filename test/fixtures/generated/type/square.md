@@ -4,7 +4,7 @@ No comment.
 
 ## Type
 
-GenericType
+Interface or Class (isGenericType: false)
 
 ## BaseTypes
 
@@ -20,11 +20,11 @@ TypeArguments is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|Tags|Comment
+Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
-center|Point|false||
-margin|number|true||
-size|integer|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+center|Point|false|true||
+margin|number|true|true||
+size|integer|false|true|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 

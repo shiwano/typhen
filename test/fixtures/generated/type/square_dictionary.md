@@ -4,7 +4,7 @@ No comment.
 
 ## Type
 
-GenericType
+Interface or Class (isGenericType: true)
 
 ## BaseTypes
 

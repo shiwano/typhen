@@ -244,7 +244,8 @@ export class Property extends Symbol {
       rawName: string,
       docComment: string[],
       public type: Type,
-      public isOptional: boolean) {
+      public isOptional: boolean,
+      public isOwn: boolean) {
     super(runner, rawName, docComment);
   }
 }
@@ -258,7 +259,8 @@ export class Method extends Symbol {
       rawName: string,
       docComment: string[],
       public callSignatures: Signature[],
-      public isOptional: boolean) {
+      public isOptional: boolean,
+      public isOwn: boolean) {
     super(runner, rawName, docComment);
   }
 }
