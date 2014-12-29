@@ -100,8 +100,8 @@ module.exports = function(typhen) {
     newLine: '\r\n',                // Optional. Default value is '\n'.
     namespaceSeparator: '::',       // Optional. Default value is '.'.
     disallow: {                     // Optional. Default value is {}.
-      typeParameter: true;
-      method: true;
+      typeParameter: true,
+      method: true
     },
     aliases: {                      // Optional. Default value is {}.
       '^(.+)Class$': '$1'
