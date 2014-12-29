@@ -22,7 +22,7 @@ export enum SymbolFlags {
 }
 
 export class Symbol {
-  private tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
+  private static tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
   public flags: SymbolFlags = SymbolFlags.Invalid;
 
   constructor(
@@ -45,13 +45,13 @@ export class Symbol {
 
   public get comment(): string {
     return this.docComment
-      .filter(c => !this.tagPattern.test(c))
+      .filter(c => !Symbol.tagPattern.test(c))
       .join(this.runner.plugin.newLine);
   }
 
   public get tags(): { name: string; value: string; }[] {
     return _.chain(this.docComment).map(comment => {
-      var matches = comment.match(this.tagPattern);
+      var matches = comment.match(Symbol.tagPattern);
       return matches == null ? null : { name: matches[1], value: matches[2] };
     }).compact().value();
   }
