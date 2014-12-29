@@ -168,6 +168,14 @@ export class ObjectType extends Type {
   public flags: SymbolFlags = SymbolFlags.ObjectType;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
 
+  public get ownProperties(): Property[] {
+    return this.properties.filter(p => p.isOwn);
+  }
+
+  public get ownMethods(): Method[] {
+    return this.methods.filter(m => m.isOwn);
+  }
+
   constructor(
       runner: Runner.Runner,
       rawName: string,
