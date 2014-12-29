@@ -178,7 +178,7 @@ class TypeScriptParser {
         moduleNames, members);
   }
 
-  private parseInterface(type: ts.GenericType): Symbol.Interface {
+  private parseGenericType(type: ts.GenericType, genericTypeClass: typeof Symbol.GenericType): Symbol.Interface {
     var symbol = type.symbol;
 
     var name = symbol === undefined || type.flags & ts.TypeFlags.Anonymous ? '' : symbol.name;
@@ -198,13 +198,17 @@ class TypeScriptParser {
     var stringIndexType = this.parseType(type.getStringIndexType());
     var numberIndexType = this.parseType(type.getNumberIndexType());
 
-    return new Symbol.Interface(this.runner, name, this.getDocComment(symbol),
+    return new genericTypeClass(this.runner, name, this.getDocComment(symbol),
         moduleNames, baseTypes, typeParameters, typeArguments, properties,
         methods, stringIndexType, numberIndexType);
   }
 
+  private parseInterface(type: ts.GenericType): Symbol.Interface {
+    return <Symbol.Interface>this.parseGenericType(type, Symbol.Interface);
+  }
+
   private parseClass(type: ts.GenericType): Symbol.Class {
-    return <Symbol.Class>this.parseInterface(type);
+    return <Symbol.Class>this.parseGenericType(type, Symbol.Class);
   }
 
   private parseObjectType(type: ts.ResolvedObjectType): Symbol.ObjectType {
