@@ -1,21 +1,16 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 import path = require('path');
-import Handlebars = require('handlebars');
 
 import Plugin = require('./plugin');
 import Config = require('./config');
 import Runner = require('./runner');
 import Symbol = require('./symbol');
-
-import Swag = require('swag');
-import HandlebarsHelpers = require('./handlebars_helpers');
-
-Swag.registerHelpers(Handlebars);
-HandlebarsHelpers.registerHelpers(Handlebars);
+import LocalHandlebars = require('./local_handlebars');
 
 module Typhen {
   export import SymbolKinds = Symbol.SymbolKinds;
+  export import Handlebars = LocalHandlebars.handlebars;
 
   export function run(configArgs: Config.IConfig): void {
     var config = new Config.Config(configArgs);
@@ -23,7 +18,7 @@ module Typhen {
   }
 
   export function runByTyphenfile(fileName: string): void {
-    require(fileName)(Typhen, Handlebars);
+    require(fileName)(Typhen);
   }
 
   export function createPlugin(pluginArgs: Plugin.IPlugin): Plugin.Plugin {
@@ -32,10 +27,10 @@ module Typhen {
 
   export function loadPlugin(pluginName: string): Plugin.Plugin {
     try {
-      return <Plugin.Plugin>require(pluginName)(Typhen, Handlebars);
+      return <Plugin.Plugin>require(pluginName)(Typhen);
     } catch (e) {
       var resolvedPath = path.resolve(pluginName);
-      return <Plugin.Plugin>require(resolvedPath)(Typhen, Handlebars);
+      return <Plugin.Plugin>require(resolvedPath)(Typhen);
     }
   }
 }

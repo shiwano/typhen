@@ -2,11 +2,11 @@
 
 import _ = require('lodash');
 import inflection = require('inflection');
-import Handlebars = require('handlebars');
 
 import IEnvironment = require('./environments/i_environment');
 import Symbol = require('./symbol');
 import Plugin = require('./plugin');
+import LocalHandlebars = require('./local_handlebars');
 
 class Generator {
   private fileDataCache: { [index: string]: string } = {};
@@ -84,7 +84,7 @@ class Generator {
 
     if (!this.templateCache[filePath]) {
       var templateSource = this.getFile(filePath);
-      this.templateCache[filePath] = Handlebars.compile(templateSource);
+      this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource);
     }
     return this.templateCache[filePath];
   }

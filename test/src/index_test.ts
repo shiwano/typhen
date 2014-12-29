@@ -2,8 +2,22 @@ require('../test_helper');
 
 import Typhen = require('../../src/index');
 import Plugin = require('../../src/plugin');
+import Symbol = require('../../src/symbol');
+import LocalHandlebars = require('../../src/local_handlebars');
 
 describe('Typhen', () => {
+  describe('.SymbolKinds', () => {
+    it('should export SymbolKinds', () => {
+      assert.strictEqual(Typhen.SymbolKinds, Symbol.SymbolKinds);
+    });
+  });
+
+  describe('.Handlebars', () => {
+    it('should export local handlebars', () => {
+      assert.strictEqual(Typhen.Handlebars, LocalHandlebars.handlebars);
+    });
+  });
+
   describe('#createPlugin', () => {
     it('should create the instance of Plugin', () => {
       var response = Typhen.createPlugin({

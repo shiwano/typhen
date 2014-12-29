@@ -1,19 +1,26 @@
 require('../test_helper');
 
 import Handlebars = require('handlebars');
-import HandlebarsHelpers = require('../../src/handlebars_helpers');
+import LocalHandlebars = require('../../src/local_handlebars');
 
-describe('HandlebarsHelpers', () => {
+describe('LocalHandlebars', () => {
   var sandbox = sinon.sandbox.create();
 
   afterEach(() => {
     sandbox.restore();
   });
 
+  describe('.handlebars', () => {
+    it('should export local handlebars', () => {
+      assert(LocalHandlebars.handlebars.registerHelper);
+      assert.notEqual(LocalHandlebars.handlebars, Handlebars);
+    });
+  });
+
   describe('.registerHelpers', () => {
     beforeEach(() => {
       sandbox.stub(Handlebars, 'registerHelper');
-      HandlebarsHelpers.registerHelpers(Handlebars);
+      LocalHandlebars.registerHelpers(Handlebars);
     });
 
     it('should register all helpers to Handlebars', () => {

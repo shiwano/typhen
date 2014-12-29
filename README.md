@@ -64,7 +64,7 @@ The typhenfile.js is a valid JavaScript file that belongs in the root directory 
 
 The typhenfile.js is comprised of the following parts:
 
-* The "wrapper" function which takes `typhen` and `Handlebars` as arguments.
+* The "wrapper" function which takes `typhen` as argument.
 * Loading or creating a plugin.
 * Running configuration.
 
@@ -93,7 +93,7 @@ A typhen plugin can be defined in the typhenfile.js or an external module.
 Example:
 
 ```js
-module.exports = function(typhen, Handlebars) {
+module.exports = function(typhen) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
     defaultLibFileName: 'lib.d.ts', // Optional. Default value is ''.
