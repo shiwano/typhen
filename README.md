@@ -118,16 +118,16 @@ module.exports = function(typhen, Handlebars) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
 
       types.forEach(function(type) {
-        switch (type.flags) {
-          case typhen.SymbolFlags.Enum:
+        switch (type.kind) {
+          case typhen.SymbolKinds.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.rb', type);
             break;
-          case typhen.SymbolFlags.Interface:
-          case typhen.SymbolFlags.Class:
-          case typhen.SymbolFlags.ObjectType:
+          case typhen.SymbolKinds.Interface:
+          case typhen.SymbolKinds.Class:
+          case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/class.hbs', 'underscore:**/*.rb', type);
             break;
-          case typhen.SymbolFlags.Function:
+          case typhen.SymbolKinds.Function:
             generator.generate('templates/function.hbs', 'underscore:**/*.rb', type);
             break;
         }

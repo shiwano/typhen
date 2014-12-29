@@ -5,7 +5,7 @@ import inflection = require('inflection');
 
 import Runner = require('./runner');
 
-export enum SymbolFlags {
+export enum SymbolKinds {
   Invalid,
   Primitive,
   Enum,
@@ -23,7 +23,7 @@ export enum SymbolFlags {
 
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
-  public flags: SymbolFlags = SymbolFlags.Invalid;
+  public kind: SymbolKinds = SymbolKinds.Invalid;
 
   constructor(
       public runner: Runner.Runner,
@@ -61,18 +61,18 @@ export class Symbol {
   public get isType(): boolean { return false; }
   public get isGenericType(): boolean { return false; }
 
-  public get isPrimitive(): boolean { return this.flags === SymbolFlags.Primitive; }
-  public get isEnum(): boolean { return this.flags === SymbolFlags.Enum; }
-  public get isEnumMember(): boolean { return this.flags === SymbolFlags.EnumMember; }
-  public get isInterface(): boolean { return this.flags === SymbolFlags.Interface; }
-  public get isClass(): boolean { return this.flags === SymbolFlags.Class; }
-  public get isObjectType(): boolean { return this.flags === SymbolFlags.ObjectType; }
-  public get isFunction(): boolean { return this.flags === SymbolFlags.Function; }
-  public get isTypeParameter(): boolean { return this.flags === SymbolFlags.TypeParameter; }
-  public get isProperty(): boolean { return this.flags === SymbolFlags.Property; }
-  public get isMethod(): boolean { return this.flags === SymbolFlags.Method; }
-  public get isSignature(): boolean { return this.flags === SymbolFlags.Signature; }
-  public get isParameter(): boolean { return this.flags === SymbolFlags.Parameter; }
+  public get isPrimitive(): boolean { return this.kind === SymbolKinds.Primitive; }
+  public get isEnum(): boolean { return this.kind === SymbolKinds.Enum; }
+  public get isEnumMember(): boolean { return this.kind === SymbolKinds.EnumMember; }
+  public get isInterface(): boolean { return this.kind === SymbolKinds.Interface; }
+  public get isClass(): boolean { return this.kind === SymbolKinds.Class; }
+  public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
+  public get isFunction(): boolean { return this.kind === SymbolKinds.Function; }
+  public get isTypeParameter(): boolean { return this.kind === SymbolKinds.TypeParameter; }
+  public get isProperty(): boolean { return this.kind === SymbolKinds.Property; }
+  public get isMethod(): boolean { return this.kind === SymbolKinds.Method; }
+  public get isSignature(): boolean { return this.kind === SymbolKinds.Signature; }
+  public get isParameter(): boolean { return this.kind === SymbolKinds.Parameter; }
 
   public toString(): string {
     return this.name;
@@ -102,7 +102,7 @@ export class Type extends Symbol {
 }
 
 export class Primitive extends Type {
-  public flags: SymbolFlags = SymbolFlags.Primitive;
+  public kind: SymbolKinds = SymbolKinds.Primitive;
 
   constructor(
       runner: Runner.Runner,
@@ -124,7 +124,7 @@ export class Primitive extends Type {
 }
 
 export class Enum extends Type {
-  public flags: SymbolFlags = SymbolFlags.Enum;
+  public kind: SymbolKinds = SymbolKinds.Enum;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.enum; }
 
   constructor(
@@ -138,7 +138,7 @@ export class Enum extends Type {
 }
 
 export class EnumMember extends Symbol {
-  public flags: SymbolFlags = SymbolFlags.EnumMember;
+  public kind: SymbolKinds = SymbolKinds.EnumMember;
 
   constructor(
       runner: Runner.Runner,
@@ -150,7 +150,7 @@ export class EnumMember extends Symbol {
 }
 
 export class Function extends Type {
-  public flags: SymbolFlags = SymbolFlags.Function;
+  public kind: SymbolKinds = SymbolKinds.Function;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.function; }
 
   constructor(
@@ -165,7 +165,7 @@ export class Function extends Type {
 }
 
 export class ObjectType extends Type {
-  public flags: SymbolFlags = SymbolFlags.ObjectType;
+  public kind: SymbolKinds = SymbolKinds.ObjectType;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
 
   public get ownProperties(): Property[] {
@@ -191,7 +191,7 @@ export class ObjectType extends Type {
 }
 
 export class Interface extends ObjectType {
-  public flags: SymbolFlags = SymbolFlags.Interface;
+  public kind: SymbolKinds = SymbolKinds.Interface;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
   public get isGenericType(): boolean { return this.typeParameters.length > 0; }
 
@@ -226,12 +226,12 @@ export class Interface extends ObjectType {
 }
 
 export class Class extends Interface {
-  public flags: SymbolFlags = SymbolFlags.Class;
+  public kind: SymbolKinds = SymbolKinds.Class;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.class; }
 }
 
 export class TypeParameter extends Type {
-  public flags: SymbolFlags = SymbolFlags.TypeParameter;
+  public kind: SymbolKinds = SymbolKinds.TypeParameter;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.typeParameter; }
 
   constructor(
@@ -245,7 +245,7 @@ export class TypeParameter extends Type {
 }
 
 export class Property extends Symbol {
-  public flags: SymbolFlags = SymbolFlags.Property;
+  public kind: SymbolKinds = SymbolKinds.Property;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.property; }
 
   constructor(
@@ -260,7 +260,7 @@ export class Property extends Symbol {
 }
 
 export class Method extends Symbol {
-  public flags: SymbolFlags = SymbolFlags.Method;
+  public kind: SymbolKinds = SymbolKinds.Method;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.method; }
 
   constructor(
@@ -275,7 +275,7 @@ export class Method extends Symbol {
 }
 
 export class Signature extends Symbol {
-  public flags: SymbolFlags = SymbolFlags.Method;
+  public kind: SymbolKinds = SymbolKinds.Method;
 
   constructor(
       runner: Runner.Runner,
@@ -290,7 +290,7 @@ export class Signature extends Symbol {
 }
 
 export class Parameter extends Symbol {
-  public flags: SymbolFlags = SymbolFlags.Parameter;
+  public kind: SymbolKinds = SymbolKinds.Parameter;
 
   constructor(
       runner: Runner.Runner,

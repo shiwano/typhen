@@ -15,7 +15,7 @@ Swag.registerHelpers(Handlebars);
 HandlebarsHelpers.registerHelpers(Handlebars);
 
 module Typhen {
-  export import SymbolFlags = Symbol.SymbolFlags;
+  export import SymbolKinds = Symbol.SymbolKinds;
 
   export function run(configArgs: Config.IConfig): void {
     var config = new Config.Config(configArgs);

@@ -20,20 +20,20 @@ module.exports = function(typhen, Handlebars) {
       generator.generate('templates/helper_test.hbs', 'helper_test.md');
 
       types.forEach(function(type) {
-        switch (type.flags) {
-          case typhen.SymbolFlags.Enum:
+        switch (type.kind) {
+          case typhen.SymbolKinds.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolFlags.Interface:
-          case typhen.SymbolFlags.Class:
+          case typhen.SymbolKinds.Interface:
+          case typhen.SymbolKinds.Class:
             if (type.name !== 'integer') {
               generator.generate('templates/generic_type.hbs', 'underscore:**/*.md', type);
             }
             break;
-          case typhen.SymbolFlags.ObjectType:
+          case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/object_type.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolFlags.Function:
+          case typhen.SymbolKinds.Function:
             generator.generate('templates/function.hbs', 'underscore:**/*.md', type);
             break;
         }
