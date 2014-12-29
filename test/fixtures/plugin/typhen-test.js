@@ -1,10 +1,11 @@
 'use strict';
 
-module.exports = function(typhen) {
+module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
     defaultLibFileName: 'lib.d.ts',
     handlebarsOptions: {
+      data: options,
       helpers: {
         'link': function(text, url) {
           text = typhen.Handlebars.Utils.escapeExpression(text);
@@ -17,7 +18,7 @@ module.exports = function(typhen) {
 
     generate: function(types, generator) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
-      generator.generate('templates/helper_test.hbs', 'helper_test.md');
+      generator.generate('templates/plugin_test.hbs', 'plugin_test.md');
 
       types.forEach(function(type) {
         switch (type.kind) {

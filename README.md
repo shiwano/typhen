@@ -72,7 +72,9 @@ Example:
 
 ```js
 module.exports = function(typhen) {
-  var plugin = typhen.loadPlugin('typhen-awesome-plugin');
+  var plugin = typhen.loadPlugin('typhen-awesome-plugin', {
+    optionName: 'option value'
+  });
 
   typhen.run({
     plugin: plugin,
@@ -93,7 +95,7 @@ A typhen plugin can be defined in the typhenfile.js or an external module.
 Example:
 
 ```js
-module.exports = function(typhen) {
+module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
     defaultLibFileName: 'lib.d.ts', // Optional. Default value is ''.
@@ -107,9 +109,10 @@ module.exports = function(typhen) {
       '^(.+)Class$': '$1'
     },
     handlebarsOptions: {            // Optional. Default value is null.
-      helpers: {                    // For details, see: http://handlebarsjs.com/execution.html
+      data: options,                // For details, see: http://handlebarsjs.com/execution.html
+      helpers: {
         'baz': function(str) {
-          return str + '-baz';
+          return str + '-baz'
         }
       }
     },

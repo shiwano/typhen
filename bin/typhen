@@ -9,6 +9,7 @@ var _ = require('lodash'),
     here = require('here').here,
     knownOptions = {
       plugin: String,
+      'plugin-options': String,
       dest: path,
       help: Boolean,
       version: Boolean,
@@ -35,10 +36,11 @@ if (options.help) {
         typhen --plugin typhen-json-schema --dest generated definitions.d.ts
 
       Options:
-        -p, --plugin   Specify plugin name or file path.
-        -d, --dest     Generate files to the directory.
-        -h, --help     Print this message.
-        -v, --version  Print the package's version.*/).unindent());
+        -p, --plugin      Specify plugin name or file path.
+        --plugin-options  Specify plugin options (JSON string).
+        -d, --dest        Generate files to the directory.
+        -h, --help        Print this message.
+        -v, --version     Print the package's version.*/).unindent());
    return;
 }
 
@@ -62,7 +64,10 @@ if (options.argv.remain.length === 0) {
     if (_.contains(fileName, 'typhenfile.js')) {
       typhen.runByTyphenfile(fileName);
     } else if (_.isString(options.dest) && _.isString(options.plugin)) {
-      var plugin = typhen.loadPlugin(options.plugin);
+      var pluginOptions = _.isString(options['plugin-options']) ?
+        JSON.parse(options['plugin-options']) : {};
+      var plugin = typhen.loadPlugin(options.plugin, pluginOptions);
+
       typhen.run({
         plugin: plugin,
         src: fileName,

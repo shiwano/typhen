@@ -1,7 +1,9 @@
 'use strict';
 
 module.exports = function(typhen) {
-  var plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
+  var plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
+    author: 'shiwano'
+  });
 
   typhen.run({
     plugin: plugin,

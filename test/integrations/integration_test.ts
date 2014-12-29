@@ -35,7 +35,9 @@ describe('Integration Test', () => {
     context('via JavaScript code', () => {
       before((done) => {
         rimraf('./.tmp/generated', () => {
-          var plugin = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
+          var plugin = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
+            author: 'shiwano'
+          });
           Typhen.run({
             plugin: plugin,
             src: 'test/fixtures/typings/definitions.d.ts',
@@ -53,6 +55,7 @@ describe('Integration Test', () => {
         rimraf('./.tmp/generated', () => {
           var command = childProcess.spawn('bin/typhen', [
             '--plugin', 'test/fixtures/plugin/typhen-test',
+            '--plugin-options', '{"author": "shiwano"}',
             '--dest', '.tmp/generated',
             '--__main', '.tmp/src/index',
             'test/fixtures/typings/definitions.d.ts'

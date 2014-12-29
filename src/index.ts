@@ -25,12 +25,12 @@ module Typhen {
     return new Plugin.Plugin(pluginArgs);
   }
 
-  export function loadPlugin(pluginName: string): Plugin.Plugin {
+  export function loadPlugin(pluginName: string, options: any = {}): Plugin.Plugin {
     try {
-      return <Plugin.Plugin>require(pluginName)(Typhen);
+      return <Plugin.Plugin>require(pluginName)(Typhen, options);
     } catch (e) {
       var resolvedPath = path.resolve(pluginName);
-      return <Plugin.Plugin>require(resolvedPath)(Typhen);
+      return <Plugin.Plugin>require(resolvedPath)(Typhen, options);
     }
   }
 }
