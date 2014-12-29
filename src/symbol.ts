@@ -164,16 +164,17 @@ export class Function extends Type {
   }
 }
 
-export class GenericType extends Type {
-  public get isGenericType(): boolean { return true; }
-  public get hasTypeArguments(): boolean { return this.typeArguments.length > 0; }
+export class Interface extends Type {
+  public flags: SymbolFlags = SymbolFlags.Interface;
+  public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
+  public get isGenericType(): boolean { return this.typeParameters.length > 0; }
 
   public get typeArguments(): Type[] {
     return this.rawTypeArguments.filter(t => !t.isTypeParameter);
   }
 
   public get assumedName(): string {
-    if (!this.hasTypeArguments) { return ''; }
+    if (this.typeArguments.length === 0) { return ''; }
 
     return this.rawName + this.typeArguments.map((type, index) => {
       var prefix = index === 0 ? 'With' : 'And';
@@ -197,12 +198,7 @@ export class GenericType extends Type {
   }
 }
 
-export class Interface extends GenericType {
-  public flags: SymbolFlags = SymbolFlags.Interface;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
-}
-
-export class Class extends GenericType {
+export class Class extends Interface {
   public flags: SymbolFlags = SymbolFlags.Class;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.class; }
 }

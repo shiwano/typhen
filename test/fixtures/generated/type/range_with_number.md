@@ -24,7 +24,10 @@ number|
 
 ## Properties
 
-Properties is empty.
+Name|TypeName|IsOptional|Tags|Comment
+---|---|---|---|---
+start|T|false||
+end|T|false||
 
 ## Methods
 

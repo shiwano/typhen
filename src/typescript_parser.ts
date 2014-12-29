@@ -178,25 +178,27 @@ class TypeScriptParser {
         moduleNames, members);
   }
 
-  private parseGenericType(type: ts.GenericType, genericTypeClass: typeof Symbol.GenericType): Symbol.Interface {
+  private parseGenericType(type: ts.GenericType, genericTypeClass: typeof Symbol.Interface): Symbol.Interface {
     var symbol = type.symbol;
+    var genericType = type.target === undefined ? type : type.target;
 
     var name = symbol === undefined || type.flags & ts.TypeFlags.Anonymous ? '' : symbol.name;
     var moduleNames = this.getModuleNames(symbol);
-    var baseTypes = type.baseTypes === undefined ? [] :
-      type.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
-    var typeParameters = type.target === undefined ? [] :
-      type.target.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var typeArguments = type.typeArguments === undefined ? [] :
       type.typeArguments.map(t => this.parseType(t));
-    var properties = type.getProperties()
+
+    var baseTypes = genericType.baseTypes === undefined ? [] :
+      genericType.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
+    var typeParameters = genericType.typeParameters === undefined ? [] :
+      genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
+    var properties = genericType.getProperties()
         .filter(s => s.flags === ts.SymbolFlags.Property)
         .map(s => this.parseProperty(s));
-    var methods = type.getProperties()
+    var methods = genericType.getProperties()
         .filter(s => s.flags === ts.SymbolFlags.Method)
         .map(s => this.parseMethod(s));
-    var stringIndexType = this.parseType(type.getStringIndexType());
-    var numberIndexType = this.parseType(type.getNumberIndexType());
+    var stringIndexType = this.parseType(genericType.getStringIndexType());
+    var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
     return new genericTypeClass(this.runner, name, this.getDocComment(symbol),
         moduleNames, baseTypes, typeParameters, typeArguments, properties,
