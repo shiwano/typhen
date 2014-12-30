@@ -29,7 +29,7 @@ class CompilerHost implements tss.ts.CompilerHost {
 
   public writeFile(fileName: string, data: string, writeByteOrderMark: boolean,
       onError?: (message: string) => void): void {
-    this.env.writeFile(fileName, data);
+    throw new Error('The TypeScript compiler should not write a file!');
   }
 
   public getCurrentDirectory(): string {
