@@ -12,7 +12,7 @@ describe('CompilerHost', () => {
   });
 
   beforeEach(() => {
-    instance = new CompilerHost(env, 'lib.d.ts');
+    instance = new CompilerHost(env);
   });
 
   afterEach(() => {
@@ -40,7 +40,7 @@ describe('CompilerHost', () => {
 
   describe('#getDefaultLibFilename', () => {
     it('should return the defaultLibFileName', () => {
-      assert.strictEqual(instance.getDefaultLibFilename(), 'lib.d.ts');
+      assert.strictEqual(instance.getDefaultLibFilename(), 'lib.typhen.d.ts');
     });
   });
 

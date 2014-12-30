@@ -29,7 +29,6 @@ export interface IHandlebarsOptions {
 export interface IPlugin {
   pluginDirectory: string;
   env?: IEnvironment;
-  defaultLibFileName?: string;
   disallow?: IDisallowOptions;
   aliases?: Runner.IAliasesOptions;
   newLine?: string;
@@ -41,7 +40,6 @@ export interface IPlugin {
 export class Plugin implements IPlugin {
   public pluginDirectory: string;
   public env: IEnvironment;
-  public defaultLibFileName: string;
   public disallow: IDisallowOptions = {};
   public aliases: Runner.IAliasesOptions = {};
   public newLine: string = '\n';
@@ -53,10 +51,6 @@ export class Plugin implements IPlugin {
 
     if (this.env === undefined) {
       this.env = new NodeJsEnvironment(this.pluginDirectory, this.newLine);
-    }
-
-    if (this.defaultLibFileName !== undefined) {
-      this.defaultLibFileName = this.env.resolvePath(this.defaultLibFileName);
     }
   }
 

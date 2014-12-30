@@ -28,7 +28,7 @@ describe('TypeScriptParser', () => {
     context('in general', () => {
       it('should return all Typhen types', () => {
         instance.parse();
-        assert.strictEqual(instance.types.length, 20);
+        assert.strictEqual(instance.types.length, 21);
         instance.types.forEach(type => {
           assert(type instanceof Symbol.Type);
         });

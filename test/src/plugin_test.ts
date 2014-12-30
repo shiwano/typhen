@@ -12,9 +12,4 @@ describe('Plugin', () => {
   it('should have the env', () => {
     assert.strictEqual(instance.env.currentDirectory, instance.pluginDirectory);
   });
-
-  it('should have the resolved defaultLibFileName', () => {
-    var expected = process.cwd() + '/test/fixtures/plugin/lib.d.ts';
-    assert.strictEqual(instance.defaultLibFileName, expected);
-  });
 });

@@ -31,9 +31,9 @@ describe('Typhen', () => {
   describe('#loadPlugin', () => {
     it('should load the specified instance of Plugin', () => {
       var response = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
-      var expected = process.cwd() + '/test/fixtures/plugin/lib.d.ts';
+      var expected = process.cwd() + '/test/fixtures/plugin';
       assert(response instanceof Plugin.Plugin);
-      assert.strictEqual(response.defaultLibFileName, expected);
+      assert.strictEqual(response.pluginDirectory, expected);
     });
   });
 });

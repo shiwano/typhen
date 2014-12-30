@@ -7,9 +7,7 @@ class CompilerHost implements tss.ts.CompilerHost {
   private cachedSources: {[index: string]: tss.ts.SourceFile} = {};
   private version: number = 0;
 
-  constructor(
-      private env: IEnvironment,
-      private defaultLibFileName: string) {
+  constructor(private env: IEnvironment) {
   }
 
   public getSourceFile(fileName: string, languageVersion: tss.ts.ScriptTarget,
@@ -24,7 +22,7 @@ class CompilerHost implements tss.ts.CompilerHost {
   }
 
   public getDefaultLibFilename(): string {
-    return this.defaultLibFileName;
+    return this.env.defaultLibFileName;
   }
 
   public writeFile(fileName: string, data: string, writeByteOrderMark: boolean,

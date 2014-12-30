@@ -23,7 +23,7 @@ export class Runner {
     this.config = config;
     this.plugin = config.plugin;
 
-    this.compilerHost = new CompilerHost(this.config.env, this.plugin.defaultLibFileName);
+    this.compilerHost = new CompilerHost(this.config.env);
     this.compilerOptions = {
       declaration: true,
       diagnostics: true,
@@ -31,8 +31,8 @@ export class Runner {
       module: tss.ts.ModuleKind.CommonJS,
       noImplicitAny: true,
       target: tss.ts.ScriptTarget.ES5,
-      noLib: this.plugin.defaultLibFileName === undefined,
-      noLibCheck: this.plugin.defaultLibFileName === undefined
+      noLib: false,
+      noLibCheck: false
     };
   }
 
