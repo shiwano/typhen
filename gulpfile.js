@@ -4,6 +4,7 @@ var fs = require('fs');
 var gulp = require('gulp');
 var del = require('del');
 var runSequence = require('run-sequence');
+var merge = require('merge-stream');
 var plugins = require('gulp-load-plugins')();
 var spawn = require('child_process').spawn;
 var open = require('open');
@@ -43,16 +44,16 @@ gulp.task('tslint', function() {
     .pipe(plugins.tslint.report('verbose'));
 });
 
-gulp.task('test', ['clean:testDest'], function() {
-  return test(false, false);
+gulp.task('test', ['clean:testDest'], function(callback) {
+  test(false, false, callback);
 });
 
-gulp.task('test:watch', function() {
-  return test(true, false);
+gulp.task('test:watch', function(callback) {
+  test(true, false, callback);
 });
 
-gulp.task('test:watch:debug', function() {
-  return test(true, true);
+gulp.task('test:watch:debug', function(callback) {
+  test(true, true, callback);
 });
 
 gulp.task('clean:dest', function(callback) {
@@ -64,16 +65,18 @@ gulp.task('clean:testDest', function(callback) {
 });
 
 gulp.task('compile', ['clean:dest'], function(){
-  var tsResult = gulp.src(paths.src)
+  var tsStream = gulp.src(paths.src)
     .pipe(plugins.plumber({errorHandler: function() {
       process.exit(1);
     }}))
     .pipe(plugins.typescript(tsProject));
 
-  tsResult.js.pipe(gulp.dest(paths.dest));
-  tsResult.dts
+  var jsStream = tsStream.js
+    .pipe(gulp.dest(paths.dest));
+  var dtsStream = tsStream.dts
     .pipe(plugins.replace(/^\/\/\/\s*<reference\s+path="[\.\/]+typings\/tsd.d.ts"\s*\/>$/gm, ''))
     .pipe(gulp.dest(paths.dest));
+  return merge(jsStream, dtsStream);
 });
 
 gulp.task('build', function(callback) {
@@ -91,10 +94,10 @@ gulp.task('watch:debug', function() {
   gulp.watch([paths.src, paths.test], ['test:watch:debug']);
 });
 
-function test(watching, debug) {
+function test(watching, debug, callback) {
   mochaOptions.debug = mochaOptions.debugBrk = debug;
 
-  return gulp.src(paths.defaultLibFile)
+  gulp.src(paths.defaultLibFile)
     .pipe(plugins.copy(paths.testDest))
     .on('end', function() {
       return gulp.src(paths.typescriptFiles)
@@ -110,7 +113,8 @@ function test(watching, debug) {
         .on('end', function() {
           if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
         })
-        .pipe(plugins.spawnMocha(mochaOptions));
+        .pipe(plugins.spawnMocha(mochaOptions))
+        .on('end', callback);
     });
 }
 
