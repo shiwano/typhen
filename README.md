@@ -98,7 +98,6 @@ Example:
 module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
-    defaultLibFileName: 'lib.d.ts', // Optional. Default value is ''.
     newLine: '\r\n',                // Optional. Default value is '\n'.
     namespaceSeparator: '::',       // Optional. Default value is '.'.
     disallow: {                     // Optional. Default value is {}.
@@ -172,6 +171,14 @@ Usage:
     {{lowerCamelCase 'foo_bar_baz'}}
                       fooBarBaz
 ```
+
+### Custom Primitive Types
+
+If you want to use custom primitive types in the typhen environment, you can define the interface which was extended from `TyphenPrimitiveType` in your definitions. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
+
+#### integer
+
+A number without a fraction or exponent part.
 
 ## TypeScript Version
 
