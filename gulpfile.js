@@ -70,7 +70,9 @@ gulp.task('compile', ['clean:dest'], function(){
     .pipe(plugins.typescript(tsProject));
 
   tsResult.js.pipe(gulp.dest(paths.dest));
-  tsResult.dts.pipe(gulp.dest(paths.dest));
+  tsResult.dts
+    .pipe(plugins.replace(/^\/\/\/\s*<reference\s+path="[\.\/]+typings\/tsd.d.ts"\s*\/>$/gm, ''))
+    .pipe(gulp.dest(paths.dest));
 });
 
 gulp.task('build', function(callback) {
