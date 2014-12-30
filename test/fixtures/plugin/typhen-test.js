@@ -3,7 +3,6 @@
 module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
-    defaultLibFileName: 'lib.d.ts',
     handlebarsOptions: {
       data: options,
       helpers: {
@@ -27,9 +26,7 @@ module.exports = function(typhen, options) {
             break;
           case typhen.SymbolKinds.Interface:
           case typhen.SymbolKinds.Class:
-            if (type.name !== 'integer') {
-              generator.generate('templates/generic_type.hbs', 'underscore:**/*.md', type);
-            }
+            generator.generate('templates/generic_type.hbs', 'underscore:**/*.md', type);
             break;
           case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/object_type.hbs', 'underscore:**/*.md', type);
