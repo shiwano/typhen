@@ -12,6 +12,7 @@ class TypeScriptParser {
   private program: tss.ts.Program;
   private typeChecker: ts.TypeChecker;
   private cachedTypes: { [index: number]: Symbol.Type } = {};
+  private typhenPrimitiveTypeName: string = 'TyphenPrimitiveType';
 
   private static topLevelKinds: ts.SyntaxKind[] = [
     ts.SyntaxKind.FunctionDeclaration,
@@ -76,6 +77,8 @@ class TypeScriptParser {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.StringLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Intrinsic) {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.IntrinsicType>type);
+      } else if (this.isTyphenPrimitiveType(type)) {
+        throw new Error('Can not parse the plain TyphenPrimitiveType');
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
@@ -88,10 +91,18 @@ class TypeScriptParser {
             this.cachedTypes[type.id] = this.parseFunction(<ts.ResolvedObjectType>type);
             break;
           case ts.SymbolFlags.Class:
-            this.cachedTypes[type.id] = this.parseClass(<ts.GenericType>type);
+            if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
+              throw new Error('Can not define the class which is extended from the TyphenPrimitiveType');
+            } else {
+              this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
+            }
             break;
           case ts.SymbolFlags.Interface:
-            this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
+            if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
+              this.cachedTypes[type.id] = this.parsePrimitive(<ts.GenericType>type);
+            } else {
+              this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
+            }
             break;
           case ts.SymbolFlags.TypeParameter:
             this.cachedTypes[type.id] = this.parseTypeParameter(<ts.TypeParameter>type);
@@ -159,6 +170,26 @@ class TypeScriptParser {
       }
     }).reverse();
     return parentNames.join('') + typeName;
+  }
+
+  private isTyphenPrimitiveType(type: ts.Type): boolean {
+    return _.isObject(type.symbol) &&
+           type.symbol.name === this.typhenPrimitiveTypeName &&
+           this.getModuleNames(type.symbol).length === 0;
+  }
+
+  private isExtendedTyphenPrimitiveType(type: ts.GenericType): boolean {
+    var isExtendedTyphenPrimitiveType = type.baseTypes === undefined ? false :
+      _.any(type.baseTypes, (t) => this.isTyphenPrimitiveType(t));
+
+    if (isExtendedTyphenPrimitiveType) {
+      if (this.getModuleNames(type.symbol).length === 0) {
+        return true;
+      } else {
+        throw new Error('Found the type with namespace which is extended from the TyphenPrimitiveType');
+      }
+    }
+    return false;
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
@@ -241,10 +272,19 @@ class TypeScriptParser {
         moduleNames, assumedName, callSignatures);
   }
 
+  private parsePrimitive(type: ts.GenericType): Symbol.Primitive; // For TyphenPrimitiveType
   private parsePrimitive(type: ts.IntrinsicType): Symbol.Primitive;
   private parsePrimitive(type: ts.StringLiteralType): Symbol.Primitive;
   private parsePrimitive(type: any): Symbol.Primitive {
-    var name = _.isString(type.intrinsicName) ? type.intrinsicName : 'string';
+    var name: string;
+
+    if (_.isString(type.intrinsicName)) {
+      name = type.intrinsicName;
+    } else if (_.isObject(type.symbol)) {
+      name = type.symbol.name;
+    } else {
+      name = 'string';
+    }
     return new Symbol.Primitive(this.runner, name, this.getDocComment(type.symbol));
   }
 

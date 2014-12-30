@@ -109,17 +109,6 @@ export class Primitive extends Type {
       rawName: string,
       docComment: string[]) {
     super(runner, rawName, docComment, []);
-
-    if (this.rawName === 'unknown') {
-      throw new Error('Found unknown type');
-    }
-
-    if (this.rawName !== 'string' &&
-        this.rawName !== 'boolean' &&
-        this.rawName !== 'number' &&
-        this.rawName !== 'void') {
-      throw new Error('Invalid primitive type given: ' + this.rawName);
-    }
   }
 }
 
