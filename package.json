@@ -47,6 +47,7 @@
     "gulp-spawn-mocha": "^0.5.1",
     "gulp-tslint": "^1.4.1",
     "gulp-typescript": "^2.3.0",
+    "merge-stream": "^0.1.6",
     "node-inspector": "^0.8.1",
     "open": "0.0.5",
     "power-assert": "^0.10.0",
