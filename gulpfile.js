@@ -14,7 +14,8 @@ var paths = {
   test: 'test/{src,integrations}/**/*_test.ts',
   dest: 'lib/',
   testDest: '.tmp/',
-  typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts']
+  typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts'],
+  defaultLibFile: 'lib.typhen.d.ts'
 };
 
 var tsProject = plugins.typescript.createProject({
@@ -93,20 +94,24 @@ gulp.task('watch:debug', function() {
 function test(watching, debug) {
   mochaOptions.debug = mochaOptions.debugBrk = debug;
 
-  return gulp.src(paths.typescriptFiles)
-    .pipe(plugins.plumber({errorHandler: function() {
-      if (!watching) { process.exit(1); }
-    }}))
-    .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.typescript(tsProject)).js
-    .pipe(plugins.espower())
-    .pipe(plugins.sourcemaps.write())
-    .pipe(gulp.dest(paths.testDest))
+  return gulp.src(paths.defaultLibFile)
+    .pipe(plugins.copy(paths.testDest))
     .on('end', function() {
-      if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
-    })
-    .pipe(plugins.spawnMocha(mochaOptions));
+      return gulp.src(paths.typescriptFiles)
+        .pipe(plugins.plumber({errorHandler: function() {
+          if (!watching) { process.exit(1); }
+        }}))
+        .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
+        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.typescript(tsProject)).js
+        .pipe(plugins.espower())
+        .pipe(plugins.sourcemaps.write())
+        .pipe(gulp.dest(paths.testDest))
+        .on('end', function() {
+          if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
+        })
+        .pipe(plugins.spawnMocha(mochaOptions));
+    });
 }
 
 function hasChangedForTest(stream, callback, sourceFile, destPath) {

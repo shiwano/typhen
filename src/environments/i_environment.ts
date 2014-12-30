@@ -4,6 +4,7 @@ interface IEnvironment {
   currentDirectory: string;
   newLine: string;
   useCaseSensitiveFileNames: boolean;
+  defaultLibFileName: string;
 
   readFile(fileName: string): string;
   writeFile(fileName: string, data: string): void;

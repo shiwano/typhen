@@ -21,6 +21,7 @@ export class TestEnvironment implements IEnvironment {
   public currentDirectory: string = process.cwd() + '/test/fixtures/typings';
   public newLine: string = '\n';
   public useCaseSensitiveFileNames: boolean = false;
+  public defaultLibFileName: string = 'lib.typhen.d.ts';
 
   constructor(
       private fileData: { [fileName: string]: string } = {}) {

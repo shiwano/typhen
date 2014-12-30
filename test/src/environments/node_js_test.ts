@@ -18,12 +18,16 @@ describe('NodeJsEnvironment', () => {
     sandbox.restore();
   });
 
-  it('should have newLine', () => {
+  it('should have currentDirectory', () => {
     assert.strictEqual(instance.currentDirectory, currentDirectory);
   });
 
   it('should have newLine', () => {
     assert.strictEqual(instance.newLine, newLine);
+  });
+
+  it('should have defaultLibFileName', () => {
+    assert.strictEqual(instance.defaultLibFileName, process.cwd() + '/.tmp/lib.typhen.d.ts');
   });
 
   describe('#writeFile', () => {
