@@ -19,13 +19,12 @@ module HandlebarsHelpers {
   }
 }
 
-export function registerHelpers(handlebars: HandlebarsStatic): void {
+export function registerHelpers(handlebars: typeof Handlebars): void {
+  Swag.registerHelpers(handlebars);
   _.forEach(HandlebarsHelpers, (helper: Function, helperName: string) => {
     handlebars.registerHelper(helperName, helper);
   });
 }
 
-export var handlebars = <HandlebarsStatic>(<any>Handlebars).create();
-
+export var handlebars: typeof Handlebars = (<any>Handlebars).create();
 registerHelpers(handlebars);
-Swag.registerHelpers(handlebars);

@@ -8,9 +8,13 @@ import Symbol = require('./symbol');
 import Plugin = require('./plugin');
 import LocalHandlebars = require('./local_handlebars');
 
+interface IHandlebarsTemplate {
+  (context: any, options?: any): string;
+}
+
 class Generator {
   private fileDataCache: { [index: string]: string } = {};
-  private templateCache: { [index: string]: HandlebarsTemplateDelegate } = {};
+  private templateCache: { [index: string]: IHandlebarsTemplate } = {};
 
   constructor(
       public outputDirectory: string,
@@ -79,7 +83,7 @@ class Generator {
     return this.fileDataCache[filePath];
   }
 
-  private getTemplate(templateName: string): HandlebarsTemplateDelegate {
+  private getTemplate(templateName: string): IHandlebarsTemplate {
     var filePath = this.pluginEnv.resolvePath(templateName);
 
     if (!this.templateCache[filePath]) {
