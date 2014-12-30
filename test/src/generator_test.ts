@@ -21,7 +21,7 @@ describe('Generator', () => {
 
     it('should call Generator#generate', () => {
       instance.generateUnlessExist('README.md', 'README.md');
-      assert.strictEqual((<SinonStub>instance.generate).calledWith('README.md', 'README.md', null, false), true);
+      assert((<SinonStub>instance.generate).calledWith('README.md', 'README.md', null, false));
     });
   });
 
@@ -41,7 +41,7 @@ describe('Generator', () => {
 
       it('should call env#writeFile', () => {
         instance.generate('README.md', 'README.md');
-        assert.strictEqual((<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated), true);
+        assert((<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated));
       });
     });
 
@@ -54,7 +54,7 @@ describe('Generator', () => {
 
       it('should call env#writeFile', () => {
         instance.generate('enum.hbs', 'underscore:**/*.txt', data);
-        assert.strictEqual((<SinonStub>instance.env.writeFile).calledWith('generated/app/type/foo_type.txt', generated), true);
+        assert((<SinonStub>instance.env.writeFile).calledWith('generated/app/type/foo_type.txt', generated));
       });
     });
 
@@ -63,7 +63,7 @@ describe('Generator', () => {
 
       it('should not overwrite', () => {
         instance.generate('README.md', 'README.md', false);
-        assert.strictEqual((<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated), false);
+        assert(!(<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated));
       });
     });
   });
