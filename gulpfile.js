@@ -100,9 +100,13 @@ function test(watching, debug, callback) {
   gulp.src(paths.defaultLibFile)
     .pipe(plugins.copy(paths.testDest))
     .on('end', function() {
-      return gulp.src(paths.typescriptFiles)
+      gulp.src(paths.typescriptFiles)
         .pipe(plugins.plumber({errorHandler: function() {
-          if (!watching) { process.exit(1); }
+          if (watching) {
+            this.emit('end');
+          } else {
+            process.exit(1);
+          }
         }}))
         .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
         .pipe(plugins.sourcemaps.init())
