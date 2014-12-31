@@ -45,12 +45,13 @@ export class TestEnvironment implements IEnvironment {
 
 export function createEnum(runner?: Runner.Runner): Symbol.Enum {
   if (runner === undefined) { runner = createRunner(); }
-  return new Symbol.Enum(runner, 'FooType',
-      ['awesome', '@default FooType.Bar', '@type Enum'], ['App', 'Type'],
-      [
-        new Symbol.EnumMember(runner, 'Bar', [''], 0),
-        new Symbol.EnumMember(runner, 'Baz', [''], 1)
-      ]);
+  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@type Enum'], ['App', 'Type']);
+
+  type.initialize([
+    new Symbol.EnumMember(runner, 'Bar', ['']).initialize(0),
+    new Symbol.EnumMember(runner, 'Baz', ['']).initialize(1)
+  ]);
+  return type;
 }
 
 export function createPlugin(): Plugin.Plugin {

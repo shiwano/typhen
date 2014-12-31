@@ -30,6 +30,7 @@ export class Symbol {
       public runner: Runner.Runner,
       public rawName: string,
       public docComment: string[],
+      public moduleNames?: string[],
       public assumedName?: string) {
     if (this.isDisallowed) {
       throw new Error('The plugin disallows the type: ' + this.rawName);
@@ -92,35 +93,19 @@ export class Type extends Symbol {
   public get namespace(): string {
     return this.moduleNames.join(this.runner.plugin.namespaceSeparator);
   }
-
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      public moduleNames: string[],
-      assumedName?: string) {
-    super(runner, rawName, docComment, assumedName);
-  }
 }
 
 export class Primitive extends Type {
   public kind: SymbolKinds = SymbolKinds.Primitive;
-  private static invalidNames: string[] = [
-    'unknown',
-    'any',
-    'undefined',
-    'null'
-  ];
+  private static invalidNames: string[] = ['unknown', 'any', 'undefined', 'null'];
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[]) {
-    super(runner, rawName, docComment, []);
+  public initialize(rawName: string): Primitive {
+    this.rawName = rawName;
 
     if (_.contains(Primitive.invalidNames, this.rawName)) {
       throw new Error('Invalid primitive type given: ' + this.rawName);
     }
+    return this;
   }
 }
 
@@ -128,25 +113,22 @@ export class Enum extends Type {
   public kind: SymbolKinds = SymbolKinds.Enum;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.enum; }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      public members: EnumMember[]) {
-    super(runner, rawName, docComment, moduleNames);
+  public members: EnumMember[] = [];
+
+  public initialize(members: EnumMember[]): Enum {
+    this.members = members;
+    return this;
   }
 }
 
 export class EnumMember extends Symbol {
   public kind: SymbolKinds = SymbolKinds.EnumMember;
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      public value: number) {
-    super(runner, rawName, docComment);
+  public value: number;
+
+  public initialize(value: number): EnumMember {
+    this.value = value;
+    return this;
   }
 }
 
@@ -154,14 +136,11 @@ export class Function extends Type {
   public kind: SymbolKinds = SymbolKinds.Function;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.function; }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      assumedName: string,
-      public callSignatures: Signature[]) {
-    super(runner, rawName, docComment, moduleNames, assumedName);
+  public callSignatures: Signature[] = [];
+
+  public initialize(callSignatures: Signature[]): Function {
+    this.callSignatures = callSignatures;
+    return this;
   }
 }
 
@@ -169,36 +148,36 @@ export class ObjectType extends Type {
   public kind: SymbolKinds = SymbolKinds.ObjectType;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
 
-  public get ownProperties(): Property[] {
-    return this.properties.filter(p => p.isOwn);
-  }
+  public properties: Property[] = [];
+  public methods: Method[] = [];
+  public stringIndexType: Type = null;
+  public numberIndexType: Type = null;
 
-  public get ownMethods(): Method[] {
-    return this.methods.filter(m => m.isOwn);
-  }
+  public get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
+  public get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      assumedName: string,
-      public properties: Property[],
-      public methods: Method[],
-      public stringIndexType: Type,
-      public numberIndexType: Type) {
-    super(runner, rawName, docComment, moduleNames, assumedName);
+  public initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
+      ...forOverride: any[]): ObjectType {
+    this.properties = properties;
+    this.methods = methods;
+    this.stringIndexType = stringIndexType;
+    this.numberIndexType = numberIndexType;
+    return this;
   }
 }
 
 export class Interface extends ObjectType {
   public kind: SymbolKinds = SymbolKinds.Interface;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
-  public get isGenericType(): boolean { return this.typeParameters.length > 0; }
 
-  public get typeArguments(): Type[] {
-    return this.rawTypeArguments.filter(t => !t.isTypeParameter);
-  }
+  public constructorSignatures: Signature[] = [];
+  public callSignatures: Signature[] = [];
+  public baseTypes: Interface[] = [];
+  public typeParameters: TypeParameter[] = [];
+  public rawTypeArguments: Type[] = [];
+
+  public get isGenericType(): boolean { return this.typeParameters.length > 0; }
+  public get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
 
   public get assumedName(): string {
     if (this.typeArguments.length === 0) { return ''; }
@@ -209,22 +188,17 @@ export class Interface extends ObjectType {
     }).join('');
   }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      properties: Property[],
-      methods: Method[],
-      stringIndexType: Type,
-      numberIndexType: Type,
-      public constructorSignatures: Signature[],
-      public callSignatures: Signature[],
-      public baseTypes: Interface[],
-      public typeParameters: TypeParameter[],
-      public rawTypeArguments: Type[]) {
-    super(runner, rawName, docComment, moduleNames, '',
-        properties, methods, stringIndexType, numberIndexType);
+  public initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
+      constructorSignatures: Signature[], callSignatures: Signature[], baseTypes: Interface[],
+      typeParameters: TypeParameter[], rawTypeArguments: Type[]): Interface {
+    super.initialize(properties, methods, stringIndexType, numberIndexType);
+
+    this.constructorSignatures = constructorSignatures;
+    this.callSignatures = callSignatures;
+    this.baseTypes = baseTypes;
+    this.typeParameters = typeParameters;
+    this.rawTypeArguments = rawTypeArguments;
+    return this;
   }
 }
 
@@ -237,13 +211,11 @@ export class TypeParameter extends Type {
   public kind: SymbolKinds = SymbolKinds.TypeParameter;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.typeParameter; }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      moduleNames: string[],
-      public constraint: Type) {
-    super(runner, rawName, docComment, moduleNames);
+  public constraint: Type = null;
+
+  public initialize(constraint: Type): TypeParameter {
+    this.constraint = constraint;
+    return this;
   }
 }
 
@@ -251,15 +223,17 @@ export class Tuple extends Type {
   public kind: SymbolKinds = SymbolKinds.Tuple;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.tuple; }
 
+  public elementTypes: Type[] = [];
+  public baseArrayType: Type = null;
+
   public get assumedName(): string {
     return this.elementTypes.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
   }
 
-  constructor(
-      runner: Runner.Runner,
-      public elementTypes: Type[],
-      public baseArrayType: Type) {
-    super(runner, '', [], []);
+  public initialize(elementTypes: Type[], baseArrayType: Type): Tuple {
+    this.elementTypes = elementTypes;
+    this.baseArrayType = baseArrayType;
+    return this;
   }
 }
 
@@ -267,14 +241,15 @@ export class Property extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Property;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.property; }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      public type: Type,
-      public isOptional: boolean,
-      public isOwn: boolean) {
-    super(runner, rawName, docComment);
+  public type: Type = null;
+  public isOptional: boolean = false;
+  public isOwn: boolean = false;
+
+  public initialize(type: Type, isOptional: boolean, isOwn: boolean): Property {
+    this.type = type;
+    this.isOptional = isOptional;
+    this.isOwn = isOwn;
+    return this;
   }
 }
 
@@ -282,41 +257,42 @@ export class Method extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Method;
   public get isDisallowed(): boolean { return this.runner.plugin.disallow.method; }
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      public callSignatures: Signature[],
-      public isOptional: boolean,
-      public isOwn: boolean) {
-    super(runner, rawName, docComment);
+  public callSignatures: Signature[] = [];
+  public isOptional: boolean = false;
+  public isOwn: boolean = false;
+
+  public initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean): Method {
+    this.callSignatures = callSignatures;
+    this.isOptional = isOptional;
+    this.isOwn = isOwn;
+    return this;
   }
 }
 
 export class Signature extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Method;
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      assumedName: string,
-      public typeParameters: TypeParameter[],
-      public parameters: Parameter[],
-      public returnType: Type) {
-    super(runner, rawName, docComment, assumedName);
+  public typeParameters: TypeParameter[] = [];
+  public parameters: Parameter[] = [];
+  public returnType: Type = null;
+
+  public initialize(typeParameters: TypeParameter[], parameters: Parameter[], returnType: Type): Signature {
+    this.typeParameters = typeParameters;
+    this.parameters = parameters;
+    this.returnType = returnType;
+    return this;
   }
 }
 
 export class Parameter extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Parameter;
 
-  constructor(
-      runner: Runner.Runner,
-      rawName: string,
-      docComment: string[],
-      public type: Type,
-      public isOptional: boolean) {
-    super(runner, rawName, docComment);
+  public type: Type = null;
+  public isOptional: boolean = false;
+
+  public initialize(type: Type, isOptional: boolean): Parameter {
+    this.type = type;
+    this.isOptional = isOptional;
+    return this;
   }
 }

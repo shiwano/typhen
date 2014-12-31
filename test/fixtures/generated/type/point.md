@@ -22,8 +22,8 @@ TypeArguments is empty.
 
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
 ---|---|---|---
-constructor|x:number:false y:number:false |void|
-constructor|args:NumberAndNumberTuple:false |void|
+constructor|x:number:false y:number:false |Point|
+constructor|args:NumberAndNumberTuple:false |Point|
 
 ## CallSignatures
 
