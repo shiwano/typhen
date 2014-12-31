@@ -15,6 +15,7 @@ export enum SymbolKinds {
   ObjectType,
   Function,
   TypeParameter,
+  Tuple,
   Property,
   Method,
   Signature,
@@ -69,6 +70,7 @@ export class Symbol {
   public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
   public get isFunction(): boolean { return this.kind === SymbolKinds.Function; }
   public get isTypeParameter(): boolean { return this.kind === SymbolKinds.TypeParameter; }
+  public get isTuple(): boolean { return this.kind === SymbolKinds.Tuple; }
   public get isProperty(): boolean { return this.kind === SymbolKinds.Property; }
   public get isMethod(): boolean { return this.kind === SymbolKinds.Method; }
   public get isSignature(): boolean { return this.kind === SymbolKinds.Signature; }
@@ -240,6 +242,22 @@ export class TypeParameter extends Type {
       moduleNames: string[],
       public constraint: Type) {
     super(runner, rawName, docComment, moduleNames);
+  }
+}
+
+export class Tuple extends Type {
+  public kind: SymbolKinds = SymbolKinds.Tuple;
+  public get isDisallowed(): boolean { return this.runner.plugin.disallow.tuple; }
+
+  public get assumedName(): string {
+    return this.elementTypes.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
+  }
+
+  constructor(
+      runner: Runner.Runner,
+      public elementTypes: Type[],
+      public baseArrayType: Type) {
+    super(runner, '', [], []);
   }
 }
 

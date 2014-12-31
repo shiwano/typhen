@@ -83,6 +83,8 @@ class TypeScriptParser {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.StringLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Intrinsic) {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.IntrinsicType>type);
+      } else if (type.flags & ts.TypeFlags.Tuple) {
+        this.cachedTypes[type.id] = this.parseTuple(<ts.TupleType>type);
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
@@ -289,6 +291,12 @@ class TypeScriptParser {
     var moduleNames = this.getModuleNames(typeParameter.symbol);
     return new Symbol.TypeParameter(this.runner, typeParameter.symbol.name,
         this.getDocComment(typeParameter.symbol), moduleNames, constraint);
+  }
+
+  private parseTuple(type: ts.TupleType): Symbol.Tuple {
+    var elementTypes = type.elementTypes.map(t => this.parseType(t));
+    var baseArrayType = this.parseType(type.baseArrayType);
+    return new Symbol.Tuple(this.runner, elementTypes, baseArrayType);
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {

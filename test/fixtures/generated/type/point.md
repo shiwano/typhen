@@ -30,6 +30,7 @@ y|number|false|true||
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
 ---|---|---|---|---
 set|x:number:false y:number:false |void|false| 
+set|args:NumberAndNumberTuple:false |void|false| 
 
 ## StringIndexType
 

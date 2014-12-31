@@ -1,0 +1,25 @@
+# {{fullName}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+Tuple
+
+## ElementTypes
+
+{{#each elementTypes}}
+* {{fullName}}
+{{/each}}
+
+## BaseArrayType
+
+{{#if baseArrayType}}
+{{baseArrayType}}
+{{else}}
+No base array type.
+{{/if}}

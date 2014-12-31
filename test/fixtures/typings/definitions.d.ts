@@ -14,6 +14,7 @@ declare module Type {
     x: number;
     y: number;
     set(x: number, y: number): void;
+    set(args: [number, number]): void;
   }
 
   interface Square {

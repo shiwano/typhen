@@ -24,6 +24,9 @@ module.exports = function(typhen, options) {
           case typhen.SymbolKinds.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.md', type);
             break;
+          case typhen.SymbolKinds.Tuple:
+            generator.generate('templates/tuple.hbs', 'underscore:**/*.md', type);
+            break;
           case typhen.SymbolKinds.Interface:
           case typhen.SymbolKinds.Class:
             generator.generate('templates/generic_type.hbs', 'underscore:**/*.md', type);

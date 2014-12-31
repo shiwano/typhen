@@ -15,6 +15,7 @@ export interface IDisallowOptions {
   class?: boolean;
   objectType?: boolean;
   typeParameter?: boolean;
+  tuple?: boolean;
   method?: boolean;
   property?: boolean;
 }
