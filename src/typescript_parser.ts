@@ -37,14 +37,18 @@ class TypeScriptParser {
 
   public parse(): Symbol.Type[] {
     var invalidSourceFileNames = this.sourceFiles.filter(s => s.filename.match(/.*\.d\.ts$/) === null);
+
     if (invalidSourceFileNames.length > 0) {
       throw new Error('Unsupported *.ts file: ' + invalidSourceFileNames.join(', '));
     }
-    this.program.getDiagnostics()
-      .filter(d => d.category === ts.DiagnosticCategory.Error)
-      .forEach(d => {
+
+    this.program.getDiagnostics().forEach(d => {
+      if (d.category === ts.DiagnosticCategory.Error) {
         throw new Error([d.file.filename, ' (', d.start, ',', d.length, '): ', d.messageText].join(''));
-      });
+      } else if (d.category === ts.DiagnosticCategory.Warning) {
+        console.warn([d.file.filename, ' (', d.start, ',', d.length, '): ', d.messageText].join(''));
+      }
+    });
     this.sourceFiles.forEach(s => this.parseSourceFile(s));
     return this.types;
   }
