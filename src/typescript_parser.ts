@@ -73,48 +73,40 @@ class TypeScriptParser {
     if (!_.isObject(type)) { return null; }
 
     if (this.cachedTypes[type.id] == null) {
-      if (type.flags & ts.TypeFlags.StringLiteral) {
+      if (this.isTyphenPrimitiveType(type)) {
+        return null;
+      } else if (type.flags & ts.TypeFlags.StringLiteral) {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.StringLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Intrinsic) {
         this.cachedTypes[type.id] = this.parsePrimitive(<ts.IntrinsicType>type);
-      } else if (this.isTyphenPrimitiveType(type)) {
-        throw new Error('Can not parse the plain TyphenPrimitiveType');
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
-      } else {
-        switch (type.symbol.flags) {
-          case ts.SymbolFlags.Enum:
-            this.cachedTypes[type.id] = this.parseEnum(type);
-            break;
-          case ts.SymbolFlags.Function:
-            this.cachedTypes[type.id] = this.parseFunction(<ts.ResolvedObjectType>type);
-            break;
-          case ts.SymbolFlags.Class:
-            if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
-              throw new Error('Can not define the class which is extended from the TyphenPrimitiveType');
-            } else {
-              this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
-            }
-            break;
-          case ts.SymbolFlags.Interface:
-            if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
-              this.cachedTypes[type.id] = this.parsePrimitive(<ts.GenericType>type);
-            } else {
-              this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
-            }
-            break;
-          case ts.SymbolFlags.TypeParameter:
-            this.cachedTypes[type.id] = this.parseTypeParameter(<ts.TypeParameter>type);
-            break;
-          case ts.SymbolFlags.TypeLiteral:
-            this.cachedTypes[type.id] = _.isEmpty(type.getCallSignatures()) ?
-              this.parseObjectType(<ts.ResolvedObjectType>type) :
-              this.parseFunction(<ts.ResolvedObjectType>type);
-            break;
-          default:
-            throw new Error('Unsupported type! (TypeFlags:' + type.flags + ', SymbolFlags:' + type.symbol.flags + ')');
+      } else if (type.symbol.flags & ts.SymbolFlags.Function) {
+        this.cachedTypes[type.id] = this.parseFunction(<ts.ResolvedObjectType>type);
+      } else if (type.symbol.flags & ts.SymbolFlags.Enum) {
+        this.cachedTypes[type.id] = this.parseEnum(type);
+      } else if (type.symbol.flags & ts.SymbolFlags.TypeParameter) {
+        this.cachedTypes[type.id] = this.parseTypeParameter(<ts.TypeParameter>type);
+      } else if (type.symbol.flags & ts.SymbolFlags.Class) {
+        if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
+          throw new Error('Can not define a class which is extended from the TyphenPrimitiveType: ' + type.symbol.name);
+        } else {
+          this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
         }
+      } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
+        if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
+          this.cachedTypes[type.id] = this.parsePrimitive(<ts.GenericType>type);
+        } else {
+          this.cachedTypes[type.id] = this.parseInterface(<ts.GenericType>type);
+        }
+      } else if (type.symbol.flags & ts.SymbolFlags.TypeLiteral) {
+        this.cachedTypes[type.id] = _.isEmpty(type.getCallSignatures()) ?
+          this.parseObjectType(<ts.ResolvedObjectType>type) :
+          this.parseFunction(<ts.ResolvedObjectType>type);
+      } else {
+        throw new Error('Unsupported type: ' + type.symbol.name +
+              ' (TypeFlags:' + type.flags + ', SymbolFlags:' + type.symbol.flags + ')');
       }
     }
     return this.cachedTypes[type.id];
