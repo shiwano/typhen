@@ -38,7 +38,8 @@ declare module Type {
   }
 
   interface SquareDictionary<T extends Square> {
-    [index: string]: T;
+    [stringIndex: string]: T;
+    [numberIndex: number]: T;
   }
 }
 

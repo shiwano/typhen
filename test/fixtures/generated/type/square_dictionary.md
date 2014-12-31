@@ -34,4 +34,4 @@ T
 
 ## NumberIndexType
 
-NumberIndexType is undefined.
+T
