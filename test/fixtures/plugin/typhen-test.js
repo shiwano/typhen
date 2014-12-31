@@ -29,7 +29,7 @@ module.exports = function(typhen, options) {
             break;
           case typhen.SymbolKinds.Interface:
           case typhen.SymbolKinds.Class:
-            generator.generate('templates/generic_type.hbs', 'underscore:**/*.md', type);
+            generator.generate('templates/interface.hbs', 'underscore:**/*.md', type);
             break;
           case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/object_type.hbs', 'underscore:**/*.md', type);
