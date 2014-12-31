@@ -44,6 +44,30 @@ Name|Comment
 {{/each}}
 {{/empty}}
 
+## ConstructorSignatures
+
+{{#empty constructorSignatures}}
+ConstructorSignatures is empty.
+{{else}}
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+{{#each constructorSignatures}}
+constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## CallSignatures
+
+{{#empty callSignatures}}
+CallSignatures is empty.
+{{else}}
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+{{#each callSignatures}}
+{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
+{{/each}}
+{{/empty}}
+
 ## Properties
 
 {{#empty properties}}

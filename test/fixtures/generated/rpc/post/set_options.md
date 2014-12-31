@@ -8,6 +8,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
-setOptions|options:SetOptionsOptionsObject:false |boolean|| 
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+setOptions|options:SetOptionsOptionsObject:false |boolean|

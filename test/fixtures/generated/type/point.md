@@ -18,6 +18,17 @@ TypeParameters is empty.
 
 TypeArguments is empty.
 
+## ConstructorSignatures
+
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+constructor|x:number:false y:number:false |void|
+constructor|args:NumberAndNumberTuple:false |void|
+
+## CallSignatures
+
+CallSignatures is empty.
+
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment

@@ -218,6 +218,8 @@ export class Interface extends ObjectType {
       methods: Method[],
       stringIndexType: Type,
       numberIndexType: Type,
+      public constructorSignatures: Signature[],
+      public callSignatures: Signature[],
       public baseTypes: Interface[],
       public typeParameters: TypeParameter[],
       public rawTypeArguments: Type[]) {

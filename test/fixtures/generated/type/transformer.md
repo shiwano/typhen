@@ -1,10 +1,10 @@
-# Type.Range
+# Type.Transformer
 
 No comment.
 
 ## Type
 
-Interface or Class (isGenericType: true)
+Interface or Class (isGenericType: false)
 
 ## BaseTypes
 
@@ -12,9 +12,7 @@ BaseTypes is empty.
 
 ## TypeParameters
 
-Name|ConstraintTypeName|Comment
----|---|---
-T||
+TypeParameters is empty.
 
 ## TypeArugments
 
@@ -26,14 +24,13 @@ ConstructorSignatures is empty.
 
 ## CallSignatures
 
-CallSignatures is empty.
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+Transformer|squeare:Square:false scale:number:false |void|
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---
-start|T|false|true||
-end|T|false|true||
+Properties is empty.
 
 ## Methods
 

@@ -49,7 +49,7 @@ export class Runner {
     var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
         this.plugin.handlebarsOptions, (fileName) => {
           fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
-          console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' generated.');
+          console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' generating.');
         });
     this.plugin.generate(parser.types, generator);
 

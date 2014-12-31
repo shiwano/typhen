@@ -8,6 +8,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
-emitLog|text:string:false |void|| 
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+emitLog|text:string:false |void|

@@ -12,8 +12,8 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
 {{/each}}

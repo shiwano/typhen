@@ -223,6 +223,9 @@ class TypeScriptParser {
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
+    var constructorSignatures = genericType.getConstructSignatures().map(s => this.parseSignature(s));
+    var callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
+
     var baseTypes = genericType.baseTypes === undefined ? [] :
       genericType.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
     var typeParameters = genericType.typeParameters === undefined ? [] :
@@ -232,6 +235,7 @@ class TypeScriptParser {
 
     return new genericTypeClass(this.runner, name, this.getDocComment(symbol), moduleNames,
         properties, methods, stringIndexType, numberIndexType,
+        constructorSignatures, callSignatures,
         baseTypes, typeParameters, typeArguments);
   }
 

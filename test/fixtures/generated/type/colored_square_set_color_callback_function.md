@@ -8,6 +8,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
-ColoredSquareSetColorCallbackFunction|color:Color:false |void|| 
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+ColoredSquareSetColorCallbackFunction|color:Color:false |void|

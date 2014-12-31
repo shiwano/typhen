@@ -31,7 +31,7 @@ Name|Parameter(TypeName - IsOptional)|ReturnTypeName|IsOptional|Comment
 ---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}({{type.name}} - {{isOptional}}) {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}({{type}} - {{isOptional}}) {{/each}}|{{returnType}}|{{../isOptional}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{/empty}}

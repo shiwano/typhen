@@ -18,6 +18,14 @@ TypeParameters is empty.
 
 TypeArguments is empty.
 
+## ConstructorSignatures
+
+ConstructorSignatures is empty.
+
+## CallSignatures
+
+CallSignatures is empty.
+
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment

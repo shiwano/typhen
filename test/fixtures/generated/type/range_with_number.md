@@ -22,6 +22,14 @@ Name|Comment
 ---|---
 number|
 
+## ConstructorSignatures
+
+ConstructorSignatures is empty.
+
+## CallSignatures
+
+CallSignatures is empty.
+
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment

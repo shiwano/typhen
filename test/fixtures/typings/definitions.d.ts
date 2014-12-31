@@ -15,6 +15,8 @@ declare module Type {
     y: number;
     set(x: number, y: number): void;
     set(args: [number, number]): void;
+    new(x: number, y: number): void;
+    new(args: [number, number]): void;
   }
 
   interface Square {
@@ -41,6 +43,10 @@ declare module Type {
   interface SquareDictionary<T extends Square> {
     [stringIndex: string]: T;
     [numberIndex: number]: T;
+  }
+
+  interface Transformer {
+    (squeare: Square, scale : number): void;
   }
 }
 

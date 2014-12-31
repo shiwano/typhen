@@ -28,7 +28,7 @@ describe('TypeScriptParser', () => {
     context('in general', () => {
       it('should return all Typhen types', () => {
         instance.parse();
-        assert.strictEqual(instance.types.length, 21);
+        assert.strictEqual(instance.types.length, 22);
         instance.types.forEach(type => {
           assert(type instanceof Symbol.Type);
         });
@@ -64,7 +64,7 @@ describe('TypeScriptParser', () => {
     it('should return Typhen types which is defined on source file', () => {
       var sourceFile = instance.sourceFiles[1];
       var types = instance.parseSourceFile(sourceFile);
-      assert.strictEqual(types.length, 8);
+      assert.strictEqual(types.length, 9);
       types.forEach(type => {
         assert(type instanceof Symbol.Type);
       });
@@ -76,7 +76,7 @@ describe('TypeScriptParser', () => {
       var sourceFile = instance.sourceFiles[1];
       var kinds = [tss.ts.SyntaxKind.InterfaceDeclaration];
       var types = instance.findTypesFromSourceFile(sourceFile, kinds);
-      assert.strictEqual(types.length, 5);
+      assert.strictEqual(types.length, 6);
       types.forEach(type => {
         assert(type.flags & tss.ts.TypeFlags.Interface);
       });

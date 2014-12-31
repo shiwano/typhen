@@ -20,6 +20,14 @@ T||
 
 TypeArguments is empty.
 
+## ConstructorSignatures
+
+ConstructorSignatures is empty.
+
+## CallSignatures
+
+CallSignatures is empty.
+
 ## Properties
 
 Properties is empty.

@@ -36,21 +36,21 @@ class Generator {
       context = null;
     }
 
-    var data = context !== null && /^.+\.hbs$/.test(src) ?
-      this.getTemplate(src)(context, this.handlebarsOptions) :
-      this.getFile(src);
-
     if (context instanceof Symbol.Type) {
       dest = this.replaceStarsOfFileName(dest, <Symbol.Type>context);
     }
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
 
+    if (this.onGenerate !== undefined) {
+      this.onGenerate(resolvedDest);
+    }
+
+    var data = context !== null && /^.+\.hbs$/.test(src) ?
+      this.getTemplate(src)(context, this.handlebarsOptions) :
+      this.getFile(src);
+
     if (_.contains([true, undefined], overwrite) || !this.env.exists(resolvedDest)) {
       this.env.writeFile(resolvedDest, data);
-
-      if (this.onGenerate !== undefined) {
-        this.onGenerate(resolvedDest);
-      }
     }
     return data;
   }
