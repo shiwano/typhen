@@ -174,7 +174,7 @@ Usage:
 
 ### Custom Primitive Types
 
-If you want to use custom primitive types in the typhen environment, you can define the interface which was extended from `TyphenPrimitiveType` in your definitions. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
+If you want to use a custom primitive type, define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive symbol. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
 
 #### integer
 
