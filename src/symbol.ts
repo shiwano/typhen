@@ -103,12 +103,22 @@ export class Type extends Symbol {
 
 export class Primitive extends Type {
   public kind: SymbolKinds = SymbolKinds.Primitive;
+  private static invalidNames: string[] = [
+    'unknown',
+    'any',
+    'undefined',
+    'null'
+  ];
 
   constructor(
       runner: Runner.Runner,
       rawName: string,
       docComment: string[]) {
     super(runner, rawName, docComment, []);
+
+    if (_.contains(Primitive.invalidNames, this.rawName)) {
+      throw new Error('Invalid primitive type given: ' + this.rawName);
+    }
   }
 }
 
