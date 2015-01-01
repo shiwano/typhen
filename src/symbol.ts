@@ -97,7 +97,7 @@ export class Type extends Symbol {
 
 export class Primitive extends Type {
   public kind: SymbolKinds = SymbolKinds.Primitive;
-  private static invalidNames: string[] = ['unknown', 'any', 'undefined', 'null'];
+  private static invalidNames: string[] = ['unknown', 'undefined', 'null'];
 
   public initialize(rawName: string): Primitive {
     this.rawName = rawName;
