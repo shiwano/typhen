@@ -53,7 +53,7 @@ $ typhen foo/bar/typhenfile.js
 ```
 
 ```sh
-$ typhen --plugin typhen-json-schema --dest generated definitions.d.ts
+$ typhen --plugin typhen-awesome-plugin --dest generated definitions.d.ts
 ```
 
 ## Documentation
@@ -66,7 +66,7 @@ The typhenfile.js is comprised of the following parts:
 
 * The "wrapper" function.
 * Loading or creating a plugin.
-* Running configuration.
+* Running with configuration.
 
 Example:
 
