@@ -64,7 +64,7 @@ The typhenfile.js is a valid JavaScript file that belongs in the root directory 
 
 The typhenfile.js is comprised of the following parts:
 
-* The "wrapper" function which takes `typhen` as argument.
+* The "wrapper" function.
 * Loading or creating a plugin.
 * Running configuration.
 
@@ -170,7 +170,7 @@ Usage:
 
 ### Custom Primitive Types
 
-If you want to use a custom primitive type, define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive symbol. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
+If you want to use a custom primitive type, define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive type. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
 
 #### integer
 
