@@ -113,14 +113,9 @@ export class Type extends Symbol {
 
 export class Primitive extends Type {
   public kind: SymbolKinds = SymbolKinds.Primitive;
-  private static invalidNames: string[] = ['unknown', 'undefined', 'null'];
 
   public initialize(rawName: string): Primitive {
     this.rawName = rawName;
-
-    if (_.contains(Primitive.invalidNames, this.rawName)) {
-      throw new Error('Invalid primitive type given:\n' + this.declarationInfos.map(d => d.toString()).join('\n'));
-    }
     return this;
   }
 }
