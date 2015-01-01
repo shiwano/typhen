@@ -22,6 +22,7 @@ export class TestEnvironment implements IEnvironment {
   public newLine: string = '\n';
   public useCaseSensitiveFileNames: boolean = false;
   public defaultLibFileName: string = 'lib.typhen.d.ts';
+  public defaultLibFileNames: string[] = ['lib.typhen.d.ts'];
 
   constructor(
       private fileData: { [fileName: string]: string } = {}) {

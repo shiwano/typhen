@@ -35,7 +35,7 @@ export class DeclarationInfo {
   public toString(): string {
     return [
       this.fileName,
-      ' (', this.lineAndCharacterNumber.line, ',', this.lineAndCharacterNumber.character, '):\n',
+      '(', this.lineAndCharacterNumber.line, ',', this.lineAndCharacterNumber.character, '):\n',
       '---\n', this.fullText, '\n---'
     ].join('');
   }

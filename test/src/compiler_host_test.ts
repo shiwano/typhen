@@ -29,11 +29,9 @@ describe('CompilerHost', () => {
     });
 
     context('with a file name which does not exists', () => {
-      it('should throw an error', () => {
+      it('should return undefined', () => {
         var languageVersion = tss.ts.ScriptTarget.ES5;
-        assert.throws(() => {
-          instance.getSourceFile('', languageVersion);
-        });
+        assert.strictEqual(instance.getSourceFile('', languageVersion), undefined);
       });
     });
   });

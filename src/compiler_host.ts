@@ -14,7 +14,12 @@ class CompilerHost implements tss.ts.CompilerHost {
       onError?: (message: string) => void): tss.ts.SourceFile {
     if (this.cachedSources[fileName] === undefined) {
       var text: string;
-      text = this.env.readFile(fileName);
+
+      try {
+        text = this.env.readFile(fileName);
+      } catch (e) {
+        return undefined;
+      }
       this.cachedSources[fileName] = tss.ts.createSourceFile(fileName, text,
           languageVersion, this.version.toString(), false);
     }

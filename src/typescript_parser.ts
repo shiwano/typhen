@@ -22,13 +22,13 @@ class TypeScriptParser {
   ];
 
   constructor(fileNames: string[], private runner: Runner.Runner) {
-    this.program = ts.createProgram(fileNames, runner.compilerOptions, runner.compilerHost);
+    this.program = ts.createProgram(fileNames, this.runner.compilerOptions, this.runner.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
   }
 
   public get sourceFiles(): ts.SourceFile[] {
-    var libFileName = this.program.getCompilerHost().getDefaultLibFilename();
-    return this.program.getSourceFiles().filter(s => s.filename !== libFileName);
+    return this.program.getSourceFiles()
+      .filter(s => !_.contains(this.runner.config.env.defaultLibFileNames, s.filename));
   }
 
   public get types(): Symbol.Type[] {
@@ -39,18 +39,24 @@ class TypeScriptParser {
     var unsupportedSourceFileNames = this.sourceFiles
       .filter(s => s.filename.match(/.*\.d\.ts$/) === null)
       .map(s => s.filename);
-
     if (unsupportedSourceFileNames.length > 0) {
-      throw new Error('Unsupported *.ts file: ' + unsupportedSourceFileNames.join(', '));
+      throw new Error('Unsupported files given (not *.d.ts): ' + unsupportedSourceFileNames.join(', '));
     }
 
-    this.program.getDiagnostics().forEach(d => {
-      if (d.category === ts.DiagnosticCategory.Error) {
-        throw new Error([d.file.filename, ' (', d.start, ',', d.length, '): ', d.messageText].join(''));
-      } else if (d.category === ts.DiagnosticCategory.Warning) {
-        console.warn([d.file.filename, ' (', d.start, ',', d.length, '): ', d.messageText].join(''));
-      }
+    var errors = this.program.getDiagnostics();
+    if (errors.length === 0) {
+      var semanticErrors = this.typeChecker.getDiagnostics();
+      var emitOutput = this.typeChecker.emitFiles();
+      var emitErrors = emitOutput.errors;
+      errors = errors.concat(semanticErrors, emitErrors);
+    }
+
+    errors.forEach(d => {
+      var prefix = _.isObject(d.file) ? [d.file.filename, ' (', d.start, ',', d.length, '): '].join() : '';
+      console.info([prefix, d.messageText].join(''));
+      throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
+
     this.sourceFiles.forEach(s => this.parseSourceFile(s));
     return this.types;
   }
@@ -161,7 +167,9 @@ class TypeScriptParser {
               ts.SymbolFlags.NamespaceModule,
               ts.SymbolFlags.ValueModule
             ], parentDecl.symbol.flags)) {
-          results.push(parentDecl.symbol.name);
+          parentDecl.symbol.name.replace(/["']/g, '').split('/').reverse().forEach(n => {
+            results.push(n);
+          });
         }
         parentDecl = parentDecl.parent;
       }
