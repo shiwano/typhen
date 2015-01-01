@@ -22,6 +22,25 @@ export enum SymbolKinds {
   Parameter
 }
 
+export class DeclarationInfo {
+  constructor(
+      public fileName: string,
+      public fullText: string,
+      public lineAndCharacterNumber: {
+        line: number;
+        character: number;
+      }) {
+  }
+
+  public toString(): string {
+    return [
+      this.fileName,
+      ' (', this.lineAndCharacterNumber.line, ',', this.lineAndCharacterNumber.character, '):\n',
+      '---\n', this.fullText, '\n---'
+    ].join('');
+  }
+}
+
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
   public kind: SymbolKinds = SymbolKinds.Invalid;
@@ -30,6 +49,7 @@ export class Symbol {
       public runner: Runner.Runner,
       public rawName: string,
       public docComment: string[],
+      public declarationInfos?: DeclarationInfo[],
       public moduleNames?: string[],
       public assumedName?: string) {
   }
@@ -99,7 +119,7 @@ export class Primitive extends Type {
     this.rawName = rawName;
 
     if (_.contains(Primitive.invalidNames, this.rawName)) {
-      throw new Error('Invalid primitive type given: ' + this.rawName);
+      throw new Error('Invalid primitive type given:\n' + this.declarationInfos.map(d => d.toString()).join('\n'));
     }
     return this;
   }

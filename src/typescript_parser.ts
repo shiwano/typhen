@@ -73,6 +73,12 @@ class TypeScriptParser {
     return results;
   }
 
+  private throwErrorWithSymbol(message: string, symbol: ts.Symbol): void {
+    var infos = this.getDeclarationInfos(symbol);
+    var symbolInfo = infos.length > 0 ? infos.map(d => d.toString()).join('\n') : '';
+    throw new Error(message + '\n' + symbolInfo);
+  }
+
   private parseType(type: ts.Type): Symbol.Type {
     if (!_.isObject(type)) { return null; }
     if (this.typeCache[type.id] !== undefined) { return this.typeCache[type.id]; }
@@ -95,11 +101,7 @@ class TypeScriptParser {
     } else if (type.symbol.flags & ts.SymbolFlags.TypeParameter) {
       return this.parseTypeParameter(<ts.TypeParameter>type);
     } else if (type.symbol.flags & ts.SymbolFlags.Class) {
-      if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
-        throw new Error('Can not define a class which is extended from the TyphenPrimitiveType: ' + type.symbol.name);
-      } else {
-        return this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
-      }
+      return this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
     } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
       if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
         return this.parsePrimitive(<ts.GenericType>type);
@@ -113,8 +115,7 @@ class TypeScriptParser {
         return this.parseFunction(<ts.ResolvedObjectType>type);
       }
     } else {
-      throw new Error('Unsupported type: ' + type.symbol.name +
-            ' (TypeFlags:' + type.flags + ', SymbolFlags:' + type.symbol.flags + ')');
+      this.throwErrorWithSymbol('Unsupported type', type.symbol);
     }
   }
 
@@ -124,17 +125,28 @@ class TypeScriptParser {
     var assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
       this.getAssumedName(symbol, assumedNameSuffix) : '';
     return <T>new typhenSymbolClass(this.runner, name,
-        this.getDocComment(symbol), this.getModuleNames(symbol), assumedName);
+        this.getDocComment(symbol), this.getDeclarationInfos(symbol),
+        this.getModuleNames(symbol), assumedName);
   }
 
   private createTyphenType<T extends Symbol.Type>(type: ts.Type,
       typhenTypeClass: typeof Symbol.Type, assumedNameSuffix?: string): T {
     if (this.typeCache[type.id] !== undefined) {
-      throw new Error('Already created the type: ' + typhenTypeClass.toString());
+      this.throwErrorWithSymbol('Already created the type', type.symbol);
     }
     var typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
     this.typeCache[type.id] = typhenType;
     return <T>typhenType;
+  }
+
+  private getDeclarationInfos(symbol: ts.Symbol): Symbol.DeclarationInfo[] {
+    if (!_.isObject(symbol) || symbol.declarations === undefined) { return []; }
+
+    return symbol.declarations.map(d => {
+      var sourceFile = d.getSourceFile();
+      var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.pos);
+      return new Symbol.DeclarationInfo(sourceFile.filename, d.getFullText(), lineAndCharacterNumber);
+    });
   }
 
   private getModuleNames(symbol: ts.Symbol): string[] {
@@ -203,7 +215,7 @@ class TypeScriptParser {
       if (this.getModuleNames(type.symbol).length === 0) {
         return true;
       } else {
-        throw new Error('Found the type with namespace which is extended from the TyphenPrimitiveType');
+        this.throwErrorWithSymbol('Found the interface with module which is extended from the TyphenPrimitiveType', type.symbol);
       }
     }
     return false;
