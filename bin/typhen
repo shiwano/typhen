@@ -24,7 +24,7 @@ var _ = require('lodash'),
     options = nopt(knownOptions, shortHands, process.argv, 2);
 
 if (options.help) {
-  console.info(
+  console.log(
     'Version:\n  ' + require('../package.json').version + '\n\n' +
     here(/*
       Usage:
@@ -45,7 +45,7 @@ if (options.help) {
 }
 
 if (options.version) {
-  console.info('v' + require('../package.json').version);
+  console.log('v' + require('../package.json').version);
   return;
 }
 
@@ -55,7 +55,7 @@ if (options.argv.remain.length === 0) {
   if (fs.existsSync(process.cwd() + '/typhenfile.js')) {
     typhen.runByTyphenfile(process.cwd() + '/typhenfile.js');
   } else {
-    console.info('No typhenfile found');
+    console.log('No typhenfile found');
   }
 } else {
   var fileName = path.resolve(options.argv.remain[0]);
@@ -74,9 +74,9 @@ if (options.argv.remain.length === 0) {
         dest: options.dest
       });
     } else {
-      console.info('Insufficient arguments');
+      console.log('Insufficient arguments');
     }
   } else {
-    console.info('Not found the file: ' + fileName);
+    console.log('Not found the file: ' + fileName);
   }
 }

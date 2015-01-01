@@ -5,6 +5,7 @@ import chalk = require('chalk');
 
 import Plugin = require('./plugin');
 import Config = require('./config');
+import Logger = require('./logger');
 import CompilerHost = require('./compiler_host');
 import Generator = require('./generator');
 import TypeScriptParser = require('./typescript_parser');
@@ -37,22 +38,24 @@ export class Runner {
   }
 
   public run(): void {
-    console.info(chalk.underline('Parsing TypeScript files'));
+    Logger.log(Logger.underline('Parsing TypeScript files'));
+
     var parser = new TypeScriptParser([this.config.src], this);
     parser.parse();
     parser.sourceFiles.forEach(sourceFile => {
       var fileName = sourceFile.filename.replace(this.config.env.currentDirectory + '/', '');
-      console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' parsed.');
+      Logger.info('Parsed', Logger.cyan(fileName));
     });
 
-    console.info(chalk.underline('Generating files'));
+    Logger.log(Logger.underline('Generating files'));
+
     var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
         this.plugin.handlebarsOptions, (fileName) => {
           fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
-          console.info(chalk.green('>>') + ' File ' + chalk.cyan(fileName) + ' generating.');
+          Logger.info('Generating', Logger.cyan(fileName));
         });
     this.plugin.generate(parser.types, generator);
 
-    console.info('\n' + chalk.green('✓') + ' Finished successfully!');
+    Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
   }
 }

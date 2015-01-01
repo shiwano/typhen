@@ -12,10 +12,11 @@ import Symbol = require('../src/symbol');
 import Plugin = require('../src/plugin');
 import Runner = require('../src/runner');
 import Config = require('../src/config');
+import Logger = require('../src/logger');
 import Generator = require('../src/generator');
 import IEnvironment = require('../src/environments/i_environment');
 
-console.info = () => {};
+Logger.log = () => {};
 
 export class TestEnvironment implements IEnvironment {
   public currentDirectory: string = process.cwd() + '/test/fixtures/typings';

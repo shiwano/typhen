@@ -5,6 +5,7 @@ import ts = tss.ts;
 import _ = require('lodash');
 import inflection = require('inflection');
 
+import Logger = require('./logger');
 import Symbol = require('./symbol');
 import Runner = require('./runner');
 
@@ -52,8 +53,8 @@ class TypeScriptParser {
     }
 
     errors.forEach(d => {
-      var prefix = _.isObject(d.file) ? [d.file.filename, ' (', d.start, ',', d.length, '): '].join() : '';
-      console.info([prefix, d.messageText].join(''));
+      var info = _.isObject(d.file) ? [d.file.filename, '(', d.start, ',', d.length, '):'].join('') : '';
+      Logger.error(Logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
 
