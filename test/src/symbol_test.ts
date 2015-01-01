@@ -52,18 +52,6 @@ describe('Symbol', () => {
       });
     });
 
-    context('when disallow option is true', () => {
-      beforeEach(() => {
-        runner.plugin.disallow.enum = true;
-      });
-
-      it('should throw the error', () => {
-        assert.throws(() => {
-          instance = helper.createEnum(runner);
-        });
-      });
-    });
-
     context('when alias option is given', () => {
       beforeEach(() => {
         runner.plugin.aliases['(.*)Type'] = '$1Enum';

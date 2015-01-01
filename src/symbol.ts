@@ -32,9 +32,6 @@ export class Symbol {
       public docComment: string[],
       public moduleNames?: string[],
       public assumedName?: string) {
-    if (this.isDisallowed) {
-      throw new Error('The plugin disallows the type: ' + this.rawName);
-    }
   }
 
   public get name(): string {
@@ -58,7 +55,6 @@ export class Symbol {
     }).compact().value();
   }
 
-  public get isDisallowed(): boolean { return false; }
   public get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }
   public get isType(): boolean { return false; }
   public get isGenericType(): boolean { return false; }
@@ -111,7 +107,6 @@ export class Primitive extends Type {
 
 export class Enum extends Type {
   public kind: SymbolKinds = SymbolKinds.Enum;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.enum; }
 
   public members: EnumMember[] = [];
 
@@ -134,7 +129,6 @@ export class EnumMember extends Symbol {
 
 export class Function extends Type {
   public kind: SymbolKinds = SymbolKinds.Function;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.function; }
 
   public callSignatures: Signature[] = [];
 
@@ -146,7 +140,6 @@ export class Function extends Type {
 
 export class ObjectType extends Type {
   public kind: SymbolKinds = SymbolKinds.ObjectType;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.objectType; }
 
   public properties: Property[] = [];
   public methods: Method[] = [];
@@ -168,7 +161,6 @@ export class ObjectType extends Type {
 
 export class Interface extends ObjectType {
   public kind: SymbolKinds = SymbolKinds.Interface;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.interface; }
 
   public constructorSignatures: Signature[] = [];
   public callSignatures: Signature[] = [];
@@ -204,12 +196,10 @@ export class Interface extends ObjectType {
 
 export class Class extends Interface {
   public kind: SymbolKinds = SymbolKinds.Class;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.class; }
 }
 
 export class TypeParameter extends Type {
   public kind: SymbolKinds = SymbolKinds.TypeParameter;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.typeParameter; }
 
   public constraint: Type = null;
 
@@ -221,7 +211,6 @@ export class TypeParameter extends Type {
 
 export class Tuple extends Type {
   public kind: SymbolKinds = SymbolKinds.Tuple;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.tuple; }
 
   public elementTypes: Type[] = [];
   public baseArrayType: Type = null;
@@ -239,7 +228,6 @@ export class Tuple extends Type {
 
 export class Property extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Property;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.property; }
 
   public type: Type = null;
   public isOptional: boolean = false;
@@ -255,7 +243,6 @@ export class Property extends Symbol {
 
 export class Method extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Method;
-  public get isDisallowed(): boolean { return this.runner.plugin.disallow.method; }
 
   public callSignatures: Signature[] = [];
   public isOptional: boolean = false;

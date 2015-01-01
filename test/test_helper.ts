@@ -59,7 +59,6 @@ export function createPlugin(): Plugin.Plugin {
     pluginDirectory: process.cwd() + '/test/fixtures/plugin',
     defaultLibFileName: 'lib.d.ts',
     aliases: {},
-    disallow: {},
     generate: function(types, generator) {}
   });
 }

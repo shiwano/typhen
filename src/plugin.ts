@@ -8,18 +8,6 @@ import IEnvironment = require('./environments/i_environment');
 import NodeJsEnvironment = require('./environments/node_js');
 import Generator = require('./generator');
 
-export interface IDisallowOptions {
-  enum?: boolean;
-  function?: boolean;
-  interface?: boolean;
-  class?: boolean;
-  objectType?: boolean;
-  typeParameter?: boolean;
-  tuple?: boolean;
-  method?: boolean;
-  property?: boolean;
-}
-
 // For details, see: http://handlebarsjs.com/execution.html
 export interface IHandlebarsOptions {
   data?: any;
@@ -30,7 +18,6 @@ export interface IHandlebarsOptions {
 export interface IPlugin {
   pluginDirectory: string;
   env?: IEnvironment;
-  disallow?: IDisallowOptions;
   aliases?: Runner.IAliasesOptions;
   newLine?: string;
   namespaceSeparator?: string;
@@ -41,7 +28,6 @@ export interface IPlugin {
 export class Plugin implements IPlugin {
   public pluginDirectory: string;
   public env: IEnvironment;
-  public disallow: IDisallowOptions = {};
   public aliases: Runner.IAliasesOptions = {};
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';

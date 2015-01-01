@@ -98,17 +98,13 @@ Example:
 module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
-    newLine: '\r\n',                // Optional. Default value is '\n'.
-    namespaceSeparator: '::',       // Optional. Default value is '.'.
-    disallow: {                     // Optional. Default value is {}.
-      typeParameter: true,
-      method: true
-    },
-    aliases: {                      // Optional. Default value is {}.
+    newLine: '\r\n',          // Optional. Default value is '\n'.
+    namespaceSeparator: '::', // Optional. Default value is '.'.
+    aliases: {                // Optional. Default value is {}.
       '^(.+)Class$': '$1'
     },
-    handlebarsOptions: {            // Optional. Default value is null.
-      data: options,                // For details, see: http://handlebarsjs.com/execution.html
+    handlebarsOptions: {      // Optional. Default value is null.
+      data: options,          // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
         'baz': function(str) {
           return str + '-baz'
