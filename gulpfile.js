@@ -16,7 +16,7 @@ var paths = {
   dest: 'lib/',
   testDest: '.tmp/',
   typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts'],
-  defaultLibFile: 'lib.typhen.d.ts'
+  defaultLibFiles: ['lib.typhen.d.ts', 'lib.core.d.ts']
 };
 
 var tsProject = plugins.typescript.createProject({
@@ -96,8 +96,9 @@ gulp.task('watch:debug', function() {
 
 function test(watching, debug, callback) {
   mochaOptions.debug = mochaOptions.debugBrk = debug;
+  var isCompleted = false;
 
-  gulp.src(paths.defaultLibFile)
+  gulp.src(paths.defaultLibFiles)
     .pipe(plugins.copy(paths.testDest))
     .on('end', function() {
       gulp.src(paths.typescriptFiles)
@@ -118,7 +119,12 @@ function test(watching, debug, callback) {
           if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
         })
         .pipe(plugins.spawnMocha(mochaOptions))
-        .on('end', callback);
+        .on('end', function() {
+          if (!isCompleted) {
+            callback();
+            isCompleted = true;
+          }
+        });
     });
 }
 
