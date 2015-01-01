@@ -36,10 +36,12 @@ class TypeScriptParser {
   }
 
   public parse(): Symbol.Type[] {
-    var invalidSourceFileNames = this.sourceFiles.filter(s => s.filename.match(/.*\.d\.ts$/) === null);
+    var unsupportedSourceFileNames = this.sourceFiles
+      .filter(s => s.filename.match(/.*\.d\.ts$/) === null)
+      .map(s => s.filename);
 
-    if (invalidSourceFileNames.length > 0) {
-      throw new Error('Unsupported *.ts file: ' + invalidSourceFileNames.join(', '));
+    if (unsupportedSourceFileNames.length > 0) {
+      throw new Error('Unsupported *.ts file: ' + unsupportedSourceFileNames.join(', '));
     }
 
     this.program.getDiagnostics().forEach(d => {

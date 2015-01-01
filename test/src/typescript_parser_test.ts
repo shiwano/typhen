@@ -25,37 +25,11 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#parse', () => {
-    context('in general', () => {
-      it('should return all Typhen types', () => {
-        instance.parse();
-        assert(instance.types.length > 0);
-        instance.types.forEach(type => {
-          assert(type instanceof Symbol.Type);
-        });
-      });
-    });
-    context('when it has a source file', () => {
-      beforeEach(() => {
-        var invalidPath = 'test/fixtures/typings/invalid.ts';
-        instance = new TypeScriptParser([invalidPath], runner);
-      });
-
-      it('should raise a error', () => {
-        assert.throws(() => {
-          instance.parse();
-        });
-      });
-    });
-    context('when it has a declaration source file which has error diagnostics', () => {
-      beforeEach(() => {
-        var invalidPath = 'test/fixtures/typings/invalid.d.ts';
-        instance = new TypeScriptParser([invalidPath], runner);
-      });
-
-      it('should raise a error', () => {
-        assert.throws(() => {
-          instance.parse();
-        });
+    it('should return all Typhen types', () => {
+      instance.parse();
+      assert(instance.types.length > 0);
+      instance.types.forEach(type => {
+        assert(type instanceof Symbol.Type);
       });
     });
   });
