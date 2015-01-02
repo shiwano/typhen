@@ -59,7 +59,6 @@ export class Symbol {
     var name = this.assumedName === undefined || _.isEmpty(this.assumedName) ?
       this.rawName : this.assumedName;
     _.forEach(this.runner.plugin.aliases, (v, k) => name = name.replace(new RegExp(k), v));
-    _.forEach(this.runner.config.aliases, (v, k) => name = name.replace(new RegExp(k), v));
     return name;
   }
 

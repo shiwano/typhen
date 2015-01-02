@@ -14,7 +14,6 @@ export interface IConfig {
   env?: IEnvironment;
   cwd?: string;
   noWrite?: boolean;
-  aliases?: Runner.IAliasesOptions;
 }
 
 export class Config {
@@ -24,7 +23,6 @@ export class Config {
   public env: IEnvironment;
   public cwd: string = process.cwd();
   public noWrite: boolean = false;
-  public aliases: Runner.IAliasesOptions = {};
 
   constructor(args: IConfig) {
     _.assign(this, args);
