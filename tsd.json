@@ -46,6 +46,9 @@
     },
     "bluebird/bluebird.d.ts": {
       "commit": "ec6e0ae9525a165ca94d751932dd387078800c1e"
+    },
+    "vinyl/vinyl.d.ts": {
+      "commit": "77cfe764fbca8b964092efd14633560a4b10877c"
     }
   }
 }

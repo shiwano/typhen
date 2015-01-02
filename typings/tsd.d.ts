@@ -13,3 +13,4 @@
 /// <reference path="chalk/chalk.d.ts" />
 /// <reference path="swag/swag.d.ts" />
 /// <reference path="bluebird/bluebird.d.ts" />
+/// <reference path="vinyl/vinyl.d.ts" />
