@@ -1,6 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
 
-import _ = require('lodash');
 import chalk = require('chalk');
 
 class Logger {

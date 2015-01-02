@@ -6,11 +6,13 @@ import Plugin = require('./plugin');
 import Config = require('./config');
 import Runner = require('./runner');
 import Symbol = require('./symbol');
+import Logger = require('./logger');
 import LocalHandlebars = require('./local_handlebars');
 
 module Typhen {
   export import SymbolKinds = Symbol.SymbolKinds;
   export import Handlebars = LocalHandlebars.handlebars;
+  export var logger = Logger;
 
   export function run(configArgs: Config.IConfig): Promise<void> {
     var config = new Config.Config(configArgs);

@@ -3,6 +3,7 @@ require('../test_helper');
 import Typhen = require('../../src/index');
 import Plugin = require('../../src/plugin');
 import Symbol = require('../../src/symbol');
+import Logger = require('../../src/logger');
 import LocalHandlebars = require('../../src/local_handlebars');
 
 describe('Typhen', () => {
@@ -18,7 +19,13 @@ describe('Typhen', () => {
     });
   });
 
-  describe('#createPlugin', () => {
+  describe('.logger', () => {
+    it('should export logger', () => {
+      assert.strictEqual(Typhen.logger, Logger);
+    });
+  });
+
+  describe('.createPlugin', () => {
     it('should create the instance of Plugin', () => {
       var response = Typhen.createPlugin({
         pluginDirectory: 'templates',
@@ -28,7 +35,7 @@ describe('Typhen', () => {
     });
   });
 
-  describe('#loadPlugin', () => {
+  describe('.loadPlugin', () => {
     it('should load the specified instance of Plugin', () => {
       var response = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
       var expected = process.cwd() + '/test/fixtures/plugin';
