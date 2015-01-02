@@ -36,12 +36,7 @@ describe('Generator', () => {
       var generated = 'This is README.';
 
       it('should return the file data', () => {
-        assert.strictEqual(instance.generate('README.md', 'README.md'), generated);
-      });
-
-      it('should call env#writeFile', () => {
-        instance.generate('README.md', 'README.md');
-        assert((<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated));
+        assert.strictEqual(instance.generate('README.md', 'README.md').contents.toString(), generated);
       });
     });
 
@@ -49,12 +44,7 @@ describe('Generator', () => {
       var generated = 'FooType\nBar: 0\nBaz: 1\n';
 
       it('should return the generated data by Handlebars', () => {
-        assert.strictEqual(instance.generate('enum.hbs', 'underscore:**/*.txt', data), generated);
-      });
-
-      it('should call env#writeFile', () => {
-        instance.generate('enum.hbs', 'underscore:**/*.txt', data);
-        assert((<SinonStub>instance.env.writeFile).calledWith('generated/app/type/foo_type.txt', generated));
+        assert.strictEqual(instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents.toString(), generated);
       });
     });
 

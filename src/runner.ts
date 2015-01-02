@@ -43,7 +43,6 @@ export class Runner {
   public run(): Promise<void> {
     return new Promise<void>((resolve: () => void, reject: (e: Error) => void) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
-
       var parser = new TypeScriptParser([this.config.src], this);
       parser.parse();
       parser.sourceFiles.forEach(sourceFile => {
@@ -52,20 +51,19 @@ export class Runner {
       });
 
       Logger.log(Logger.underline('Generating files'));
-
       var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
-          this.plugin.handlebarsOptions, (fileName) => {
-            fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
-            Logger.info('Generating', Logger.cyan(fileName));
-          });
-
+          this.plugin.handlebarsOptions);
       var generateResult = this.plugin.generate(parser.types, generator);
 
-      function afterGenerate() {
+      var afterGenerate = () => {
+        generator.files.forEach(file => {
+          this.config.env.writeFile(file.path, file.contents);
+          Logger.info('Generated', Logger.cyan(file.relative));
+        });
         parser.types.forEach(type => type.destroy(true));
         Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
         resolve();
-      }
+      };
 
       if (_.isObject(generateResult) && _.isFunction(generateResult.then)) {
         (<Promise<void>>generateResult).then(afterGenerate).catch(e => { throw e; });

@@ -2,6 +2,7 @@
 
 import _ = require('lodash');
 import inflection = require('inflection');
+import Vinyl = require('vinyl');
 
 import IEnvironment = require('./environments/i_environment');
 import Symbol = require('./symbol');
@@ -15,22 +16,23 @@ interface IHandlebarsTemplate {
 class Generator {
   private fileDataCache: { [index: string]: string } = {};
   private templateCache: { [index: string]: IHandlebarsTemplate } = {};
+  public files: Vinyl[] = [];
 
   constructor(
       public outputDirectory: string,
       public env: IEnvironment,
       public pluginEnv: IEnvironment,
-      private handlebarsOptions: Plugin.IHandlebarsOptions,
-      private onGenerate?: (fileName: string) => void) {
+      private handlebarsOptions: Plugin.IHandlebarsOptions) {
+    this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
-  public generateUnlessExist(src: string, dest: string, context: Object = null): string {
+  public generateUnlessExist(src: string, dest: string, context: Object = null): Vinyl {
     return this.generate(src, dest, context, false);
   }
 
-  public generate(src: string, dest: string, overwrite?: boolean): string;
-  public generate(src: string, dest: string, context: Object, overwrite?: boolean): string;
-  public generate(src: string, dest: string, context: any, overwrite?: boolean): string {
+  public generate(src: string, dest: string, overwrite?: boolean): Vinyl;
+  public generate(src: string, dest: string, context: Object, overwrite?: boolean): Vinyl;
+  public generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
     if (_.isBoolean(context)) {
       overwrite = <boolean>context;
       context = null;
@@ -41,37 +43,46 @@ class Generator {
     }
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
 
-    if (this.onGenerate !== undefined) {
-      this.onGenerate(resolvedDest);
-    }
-
     var data = context !== null && /^.+\.hbs$/.test(src) ?
       this.getTemplate(src)(context, this.handlebarsOptions) :
       this.getFile(src);
 
     if (_.contains([true, undefined], overwrite) || !this.env.exists(resolvedDest)) {
-      this.env.writeFile(resolvedDest, data);
+      var file = this.createFile({
+        cwd: this.env.currentDirectory,
+        base: this.outputDirectory,
+        path: resolvedDest,
+        contents: data
+      });
+      this.files.push(file);
+      return file;
     }
-    return data;
+    return null;
+  }
+
+  public createFile(options: { cwd?: string; base?: string; path?: string; contents?: any; }): Vinyl {
+    if (_.isString(options.contents)) {
+      options.contents = new Buffer(options.contents);
+    }
+    return new Vinyl(options);
   }
 
   public replaceStarsOfFileName(fileName: string, type: Symbol.Type): string {
     var matches = fileName.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches == null) { return fileName; }
 
+    var inflect = (name: string, inflectionType: string): string => {
+      switch (inflectionType) {
+        case 'underscore':     return inflection.underscore(name);
+        case 'upperCamelCase': return inflection.camelize(name);
+        case 'lowerCamelCase': return inflection.camelize(name, true);
+        default:               return name;
+      }
+    };
     return matches[2]
-      .replace('**', type.moduleNames.map(n => this.inflect(n, matches[1])).join('/'))
-      .replace('*', this.inflect(type.name, matches[1]))
+      .replace('**', type.moduleNames.map(n => inflect(n, matches[1])).join('/'))
+      .replace('*', inflect(type.name, matches[1]))
       .replace(/^\//, ''); // Avoid making an absolute path
-  }
-
-  private inflect(name: string, inflectionType: string): string {
-    switch (inflectionType) {
-      case 'underscore':     return inflection.underscore(name);
-      case 'upperCamelCase': return inflection.camelize(name);
-      case 'lowerCamelCase': return inflection.camelize(name, true);
-      default:               return name;
-    }
   }
 
   private getFile(fileName: string): string {
