@@ -57,7 +57,9 @@ export class Runner {
 
       var afterGenerate = () => {
         generator.files.forEach(file => {
-          this.config.env.writeFile(file.path, file.contents);
+          if (!this.config.noWrite) {
+            this.config.env.writeFile(file.path, file.contents);
+          }
           Logger.info('Generated', Logger.cyan(file.relative));
         });
         parser.types.forEach(type => type.destroy(true));

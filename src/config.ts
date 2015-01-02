@@ -13,6 +13,7 @@ export interface IConfig {
   dest: string;
   env?: IEnvironment;
   cwd?: string;
+  noWrite?: boolean;
   aliases?: Runner.IAliasesOptions;
 }
 
@@ -22,6 +23,7 @@ export class Config {
   public dest: string;
   public env: IEnvironment;
   public cwd: string = process.cwd();
+  public noWrite: boolean = false;
   public aliases: Runner.IAliasesOptions = {};
 
   constructor(args: IConfig) {
