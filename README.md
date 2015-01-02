@@ -64,7 +64,7 @@ The typhenfile.js is a valid JavaScript file that belongs in the root directory 
 
 The typhenfile.js is comprised of the following parts:
 
-* The "wrapper" function.
+* The "wrapper" function that returns a Promise Object of the [bluebird](https://github.com/petkaantonov/bluebird).
 * Loading or creating a plugin.
 * Running with configuration.
 
@@ -76,14 +76,17 @@ module.exports = function(typhen) {
     optionName: 'option value'
   });
 
-  typhen.run({
+  return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
     plugin: plugin,
-    src: 'definitions.d.ts',
+    src: 'typings/lib/definitions.d.ts',
     dest: 'generated',
-    cwd: '../other/current', // Optional. Default value is process.cwd().
-    aliases: {               // Optional. Default value is {}.
-      'Foo': 'Bar'
-    }
+    cwd: '../other/current',             // Optional. Default value is process.cwd().
+    typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
+    defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+  }).then(function(files) {
+    console.log('Done!');
+  }).catche(function(e) {
+    console.error(e);
   });
 };
 ```
@@ -101,6 +104,7 @@ module.exports = function(typhen, options) {
     newLine: '\r\n',          // Optional. Default value is '\n'.
     namespaceSeparator: '::', // Optional. Default value is '.'.
     aliases: {                // Optional. Default value is {}.
+      'Foo': 'Bar',
       '^(.+)Class$': '$1'
     },
     handlebarsOptions: {      // Optional. Default value is null.
@@ -125,10 +129,15 @@ module.exports = function(typhen, options) {
           case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/class.hbs', 'underscore:**/*.rb', type);
             break;
-          case typhen.SymbolKinds.Function:
-            generator.generate('templates/function.hbs', 'underscore:**/*.rb', type);
-            break;
         }
+      });
+
+      generator.files.forEach((file) => {
+        // Change a file that will be written.
+      });
+
+      return new Promise(function(resolve, reject) { // If you want async processing, return a Promise object.
+        // Do async processing.
       });
     }
   });
