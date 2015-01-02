@@ -56,6 +56,10 @@ export class Runner {
         });
     this.plugin.generate(parser.types, generator);
 
+    parser.types.forEach(type => {
+      type.destroy(true); // Remove circular-reference memory leaks
+    });
+
     Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
   }
 }

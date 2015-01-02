@@ -44,6 +44,7 @@ export class DeclarationInfo {
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
   public kind: SymbolKinds = SymbolKinds.Invalid;
+  private isDestroyed: boolean = false;
 
   constructor(
       public runner: Runner.Runner,
@@ -95,6 +96,14 @@ export class Symbol {
 
   public toString(): string {
     return this.name;
+  }
+
+  public destroy(ok: boolean = false): void {
+    if (!ok || this.isDestroyed) { return; }
+    Object.keys(this).forEach((key) => {
+      delete (<any>this)[key];
+    });
+    this.isDestroyed = true;
   }
 }
 

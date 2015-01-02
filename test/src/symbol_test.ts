@@ -15,13 +15,10 @@ describe('Symbol', () => {
 
     beforeEach(() => {
       runner = helper.createRunner();
+      instance = helper.createEnum(runner);
     });
 
-    context('in general', () => {
-      beforeEach(() => {
-        instance = helper.createEnum(runner);
-      });
-
+    describe('#constructor', () => {
       it('should have isEnum', () => assert(instance.isEnum === true));
       it('should have name', () => assert(instance.name === 'FooType'));
       it('should have fullName', () => assert(instance.fullName === 'App.Type.FooType'));
@@ -39,27 +36,33 @@ describe('Symbol', () => {
           { name: 'type', value: 'Enum' }
         ]);
       });
+
+      context('when it has assumedName', () => {
+        beforeEach(() => {
+          instance.assumedName = 'SuperFooEnum';
+        });
+
+        it('should return assumedName as name', () => {
+          assert(instance.name === 'SuperFooEnum');
+        });
+      });
+
+      context('when alias option is given', () => {
+        beforeEach(() => {
+          runner.plugin.aliases['(.*)Type'] = '$1Enum';
+        });
+
+        it('should return alias as name', () => {
+          assert(instance.name === 'FooEnum');
+        });
+      });
     });
 
-    context('when it has assumedName', () => {
-      beforeEach(() => {
-        instance = helper.createEnum(runner);
-        instance.assumedName = 'SuperFooEnum';
-      });
-
-      it('should return assumedName as name', () => {
-        assert(instance.name === 'SuperFooEnum');
-      });
-    });
-
-    context('when alias option is given', () => {
-      beforeEach(() => {
-        runner.plugin.aliases['(.*)Type'] = '$1Enum';
-        instance = helper.createEnum(runner);
-      });
-
-      it('should return alias as name', () => {
-        assert(instance.name === 'FooEnum');
+    describe('#destroy', () => {
+      it('should delete own properties', () => {
+        instance.destroy(true);
+        assert(instance.rawName === undefined);
+        assert(instance.members === undefined);
       });
     });
   });
