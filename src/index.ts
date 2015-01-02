@@ -12,13 +12,13 @@ module Typhen {
   export import SymbolKinds = Symbol.SymbolKinds;
   export import Handlebars = LocalHandlebars.handlebars;
 
-  export function run(configArgs: Config.IConfig): void {
+  export function run(configArgs: Config.IConfig): Promise<void> {
     var config = new Config.Config(configArgs);
-    new Runner.Runner(config).run();
+    return new Runner.Runner(config).run();
   }
 
   export function runByTyphenfile(fileName: string): void {
-    require(fileName)(Typhen);
+    return require(fileName)(Typhen);
   }
 
   export function createPlugin(pluginArgs: Plugin.IPlugin): Plugin.Plugin {

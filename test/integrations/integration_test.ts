@@ -42,8 +42,7 @@ describe('Integration Test', () => {
             plugin: plugin,
             src: 'test/fixtures/typings/definitions.d.ts',
             dest: '.tmp/generated'
-          });
-          done();
+          }).then(done);
         });
       });
 

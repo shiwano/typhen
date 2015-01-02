@@ -19,13 +19,13 @@ describe('Error Test', () => {
         rimraf('./.tmp/generated', done);
       });
 
-      it('should raise error', () => {
-        assert.throws(() => {
-          Typhen.run({
-            plugin: plugin,
-            src: errorFileName,
-            dest: '.tmp/generated'
-          });
+      it('should raise error', (done) => {
+        Typhen.run({
+          plugin: plugin,
+          src: errorFileName,
+          dest: '.tmp/generated'
+        }).catch(e => {
+          done();
         });
       });
 

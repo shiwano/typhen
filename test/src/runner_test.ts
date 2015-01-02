@@ -19,9 +19,11 @@ describe('Runner', () => {
       sandbox.stub(instance.plugin, 'generate');
     });
 
-    it('should call Plugin#generate', () => {
-      instance.run();
-      assert.strictEqual((<SinonStub>instance.plugin.generate).calledOnce, true);
+    it('should call Plugin#generate', (done) => {
+      instance.run().then(() => {
+        assert.strictEqual((<SinonStub>instance.plugin.generate).calledOnce, true);
+        done();
+      });
     });
   });
 });

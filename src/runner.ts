@@ -1,7 +1,10 @@
 /// <reference path="../typings/tsd.d.ts" />
 
+import _ = require('lodash');
 import tss = require('typescript-services-api');
 import chalk = require('chalk');
+import Promise = require('bluebird');
+import Vinyl = require('vinyl');
 
 import Plugin = require('./plugin');
 import Config = require('./config');
@@ -37,29 +40,38 @@ export class Runner {
     };
   }
 
-  public run(): void {
-    Logger.log(Logger.underline('Parsing TypeScript files'));
+  public run(): Promise<void> {
+    return new Promise<void>((resolve: () => void, reject: (e: Error) => void) => {
+      Logger.log(Logger.underline('Parsing TypeScript files'));
 
-    var parser = new TypeScriptParser([this.config.src], this);
-    parser.parse();
-    parser.sourceFiles.forEach(sourceFile => {
-      var fileName = sourceFile.filename.replace(this.config.env.currentDirectory + '/', '');
-      Logger.info('Parsed', Logger.cyan(fileName));
+      var parser = new TypeScriptParser([this.config.src], this);
+      parser.parse();
+      parser.sourceFiles.forEach(sourceFile => {
+        var fileName = sourceFile.filename.replace(this.config.env.currentDirectory + '/', '');
+        Logger.info('Parsed', Logger.cyan(fileName));
+      });
+
+      Logger.log(Logger.underline('Generating files'));
+
+      var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
+          this.plugin.handlebarsOptions, (fileName) => {
+            fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
+            Logger.info('Generating', Logger.cyan(fileName));
+          });
+
+      var generateResult = this.plugin.generate(parser.types, generator);
+
+      function afterGenerate() {
+        parser.types.forEach(type => type.destroy(true));
+        Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
+        resolve();
+      }
+
+      if (_.isObject(generateResult) && _.isFunction(generateResult.then)) {
+        (<Promise<void>>generateResult).then(afterGenerate).catch(e => { throw e; });
+      } else {
+        afterGenerate();
+      }
     });
-
-    Logger.log(Logger.underline('Generating files'));
-
-    var generator = new Generator(this.config.dest, this.config.env, this.plugin.env,
-        this.plugin.handlebarsOptions, (fileName) => {
-          fileName = fileName.replace(this.config.env.currentDirectory + '/', '');
-          Logger.info('Generating', Logger.cyan(fileName));
-        });
-    this.plugin.generate(parser.types, generator);
-
-    parser.types.forEach(type => {
-      type.destroy(true); // Remove circular-reference memory leaks
-    });
-
-    Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
   }
 }
