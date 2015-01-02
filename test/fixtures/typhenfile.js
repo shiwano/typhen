@@ -5,7 +5,7 @@ module.exports = function(typhen) {
     author: 'shiwano'
   });
 
-  typhen.run({
+  return typhen.run({
     plugin: plugin,
     src: 'test/fixtures/typings/definitions.d.ts',
     dest: '.tmp/generated'

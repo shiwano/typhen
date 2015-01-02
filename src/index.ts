@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 import path = require('path');
+import Vinyl = require('vinyl');
 
 import Plugin = require('./plugin');
 import Config = require('./config');
@@ -14,12 +15,12 @@ module Typhen {
   export import Handlebars = LocalHandlebars.handlebars;
   export var logger = Logger;
 
-  export function run(configArgs: Config.IConfig): Promise<void> {
+  export function run(configArgs: Config.IConfig): Promise<Vinyl[]> {
     var config = new Config.Config(configArgs);
     return new Runner.Runner(config).run();
   }
 
-  export function runByTyphenfile(fileName: string): void {
+  export function runByTyphenfile(fileName: string): Promise<Vinyl[]> {
     return require(fileName)(Typhen);
   }
 

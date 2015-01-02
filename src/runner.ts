@@ -40,8 +40,8 @@ export class Runner {
     };
   }
 
-  public run(): Promise<void> {
-    return new Promise<void>((resolve: () => void, reject: (e: Error) => void) => {
+  public run(): Promise<Vinyl[]> {
+    return new Promise<Vinyl[]>((resolve: (r: Vinyl[]) => void, reject: (e: Error) => void) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
       var parser = new TypeScriptParser([this.config.src], this);
       parser.parse();
@@ -62,11 +62,11 @@ export class Runner {
         });
         parser.types.forEach(type => type.destroy(true));
         Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
-        resolve();
+        resolve(generator.files);
       };
 
       if (_.isObject(generateResult) && _.isFunction(generateResult.then)) {
-        (<Promise<void>>generateResult).then(afterGenerate).catch(e => { throw e; });
+        (<Promise<void>>generateResult).then(afterGenerate).catch(reject);
       } else {
         afterGenerate();
       }

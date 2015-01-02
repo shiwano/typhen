@@ -1,9 +1,12 @@
 require('../test_helper');
 
 import fs = require('fs');
+import path = require('path');
 import childProcess = require('child_process');
+import _ = require('lodash');
 import glob = require('glob');
 import rimraf = require('rimraf');
+import Vinyl = require('vinyl');
 
 import Typhen = require('../../src/index');
 
@@ -31,8 +34,11 @@ function addTestSuite(expectedFileNames: string[]) {
 describe('Integration Test', () => {
   describe('typhen-test plugin', () => {
     var expectedFileNames = glob.sync('./test/fixtures/generated/**/*.md');
+    expectedFileNames.sort();
 
     context('via JavaScript code', () => {
+      var generatedFiles: Vinyl[];
+
       before((done) => {
         rimraf('./.tmp/generated', () => {
           var plugin = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
@@ -42,11 +48,22 @@ describe('Integration Test', () => {
             plugin: plugin,
             src: 'test/fixtures/typings/definitions.d.ts',
             dest: '.tmp/generated'
-          }).then(done);
+          }).done((files) => {
+            generatedFiles = files;
+            done();
+          }, (e) => {
+            throw e;
+          });
         });
       });
 
       addTestSuite(expectedFileNames);
+
+      it('should return generated vinyl files on then callback', () => {
+        var actualFileNames = generatedFiles.map(f => './test/fixtures/generated/' + f.relative);
+        actualFileNames.sort();
+        assert.deepEqual(actualFileNames, expectedFileNames);
+      });
     });
 
     context('via bin', () => {
