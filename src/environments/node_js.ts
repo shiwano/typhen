@@ -10,19 +10,25 @@ import IEnvironment = require('./i_environment');
 class NodeJsEnvironment implements IEnvironment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
-  public defaultLibFileNames: string[] = [
-    path.resolve(__dirname, '../../lib.typhen.d.ts'),
-    path.resolve(__dirname, '../../lib.core.d.ts')
-  ];
+  public defaultLibFileName: string = path.resolve(__dirname, '../../lib.typhen.d.ts');
+  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.core.d.ts');
 
-  public get defaultLibFileName(): string { return this.defaultLibFileNames[0]; }
-
-  constructor(currentDirectory: string, public newLine: string) {
+  constructor(currentDirectory: string, public newLine: string, baseDefaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
+
+    if (_.isString(baseDefaultLibFileName) && baseDefaultLibFileName.length > 0) {
+      this.baseDefaultLibFileName = this.resolvePath(baseDefaultLibFileName);
+    }
   }
 
   public readFile(fileName: string): string {
-    return fs.readFileSync(this.resolvePath(fileName), 'utf-8');
+    var resolvedPath = this.resolvePath(fileName);
+
+    if (resolvedPath === this.defaultLibFileName) {
+      return this.getDefaultLibFileData();
+    } else {
+      return fs.readFileSync(resolvedPath, 'utf-8');
+    }
   }
 
   public writeFile(fileName: string, data: string): void {
@@ -39,6 +45,12 @@ class NodeJsEnvironment implements IEnvironment {
   public exists(fileName: string): boolean {
     var filePath = this.resolvePath(fileName);
     return fs.existsSync(filePath);
+  }
+
+  private getDefaultLibFileData(): string {
+    var baseDefaultLibFileData = fs.readFileSync(this.baseDefaultLibFileName, 'utf-8');
+    var defaultLibFileData = fs.readFileSync(this.defaultLibFileName, 'utf-8');
+    return [baseDefaultLibFileData, defaultLibFileData].join('\n');
   }
 }
 

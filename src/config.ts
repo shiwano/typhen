@@ -13,6 +13,7 @@ export interface IConfig {
   dest: string;
   env?: IEnvironment;
   cwd?: string;
+  defaultLibFileName?: string;
   noWrite?: boolean;
 }
 
@@ -22,13 +23,14 @@ export class Config {
   public dest: string;
   public env: IEnvironment;
   public cwd: string = process.cwd();
+  public defaultLibFileName: string;
   public noWrite: boolean = false;
 
   constructor(args: IConfig) {
     _.assign(this, args);
 
     if (this.env === undefined) {
-      this.env = new NodeJsEnvironment(this.cwd, this.plugin.newLine);
+      this.env = new NodeJsEnvironment(this.cwd, this.plugin.newLine, this.defaultLibFileName);
     }
   }
 }

@@ -1,7 +1,6 @@
 /* tslint:disable:interface-name class-name */
 
-/// <reference no-default-lib="true"/>
-/// <reference path="./lib.core.d.ts" />
+// "lib.core.d.ts" contents here
 
 interface TyphenPrimitiveType {}
 

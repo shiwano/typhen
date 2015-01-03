@@ -50,7 +50,7 @@ class TypeScriptParser {
 
   public get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
-      .filter(s => !_.contains(this.runner.config.env.defaultLibFileNames, s.filename));
+      .filter(s => s.filename !== this.runner.config.env.defaultLibFileName);
   }
 
   public get types(): Symbol.Type[] {
