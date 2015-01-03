@@ -8,8 +8,4 @@ describe('Plugin', () => {
   beforeEach(() => {
     instance = helper.createPlugin();
   });
-
-  it('should have the env', () => {
-    assert.strictEqual(instance.env.currentDirectory, instance.pluginDirectory);
-  });
 });

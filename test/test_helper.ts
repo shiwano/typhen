@@ -37,7 +37,8 @@ export class TestEnvironment implements IEnvironment {
   }
 
   public resolvePath(...pathSegments: string[]): string {
-    return path.join.apply(this, pathSegments);
+    pathSegments = ['/'].concat(pathSegments);
+    return path.resolve.apply(this, pathSegments);
   }
 
   public exists(fileName: string): boolean {
@@ -75,13 +76,11 @@ export function createConfig(): Config.Config {
 
 export function createGenerator(): Generator  {
   var env = new TestEnvironment({
-    'README.md': 'This is README.'
+    '/README.md': 'This is README.',
+    '/plugin/README.md': 'This is README.',
+    '/plugin/enum.hbs': '{{name}}\n{{#each members}}{{name}}: {{value}}\n{{/each}}'
   });
-  var pluginEnv = new TestEnvironment({
-    'enum.hbs': '{{name}}\n{{#each members}}{{name}}: {{value}}\n{{/each}}',
-    'README.md': 'This is README.'
-  });
-  return new Generator('generated', env, pluginEnv, null);
+  return new Generator(env, '/generated', '/plugin', null);
 }
 
 export function createRunner(): Runner.Runner {

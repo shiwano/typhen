@@ -17,7 +17,6 @@ export interface IHandlebarsOptions {
 
 export interface IPlugin {
   pluginDirectory: string;
-  env?: IEnvironment;
   aliases?: Runner.IAliasesOptions;
   newLine?: string;
   namespaceSeparator?: string;
@@ -27,7 +26,6 @@ export interface IPlugin {
 
 export class Plugin implements IPlugin {
   public pluginDirectory: string;
-  public env: IEnvironment;
   public aliases: Runner.IAliasesOptions = {};
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';
@@ -35,10 +33,6 @@ export class Plugin implements IPlugin {
 
   constructor(args: IPlugin) {
     _.assign(this, args);
-
-    if (this.env === undefined) {
-      this.env = new NodeJsEnvironment(this.pluginDirectory, this.newLine);
-    }
   }
 
   public generate(types: Symbol.Type[], generator: Generator): any {

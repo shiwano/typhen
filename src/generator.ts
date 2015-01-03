@@ -19,9 +19,9 @@ class Generator {
   public files: Vinyl[] = [];
 
   constructor(
-      public outputDirectory: string,
       public env: IEnvironment,
-      public pluginEnv: IEnvironment,
+      public outputDirectory: string,
+      public pluginDirectory: string,
       private handlebarsOptions: Plugin.IHandlebarsOptions) {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
@@ -45,7 +45,7 @@ class Generator {
 
     var data = context !== null && /^.+\.hbs$/.test(src) ?
       this.getTemplate(src)(context, this.handlebarsOptions) :
-      this.getFile(src);
+      this.getFileFromPluginDirectory(src);
 
     if (_.contains([true, undefined], overwrite) || !this.env.exists(resolvedDest)) {
       var file = this.createFile({
@@ -85,20 +85,20 @@ class Generator {
       .replace(/^\//, ''); // Avoid making an absolute path
   }
 
-  private getFile(fileName: string): string {
-    var filePath = this.pluginEnv.resolvePath(fileName);
+  private getFileFromPluginDirectory(fileName: string): string {
+    var filePath = this.env.resolvePath(this.pluginDirectory, fileName);
 
     if (!this.fileDataCache[filePath]) {
-      this.fileDataCache[filePath] = this.pluginEnv.readFile(filePath);
+      this.fileDataCache[filePath] = this.env.readFile(filePath);
     }
     return this.fileDataCache[filePath];
   }
 
   private getTemplate(templateName: string): IHandlebarsTemplate {
-    var filePath = this.pluginEnv.resolvePath(templateName);
+    var filePath = this.env.resolvePath(this.pluginDirectory, templateName);
 
     if (!this.templateCache[filePath]) {
-      var templateSource = this.getFile(filePath);
+      var templateSource = this.getFileFromPluginDirectory(filePath);
       this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource);
     }
     return this.templateCache[filePath];

@@ -8,7 +8,7 @@ describe('CompilerHost', () => {
   var sandbox = sinon.sandbox.create();
   var instance: CompilerHost;
   var env = new helper.TestEnvironment({
-    'test.d.ts': '# test'
+    '/test.d.ts': '# test'
   });
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('CompilerHost', () => {
       it('should return the instance of SourceFile which has the specified file data', () => {
         var languageVersion = tss.ts.ScriptTarget.ES5;
         var expected = '# test';
-        assert.strictEqual(instance.getSourceFile('test.d.ts', languageVersion).text, expected);
+        assert.strictEqual(instance.getSourceFile('/test.d.ts', languageVersion).text, expected);
       });
     });
 
