@@ -31,13 +31,21 @@ CallSignatures is empty.
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---
+---|---|---|---|---|---
 start|T|false|true||
 end|T|false|true||
 
 ## Methods
 
 Methods is empty.
+
+## Static Properties
+
+Static Properties is empty.
+
+## Static Methods
+
+Static Methods is empty.
 
 ## StringIndexType
 

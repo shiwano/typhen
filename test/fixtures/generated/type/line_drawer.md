@@ -1,4 +1,4 @@
-# Type.Square
+# Type.LineDrawer
 
 No comment.
 
@@ -28,11 +28,7 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---|---
-center|Point|false|true||
-margin|number|true|true||
-size|integer|false|true|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+Properties is empty.
 
 ## Methods
 
@@ -40,11 +36,15 @@ Methods is empty.
 
 ## Static Properties
 
-Static Properties is empty.
+Name|TypeName|IsOptional|isOwn|Tags|Comment
+---|---|---|---|---
+line|Line|false|true||
 
 ## Static Methods
 
-Static Methods is empty.
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
+---|---|---|---|---|---
+draw|src:Point:false dest:Point:false |Line|false|true|  
 
 ## StringIndexType
 

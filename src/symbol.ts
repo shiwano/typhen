@@ -190,6 +190,8 @@ export class Interface extends ObjectType {
   public baseTypes: Interface[] = [];
   public typeParameters: TypeParameter[] = [];
   public rawTypeArguments: Type[] = [];
+  public staticProperties: Property[] = [];
+  public staticMethods: Method[] = [];
 
   public get isGenericType(): boolean { return this.typeParameters.length > 0; }
   public get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
@@ -205,7 +207,8 @@ export class Interface extends ObjectType {
 
   public initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
       constructorSignatures: Signature[], callSignatures: Signature[], baseTypes: Interface[],
-      typeParameters: TypeParameter[], rawTypeArguments: Type[]): Interface {
+      typeParameters: TypeParameter[], rawTypeArguments: Type[],
+      staticProperties: Property[], staticMethods: Method[]): Interface {
     super.initialize(properties, methods, stringIndexType, numberIndexType);
 
     this.constructorSignatures = constructorSignatures;
@@ -213,6 +216,8 @@ export class Interface extends ObjectType {
     this.baseTypes = baseTypes;
     this.typeParameters = typeParameters;
     this.rawTypeArguments = rawTypeArguments;
+    this.staticProperties = staticProperties;
+    this.staticMethods = staticMethods;
     return this;
   }
 }

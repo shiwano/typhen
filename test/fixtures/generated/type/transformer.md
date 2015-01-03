@@ -36,6 +36,14 @@ Properties is empty.
 
 Methods is empty.
 
+## Static Properties
+
+Static Properties is empty.
+
+## Static Methods
+
+Static Methods is empty.
+
 ## StringIndexType
 
 StringIndexType is undefined.

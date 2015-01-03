@@ -249,15 +249,14 @@ class TypeScriptParser {
   }
 
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
-    var symbol = type.symbol;
     var genericType = type.target === undefined ? type : type.target;
     var typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
     var properties = genericType.getProperties()
-        .filter(s => s.flags === ts.SymbolFlags.Property)
+        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
         .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
     var methods = genericType.getProperties()
-        .filter(s => s.flags === ts.SymbolFlags.Method)
+        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
         .map(s => this.parseMethod(s, _.contains(genericType.declaredProperties, s)));
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
@@ -272,19 +271,32 @@ class TypeScriptParser {
     var typeArguments = type.typeArguments === undefined ? [] :
       type.typeArguments.map(t => this.parseType(t));
 
+    var staticProperties: Symbol.Property[] = [];
+    var staticMethods: Symbol.Method[] = [];
+
+    if (genericType.symbol.flags & ts.SymbolFlags.Class) {
+      var staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
+        .filter(s => !((s.flags & ts.SymbolFlags.Prototype) > 0));
+      staticProperties = staticPropertySymbols
+        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
+        .map(s => this.parseProperty(s));
+      staticMethods = staticPropertySymbols
+        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
+        .map(s => this.parseMethod(s));
+    }
     return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
-        constructorSignatures, callSignatures,
-        baseTypes, typeParameters, typeArguments);
+        constructorSignatures, callSignatures, baseTypes, typeParameters,
+        typeArguments, staticProperties, staticMethods);
   }
 
   private parseObjectType(type: ts.ResolvedObjectType): Symbol.ObjectType {
     var typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
 
     var properties = type.getProperties()
-        .filter(s => s.flags === ts.SymbolFlags.Property)
+        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
         .map(s => this.parseProperty(s));
     var methods = type.getProperties()
-        .filter(s => s.flags === ts.SymbolFlags.Method)
+        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
         .map(s => this.parseMethod(s));
     var stringIndexType = this.parseType(type.getStringIndexType());
     var numberIndexType = this.parseType(type.getNumberIndexType());
@@ -332,7 +344,7 @@ class TypeScriptParser {
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var propertyType = this.parseType(type);
-    var isOptional = symbol.valueDeclaration.flags === ts.NodeFlags.QuestionMark;
+    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
     return typhenSymbol.initialize(propertyType, isOptional, isOwn);
@@ -341,7 +353,7 @@ class TypeScriptParser {
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
-    var isOptional = symbol.valueDeclaration.flags === ts.NodeFlags.QuestionMark;
+    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn);
@@ -362,7 +374,7 @@ class TypeScriptParser {
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var parameterType = this.parseType(type);
-    var isOptional = symbol.valueDeclaration.flags === ts.NodeFlags.QuestionMark;
+    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
     return typhenSymbol.initialize(parameterType, isOptional);

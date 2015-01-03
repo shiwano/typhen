@@ -74,7 +74,7 @@ Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
 Properties is empty.
 {{else}}
 Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---
+---|---|---|---|---|---
 {{#each properties}}
 {{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
@@ -85,11 +85,37 @@ Name|TypeName|IsOptional|isOwn|Tags|Comment
 {{#empty methods}}
 Methods is empty.
 {{else}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
+---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}} {{comment}}
+{{/each}}
+{{/each}}
+{{/empty}}
+
+## Static Properties
+
+{{#empty staticProperties}}
+Static Properties is empty.
+{{else}}
+Name|TypeName|IsOptional|isOwn|Tags|Comment
+---|---|---|---|---
+{{#each staticProperties}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{/each}}
+{{/empty}}
+
+## Static Methods
+
+{{#empty staticMethods}}
+Static Methods is empty.
+{{else}}
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
+---|---|---|---|---|---
+{{#each staticMethods}}
+{{#each callSignatures}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}}  {{comment}}
 {{/each}}
 {{/each}}
 {{/empty}}

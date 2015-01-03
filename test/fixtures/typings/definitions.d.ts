@@ -48,6 +48,17 @@ declare module Type {
   interface Transformer {
     (squeare: Square, scale : number): void;
   }
+
+  class Line {
+    color: Color;
+    constructor(src: Point, dest: Point);
+    setColor(color: Color, callback?: (color: Color) => void): void;
+  }
+
+  class LineDrawer {
+    static line: Line;
+    static draw(src: Point, dest: Point): Line;
+  }
 }
 
 declare module Rpc {

@@ -1,4 +1,4 @@
-# Type.Square
+# Type.Line
 
 No comment.
 
@@ -30,13 +30,13 @@ CallSignatures is empty.
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---|---
-center|Point|false|true||
-margin|number|true|true||
-size|integer|false|true|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+color|Color|false|true||
 
 ## Methods
 
-Methods is empty.
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
+---|---|---|---|---|---
+setColor|color:Color:false callback:LineSetColorCallbackFunction:true |void|false|true| 
 
 ## Static Properties
 
