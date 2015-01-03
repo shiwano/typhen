@@ -12,3 +12,4 @@
 /// <reference path="minimatch/minimatch.d.ts" />
 /// <reference path="chalk/chalk.d.ts" />
 /// <reference path="swag/swag.d.ts" />
+/// <reference path="bluebird/bluebird.d.ts" />

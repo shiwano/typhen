@@ -62,6 +62,7 @@
     "typhen"
   ],
   "dependencies": {
+    "bluebird": "^2.5.3",
     "chalk": "^0.5.1",
     "handlebars": "^2.0.0",
     "here": "0.0.2",
