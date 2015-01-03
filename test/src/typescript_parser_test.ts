@@ -18,6 +18,10 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#sourceFiles', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
     it('should return loaded instances of ts.SourceFile', () => {
       var expected = [colorPath, definitionPath];
       assert.deepEqual(instance.sourceFiles.map(d => d.filename), expected);
@@ -35,6 +39,10 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#parseSourceFile', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
     it('should return Typhen types which is defined on source file', () => {
       var sourceFile = instance.sourceFiles[1];
       var types = instance.parseSourceFile(sourceFile);
@@ -46,6 +54,10 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#findTypesFromSourceFile', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
     it('should return specified tss.ts.Node array', () => {
       var sourceFile = instance.sourceFiles[1];
       var kinds = [tss.ts.SyntaxKind.InterfaceDeclaration];

@@ -25,18 +25,7 @@ class TypeScriptParser {
   constructor(fileNames: string[], private runner: Runner.Runner) {
     this.program = ts.createProgram(fileNames, this.runner.compilerOptions, this.runner.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
-  }
 
-  public get sourceFiles(): ts.SourceFile[] {
-    return this.program.getSourceFiles()
-      .filter(s => !_.contains(this.runner.config.env.defaultLibFileNames, s.filename));
-  }
-
-  public get types(): Symbol.Type[] {
-    return _.values(this.typeCache);
-  }
-
-  public parse(): Symbol.Type[] {
     var unsupportedSourceFileNames = this.sourceFiles
       .filter(s => s.filename.match(/.*\.d\.ts$/) === null)
       .map(s => s.filename);
@@ -57,7 +46,18 @@ class TypeScriptParser {
       Logger.error(Logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
+  }
 
+  public get sourceFiles(): ts.SourceFile[] {
+    return this.program.getSourceFiles()
+      .filter(s => !_.contains(this.runner.config.env.defaultLibFileNames, s.filename));
+  }
+
+  public get types(): Symbol.Type[] {
+    return _.values(this.typeCache);
+  }
+
+  public parse(): Symbol.Type[] {
     this.sourceFiles.forEach(s => this.parseSourceFile(s));
     return this.types;
   }
