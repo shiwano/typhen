@@ -62,6 +62,12 @@ describe('NodeJsEnvironment', () => {
     });
   });
 
+  describe('#dirname', () => {
+    it('should return the directory name', () => {
+      assert.strictEqual(instance.dirname('/test/index.ts'), '/test');
+    });
+  });
+
   describe('#exists', () => {
     beforeEach(() => {
       sandbox.stub(fs, 'existsSync').returns(true);

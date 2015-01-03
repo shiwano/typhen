@@ -9,6 +9,7 @@ interface IEnvironment {
   readFile(fileName: string): string;
   writeFile(fileName: string, data: string): void;
   resolvePath(...pathSegments: string[]): string;
+  dirname(fileName: string): string;
   exists(fileName: string): boolean;
 }
 

@@ -50,11 +50,23 @@ class TypeScriptParser {
 
   public get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
-      .filter(s => s.filename !== this.runner.config.env.defaultLibFileName);
+      .filter(s => {
+        var resolvedPath = this.runner.config.env.resolvePath(s.filename);
+        return resolvedPath !== this.runner.config.env.defaultLibFileName &&
+          _.contains(resolvedPath, this.runner.config.typingDirectory);
+      });
   }
 
   public get types(): Symbol.Type[] {
-    return _.values(this.typeCache);
+    return (<Symbol.Type[]>_.values(this.typeCache))
+      .filter(t => {
+        if (t instanceof Symbol.Tuple) { return true; }
+
+        return t.declarationInfos.length > 0 && _.every(t.declarationInfos, d => {
+          var dirname = this.runner.config.env.dirname(d.path);
+          return _.contains(dirname, this.runner.config.typingDirectory);
+        });
+      });
   }
 
   public parse(): Symbol.Type[] {
@@ -153,8 +165,9 @@ class TypeScriptParser {
 
     return symbol.declarations.map(d => {
       var sourceFile = d.getSourceFile();
+      var resolvedPath = this.runner.config.env.resolvePath(sourceFile.filename);
       var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.pos);
-      return new Symbol.DeclarationInfo(sourceFile.filename, d.getFullText(), lineAndCharacterNumber);
+      return new Symbol.DeclarationInfo(sourceFile.filename, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
   }
 

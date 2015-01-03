@@ -25,6 +25,7 @@ export enum SymbolKinds {
 export class DeclarationInfo {
   constructor(
       public fileName: string,
+      public path: string,
       public fullText: string,
       public lineAndCharacterNumber: {
         line: number;

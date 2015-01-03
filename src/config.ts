@@ -11,9 +11,10 @@ export interface IConfig {
   plugin: Plugin.Plugin;
   src: string;
   dest: string;
-  env?: IEnvironment;
   cwd?: string;
+  typingDirectory?: string;
   defaultLibFileName?: string;
+  env?: IEnvironment;
   noWrite?: boolean;
 }
 
@@ -21,9 +22,10 @@ export class Config {
   public plugin: Plugin.Plugin;
   public src: string;
   public dest: string;
-  public env: IEnvironment;
   public cwd: string = process.cwd();
+  public typingDirectory: string;
   public defaultLibFileName: string;
+  public env: IEnvironment;
   public noWrite: boolean = false;
 
   constructor(args: IConfig) {
@@ -32,5 +34,11 @@ export class Config {
     if (this.env === undefined) {
       this.env = new NodeJsEnvironment(this.cwd, this.plugin.newLine, this.defaultLibFileName);
     }
+    this.defaultLibFileName = this.env.defaultLibFileName;
+
+    if (!_.isString(this.typingDirectory)) {
+      this.typingDirectory = this.env.dirname(this.env.resolvePath(this.src));
+    }
+    this.typingDirectory = this.env.resolvePath(this.typingDirectory);
   }
 }

@@ -9,7 +9,15 @@ describe('Config', () => {
     instance = helper.createConfig();
   });
 
-  it('should have the env', () => {
-    assert.strictEqual(instance.env.currentDirectory, instance.cwd);
+  context('when the env option is not given', () => {
+    it('should have the env', () => {
+      assert.strictEqual(instance.env.currentDirectory, instance.cwd);
+    });
+  });
+
+  context('when the typingDirectory option is not given', () => {
+    it('should have the typingDirectory', () => {
+      assert.strictEqual(instance.typingDirectory, process.cwd() + '/test/fixtures/typings');
+    });
   });
 });

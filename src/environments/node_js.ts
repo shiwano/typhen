@@ -42,6 +42,10 @@ class NodeJsEnvironment implements IEnvironment {
     return path.resolve.apply(null, args);
   }
 
+  public dirname(fileName: string): string {
+    return path.dirname(fileName);
+  }
+
   public exists(fileName: string): boolean {
     var filePath = this.resolvePath(fileName);
     return fs.existsSync(filePath);

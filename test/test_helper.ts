@@ -40,6 +40,10 @@ export class TestEnvironment implements IEnvironment {
     return path.resolve.apply(this, pathSegments);
   }
 
+  public dirname(fileName: string): string {
+    return path.dirname(fileName);
+  }
+
   public exists(fileName: string): boolean {
     return _.any(Object.keys(this.fileData), n => _.contains(fileName, n));
   }
