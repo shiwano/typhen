@@ -116,6 +116,13 @@ module.exports = function(typhen, options) {
       }
     },
 
+    rename: function(symbol, name) {
+      if (symbol.kind === typhen.SymbolKinds.Array) {
+        return '[]';
+      }
+      return name;
+    },
+
     generate: function(generator, types) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
 
