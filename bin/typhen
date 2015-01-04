@@ -13,13 +13,16 @@ var _ = require('lodash'),
       dest: path,
       help: Boolean,
       version: Boolean,
+      verbose: Boolean,
       __main: path, // For test
     },
     shortHands = {
       p: '--plugin',
+      P: '--plugin-options',
       d: '--dest',
       h: '--help',
       v: '--version',
+      V: '--verbose'
     },
     options = nopt(knownOptions, shortHands, process.argv, 2);
 
@@ -36,11 +39,12 @@ if (options.help) {
         typhen --plugin typhen-json-schema --dest generated definitions.d.ts
 
       Options:
-        -p, --plugin      Specify plugin name or file path.
-        --plugin-options  Specify plugin options (JSON string).
-        -d, --dest        Generate files to the directory.
-        -h, --help        Print this message.
-        -v, --version     Print the package's version.*/).unindent());
+        -p, --plugin         Specify plugin name or file path.
+        -P, --plugin-options Specify plugin options (JSON string).
+        -d, --dest           Generate files to the directory.
+        -h, --help           Print this message.
+        -v, --version        Print the package's version.
+        -V, --verbose        Verbose mode. A lot more information output.*/).unindent());
    return;
 }
 
@@ -50,6 +54,10 @@ if (options.version) {
 }
 
 var typhen = _.isString(options.__main) ? require(options.__main) : require('../lib/index.js');
+
+if (options.verbose) {
+  typhen.logger.level = typhen.logger.LogLevel.Debug;
+}
 
 if (options.argv.remain.length === 0) {
   if (fs.existsSync(process.cwd() + '/typhenfile.js')) {
