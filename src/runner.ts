@@ -53,7 +53,7 @@ export class Runner {
       Logger.log(Logger.underline('Generating files'));
       var generator = new Generator(this.config.env, this.config.dest,
           this.plugin.pluginDirectory, this.plugin.handlebarsOptions);
-      var generateResult = this.plugin.generate(parser.types, generator);
+      var generateResult = this.plugin.generate(generator, parser.types);
 
       var afterGenerate = () => {
         generator.files.forEach(file => {

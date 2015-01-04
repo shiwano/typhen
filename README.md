@@ -116,7 +116,7 @@ module.exports = function(typhen, options) {
       }
     },
 
-    generate: function(types, generator) {
+    generate: function(generator, types) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
 
       types.forEach(function(type) {
@@ -131,7 +131,6 @@ module.exports = function(typhen, options) {
             break;
         }
       });
-
       generator.files.forEach((file) => {
         // Change a file that will be written.
       });
