@@ -281,7 +281,7 @@ class TypeScriptParser {
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
-    var constructorSignatures = genericType.getConstructSignatures().map(s => this.parseSignature(s));
+    var constructorSignatures = genericType.getConstructSignatures().map(s => this.parseSignature(s, 'Constructor'));
     var callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
     var baseTypes = genericType.baseTypes === undefined ? [] :
@@ -295,6 +295,15 @@ class TypeScriptParser {
     var staticMethods: Symbol.Method[] = [];
 
     if (genericType.symbol.flags & ts.SymbolFlags.Class) {
+      (<ts.Symbol[]>_.values(genericType.symbol.members))
+        .filter(s => ((s.flags & ts.SymbolFlags.Constructor) > 0))
+        .forEach(s => {
+          s.declarations.forEach(d => {
+            var signatureSymbol = this.typeChecker.getSignatureFromDeclaration(<ts.SignatureDeclaration>d);
+            var constructorSignature = this.parseSignature(signatureSymbol, 'Constructor');
+            constructorSignatures.push(constructorSignature);
+        });
+      });
       var staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
         .filter(s => !((s.flags & ts.SymbolFlags.Prototype) > 0));
       staticProperties = staticPropertySymbols
@@ -379,7 +388,7 @@ class TypeScriptParser {
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn);
   }
 
-  private parseSignature(signature: ts.Signature): Symbol.Signature {
+  private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {
     var symbol = signature.declaration.symbol;
 
     var typeParameters = signature.typeParameters === undefined ? [] :
@@ -387,7 +396,7 @@ class TypeScriptParser {
     var parameters = signature.getParameters().map(s => this.parseParameter(s));
     var returnType = this.parseType(signature.getReturnType());
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, 'Signature');
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
     return typhenSymbol.initialize(typeParameters, parameters, returnType);
   }
 

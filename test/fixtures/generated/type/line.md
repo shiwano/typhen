@@ -20,7 +20,9 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-ConstructorSignatures is empty.
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+---|---|---|---
+constructor|src:Point:false dest:Point:false |Line|
 
 ## CallSignatures
 
