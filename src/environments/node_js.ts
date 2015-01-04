@@ -11,7 +11,7 @@ class NodeJsEnvironment implements IEnvironment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
   public defaultLibFileName: string = path.resolve(__dirname, '../../lib.typhen.d.ts');
-  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.core.d.ts');
+  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.d.ts');
 
   constructor(currentDirectory: string, public newLine: string, baseDefaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);

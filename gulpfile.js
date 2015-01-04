@@ -16,7 +16,7 @@ var paths = {
   dest: 'lib/',
   testDest: '.tmp/',
   typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts'],
-  defaultLibFiles: ['lib.typhen.d.ts', 'lib.core.d.ts']
+  defaultLibFiles: ['lib.typhen.d.ts', 'lib.d.ts']
 };
 
 var tsProject = plugins.typescript.createProject({
