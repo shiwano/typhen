@@ -10,9 +10,10 @@ export enum SymbolKinds {
   Primitive,
   Enum,
   EnumMember,
+  ObjectType,
   Interface,
   Class,
-  ObjectType,
+  Array,
   Function,
   TypeParameter,
   Tuple,
@@ -80,9 +81,10 @@ export class Symbol {
   public get isPrimitive(): boolean { return this.kind === SymbolKinds.Primitive; }
   public get isEnum(): boolean { return this.kind === SymbolKinds.Enum; }
   public get isEnumMember(): boolean { return this.kind === SymbolKinds.EnumMember; }
+  public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
   public get isInterface(): boolean { return this.kind === SymbolKinds.Interface; }
   public get isClass(): boolean { return this.kind === SymbolKinds.Class; }
-  public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
+  public get isArray(): boolean { return this.kind === SymbolKinds.Array; }
   public get isFunction(): boolean { return this.kind === SymbolKinds.Function; }
   public get isTypeParameter(): boolean { return this.kind === SymbolKinds.TypeParameter; }
   public get isTuple(): boolean { return this.kind === SymbolKinds.Tuple; }
@@ -222,6 +224,21 @@ export class Interface extends ObjectType {
 
 export class Class extends Interface {
   public kind: SymbolKinds = SymbolKinds.Class;
+}
+
+export class Array extends Type {
+  public kind: SymbolKinds = SymbolKinds.Array;
+  public type: Type = null;
+
+  public get assumedName(): string {
+    if (this.type === null) { return this.rawName; }
+    return this.type.name + '[]';
+  }
+
+  public initialize(type: Type): Array {
+    this.type = type;
+    return this;
+  }
 }
 
 export class TypeParameter extends Type {

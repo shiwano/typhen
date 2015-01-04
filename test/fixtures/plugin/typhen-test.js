@@ -15,6 +15,13 @@ module.exports = function(typhen, options) {
       }
     },
 
+    rename: function(symbol, name) {
+      if (symbol.kind === typhen.SymbolKinds.Array) {
+        return 'ArrayOf' + symbol.type.name;
+      }
+      return name;
+    },
+
     generate: function(generator, types) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
       generator.generate('templates/plugin_test.hbs', 'plugin_test.md');

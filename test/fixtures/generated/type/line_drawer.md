@@ -41,7 +41,7 @@ Methods is empty.
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
-line|Line|false|true||
+lines|ArrayOfLine|false|true||
 
 ## Static Methods
 

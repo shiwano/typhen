@@ -56,7 +56,7 @@ declare module Type {
   }
 
   class LineDrawer {
-    static line: Line;
+    static lines: Line[];
     static draw(src: Point, dest: Point): Line;
   }
 }

@@ -14,6 +14,7 @@ class TypeScriptParser {
   private typeChecker: ts.TypeChecker;
   private typeCache: { [index: number]: Symbol.Type } = {};
   private typhenPrimitiveTypeName: string = 'TyphenPrimitiveType';
+  private arrayTypeName: string = 'Array';
 
   private static topLevelKinds: ts.SyntaxKind[] = [
     ts.SyntaxKind.FunctionDeclaration,
@@ -129,6 +130,8 @@ class TypeScriptParser {
     } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
       if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
         return this.parsePrimitive(<ts.GenericType>type);
+      } else if (this.isArrayType(<ts.GenericType>type)) {
+        return this.parseArray(<ts.GenericType>type);
       } else {
         return this.parseGenericType<Symbol.Interface>(<ts.GenericType>type, Symbol.Interface);
       }
@@ -152,7 +155,7 @@ class TypeScriptParser {
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
         this.getModuleNames(symbol), assumedName);
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
-        'module=' + typhenSymbol.moduleNames.join('.') + ',', 'name=' + typhenSymbol.name + ',',
+        'module=' + typhenSymbol.moduleNames.join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
         'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
     return typhenSymbol;
   }
@@ -253,6 +256,12 @@ class TypeScriptParser {
     return false;
   }
 
+  private isArrayType(type: ts.Type): boolean {
+    return _.isObject(type.symbol) &&
+           type.symbol.name === this.arrayTypeName &&
+           this.getModuleNames(type.symbol).length === 0;
+  }
+
   private parseEnum(type: ts.Type): Symbol.Enum {
     var typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
     var symbol = type.symbol;
@@ -332,6 +341,14 @@ class TypeScriptParser {
     var numberIndexType = this.parseType(type.getNumberIndexType());
 
     return typhenType.initialize(properties, methods, stringIndexType, numberIndexType);
+  }
+
+  private parseArray(type: ts.GenericType): Symbol.Array {
+    var typhenType = this.createTyphenType<Symbol.Array>(type, Symbol.Array);
+    var typeArguments = type.typeArguments === undefined ? [] :
+      type.typeArguments.map(t => this.parseType(t));
+    var arrayType = typeArguments.length > 0 ? typeArguments[0] : null;
+    return typhenType.initialize(arrayType);
   }
 
   private parseFunction(type: ts.ResolvedObjectType): Symbol.Function {
