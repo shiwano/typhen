@@ -103,10 +103,6 @@ module.exports = function(typhen, options) {
     pluginDirectory: __dirname,
     newLine: '\r\n',          // Optional. Default value is '\n'.
     namespaceSeparator: '::', // Optional. Default value is '.'.
-    aliases: {                // Optional. Default value is {}.
-      'Foo': 'Bar',
-      '^(.+)Class$': '$1'
-    },
     handlebarsOptions: {      // Optional. Default value is null.
       data: options,          // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
@@ -116,7 +112,7 @@ module.exports = function(typhen, options) {
       }
     },
 
-    rename: function(symbol, name) {
+    rename: function(symbol, name) { // Optional. Default value is a function that returns just the name.
       if (symbol.kind === typhen.SymbolKinds.Array) {
         return '[]';
       }
