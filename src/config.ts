@@ -39,6 +39,10 @@ export class Config {
     if (!_.isString(this.typingDirectory)) {
       this.typingDirectory = this.env.dirname(this.env.resolvePath(this.src));
     }
+
+    this.src = this.env.resolvePath(this.src);
+    this.dest = this.env.resolvePath(this.dest);
+    this.cwd = this.env.resolvePath(this.cwd);
     this.typingDirectory = this.env.resolvePath(this.typingDirectory);
   }
 }

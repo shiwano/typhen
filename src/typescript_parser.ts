@@ -174,7 +174,8 @@ class TypeScriptParser {
       var sourceFile = d.getSourceFile();
       var resolvedPath = this.runner.config.env.resolvePath(sourceFile.filename);
       var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.pos);
-      return new Symbol.DeclarationInfo(sourceFile.filename, resolvedPath, d.getFullText(), lineAndCharacterNumber);
+      return new Symbol.DeclarationInfo(resolvedPath.replace(this.runner.config.cwd + '/', ''),
+          resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
   }
 
