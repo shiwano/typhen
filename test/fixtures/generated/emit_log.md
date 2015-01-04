@@ -1,5 +1,8 @@
 # emitLog
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L1)
+
 No comment.
 
 ## Type

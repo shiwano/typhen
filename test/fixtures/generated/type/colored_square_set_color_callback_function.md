@@ -1,5 +1,8 @@
 # Type.ColoredSquareSetColorCallbackFunction
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L40)
+
 No comment.
 
 ## Type

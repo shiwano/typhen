@@ -1,5 +1,8 @@
 # Rpc.Get.GetRangeObject
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L66)
+
 No comment.
 
 ## Type

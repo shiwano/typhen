@@ -1,5 +1,7 @@
 # NumberAndNumberTuple
 
+No declarations.
+
 No comment.
 
 ## Type

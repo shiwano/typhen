@@ -1,5 +1,8 @@
 # Rpc.Post.SetOptionsOptionsObject
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L70)
+
 No comment.
 
 ## Type

@@ -1,5 +1,8 @@
 # Type.LineSetColorCallbackFunction
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L55)
+
 No comment.
 
 ## Type

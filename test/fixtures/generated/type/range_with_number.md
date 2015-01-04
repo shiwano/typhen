@@ -1,5 +1,8 @@
 # Type.RangeWithNumber
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L7)
+
 No comment.
 
 ## Type

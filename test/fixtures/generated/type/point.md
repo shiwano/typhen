@@ -1,5 +1,8 @@
 # Type.Point
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L11)
+
 No comment.
 
 ## Type

@@ -1,5 +1,8 @@
 # Type.Square
 
+* Declarations
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L20)
+
 No comment.
 
 ## Type
