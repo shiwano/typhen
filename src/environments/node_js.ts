@@ -45,6 +45,14 @@ class NodeJsEnvironment implements IEnvironment {
     return path.resolve.apply(null, args);
   }
 
+  public relativePath(from: string, to?: string): string {
+    if (to === undefined) {
+      to = from;
+      from = this.currentDirectory;
+    }
+    return path.relative(from, to);
+  }
+
   public dirname(fileName: string): string {
     return path.dirname(fileName);
   }

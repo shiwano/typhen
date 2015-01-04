@@ -40,6 +40,14 @@ export class TestEnvironment implements IEnvironment {
     return path.resolve.apply(this, pathSegments);
   }
 
+  public relativePath(from: string, to?: string): string {
+    if (to === undefined) {
+      from = '/';
+      to = from;
+    }
+    return path.relative(from, to);
+  }
+
   public dirname(fileName: string): string {
     return path.dirname(fileName);
   }

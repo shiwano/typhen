@@ -62,6 +62,13 @@ describe('NodeJsEnvironment', () => {
     });
   });
 
+  describe('#relativePath', () => {
+    it('should return the relative path', () => {
+      assert.strictEqual(instance.relativePath(currentDirectory + '/test/resolve.ts'), 'test/resolve.ts');
+      assert.strictEqual(instance.relativePath('/test', '/test/resolve.ts'), 'resolve.ts');
+    });
+  });
+
   describe('#dirname', () => {
     it('should return the directory name', () => {
       assert.strictEqual(instance.dirname('/test/index.ts'), '/test');

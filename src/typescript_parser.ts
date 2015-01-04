@@ -176,9 +176,9 @@ class TypeScriptParser {
     return symbol.declarations.map(d => {
       var sourceFile = d.getSourceFile();
       var resolvedPath = this.runner.config.env.resolvePath(sourceFile.filename);
+      var relativePath = this.runner.config.env.relativePath(resolvedPath);
       var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.pos);
-      return new Symbol.DeclarationInfo(resolvedPath.replace(this.runner.config.cwd + '/', ''),
-          resolvedPath, d.getFullText(), lineAndCharacterNumber);
+      return new Symbol.DeclarationInfo(relativePath, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
   }
 
@@ -192,9 +192,12 @@ class TypeScriptParser {
               ts.SymbolFlags.NamespaceModule,
               ts.SymbolFlags.ValueModule
             ], parentDecl.symbol.flags)) {
-          parentDecl.symbol.name.replace(/["']/g, '').split('/').reverse().forEach(n => {
-            results.push(n);
-          });
+          var moduleName = parentDecl.symbol.name.replace(/["']/g, '');
+
+          if (moduleName[0] === '/') {
+            moduleName = this.runner.config.env.relativePath(this.runner.config.typingDirectory, moduleName);
+          }
+          moduleName.split('/').reverse().forEach(n => results.push(n));
         }
         parentDecl = parentDecl.parent;
       }

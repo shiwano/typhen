@@ -46,8 +46,8 @@ export class Runner {
       var parser = new TypeScriptParser([this.config.src], this);
       parser.parse();
       parser.sourceFiles.forEach(sourceFile => {
-        var fileName = sourceFile.filename.replace(this.config.env.currentDirectory + '/', '');
-        Logger.info('Parsed', Logger.cyan(fileName));
+        var relative = this.config.env.relativePath(sourceFile.filename);
+        Logger.info('Parsed', Logger.cyan(relative));
       });
 
       Logger.log(Logger.underline('Generating files'));
@@ -60,7 +60,8 @@ export class Runner {
           if (!this.config.noWrite) {
             this.config.env.writeFile(file.path, file.contents);
           }
-          Logger.info('Generated', Logger.cyan(file.relative));
+          var relative = this.config.env.relativePath(file.path);
+          Logger.info('Generated', Logger.cyan(relative));
         });
         parser.types.forEach(type => type.destroy(true));
         Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
