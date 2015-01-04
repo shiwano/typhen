@@ -23,6 +23,7 @@ class TypeScriptParser {
   ];
 
   constructor(fileNames: string[], private runner: Runner.Runner) {
+    Logger.debug('Loading the TypeScript files');
     this.program = ts.createProgram(fileNames, this.runner.compilerOptions, this.runner.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
 
@@ -33,6 +34,7 @@ class TypeScriptParser {
       throw new Error('Unsupported files given (not *.d.ts): ' + unsupportedSourceFileNames.join(', '));
     }
 
+    Logger.debug('Compiling the TypeScript files');
     var errors = this.program.getDiagnostics();
     if (errors.length === 0) {
       var semanticErrors = this.typeChecker.getDiagnostics();
@@ -70,6 +72,7 @@ class TypeScriptParser {
   }
 
   public parse(): Symbol.Type[] {
+    Logger.debug('Parsing the TypeScript types');
     this.sourceFiles.forEach(s => this.parseSourceFile(s));
     return this.types;
   }
@@ -145,9 +148,13 @@ class TypeScriptParser {
     var name = _.isObject(symbol) ? symbol.name.replace(/^__.*$/, '') : '';
     var assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
       this.getAssumedName(symbol, assumedNameSuffix) : '';
-    return <T>new typhenSymbolClass(this.runner, name,
+    var typhenSymbol = <T>new typhenSymbolClass(this.runner, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
         this.getModuleNames(symbol), assumedName);
+    Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
+        'module=' + typhenSymbol.moduleNames.join('.') + ',', 'name=' + typhenSymbol.name + ',',
+        'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
+    return typhenSymbol;
   }
 
   private createTyphenType<T extends Symbol.Type>(type: ts.Type,

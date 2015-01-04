@@ -5,6 +5,7 @@ import path = require('path');
 import mkdirp = require('mkdirp');
 import _ = require('lodash');
 
+import Logger = require('../logger');
 import IEnvironment = require('./i_environment');
 
 class NodeJsEnvironment implements IEnvironment {
@@ -27,12 +28,14 @@ class NodeJsEnvironment implements IEnvironment {
     if (resolvedPath === this.defaultLibFileName) {
       return this.getDefaultLibFileData();
     } else {
+      Logger.debug('Reading: ' + resolvedPath);
       return fs.readFileSync(resolvedPath, 'utf-8');
     }
   }
 
   public writeFile(fileName: string, data: string): void {
     var filePath = this.resolvePath(fileName);
+    Logger.debug('Writing: ' + filePath);
     mkdirp.sync(path.dirname(filePath));
     fs.writeFileSync(filePath, data);
   }
@@ -52,6 +55,7 @@ class NodeJsEnvironment implements IEnvironment {
   }
 
   private getDefaultLibFileData(): string {
+    Logger.debug('Reading dafaultLibFile data');
     var baseDefaultLibFileData = fs.readFileSync(this.baseDefaultLibFileName, 'utf-8');
     var defaultLibFileData = fs.readFileSync(this.defaultLibFileName, 'utf-8');
     return [baseDefaultLibFileData, defaultLibFileData].join('\n');

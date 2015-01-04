@@ -7,6 +7,7 @@ import Vinyl = require('vinyl');
 import IEnvironment = require('./environments/i_environment');
 import Symbol = require('./symbol');
 import Plugin = require('./plugin');
+import Logger = require('./logger');
 import LocalHandlebars = require('./local_handlebars');
 
 interface IHandlebarsTemplate {
@@ -42,10 +43,14 @@ class Generator {
       dest = this.replaceStarsOfFileName(dest, <Symbol.Type>context);
     }
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
+    var data: string;
 
-    var data = context !== null && /^.+\.hbs$/.test(src) ?
-      this.getTemplate(src)(context, this.handlebarsOptions) :
-      this.getFileFromPluginDirectory(src);
+    if (context !== null && /^.+\.hbs$/.test(src)) {
+      Logger.debug('Rendering: ' + src + ', ' + context);
+      data = this.getTemplate(src)(context, this.handlebarsOptions);
+    } else {
+      data = this.getFileFromPluginDirectory(src);
+    }
 
     if (_.contains([true, undefined], overwrite) || !this.env.exists(resolvedDest)) {
       var file = this.createFile({
@@ -99,6 +104,7 @@ class Generator {
 
     if (!this.templateCache[filePath]) {
       var templateSource = this.getFileFromPluginDirectory(filePath);
+      Logger.debug('Compiling the Template: ' + templateName);
       this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource);
     }
     return this.templateCache[filePath];
