@@ -1,6 +1,6 @@
 /* tslint:disable:interface-name class-name */
 
-// "lib.core.d.ts" contents here
+// "lib.d.ts" contents here
 
 interface TyphenPrimitiveType {}
 
