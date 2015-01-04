@@ -16,7 +16,7 @@ import Logger = require('../src/logger');
 import Generator = require('../src/generator');
 import IEnvironment = require('../src/environments/i_environment');
 
-Logger.log = () => {};
+Logger.level = Logger.LogLevel.Silent;
 
 export class TestEnvironment implements IEnvironment {
   public currentDirectory: string = process.cwd() + '/test/fixtures/typings';

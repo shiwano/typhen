@@ -7,14 +7,35 @@ describe('Logger', () => {
   var logStub: SinonStub;
 
   beforeEach(() => {
-    Logger.colored = false;
+    Logger.enableColor(false);
+    Logger.level = Logger.LogLevel.Info;
     logStub = sandbox.stub(Logger, 'log');
     sandbox.stub(Logger, 'getDateTimeString').returns('00:00:00');
   });
 
   afterEach(() => {
-    Logger.colored = true;
+    Logger.enableColor(true);
+    Logger.level = Logger.LogLevel.Silent;
     sandbox.restore();
+  });
+
+  describe('.debug', () => {
+    context('when the level is not LogLevel.Debug', () => {
+      it('should not call Logger.debug', () => {
+        Logger.debug('debug');
+        assert(logStub.notCalled);
+      });
+    });
+
+    context('when the level is LogLevel.Debug', () => {
+      beforeEach(() => {
+        Logger.level = Logger.LogLevel.Debug;
+      });
+      it('should call Logger.debug', () => {
+        Logger.debug('debug');
+        assert(logStub.calledWith('[00:00:00][DEBUG]', 'debug'));
+      });
+    });
   });
 
   describe('.info', () => {
