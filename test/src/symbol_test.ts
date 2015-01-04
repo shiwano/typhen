@@ -46,16 +46,6 @@ describe('Symbol', () => {
           assert(instance.name === 'SuperFooEnum');
         });
       });
-
-      context('when alias option is given', () => {
-        beforeEach(() => {
-          runner.plugin.aliases['(.*)Type'] = '$1Enum';
-        });
-
-        it('should return alias as name', () => {
-          assert(instance.name === 'FooEnum');
-        });
-      });
     });
 
     describe('#destroy', () => {

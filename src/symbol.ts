@@ -57,8 +57,7 @@ export class Symbol {
   public get name(): string {
     var name = this.assumedName === undefined || _.isEmpty(this.assumedName) ?
       this.rawName : this.assumedName;
-    _.forEach(this.runner.plugin.aliases, (v, k) => name = name.replace(new RegExp(k), v));
-    return name;
+    return this.runner.plugin.rename(this, name);
   }
 
   public get comment(): string {

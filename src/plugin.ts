@@ -17,22 +17,25 @@ export interface IHandlebarsOptions {
 
 export interface IPlugin {
   pluginDirectory: string;
-  aliases?: Runner.IAliasesOptions;
   newLine?: string;
   namespaceSeparator?: string;
   handlebarsOptions?: IHandlebarsOptions;
+  rename?(symbol: Symbol.Symbol, name: string): string;
   generate(generator: Generator, types: Symbol.Type[]): any; // void or Promise<void>
 }
 
 export class Plugin implements IPlugin {
   public pluginDirectory: string;
-  public aliases: Runner.IAliasesOptions = {};
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';
   public handlebarsOptions: IHandlebarsOptions = null;
 
   constructor(args: IPlugin) {
     _.assign(this, args);
+  }
+
+  public rename(symbol: Symbol.Symbol, name: string): string {
+    return name;
   }
 
   public generate(generator: Generator, types: Symbol.Type[]): any {
