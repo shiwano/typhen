@@ -134,7 +134,7 @@ module.exports = function(typhen, options) {
         }
       });
 
-      modules.forEach(function(type) {
+      modules.forEach(function(module) {
         generator.generate('templates/module.hbs', 'underscore:**/*.rb', module);
       });
 
