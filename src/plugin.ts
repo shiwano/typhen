@@ -21,7 +21,7 @@ export interface IPlugin {
   namespaceSeparator?: string;
   handlebarsOptions?: IHandlebarsOptions;
   rename?(symbol: Symbol.Symbol, name: string): string;
-  generate(generator: Generator, types: Symbol.Type[]): any; // void or Promise<void>
+  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): any; // void or Promise<void>
 }
 
 export class Plugin implements IPlugin {
@@ -38,7 +38,7 @@ export class Plugin implements IPlugin {
     return name;
   }
 
-  public generate(generator: Generator, types: Symbol.Type[]): any {
+  public generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): any {
     throw new Error('The plugin does not implement the generate function');
   }
 }

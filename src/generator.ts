@@ -39,7 +39,7 @@ class Generator {
       context = null;
     }
 
-    if (context instanceof Symbol.Type) {
+    if (context instanceof Symbol.Type || context instanceof Symbol.Module) {
       dest = this.replaceStarsOfFileName(dest, <Symbol.Type>context);
     }
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
@@ -72,11 +72,15 @@ class Generator {
     return new Vinyl(options);
   }
 
-  public replaceStarsOfFileName(fileName: string, type: Symbol.Type): string {
+  public replaceStarsOfFileName(fileName: string, symbol: Symbol.Type): string;
+  public replaceStarsOfFileName(fileName: string, symbol: Symbol.Module): string;
+  public replaceStarsOfFileName(fileName: string, symbol: Symbol.Symbol): string {
     var matches = fileName.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches == null) { return fileName; }
 
     var inflect = (name: string, inflectionType: string): string => {
+      if (_.contains(name, '/')) { return name; }
+
       switch (inflectionType) {
         case 'underscore':     return inflection.underscore(name);
         case 'upperCamelCase': return inflection.camelize(name);
@@ -85,8 +89,8 @@ class Generator {
       }
     };
     return matches[2]
-      .replace('**', type.ancestorModules.map(s => inflect(s.name, matches[1])).join('/'))
-      .replace('*', inflect(type.name, matches[1]))
+      .replace('**', symbol.ancestorModules.map(s => inflect(s.name, matches[1])).join('/'))
+      .replace('*', inflect(symbol.name, matches[1]))
       .replace(/^\//, ''); // Avoid making an absolute path
   }
 

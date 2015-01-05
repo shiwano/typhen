@@ -35,7 +35,7 @@ describe('TypeScriptParser', () => {
 
     it('should return the parsed types', () => {
       assert.deepEqual(
-          instance.types.map(t => t.fullName).sort(),
+          instance.types.map(t => t.fullName),
           [
             // Array
             'Line[]',
@@ -84,8 +84,8 @@ describe('TypeScriptParser', () => {
 
     it('should return the parsed modules', () => {
       assert.deepEqual(
-        instance.modules.map(t => t.name).sort(),
-        ['', 'Get', 'Post', 'Rpc', 'Type'].sort()
+        instance.modules.map(t => t.fullName),
+        ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort()
       );
     });
   });

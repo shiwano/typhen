@@ -55,11 +55,11 @@ class TypeScriptParser {
   }
 
   public get types(): Symbol.Type[] {
-    return _.values(this.typeCache);
+    return _.sortBy(_.values(this.typeCache), t => t.fullName);
   }
 
   public get modules(): Symbol.Module[] {
-    return _.values(this.moduleCache);
+    return _.sortBy(_.values(this.moduleCache), m => m.fullName);
   }
 
   public parse(): void {

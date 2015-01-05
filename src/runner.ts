@@ -53,7 +53,7 @@ export class Runner {
       Logger.log(Logger.underline('Generating files'));
       var generator = new Generator(this.config.env, this.config.dest,
           this.plugin.pluginDirectory, this.plugin.handlebarsOptions);
-      var generateResult = this.plugin.generate(generator, parser.types);
+      var generateResult = this.plugin.generate(generator, parser.types, parser.modules);
 
       var afterGenerate = () => {
         generator.files.forEach(file => {
@@ -63,7 +63,8 @@ export class Runner {
           var relative = this.config.env.relativePath(file.path);
           Logger.info('Generated', Logger.cyan(relative));
         });
-        parser.types.forEach(type => type.destroy(true));
+        parser.types.forEach(t => t.destroy(true));
+        parser.modules.forEach(m => m.destroy(true));
         Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
         resolve(generator.files);
       };

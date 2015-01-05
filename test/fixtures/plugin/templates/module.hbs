@@ -1,0 +1,56 @@
+# {{fullName}}
+
+{{#empty declarationInfos}}
+No declarations.
+{{else}}
+{{#each declarationInfos}}
+* Declarations
+  * [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+{{/each}}
+{{/empty}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Enums
+
+{{#empty enums}}
+No Enums.
+{{else}}
+{{#each enums}}
+* {{name}}
+{{/each}}
+{{/empty}}
+
+## Functions
+
+{{#empty functions}}
+No Functions.
+{{else}}
+{{#each functions}}
+* {{name}}
+{{/each}}
+{{/empty}}
+
+## Interfaces
+
+{{#empty interfaces}}
+No Interfaces.
+{{else}}
+{{#each interfaces}}
+* {{name}}
+{{/each}}
+{{/empty}}
+
+## Classes
+
+{{#empty classes}}
+No Classes.
+{{else}}
+{{#each classes}}
+* {{name}}
+{{/each}}
+{{/empty}}

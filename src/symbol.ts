@@ -57,9 +57,17 @@ export class Symbol {
   }
 
   public get name(): string {
-    var name = this.assumedName === undefined || _.isEmpty(this.assumedName) ?
-      this.rawName : this.assumedName;
+    var name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
     return this.runner.plugin.rename(this, name);
+  }
+
+  public get fullName(): string {
+    if (this.parentModule === null) { return this.name; }
+    return [this.namespace, this.name].join(this.runner.plugin.namespaceSeparator);
+  }
+
+  public get namespace(): string {
+    return this.ancestorModules.map(s => s.name).join(this.runner.plugin.namespaceSeparator);
   }
 
   public get ancestorModules(): Module[] {
@@ -88,6 +96,7 @@ export class Symbol {
   public get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }
   public get isType(): boolean { return false; }
   public get isGenericType(): boolean { return false; }
+  public get isGlobalModule(): boolean { return false; }
 
   public get isModule(): boolean { return this.kind === SymbolKinds.Module; }
   public get isPrimitive(): boolean { return this.kind === SymbolKinds.Primitive; }
@@ -120,15 +129,6 @@ export class Symbol {
 
 export class Type extends Symbol {
   public get isType(): boolean { return true; }
-
-  public get fullName(): string {
-    if (this.parentModule === null) { return this.name; }
-    return [this.namespace, this.name].join(this.runner.plugin.namespaceSeparator);
-  }
-
-  public get namespace(): string {
-    return this.ancestorModules.map(s => s.name).join(this.runner.plugin.namespaceSeparator);
-  }
 }
 
 export class Module extends Symbol {
@@ -142,8 +142,10 @@ export class Module extends Symbol {
   public get interfaces(): Interface[] { return <Interface[]>this.types.filter(t => t.isInterface); }
   public get classes(): Class[] { return <Class[]>this.types.filter(t => t.isClass); }
 
+  public get isGlobalModule(): boolean { return this.rawName === '' && this.parentModule === null; }
+
   public get name(): string {
-    var name = this.rawName.replace(/["']/g, '');
+    var name = this.isGlobalModule ? 'Global' : this.rawName.replace(/["']/g, '');
     if (name[0] === '/') {
       name = this.runner.config.env.relativePath(this.runner.config.typingDirectory, name);
     }

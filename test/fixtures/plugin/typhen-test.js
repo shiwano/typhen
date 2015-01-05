@@ -22,7 +22,7 @@ module.exports = function(typhen, options) {
       return name;
     },
 
-    generate: function(generator, types) {
+    generate: function(generator, types, modules) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
       generator.generate('templates/plugin_test.hbs', 'plugin_test.md');
 
@@ -45,6 +45,10 @@ module.exports = function(typhen, options) {
             generator.generate('templates/function.hbs', 'underscore:**/*.md', type);
             break;
         }
+      });
+
+      modules.forEach(function(mod) {
+        generator.generate('templates/module.hbs', 'underscore:**/*.md', mod);
       });
     }
   });
