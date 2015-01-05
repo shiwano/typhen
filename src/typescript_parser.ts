@@ -98,10 +98,14 @@ class TypeScriptParser {
     return results;
   }
 
+  private checkFlags(flagsA: number, flagsB: number): boolean {
+    return (flagsA & flagsB) > 0;
+  }
+
   private throwErrorWithSymbol(message: string, symbol: ts.Symbol): void {
     var infos = this.getDeclarationInfos(symbol);
-    var symbolInfo = infos.length > 0 ? infos.map(d => d.toString()).join('\n') : '';
-    throw new Error(message + '\n' + symbolInfo);
+    var symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
+    throw new Error(message + symbolInfo);
   }
 
   private parseType(type: ts.Type): Symbol.Type {
@@ -188,10 +192,7 @@ class TypeScriptParser {
 
       var parentDecl = symbol.declarations[0].parent;
       while (parentDecl !== undefined) {
-        if (parentDecl.symbol && _.contains([
-              ts.SymbolFlags.NamespaceModule,
-              ts.SymbolFlags.ValueModule
-            ], parentDecl.symbol.flags)) {
+        if (parentDecl.symbol && this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Module)) {
           var moduleName = parentDecl.symbol.name.replace(/["']/g, '');
 
           if (moduleName[0] === '/') {
@@ -223,14 +224,14 @@ class TypeScriptParser {
 
       var parentDecl = symbol.declarations[0].parent;
       while (parentDecl !== undefined) {
-        if (parentDecl.symbol && _.contains([
-              ts.SymbolFlags.Class,
-              ts.SymbolFlags.Interface,
-              ts.SymbolFlags.Property,
-              ts.SymbolFlags.Function,
-              ts.SymbolFlags.Method,
-              ts.SymbolFlags.Variable
-            ], parentDecl.symbol.flags)) {
+        if (parentDecl.symbol && (
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Class) ||
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Interface) ||
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Property) ||
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Function) ||
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Method) ||
+            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Variable)
+            )) {
           results.push(inflection.camelize(parentDecl.symbol.name));
         }
         parentDecl = parentDecl.parent;
@@ -286,10 +287,10 @@ class TypeScriptParser {
     var typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
     var properties = genericType.getProperties()
-        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
         .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
     var methods = genericType.getProperties()
-        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
         .map(s => this.parseMethod(s, _.contains(genericType.declaredProperties, s)));
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
@@ -309,7 +310,7 @@ class TypeScriptParser {
 
     if (genericType.symbol.flags & ts.SymbolFlags.Class) {
       (<ts.Symbol[]>_.values(genericType.symbol.members))
-        .filter(s => ((s.flags & ts.SymbolFlags.Constructor) > 0))
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Constructor))
         .forEach(s => {
           s.declarations.forEach(d => {
             var signatureSymbol = this.typeChecker.getSignatureFromDeclaration(<ts.SignatureDeclaration>d);
@@ -318,12 +319,12 @@ class TypeScriptParser {
         });
       });
       var staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
-        .filter(s => !((s.flags & ts.SymbolFlags.Prototype) > 0));
+        .filter(s => !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
       staticProperties = staticPropertySymbols
-        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
         .map(s => this.parseProperty(s));
       staticMethods = staticPropertySymbols
-        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
         .map(s => this.parseMethod(s));
     }
     return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
@@ -335,10 +336,10 @@ class TypeScriptParser {
     var typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
 
     var properties = type.getProperties()
-        .filter(s => (s.flags & ts.SymbolFlags.Property) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
         .map(s => this.parseProperty(s));
     var methods = type.getProperties()
-        .filter(s => (s.flags & ts.SymbolFlags.Method) > 0 && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
         .map(s => this.parseMethod(s));
     var stringIndexType = this.parseType(type.getStringIndexType());
     var numberIndexType = this.parseType(type.getNumberIndexType());
@@ -394,7 +395,7 @@ class TypeScriptParser {
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var propertyType = this.parseType(type);
-    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
+    var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
     return typhenSymbol.initialize(propertyType, isOptional, isOwn);
@@ -403,7 +404,7 @@ class TypeScriptParser {
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
-    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
+    var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn);
@@ -424,7 +425,7 @@ class TypeScriptParser {
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
     var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
     var parameterType = this.parseType(type);
-    var isOptional = (symbol.valueDeclaration.flags & ts.NodeFlags.QuestionMark) > 0;
+    var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
     return typhenSymbol.initialize(parameterType, isOptional);
