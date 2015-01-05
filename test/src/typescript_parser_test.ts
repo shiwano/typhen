@@ -28,44 +28,73 @@ describe('TypeScriptParser', () => {
     });
   });
 
+  describe('#types', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
+    it('should return the parsed types', () => {
+      assert.deepEqual(
+          instance.types.map(t => t.fullName).sort(),
+          [
+            // Array
+            'Line[]',
+            // Tuple
+            'NumberAndNumberTuple',
+            // Function
+            'Rpc.Get.getRange',
+            'Rpc.Post.setOptions',
+            'Type.ColoredSquareSetColorCallbackFunction',
+            'Type.LineSetColorCallbackFunction',
+            'emitLog',
+            // ObjectType
+            'Rpc.Get.GetRangeObject',
+            'Rpc.Post.SetOptionsOptionsObject',
+            // Enum
+            'Type.Color',
+            // Interface
+            'Type.ColoredSquare',
+            'Type.Point',
+            'Type.Range',
+            'Type.RangeWithNumber',
+            'Type.Square',
+            'Type.SquareDictionary',
+            'Type.Transformer',
+            // Class
+            'Type.Line',
+            'Type.LineDrawer',
+            // TypeParameter
+            'Type.T',
+            'Type.T',
+            // PrimitiveType
+            'boolean',
+            'integer',
+            'number',
+            'string',
+            'void'
+          ].sort()
+      );
+    });
+  });
+
+  describe('#modules', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
+    it('should return the parsed modules', () => {
+      assert.deepEqual(
+        instance.modules.map(t => t.name).sort(),
+        ['', 'Get', 'Post', 'Rpc', 'Type'].sort()
+      );
+    });
+  });
+
   describe('#parse', () => {
-    it('should return all Typhen types', () => {
+    it('should parse the TypeScript types', () => {
+      assert(instance.types.length === 0);
       instance.parse();
       assert(instance.types.length > 0);
-      instance.types.forEach(type => {
-        assert(type instanceof Symbol.Type);
-      });
-    });
-  });
-
-  describe('#parseSourceFile', () => {
-    beforeEach(() => {
-      instance.parse();
-    });
-
-    it('should return Typhen types which is defined on source file', () => {
-      var sourceFile = instance.sourceFiles[1];
-      var types = instance.parseSourceFile(sourceFile);
-      assert(types.length > 0);
-      types.forEach(type => {
-        assert(type instanceof Symbol.Type);
-      });
-    });
-  });
-
-  describe('#findTypesFromSourceFile', () => {
-    beforeEach(() => {
-      instance.parse();
-    });
-
-    it('should return specified tss.ts.Node array', () => {
-      var sourceFile = instance.sourceFiles[1];
-      var kinds = [tss.ts.SyntaxKind.InterfaceDeclaration];
-      var types = instance.findTypesFromSourceFile(sourceFile, kinds);
-      assert(types.length > 0);
-      types.forEach(type => {
-        assert(type.flags & tss.ts.TypeFlags.Interface);
-      });
     });
   });
 });

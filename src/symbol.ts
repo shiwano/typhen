@@ -7,6 +7,7 @@ import Runner = require('./runner');
 
 export enum SymbolKinds {
   Invalid,
+  Module,
   Primitive,
   Enum,
   EnumMember,
@@ -78,6 +79,7 @@ export class Symbol {
   public get isType(): boolean { return false; }
   public get isGenericType(): boolean { return false; }
 
+  public get isModule(): boolean { return this.kind === SymbolKinds.Module; }
   public get isPrimitive(): boolean { return this.kind === SymbolKinds.Primitive; }
   public get isEnum(): boolean { return this.kind === SymbolKinds.Enum; }
   public get isEnumMember(): boolean { return this.kind === SymbolKinds.EnumMember; }
@@ -116,6 +118,24 @@ export class Type extends Symbol {
 
   public get namespace(): string {
     return this.moduleNames.join(this.runner.plugin.namespaceSeparator);
+  }
+}
+
+export class Module extends Symbol {
+  public kind: SymbolKinds = SymbolKinds.Module;
+
+  public modules: Module[] = [];
+  public types: Type[] = [];
+
+  public get enums(): Enum[] { return <Enum[]>this.types.filter(t => t.isEnum); }
+  public get functions(): Function[] { return <Function[]>this.types.filter(t => t.isFunction); }
+  public get interfaces(): Interface[] { return <Interface[]>this.types.filter(t => t.isInterface); }
+  public get classes(): Class[] { return <Class[]>this.types.filter(t => t.isClass); }
+
+  public initialize(modules: Module[], types: Type[]): Module {
+    this.modules = modules;
+    this.types = types;
+    return this;
   }
 }
 

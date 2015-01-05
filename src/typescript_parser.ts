@@ -12,16 +12,10 @@ import Runner = require('./runner');
 class TypeScriptParser {
   private program: tss.ts.Program;
   private typeChecker: ts.TypeChecker;
-  private typeCache: { [index: number]: Symbol.Type } = {};
+  private moduleCache: { [name: string]: Symbol.Module } = {};
+  private typeCache: { [id: number]: Symbol.Type } = {};
   private typhenPrimitiveTypeName: string = 'TyphenPrimitiveType';
   private arrayTypeName: string = 'Array';
-
-  private static topLevelKinds: ts.SyntaxKind[] = [
-    ts.SyntaxKind.FunctionDeclaration,
-    ts.SyntaxKind.EnumDeclaration,
-    ts.SyntaxKind.InterfaceDeclaration,
-    ts.SyntaxKind.ClassDeclaration
-  ];
 
   constructor(fileNames: string[], private runner: Runner.Runner) {
     Logger.debug('Loading the TypeScript files');
@@ -61,41 +55,37 @@ class TypeScriptParser {
   }
 
   public get types(): Symbol.Type[] {
-    return (<Symbol.Type[]>_.values(this.typeCache))
-      .filter(t => {
-        if (t instanceof Symbol.Tuple) { return true; }
-
-        return t.declarationInfos.length > 0 && _.every(t.declarationInfos, d => {
-          var dirname = this.runner.config.env.dirname(d.path);
-          return _.contains(dirname, this.runner.config.typingDirectory);
-        });
-      });
+    return _.values(this.typeCache);
   }
 
-  public parse(): Symbol.Type[] {
+  public get modules(): Symbol.Module[] {
+    return _.values(this.moduleCache);
+  }
+
+  public parse(): void {
     Logger.debug('Parsing the TypeScript types');
-    this.sourceFiles.forEach(s => this.parseSourceFile(s));
-    return this.types;
-  }
 
-  public parseSourceFile(sourceFile: ts.SourceFile): Symbol.Type[] {
-    return _.chain(this.findTypesFromSourceFile(sourceFile, TypeScriptParser.topLevelKinds))
-      .map(t => this.parseType(t))
-      .compact()
-      .value();
-  }
+    var isTargetOfParser = (s: ts.Symbol): boolean => {
+      return s.declarations.every(d => {
+        var resolvedPath = this.runner.config.env.resolvePath(d.getSourceFile().filename);
+        return resolvedPath !== this.runner.config.env.defaultLibFileName &&
+          _.contains(resolvedPath, this.runner.config.typingDirectory);
+      });
+    };
 
-  public findTypesFromSourceFile(sourceFile: ts.SourceFile, searchKinds: ts.SyntaxKind[],
-      node: ts.Node = null, results: ts.Type[] = []): ts.Type[] {
-    if (node === null) { node = sourceFile; }
-    node.getChildren(sourceFile).forEach(childNode => {
-      if (searchKinds.indexOf(childNode.kind) >= 0) {
-        var type = this.typeChecker.getTypeOfNode(childNode);
-        results.push(type);
-      }
-      this.findTypesFromSourceFile(sourceFile, searchKinds, childNode, results);
-    });
-    return results;
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(undefined, Symbol.Module);
+    this.moduleCache[''] = typhenSymbol;
+
+    var modules = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Module)
+      .filter(s => isTargetOfParser(s))
+      .map(s => this.parseModule(s));
+    var types = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Type)
+      .concat(this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Function))
+      .filter(s => isTargetOfParser(s))
+      .map(s => this.typeChecker.getTypeOfNode(s.declarations[0]))
+      .map(s => this.parseType(s));
+
+    typhenSymbol.initialize(modules, types);
   }
 
   private checkFlags(flagsA: number, flagsB: number): boolean {
@@ -264,6 +254,23 @@ class TypeScriptParser {
     return _.isObject(type.symbol) &&
            type.symbol.name === this.arrayTypeName &&
            this.getModuleNames(type.symbol).length === 0;
+  }
+
+  private parseModule(symbol: ts.Symbol): Symbol.Module {
+    if (this.moduleCache[symbol.name] !== undefined) { return this.moduleCache[symbol.name]; }
+
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
+    this.moduleCache[symbol.name] = typhenSymbol;
+
+    var exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
+    var modules = exportedSymbols
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
+      .map(s => this.parseModule(s));
+    var types = exportedSymbols
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Type) || this.checkFlags(s.flags, ts.SymbolFlags.Function))
+      .map(s => this.typeChecker.getTypeOfNode(s.declarations[0]))
+      .map(t => this.parseType(t));
+    return typhenSymbol.initialize(modules, types);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
