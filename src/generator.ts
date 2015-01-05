@@ -85,7 +85,7 @@ class Generator {
       }
     };
     return matches[2]
-      .replace('**', type.moduleNames.map(n => inflect(n, matches[1])).join('/'))
+      .replace('**', type.ancestorModules.map(s => inflect(s.name, matches[1])).join('/'))
       .replace('*', inflect(type.name, matches[1]))
       .replace(/^\//, ''); // Avoid making an absolute path
   }

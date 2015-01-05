@@ -147,9 +147,9 @@ class TypeScriptParser {
       this.getAssumedName(symbol, assumedNameSuffix) : '';
     var typhenSymbol = <T>new typhenSymbolClass(this.runner, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
-        this.getModuleNames(symbol), assumedName);
+        this.getParentModule(symbol), assumedName);
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
-        'module=' + typhenSymbol.moduleNames.join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
+        'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
         'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
     return typhenSymbol;
   }
@@ -176,23 +176,17 @@ class TypeScriptParser {
     });
   }
 
-  private getModuleNames(symbol: ts.Symbol): string[] {
-    return _.tap([], (results) => {
-      if (symbol === undefined) { return; }
+  private getParentModule(symbol: ts.Symbol): Symbol.Module {
+    if (symbol === undefined) { return null; }
 
-      var parentDecl = symbol.declarations[0].parent;
-      while (parentDecl !== undefined) {
-        if (parentDecl.symbol && this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Module)) {
-          var moduleName = parentDecl.symbol.name.replace(/["']/g, '');
-
-          if (moduleName[0] === '/') {
-            moduleName = this.runner.config.env.relativePath(this.runner.config.typingDirectory, moduleName);
-          }
-          moduleName.split('/').reverse().forEach(n => results.push(n));
-        }
-        parentDecl = parentDecl.parent;
+    var parentDecl = symbol.declarations[0].parent;
+    while (parentDecl !== undefined) {
+      if (parentDecl.symbol && this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Module)) {
+        return this.moduleCache[parentDecl.symbol.name];
       }
-    }).reverse();
+      parentDecl = parentDecl.parent;
+    }
+    return null;
   }
 
   private getDocComment(symbol: ts.Symbol): string[] {
@@ -233,7 +227,7 @@ class TypeScriptParser {
   private isTyphenPrimitiveType(type: ts.Type): boolean {
     return _.isObject(type.symbol) &&
            type.symbol.name === this.typhenPrimitiveTypeName &&
-           this.getModuleNames(type.symbol).length === 0;
+           this.getParentModule(type.symbol) === null;
   }
 
   private isExtendedTyphenPrimitiveType(type: ts.GenericType): boolean {
@@ -241,7 +235,7 @@ class TypeScriptParser {
       _.any(type.baseTypes, (t) => this.isTyphenPrimitiveType(t));
 
     if (isExtendedTyphenPrimitiveType) {
-      if (this.getModuleNames(type.symbol).length === 0) {
+      if (this.getParentModule(type.symbol) === null) {
         return true;
       } else {
         this.throwErrorWithSymbol('Found the interface with module which is extended from the TyphenPrimitiveType', type.symbol);
@@ -253,7 +247,7 @@ class TypeScriptParser {
   private isArrayType(type: ts.Type): boolean {
     return _.isObject(type.symbol) &&
            type.symbol.name === this.arrayTypeName &&
-           this.getModuleNames(type.symbol).length === 0;
+           this.getParentModule(type.symbol) === null;
   }
 
   private parseModule(symbol: ts.Symbol): Symbol.Module {

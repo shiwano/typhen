@@ -59,11 +59,13 @@ export class TestEnvironment implements IEnvironment {
 
 export function createEnum(runner?: Runner.Runner): Symbol.Enum {
   if (runner === undefined) { runner = createRunner(); }
-  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@type Enum'], [], ['App', 'Type']);
+  var appModule = new Symbol.Module(runner, 'App', [''], [], null, '').initialize([], []);
+  var typeModule = new Symbol.Module(runner, 'Type', [''], [], appModule, '').initialize([], []);
 
+  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@type Enum'], [], typeModule, '');
   type.initialize([
-    new Symbol.EnumMember(runner, 'Bar', [''], []).initialize(0),
-    new Symbol.EnumMember(runner, 'Baz', [''], []).initialize(1)
+    new Symbol.EnumMember(runner, 'Bar', [''], [], typeModule, '').initialize(0),
+    new Symbol.EnumMember(runner, 'Baz', [''], [], typeModule, '').initialize(1)
   ]);
   return type;
 }

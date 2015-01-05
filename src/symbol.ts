@@ -51,15 +51,25 @@ export class Symbol {
       public runner: Runner.Runner,
       public rawName: string,
       public docComment: string[],
-      public declarationInfos?: DeclarationInfo[],
-      public moduleNames?: string[],
-      public assumedName?: string) {
+      public declarationInfos: DeclarationInfo[],
+      public parentModule: Module,
+      public assumedName: string) {
   }
 
   public get name(): string {
     var name = this.assumedName === undefined || _.isEmpty(this.assumedName) ?
       this.rawName : this.assumedName;
     return this.runner.plugin.rename(this, name);
+  }
+
+  public get ancestorModules(): Module[] {
+    return _.tap([], (results) => {
+      var parentModule = this.parentModule;
+      while (_.isObject(parentModule)) {
+        results.push(parentModule);
+        parentModule = parentModule.parentModule;
+      }
+    }).reverse();
   }
 
   public get comment(): string {
@@ -112,12 +122,12 @@ export class Type extends Symbol {
   public get isType(): boolean { return true; }
 
   public get fullName(): string {
-    if (this.moduleNames.length === 0) { return this.name; }
+    if (this.parentModule === null) { return this.name; }
     return [this.namespace, this.name].join(this.runner.plugin.namespaceSeparator);
   }
 
   public get namespace(): string {
-    return this.moduleNames.join(this.runner.plugin.namespaceSeparator);
+    return this.ancestorModules.map(s => s.name).join(this.runner.plugin.namespaceSeparator);
   }
 }
 
@@ -131,6 +141,14 @@ export class Module extends Symbol {
   public get functions(): Function[] { return <Function[]>this.types.filter(t => t.isFunction); }
   public get interfaces(): Interface[] { return <Interface[]>this.types.filter(t => t.isInterface); }
   public get classes(): Class[] { return <Class[]>this.types.filter(t => t.isClass); }
+
+  public get name(): string {
+    var name = this.rawName.replace(/["']/g, '');
+    if (name[0] === '/') {
+      name = this.runner.config.env.relativePath(this.runner.config.typingDirectory, name);
+    }
+    return this.runner.plugin.rename(this, name);
+  }
 
   public initialize(modules: Module[], types: Type[]): Module {
     this.modules = modules;
