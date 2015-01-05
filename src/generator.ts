@@ -27,12 +27,12 @@ class Generator {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
-  public generateUnlessExist(src: string, dest: string, context: Object = null): Vinyl {
+  public generateUnlessExist(src: string, dest: string, context: any = null): Vinyl {
     return this.generate(src, dest, context, false);
   }
 
   public generate(src: string, dest: string, overwrite?: boolean): Vinyl;
-  public generate(src: string, dest: string, context: Object, overwrite?: boolean): Vinyl;
+  public generate(src: string, dest: string, context: Symbol.Symbol, overwrite?: boolean): Vinyl;
   public generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
     if (_.isBoolean(context)) {
       overwrite = <boolean>context;
