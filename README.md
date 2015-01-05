@@ -64,7 +64,7 @@ The typhenfile.js is a valid JavaScript file that belongs in the root directory 
 
 The typhenfile.js is comprised of the following parts:
 
-* The "wrapper" function that returns a Promise Object of the [bluebird](https://github.com/petkaantonov/bluebird).
+* The "wrapper" function that returns a Promise object of the [bluebird](https://github.com/petkaantonov/bluebird).
 * Loading or creating a plugin.
 * Running with configuration.
 
@@ -119,7 +119,7 @@ module.exports = function(typhen, options) {
       return name;
     },
 
-    generate: function(generator, types) {
+    generate: function(generator, types, modules) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
 
       types.forEach(function(type) {
@@ -129,11 +129,15 @@ module.exports = function(typhen, options) {
             break;
           case typhen.SymbolKinds.Interface:
           case typhen.SymbolKinds.Class:
-          case typhen.SymbolKinds.ObjectType:
             generator.generate('templates/class.hbs', 'underscore:**/*.rb', type);
             break;
         }
       });
+
+      modules.forEach(function(type) {
+        generator.generate('templates/module.hbs', 'underscore:**/*.rb', module);
+      });
+
       generator.files.forEach((file) => {
         // Change a file that will be written.
       });
