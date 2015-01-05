@@ -8,7 +8,7 @@ import Runner = require('./runner');
 export enum SymbolKinds {
   Invalid,
   Module,
-  Primitive,
+  PrimitiveType,
   Enum,
   EnumMember,
   ObjectType,
@@ -99,7 +99,7 @@ export class Symbol {
   public get isGlobalModule(): boolean { return false; }
 
   public get isModule(): boolean { return this.kind === SymbolKinds.Module; }
-  public get isPrimitive(): boolean { return this.kind === SymbolKinds.Primitive; }
+  public get isPrimitiveType(): boolean { return this.kind === SymbolKinds.PrimitiveType; }
   public get isEnum(): boolean { return this.kind === SymbolKinds.Enum; }
   public get isEnumMember(): boolean { return this.kind === SymbolKinds.EnumMember; }
   public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
@@ -159,10 +159,10 @@ export class Module extends Symbol {
   }
 }
 
-export class Primitive extends Type {
-  public kind: SymbolKinds = SymbolKinds.Primitive;
+export class PrimitiveType extends Type {
+  public kind: SymbolKinds = SymbolKinds.PrimitiveType;
 
-  public initialize(rawName: string): Primitive {
+  public initialize(rawName: string): PrimitiveType {
     this.rawName = rawName;
     return this;
   }

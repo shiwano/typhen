@@ -105,9 +105,9 @@ class TypeScriptParser {
     if (this.isTyphenPrimitiveType(type)) {
       return null;
     } else if (type.flags & ts.TypeFlags.StringLiteral) {
-      return this.parsePrimitive(<ts.StringLiteralType>type);
+      return this.parsePrimitiveType(<ts.StringLiteralType>type);
     } else if (type.flags & ts.TypeFlags.Intrinsic) {
-      return this.parsePrimitive(<ts.IntrinsicType>type);
+      return this.parsePrimitiveType(<ts.IntrinsicType>type);
     } else if (type.flags & ts.TypeFlags.Tuple) {
       return this.parseTuple(<ts.TupleType>type);
     } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
@@ -123,7 +123,7 @@ class TypeScriptParser {
       return this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
     } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
       if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
-        return this.parsePrimitive(<ts.GenericType>type);
+        return this.parsePrimitiveType(<ts.GenericType>type);
       } else if (this.isArrayType(<ts.GenericType>type)) {
         return this.parseArray(<ts.GenericType>type);
       } else {
@@ -362,10 +362,10 @@ class TypeScriptParser {
     return typhenType.initialize(callSignatures);
   }
 
-  private parsePrimitive(type: ts.GenericType): Symbol.Primitive; // For TyphenPrimitiveType
-  private parsePrimitive(type: ts.IntrinsicType): Symbol.Primitive;
-  private parsePrimitive(type: ts.StringLiteralType): Symbol.Primitive;
-  private parsePrimitive(type: any): Symbol.Primitive {
+  private parsePrimitiveType(type: ts.GenericType): Symbol.PrimitiveType; // For TyphenPrimitiveType
+  private parsePrimitiveType(type: ts.IntrinsicType): Symbol.PrimitiveType;
+  private parsePrimitiveType(type: ts.StringLiteralType): Symbol.PrimitiveType;
+  private parsePrimitiveType(type: any): Symbol.PrimitiveType {
     var name: string;
 
     if (_.isString(type.intrinsicName)) {
@@ -375,7 +375,7 @@ class TypeScriptParser {
     } else {
       name = 'string';
     }
-    var typhenType = this.createTyphenType<Symbol.Primitive>(type, Symbol.Primitive);
+    var typhenType = this.createTyphenType<Symbol.PrimitiveType>(type, Symbol.PrimitiveType);
     return typhenType.initialize(name);
   }
 
