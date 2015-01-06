@@ -83,6 +83,12 @@ module.exports = function(typhen) {
     cwd: '../other/current',             // Optional. Default value is process.cwd().
     typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
     defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+    disallow: {                          // Optional. Default value is {}.
+      any: true,
+      tuple: true,
+      overload: true,
+      generics: true
+    }
   }).then(function(files) {
     console.log('Done!');
   }).catch(function(e) {
@@ -106,8 +112,8 @@ module.exports = function(typhen, options) {
     handlebarsOptions: {      // Optional. Default value is null.
       data: options,          // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
-        'baz': function(str) {
-          return str + '-baz'
+        baz: function(str) {
+          return str + '-baz';
         }
       }
     },
@@ -133,15 +139,12 @@ module.exports = function(typhen, options) {
             break;
         }
       });
-
       modules.forEach(function(module) {
         generator.generate('templates/module.hbs', 'underscore:**/*.rb', module);
       });
-
       generator.files.forEach((file) => {
         // Change a file that will be written.
       });
-
       return new Promise(function(resolve, reject) { // If you want async processing, return a Promise object.
         // Do async processing.
       });
