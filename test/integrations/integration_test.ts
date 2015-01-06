@@ -17,7 +17,7 @@ function addTestSuite(expectedFileNames: string[]) {
 
       fs.readFile(expectedFileName, {encoding: 'utf-8'}, (error, expected) => {
         fs.readFile(actualFileName, {encoding: 'utf-8'}, (error, actual) => {
-          assert.strictEqual(actual, expected);
+          assert(actual === expected);
           done();
         });
       });

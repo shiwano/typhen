@@ -9,19 +9,19 @@ import LocalHandlebars = require('../../src/local_handlebars');
 describe('Typhen', () => {
   describe('.SymbolKinds', () => {
     it('should export SymbolKinds', () => {
-      assert.strictEqual(Typhen.SymbolKinds, Symbol.SymbolKinds);
+      assert(Typhen.SymbolKinds === Symbol.SymbolKinds);
     });
   });
 
   describe('.Handlebars', () => {
     it('should export local handlebars', () => {
-      assert.strictEqual(Typhen.Handlebars, LocalHandlebars.handlebars);
+      assert(Typhen.Handlebars === LocalHandlebars.handlebars);
     });
   });
 
   describe('.logger', () => {
     it('should export logger', () => {
-      assert.strictEqual(Typhen.logger, Logger);
+      assert(Typhen.logger === Logger);
     });
   });
 
@@ -40,7 +40,7 @@ describe('Typhen', () => {
       var response = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
       var expected = process.cwd() + '/test/fixtures/plugin';
       assert(response instanceof Plugin.Plugin);
-      assert.strictEqual(response.pluginDirectory, expected);
+      assert(response.pluginDirectory === expected);
     });
   });
 });

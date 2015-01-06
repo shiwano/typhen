@@ -36,7 +36,7 @@ describe('Generator', () => {
       var generated = 'This is README.';
 
       it('should return the file data', () => {
-        assert.strictEqual(instance.generate('README.md', 'README.md').contents.toString(), generated);
+        assert(instance.generate('README.md', 'README.md').contents.toString() === generated);
       });
     });
 
@@ -44,7 +44,7 @@ describe('Generator', () => {
       var generated = 'FooType\nBar: 0\nBaz: 1\n';
 
       it('should return the generated data by Handlebars', () => {
-        assert.strictEqual(instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents.toString(), generated);
+        assert(instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents.toString() === generated);
       });
     });
 
@@ -63,32 +63,32 @@ describe('Generator', () => {
 
     context('with a file name which does not have stars', () => {
       it('should return the given file name', () => {
-        assert.strictEqual(instance.replaceStarsOfFileName('foo/bar.txt', type), 'foo/bar.txt');
+        assert(instance.replaceStarsOfFileName('foo/bar.txt', type) === 'foo/bar.txt');
       });
     });
 
     context('with a file name which has stars and no inflection type', () => {
       it('should return the replaced file name', () => {
-        assert.strictEqual(instance.replaceStarsOfFileName('**/*.txt', type), 'App/Type/FooType.txt');
+        assert(instance.replaceStarsOfFileName('**/*.txt', type) === 'App/Type/FooType.txt');
       });
     });
 
     context('with a file name which has underscore inflection type', () => {
       it('should return the underscored file name', () => {
-        assert.strictEqual(instance.replaceStarsOfFileName('underscore:**/*.txt', type), 'app/type/foo_type.txt');
+        assert(instance.replaceStarsOfFileName('underscore:**/*.txt', type) === 'app/type/foo_type.txt');
       });
     });
 
     context('with a file name which has upperCamelCase inflection type', () => {
       it('should return the upperCamelCased file name', () => {
         type.rawName = 'foo_type';
-        assert.strictEqual(instance.replaceStarsOfFileName('upperCamelCase:**/*.txt', type), 'App/Type/FooType.txt');
+        assert(instance.replaceStarsOfFileName('upperCamelCase:**/*.txt', type) === 'App/Type/FooType.txt');
       });
     });
 
     context('with a file name which has lowerCamelCase inflection type', () => {
       it('should return the lowerCamelCased file name', () => {
-        assert.strictEqual(instance.replaceStarsOfFileName('lowerCamelCase:**/*.txt', type), 'app/type/fooType.txt');
+        assert(instance.replaceStarsOfFileName('lowerCamelCase:**/*.txt', type) === 'app/type/fooType.txt');
       });
     });
   });

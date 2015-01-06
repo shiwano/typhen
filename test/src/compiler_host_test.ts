@@ -24,21 +24,21 @@ describe('CompilerHost', () => {
       it('should return the instance of SourceFile which has the specified file data', () => {
         var languageVersion = tss.ts.ScriptTarget.ES5;
         var expected = '# test';
-        assert.strictEqual(instance.getSourceFile('/test.d.ts', languageVersion).text, expected);
+        assert(instance.getSourceFile('/test.d.ts', languageVersion).text === expected);
       });
     });
 
     context('with a file name which does not exists', () => {
       it('should return undefined', () => {
         var languageVersion = tss.ts.ScriptTarget.ES5;
-        assert.strictEqual(instance.getSourceFile('', languageVersion), undefined);
+        assert(instance.getSourceFile('', languageVersion) === undefined);
       });
     });
   });
 
   describe('#getDefaultLibFilename', () => {
     it('should return the defaultLibFileName', () => {
-      assert.strictEqual(instance.getDefaultLibFilename(), 'lib.typhen.d.ts');
+      assert(instance.getDefaultLibFilename() === 'lib.typhen.d.ts');
     });
   });
 
@@ -52,7 +52,7 @@ describe('CompilerHost', () => {
 
   describe('#getCurrentDirectory', () => {
     it('should return the currentDirectory', () => {
-      assert.strictEqual(instance.getCurrentDirectory(), env.currentDirectory);
+      assert(instance.getCurrentDirectory() === env.currentDirectory);
     });
   });
 
@@ -64,7 +64,7 @@ describe('CompilerHost', () => {
 
       it('should return the given file name', () => {
         var fileName = 'CanonicleFileName';
-        assert.strictEqual(instance.getCanonicalFileName(fileName), fileName);
+        assert(instance.getCanonicalFileName(fileName) === fileName);
       });
     });
 
@@ -72,20 +72,20 @@ describe('CompilerHost', () => {
       it('should return the lower cased file name', () => {
         var fileName = 'CanonicleFileName';
         var expected = 'canoniclefilename';
-        assert.strictEqual(instance.getCanonicalFileName(fileName), expected);
+        assert(instance.getCanonicalFileName(fileName) === expected);
       });
     });
   });
 
   describe('#useCaseSensitiveFileNames', () => {
     it('should return env#useCaseSensitiveFileNames', () => {
-      assert.strictEqual(instance.useCaseSensitiveFileNames(), false);
+      assert(instance.useCaseSensitiveFileNames() === false);
     });
   });
 
   describe('#newLine', () => {
     it('should return env#getNewLine', () => {
-      assert.strictEqual(instance.getNewLine(), '\n');
+      assert(instance.getNewLine() === '\n');
     });
   });
 });

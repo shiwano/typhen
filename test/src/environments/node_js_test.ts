@@ -19,15 +19,15 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have currentDirectory', () => {
-    assert.strictEqual(instance.currentDirectory, currentDirectory);
+    assert(instance.currentDirectory === currentDirectory);
   });
 
   it('should have newLine', () => {
-    assert.strictEqual(instance.newLine, newLine);
+    assert(instance.newLine === newLine);
   });
 
   it('should have defaultLibFileName', () => {
-    assert.strictEqual(instance.defaultLibFileName, process.cwd() + '/.tmp/lib.typhen.d.ts');
+    assert(instance.defaultLibFileName === process.cwd() + '/.tmp/lib.typhen.d.ts');
   });
 
   describe('#writeFile', () => {
@@ -37,7 +37,7 @@ describe('NodeJsEnvironment', () => {
 
     it('should call fs#writeFileSync', () => {
       instance.writeFile('invalid.js', '');
-      assert.strictEqual((<SinonStub>fs.writeFileSync).calledOnce, true);
+      assert((<SinonStub>fs.writeFileSync).calledOnce);
     });
   });
 
@@ -47,31 +47,31 @@ describe('NodeJsEnvironment', () => {
     });
 
     it('should return the file text', () => {
-      assert.strictEqual(instance.readFile('invalid.js'), 'a');
+      assert(instance.readFile('invalid.js') === 'a');
     });
     it('should call fs#readFileSync', () => {
       instance.readFile('invalid.js');
-      assert.strictEqual((<SinonStub>fs.readFileSync).calledOnce, true);
+      assert((<SinonStub>fs.readFileSync).calledOnce);
     });
   });
 
   describe('#resolvePath', () => {
     it('should return the resolved path', () => {
       var expected = currentDirectory + '/test/resolve.ts';
-      assert.strictEqual(instance.resolvePath('test', 'resolve.ts'), expected);
+      assert(instance.resolvePath('test', 'resolve.ts') === expected);
     });
   });
 
   describe('#relativePath', () => {
     it('should return the relative path', () => {
-      assert.strictEqual(instance.relativePath(currentDirectory + '/test/resolve.ts'), 'test/resolve.ts');
-      assert.strictEqual(instance.relativePath('/test', '/test/resolve.ts'), 'resolve.ts');
+      assert(instance.relativePath(currentDirectory + '/test/resolve.ts') === 'test/resolve.ts');
+      assert(instance.relativePath('/test', '/test/resolve.ts') === 'resolve.ts');
     });
   });
 
   describe('#dirname', () => {
     it('should return the directory name', () => {
-      assert.strictEqual(instance.dirname('/test/index.ts'), '/test');
+      assert(instance.dirname('/test/index.ts') === '/test');
     });
   });
 
@@ -82,7 +82,7 @@ describe('NodeJsEnvironment', () => {
 
     it('should call fs#existsSync', () => {
       instance.exists('invalid.js');
-      assert.strictEqual((<SinonStub>fs.existsSync).calledOnce, true);
+      assert((<SinonStub>fs.existsSync).calledOnce);
     });
   });
 });
