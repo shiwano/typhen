@@ -14,11 +14,11 @@ import Runner = require('../src/runner');
 import Config = require('../src/config');
 import Logger = require('../src/logger');
 import Generator = require('../src/generator');
-import IEnvironment = require('../src/environments/i_environment');
+import Environment = require('../src/environments/environment');
 
 Logger.level = Logger.LogLevel.Silent;
 
-export class TestEnvironment implements IEnvironment {
+export class TestEnvironment implements Environment {
   public currentDirectory: string = process.cwd() + '/test/fixtures/typings';
   public newLine: string = '\n';
   public useCaseSensitiveFileNames: boolean = false;

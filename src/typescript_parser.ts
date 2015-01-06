@@ -79,12 +79,12 @@ class TypeScriptParser {
     var modules = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Module)
       .filter(s => isTargetOfParser(s))
       .map(s => this.parseModule(s));
-    var importedModules = <Symbol.IModuleTable>this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Import)
+    var importedModules = <Symbol.ModuleTable>this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Import)
       .reduce((results, s) => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         results[s.name] = this.parseModule(aliasedSymbol, s.name);
         return results;
-      }, <Symbol.IModuleTable>{});
+      }, <Symbol.ModuleTable>{});
     var types = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Type)
       .concat(this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Function))
       .filter(s => isTargetOfParser(s))
@@ -269,13 +269,13 @@ class TypeScriptParser {
     var modules = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
       .map(s => this.parseModule(s));
-    var importedModules = <Symbol.IModuleTable>exportedSymbols
+    var importedModules = <Symbol.ModuleTable>exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Import))
       .reduce((results, s) => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         results[s.name] = this.parseModule(aliasedSymbol, s.name);
         return results;
-      }, <Symbol.IModuleTable>{});
+      }, <Symbol.ModuleTable>{});
     var types = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Type) || this.checkFlags(s.flags, ts.SymbolFlags.Function))
       .map(s => this.typeChecker.getTypeOfNode(s.declarations[0]))

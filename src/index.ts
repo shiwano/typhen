@@ -15,7 +15,7 @@ module Typhen {
   export import Handlebars = LocalHandlebars.handlebars;
   export var logger = Logger;
 
-  export function run(configArgs: Config.IConfig): Promise<Vinyl[]> {
+  export function run(configArgs: Config.ConfigObject): Promise<Vinyl[]> {
     var config = new Config.Config(configArgs);
     return new Runner.Runner(config).run();
   }
@@ -24,7 +24,7 @@ module Typhen {
     return require(fileName)(Typhen);
   }
 
-  export function createPlugin(pluginArgs: Plugin.IPlugin): Plugin.Plugin {
+  export function createPlugin(pluginArgs: Plugin.PluginObject): Plugin.Plugin {
     return new Plugin.Plugin(pluginArgs);
   }
 

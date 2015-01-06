@@ -13,10 +13,6 @@ import CompilerHost = require('./compiler_host');
 import Generator = require('./generator');
 import TypeScriptParser = require('./typescript_parser');
 
-export interface IAliasesOptions {
-  [index: string]: string;
-}
-
 export class Runner {
   public config: Config.Config;
   public plugin: Plugin.Plugin;

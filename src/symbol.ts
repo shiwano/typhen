@@ -133,14 +133,14 @@ export class Type extends Symbol {
   public get isType(): boolean { return true; }
 }
 
-export interface IModuleTable {
+export interface ModuleTable {
   [moduleName: string]: Module;
 }
 
 export class Module extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Module;
 
-  public importedModules: IModuleTable = {};
+  public importedModules: ModuleTable = {};
   public modules: Module[] = [];
   public types: Type[] = [];
   public variables: Variable[] = [];
@@ -161,7 +161,7 @@ export class Module extends Symbol {
     return this.runner.plugin.rename(this, name);
   }
 
-  public initialize(importedModules: IModuleTable, modules: Module[], types: Type[], variables: Variable[]): Module {
+  public initialize(importedModules: ModuleTable, modules: Module[], types: Type[], variables: Variable[]): Module {
     this.importedModules = importedModules;
     this.modules = modules;
     this.types = types;

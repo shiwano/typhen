@@ -4,31 +4,31 @@ import _ = require('lodash');
 
 import Plugin = require('./plugin');
 import Runner = require('./runner');
-import IEnvironment = require('./environments/i_environment');
+import Environment = require('./environments/environment');
 import NodeJsEnvironment = require('./environments/node_js');
 
-export interface IConfig {
+export interface ConfigObject {
   plugin: Plugin.Plugin;
   src: string;
   dest: string;
   cwd?: string;
   typingDirectory?: string;
   defaultLibFileName?: string;
-  env?: IEnvironment;
+  env?: Environment;
   noWrite?: boolean;
 }
 
-export class Config {
+export class Config implements ConfigObject {
   public plugin: Plugin.Plugin;
   public src: string;
   public dest: string;
   public cwd: string = process.cwd();
   public typingDirectory: string;
   public defaultLibFileName: string;
-  public env: IEnvironment;
+  public env: Environment;
   public noWrite: boolean = false;
 
-  constructor(args: IConfig) {
+  constructor(args: ConfigObject) {
     _.assign(this, args);
 
     if (this.env === undefined) {

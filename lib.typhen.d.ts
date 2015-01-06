@@ -1,4 +1,4 @@
-/* tslint:disable:interface-name class-name */
+/* tslint:disable:class-name */
 
 // "lib.d.ts" contents here
 

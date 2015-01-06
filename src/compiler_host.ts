@@ -1,13 +1,13 @@
 /// <reference path='../typings/tsd.d.ts' />
 
 import tss = require('typescript-services-api');
-import IEnvironment = require('./environments/i_environment');
+import Environment = require('./environments/environment');
 
 class CompilerHost implements tss.ts.CompilerHost {
   private cachedSources: {[index: string]: tss.ts.SourceFile} = {};
   private version: number = 0;
 
-  constructor(private env: IEnvironment) {
+  constructor(private env: Environment) {
   }
 
   public getSourceFile(fileName: string, languageVersion: tss.ts.ScriptTarget,

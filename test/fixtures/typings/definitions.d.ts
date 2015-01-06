@@ -1,4 +1,4 @@
-/* tslint:disable:interface-name no-unused-variable */
+/* tslint:disable: no-unused-variable */
 
 /// <reference path="./color/color.d.ts" />
 

@@ -1,6 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-interface IEnvironment {
+interface Environment {
   currentDirectory: string;
   newLine: string;
   useCaseSensitiveFileNames: boolean;
@@ -14,4 +14,4 @@ interface IEnvironment {
   exists(fileName: string): boolean;
 }
 
-export = IEnvironment;
+export = Environment;

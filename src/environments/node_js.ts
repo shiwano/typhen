@@ -6,9 +6,9 @@ import mkdirp = require('mkdirp');
 import _ = require('lodash');
 
 import Logger = require('../logger');
-import IEnvironment = require('./i_environment');
+import Environment = require('./environment');
 
-class NodeJsEnvironment implements IEnvironment {
+class NodeJsEnvironment implements Environment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
   public defaultLibFileName: string = path.resolve(__dirname, '../../lib.typhen.d.ts');

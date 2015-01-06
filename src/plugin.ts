@@ -4,33 +4,32 @@ import _ = require('lodash');
 
 import Symbol = require('./symbol');
 import Runner = require('./runner');
-import IEnvironment = require('./environments/i_environment');
 import NodeJsEnvironment = require('./environments/node_js');
 import Generator = require('./generator');
 
 // For details, see: http://handlebarsjs.com/execution.html
-export interface IHandlebarsOptions {
+export interface HandlebarsOptions {
   data?: any;
   helpers?: { [helperName: string]: (...args: any[]) => any };
   partials: { [partialName: string]: any }
 }
 
-export interface IPlugin {
+export interface PluginObject {
   pluginDirectory: string;
   newLine?: string;
   namespaceSeparator?: string;
-  handlebarsOptions?: IHandlebarsOptions;
+  handlebarsOptions?: HandlebarsOptions;
   rename?(symbol: Symbol.Symbol, name: string): string;
   generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): any; // void or Promise<void>
 }
 
-export class Plugin implements IPlugin {
+export class Plugin implements PluginObject {
   public pluginDirectory: string;
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';
-  public handlebarsOptions: IHandlebarsOptions = null;
+  public handlebarsOptions: HandlebarsOptions = null;
 
-  constructor(args: IPlugin) {
+  constructor(args: PluginObject) {
     _.assign(this, args);
   }
 

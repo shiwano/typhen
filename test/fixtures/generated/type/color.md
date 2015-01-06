@@ -1,7 +1,7 @@
 # Type.Color
 
 * Declarations
-  * [test/fixtures/typings/color/color.d.ts](/test/fixtures/typings/color/color.d.ts#L3)
+  * [test/fixtures/typings/color/color.d.ts](/test/fixtures/typings/color/color.d.ts#L1)
 
 No comment.
 

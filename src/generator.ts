@@ -4,26 +4,26 @@ import _ = require('lodash');
 import inflection = require('inflection');
 import Vinyl = require('vinyl');
 
-import IEnvironment = require('./environments/i_environment');
+import Environment = require('./environments/environment');
 import Symbol = require('./symbol');
 import Plugin = require('./plugin');
 import Logger = require('./logger');
 import LocalHandlebars = require('./local_handlebars');
 
-interface IHandlebarsTemplate {
+interface HandlebarsTemplate {
   (context: any, options?: any): string;
 }
 
 class Generator {
   private fileDataCache: { [index: string]: string } = {};
-  private templateCache: { [index: string]: IHandlebarsTemplate } = {};
+  private templateCache: { [index: string]: HandlebarsTemplate } = {};
   public files: Vinyl[] = [];
 
   constructor(
-      public env: IEnvironment,
+      public env: Environment,
       public outputDirectory: string,
       public pluginDirectory: string,
-      private handlebarsOptions: Plugin.IHandlebarsOptions) {
+      private handlebarsOptions: Plugin.HandlebarsOptions) {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
@@ -103,7 +103,7 @@ class Generator {
     return this.fileDataCache[filePath];
   }
 
-  private getTemplate(templateName: string): IHandlebarsTemplate {
+  private getTemplate(templateName: string): HandlebarsTemplate {
     var filePath = this.env.resolvePath(this.pluginDirectory, templateName);
 
     if (!this.templateCache[filePath]) {
