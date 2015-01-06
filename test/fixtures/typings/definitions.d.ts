@@ -64,6 +64,7 @@ declare module Type {
 declare module Rpc {
   export import RpcType = Type;
   var baseUrl: string;
+  var anyAny: any;
 
   module Get {
     function getRange(start: Type.Point, dest: Type.Point): { range: RpcType.Range<number> };

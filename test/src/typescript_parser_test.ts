@@ -71,7 +71,8 @@ describe('TypeScriptParser', () => {
             'integer',
             'number',
             'string',
-            'void'
+            'void',
+            'any'
           ].sort()
       );
     });
@@ -95,6 +96,58 @@ describe('TypeScriptParser', () => {
       assert(instance.types.length === 0);
       instance.parse();
       assert(instance.types.length > 0);
+    });
+  });
+
+  describe('#validate', () => {
+    beforeEach(() => {
+      instance.parse();
+    });
+
+    afterEach(() => {
+      runner.config.disallow = {};
+    });
+
+    context('in general', () => {
+      it('should not throw an error', () => {
+        assert.doesNotThrow(() => instance.validate());
+      });
+    });
+
+    context('when dissalow#any is true', () => {
+      beforeEach(() => {
+        runner.config.disallow.any = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /any type/);
+      });
+    });
+
+    context('when dissalow#tuple is true', () => {
+      beforeEach(() => {
+        runner.config.disallow.tuple = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /tuple type/);
+      });
+    });
+
+    context('when dissalow#generics is true', () => {
+      beforeEach(() => {
+        runner.config.disallow.generics = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /generics/);
+      });
+    });
+
+    context('when dissalow#overload is true', () => {
+      beforeEach(() => {
+        runner.config.disallow.overload = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /overload/);
+      });
     });
   });
 });

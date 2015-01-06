@@ -1,7 +1,7 @@
 # Rpc.Get
 
 * Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L66)
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L67)
 
 No comment.
 

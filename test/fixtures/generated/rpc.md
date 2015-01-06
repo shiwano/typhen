@@ -32,4 +32,5 @@ No Classes.
 
 ## Variables
 
-* baseUrl
+* baseUrl - string
+* anyAny - any

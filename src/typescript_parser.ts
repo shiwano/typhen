@@ -12,8 +12,11 @@ import Runner = require('./runner');
 class TypeScriptParser {
   private program: tss.ts.Program;
   private typeChecker: ts.TypeChecker;
+
   private moduleCache: { [name: string]: Symbol.Module } = {};
   private typeCache: { [id: number]: Symbol.Type } = {};
+  private symbols: Symbol.Symbol[] = [];
+
   private typhenPrimitiveTypeName: string = 'TyphenPrimitiveType';
   private arrayTypeName: string = 'Array';
 
@@ -63,7 +66,7 @@ class TypeScriptParser {
   }
 
   public parse(): void {
-    Logger.debug('Parsing the TypeScript types');
+    Logger.debug('Parsing the TypeScript symbols');
 
     var isTargetOfParser = (s: ts.Symbol): boolean => {
       return s.declarations.every(d => {
@@ -95,6 +98,17 @@ class TypeScriptParser {
       .map(s => this.parseVariable(s));
 
     typhenSymbol.initialize(importedModules, modules, types, variables);
+  }
+
+  public validate(): void {
+    Logger.debug('Validating the typhen symbols');
+    this.symbols.forEach(symbol => {
+      var result = symbol.validate();
+
+      if (_.isString(result) && !_.isEmpty(result)) {
+        throw new Error(result + ': ' + symbol.declarationInfos.map(d => d.toString()).join(', '));
+      }
+    });
   }
 
   private checkFlags(flagsA: number, flagsB: number): boolean {
@@ -160,6 +174,7 @@ class TypeScriptParser {
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
         'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
         'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
+    this.symbols.push(typhenSymbol);
     return typhenSymbol;
   }
 

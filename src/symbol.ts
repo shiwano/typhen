@@ -120,6 +120,10 @@ export class Symbol {
     return this.name;
   }
 
+  public validate(): string {
+    return null;
+  }
+
   public destroy(ok: boolean = false): void {
     if (!ok || this.isDestroyed) { return; }
     Object.keys(this).forEach((key) => {
@@ -177,6 +181,12 @@ export class PrimitiveType extends Type {
     this.rawName = rawName;
     return this;
   }
+
+  public validate(): string {
+    if (this.runner.config.disallow.any && this.rawName === 'any') {
+      return 'Disallow the any type';
+    }
+  }
 }
 
 export class Enum extends Type {
@@ -209,6 +219,12 @@ export class Function extends Type {
   public initialize(callSignatures: Signature[]): Function {
     this.callSignatures = callSignatures;
     return this;
+  }
+
+  public validate(): string {
+    if (this.runner.config.disallow.overload && this.callSignatures.length > 1) {
+      return 'Disallow the function overloading';
+    }
   }
 }
 
@@ -271,6 +287,14 @@ export class Interface extends ObjectType {
     this.staticMethods = staticMethods;
     return this;
   }
+
+  public validate(): string {
+    if (this.runner.config.disallow.generics && this.isGenericType) {
+      return 'Disallow the generics';
+    } else if (this.runner.config.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
+      return 'Disallow the function overloading';
+    }
+  }
 }
 
 export class Class extends Interface {
@@ -318,6 +342,12 @@ export class Tuple extends Type {
     this.baseArrayType = baseArrayType;
     return this;
   }
+
+  public validate(): string {
+    if (this.runner.config.disallow.tuple) {
+      return 'Disallow the tuple type';
+    }
+  }
 }
 
 export class Property extends Symbol {
@@ -348,6 +378,12 @@ export class Method extends Symbol {
     this.isOwn = isOwn;
     return this;
   }
+
+  public validate(): string {
+    if (this.runner.config.disallow.overload && this.callSignatures.length > 1) {
+      return 'Disallow the function overloading';
+    }
+  }
 }
 
 export class Signature extends Symbol {
@@ -362,6 +398,12 @@ export class Signature extends Symbol {
     this.parameters = parameters;
     this.returnType = returnType;
     return this;
+  }
+
+  public validate(): string {
+    if (this.runner.config.disallow.generics && this.typeParameters.length > 0) {
+      return 'Disallow the generics';
+    }
   }
 }
 

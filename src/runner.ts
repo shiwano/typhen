@@ -41,6 +41,7 @@ export class Runner {
       Logger.log(Logger.underline('Parsing TypeScript files'));
       var parser = new TypeScriptParser([this.config.src], this);
       parser.parse();
+      parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
         var relative = this.config.env.relativePath(sourceFile.filename);
         Logger.info('Parsed', Logger.cyan(relative));
