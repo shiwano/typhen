@@ -85,7 +85,7 @@ module.exports = function(typhen) {
     defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
   }).then(function(files) {
     console.log('Done!');
-  }).catche(function(e) {
+  }).catch(function(e) {
     console.error(e);
   });
 };
