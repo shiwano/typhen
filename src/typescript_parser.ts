@@ -23,10 +23,10 @@ class TypeScriptParser {
     this.typeChecker = this.program.getTypeChecker(true);
 
     var unsupportedSourceFileNames = this.sourceFiles
-      .filter(s => s.filename.match(/.*\.d\.ts$/) === null)
+      .filter(s => !ts.isDeclarationFile(s))
       .map(s => s.filename);
     if (unsupportedSourceFileNames.length > 0) {
-      throw new Error('Unsupported files given (not *.d.ts): ' + unsupportedSourceFileNames.join(', '));
+      throw new Error('Not declaration files: ' + unsupportedSourceFileNames.join(', '));
     }
 
     Logger.debug('Compiling the TypeScript files');
