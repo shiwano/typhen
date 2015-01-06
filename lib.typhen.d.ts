@@ -1,6 +1,7 @@
 /* tslint:disable:class-name */
 
-// "lib.d.ts" contents here
+// Note that the reference path is used in NodeJsEnvironment.
+/// <reference path="./lib.d.ts" />
 
 interface TyphenPrimitiveType {}
 

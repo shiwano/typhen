@@ -62,11 +62,13 @@ class NodeJsEnvironment implements Environment {
     return fs.existsSync(filePath);
   }
 
-  private getDefaultLibFileData(): string {
+  public getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
-    var baseDefaultLibFileData = fs.readFileSync(this.baseDefaultLibFileName, 'utf-8');
     var defaultLibFileData = fs.readFileSync(this.defaultLibFileName, 'utf-8');
-    return [baseDefaultLibFileData, defaultLibFileData].join('\n');
+    var baseDefaultLibFileData = fs.readFileSync(this.baseDefaultLibFileName, 'utf-8').replace(/\r\n/g, '\n');
+    return defaultLibFileData.replace(
+        /^\/\/\/\s*<reference\s+path="[^"]+"\s*\/>/mi,
+        '\n' + baseDefaultLibFileData + '\n');
   }
 }
 

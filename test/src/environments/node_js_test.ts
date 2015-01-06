@@ -85,4 +85,12 @@ describe('NodeJsEnvironment', () => {
       assert((<SinonStub>fs.existsSync).calledOnce);
     });
   });
+
+  describe('#getDefaultLibFileData', () => {
+    it('should return the joined defaultLibFile data', () => {
+      var actual = instance.getDefaultLibFileData();
+      var expected = fs.readFileSync(process.cwd() + '/test/fixtures/lib.typhen-test.d.ts', 'utf-8');
+      assert(actual === expected);
+    });
+  });
 });
