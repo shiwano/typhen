@@ -15,6 +15,26 @@ No declarations.
 No comment.
 {{/if}}
 
+## Imported Modules
+
+{{#unless hasImportedModules}}
+No Imported Modules.
+{{else}}
+{{#eachProperty importedModules}}
+* {{key}} - {{value}}
+{{/eachProperty}}
+{{/unless}}
+
+## Modules
+
+{{#empty modules}}
+No Modules.
+{{else}}
+{{#each modules}}
+* {{name}}
+{{/each}}
+{{/empty}}
+
 ## Enums
 
 {{#empty enums}}

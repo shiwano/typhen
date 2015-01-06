@@ -1,9 +1,17 @@
 # Rpc.Post
 
 * Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L69)
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L70)
 
 No comment.
+
+## Imported Modules
+
+No Imported Modules.
+
+## Modules
+
+No Modules.
 
 ## Enums
 
