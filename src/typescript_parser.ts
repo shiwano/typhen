@@ -84,8 +84,11 @@ class TypeScriptParser {
       .filter(s => isTargetOfParser(s))
       .map(s => this.typeChecker.getTypeOfNode(s.declarations[0]))
       .map(s => this.parseType(s));
+    var variables = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Variable)
+      .filter(s => isTargetOfParser(s))
+      .map(s => this.parseVariable(s));
 
-    typhenSymbol.initialize(modules, types);
+    typhenSymbol.initialize(modules, types, variables);
   }
 
   private checkFlags(flagsA: number, flagsB: number): boolean {
@@ -264,7 +267,10 @@ class TypeScriptParser {
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Type) || this.checkFlags(s.flags, ts.SymbolFlags.Function))
       .map(s => this.typeChecker.getTypeOfNode(s.declarations[0]))
       .map(t => this.parseType(t));
-    return typhenSymbol.initialize(modules, types);
+    var variables = exportedSymbols
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Variable))
+      .map(s => this.parseVariable(s));
+    return typhenSymbol.initialize(modules, types, variables);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
@@ -430,6 +436,15 @@ class TypeScriptParser {
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
     return typhenSymbol.initialize(parameterType, isOptional);
+  }
+
+  private parseVariable(symbol: ts.Symbol): Symbol.Variable {
+    var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
+    var variableType = this.parseType(type);
+    var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
+
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Variable>(symbol, Symbol.Variable);
+    return typhenSymbol.initialize(variableType, isOptional);
   }
 }
 

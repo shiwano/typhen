@@ -20,3 +20,7 @@ No Interfaces.
 ## Classes
 
 No Classes.
+
+## Variables
+
+* baseUrl

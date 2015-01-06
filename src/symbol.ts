@@ -21,7 +21,8 @@ export enum SymbolKinds {
   Property,
   Method,
   Signature,
-  Parameter
+  Parameter,
+  Variable
 }
 
 export class DeclarationInfo {
@@ -113,6 +114,7 @@ export class Symbol {
   public get isMethod(): boolean { return this.kind === SymbolKinds.Method; }
   public get isSignature(): boolean { return this.kind === SymbolKinds.Signature; }
   public get isParameter(): boolean { return this.kind === SymbolKinds.Parameter; }
+  public get isVariable(): boolean { return this.kind === SymbolKinds.Variable; }
 
   public toString(): string {
     return this.name;
@@ -136,6 +138,7 @@ export class Module extends Symbol {
 
   public modules: Module[] = [];
   public types: Type[] = [];
+  public variables: Variable[] = [];
 
   public get enums(): Enum[] { return <Enum[]>this.types.filter(t => t.isEnum); }
   public get functions(): Function[] { return <Function[]>this.types.filter(t => t.isFunction); }
@@ -152,9 +155,10 @@ export class Module extends Symbol {
     return this.runner.plugin.rename(this, name);
   }
 
-  public initialize(modules: Module[], types: Type[]): Module {
+  public initialize(modules: Module[], types: Type[], variables: Variable[]): Module {
     this.modules = modules;
     this.types = types;
+    this.variables = variables;
     return this;
   }
 }
@@ -361,6 +365,19 @@ export class Parameter extends Symbol {
   public isOptional: boolean = false;
 
   public initialize(type: Type, isOptional: boolean): Parameter {
+    this.type = type;
+    this.isOptional = isOptional;
+    return this;
+  }
+}
+
+export class Variable extends Symbol {
+  public kind: SymbolKinds = SymbolKinds.Variable;
+
+  public type: Type = null;
+  public isOptional: boolean = false;
+
+  public initialize(type: Type, isOptional: boolean): Variable {
     this.type = type;
     this.isOptional = isOptional;
     return this;

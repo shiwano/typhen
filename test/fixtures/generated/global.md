@@ -19,3 +19,7 @@ No Interfaces.
 ## Classes
 
 No Classes.
+
+## Variables
+
+No Variables.
