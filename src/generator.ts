@@ -109,7 +109,9 @@ class Generator {
     if (!this.templateCache[filePath]) {
       var templateSource = this.getFileFromPluginDirectory(filePath);
       Logger.debug('Compiling the Template: ' + templateName);
-      this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource);
+      this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource, {
+        noEscape: true
+      });
     }
     return this.templateCache[filePath];
   }
