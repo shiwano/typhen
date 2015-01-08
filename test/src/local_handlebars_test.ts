@@ -12,10 +12,30 @@ describe('LocalHandlebars', () => {
     sandbox.restore();
   });
 
+  describe('.HandlebarsHelpers', () => {
+    describe('.underscore', () => {
+      it('should return a underscored string', () => {
+        assert(LocalHandlebars.HandlebarsHelpers.underscore('App.FooBar.Qux') === 'app.foo_bar.qux');
+      });
+    });
+
+    describe('.upperCamelCase', () => {
+      it('should return a upperCamelCaseed string', () => {
+        assert(LocalHandlebars.HandlebarsHelpers.upperCamelCase('app.foo_bar.qux') === 'App.FooBar.Qux');
+      });
+    });
+
+    describe('.lowerCamelCase', () => {
+      it('should return a lowerCamelCaseed string', () => {
+        assert(LocalHandlebars.HandlebarsHelpers.lowerCamelCase('app.foo_bar.qux') === 'app.fooBar.qux');
+      });
+    });
+  });
+
   describe('.handlebars', () => {
     it('should export local handlebars', () => {
       assert(LocalHandlebars.handlebars.registerHelper);
-      assert.notEqual(LocalHandlebars.handlebars, Handlebars);
+      assert(LocalHandlebars.handlebars !== Handlebars);
     });
   });
 

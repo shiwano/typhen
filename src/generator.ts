@@ -9,6 +9,7 @@ import Symbol = require('./symbol');
 import Plugin = require('./plugin');
 import Logger = require('./logger');
 import LocalHandlebars = require('./local_handlebars');
+import HandlebarsHelpers = LocalHandlebars.HandlebarsHelpers;
 
 interface HandlebarsTemplate {
   (context: any, options?: any): string;
@@ -82,9 +83,9 @@ class Generator {
       if (_.contains(name, '/')) { return name; }
 
       switch (inflectionType) {
-        case 'underscore':     return inflection.underscore(name);
-        case 'upperCamelCase': return inflection.camelize(name);
-        case 'lowerCamelCase': return inflection.camelize(name, true);
+        case 'underscore':     return HandlebarsHelpers.underscore(name);
+        case 'upperCamelCase': return HandlebarsHelpers.upperCamelCase(name);
+        case 'lowerCamelCase': return HandlebarsHelpers.lowerCamelCase(name);
         default:               return name;
       }
     };
