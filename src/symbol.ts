@@ -330,15 +330,15 @@ export class TypeParameter extends Type {
 export class Tuple extends Type {
   public kind: SymbolKinds = SymbolKinds.Tuple;
 
-  public elementTypes: Type[] = [];
+  public types: Type[] = [];
   public baseArrayType: Type = null;
 
   public get assumedName(): string {
-    return this.elementTypes.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
+    return this.types.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
   }
 
-  public initialize(elementTypes: Type[], baseArrayType: Type): Tuple {
-    this.elementTypes = elementTypes;
+  public initialize(types: Type[], baseArrayType: Type): Tuple {
+    this.types = types;
     this.baseArrayType = baseArrayType;
     return this;
   }

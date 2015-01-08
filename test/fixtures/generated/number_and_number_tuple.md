@@ -8,7 +8,7 @@ No comment.
 
 Tuple
 
-## ElementTypes
+## Types
 
 * number
 * number
