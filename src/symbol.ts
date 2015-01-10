@@ -28,7 +28,16 @@ export enum SymbolKinds {
 export class Tag {
   constructor(
       public name: string,
-      public value: string) {
+      public value: string = '') {
+  }
+
+  public get number(): number {
+    var n = Number(this.value);
+    return _.isNumber(n) ? n : 0;
+  }
+
+  public get boolean(): boolean {
+    return this.value !== 'false';
   }
 }
 
@@ -51,7 +60,7 @@ export class DeclarationInfo {
 }
 
 export class Symbol {
-  private static tagPattern: RegExp = /^\s*@([^\s@]+)\s+([^\s@]+)\s*$/m;
+  private static tagPattern: RegExp = /^\s*@([^\s@]+)\s*([^\s@]*)\s*$/m;
   public kind: SymbolKinds = SymbolKinds.Invalid;
   private isDestroyed: boolean = false;
 
@@ -95,7 +104,7 @@ export class Symbol {
   }
 
   public get tagTable(): { [name: string]: Tag } {
-    return _.reduce(this.docComment, (result, comment) => {
+    return <{ [name: string]: Tag }>_.reduce(this.docComment, (result, comment) => {
       var matches = comment.match(Symbol.tagPattern);
       if (matches != null) { result[matches[1]] = new Tag(matches[1], matches[2]); }
       return result;

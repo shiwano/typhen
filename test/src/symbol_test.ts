@@ -31,10 +31,12 @@ describe('Symbol', () => {
         });
       });
       it('should have tags', () => {
-        assert.deepEqual(instance.tags, [
-          new Symbol.Tag('default', 'FooType.Bar'),
-          new Symbol.Tag('type', 'Enum')
-        ]);
+        assert(instance.tags.length === 5);
+        assert(instance.tagTable['default'].value === 'FooType.Bar');
+        assert(instance.tagTable['type'].value === 'Enum');
+        assert(instance.tagTable['number'].number === 10);
+        assert(instance.tagTable['true'].boolean);
+        assert(!instance.tagTable['false'].boolean);
       });
 
       context('when it has assumedName', () => {
