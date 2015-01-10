@@ -29,6 +29,18 @@ describe('LocalHandlebars', () => {
         assert(LocalHandlebars.HandlebarsHelpers.lowerCamelCase('app.foo_bar.qux') === 'app.fooBar.qux');
       });
     });
+
+    describe('.pluralize', () => {
+      it('should return a pluralized string', () => {
+        assert(LocalHandlebars.HandlebarsHelpers.pluralize('person') === 'people');
+      });
+    });
+
+    describe('.singularize', () => {
+      it('should return a singularized string', () => {
+        assert(LocalHandlebars.HandlebarsHelpers.singularize('people') === 'person');
+      });
+    });
   });
 
   describe('.handlebars', () => {
@@ -48,11 +60,7 @@ describe('LocalHandlebars', () => {
       var handlebarStub = (<SinonStub>Handlebars.registerHelper);
 
       assert.deepEqual(handlebarStub.args.every(a => a[1] instanceof Function), true);
-      assert.deepEqual(handlebarStub.args.map(a => a[0]), [
-        'underscore',
-        'upperCamelCase',
-        'lowerCamelCase'
-      ]);
+      assert.deepEqual(handlebarStub.args.map(a => a[0]), Object.keys(LocalHandlebars.HandlebarsHelpers));
     });
   });
 });

@@ -17,6 +17,12 @@ FooBarBaz
 #### lowerCamelCase
 fooBarBaz
 
+#### pluralize
+people
+
+#### singularize
+person
+
 ### Custom helpers
 
 #### Plugin Helpers

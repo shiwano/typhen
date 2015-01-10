@@ -28,6 +28,14 @@ export module HandlebarsHelpers {
       return inflection.camelize(s, true);
     });
   }
+
+  export function pluralize(str: string): string {
+    return inflection.pluralize(str);
+  }
+
+  export function singularize(str: string): string {
+    return inflection.singularize(str);
+  }
 }
 
 export function registerHelpers(handlebars: typeof Handlebars): void {
