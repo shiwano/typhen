@@ -156,7 +156,7 @@ export interface ModuleTable {
 export class Module extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Module;
 
-  public importedModules: ModuleTable = {};
+  public importedModuleTable: ModuleTable = {};
   public modules: Module[] = [];
   public types: Type[] = [];
   public variables: Variable[] = [];
@@ -167,7 +167,6 @@ export class Module extends Symbol {
   public get classes(): Class[] { return <Class[]>this.types.filter(t => t.isClass); }
 
   public get isGlobalModule(): boolean { return this.rawName === '' && this.parentModule === null; }
-  public get hasImportedModules(): boolean { return Object.keys(this.importedModules).length > 0; }
 
   public get name(): string {
     var name = this.isGlobalModule ? 'Global' : this.rawName.replace(/["']/g, '');
@@ -177,8 +176,12 @@ export class Module extends Symbol {
     return this.runner.plugin.rename(this, name);
   }
 
-  public initialize(importedModules: ModuleTable, modules: Module[], types: Type[], variables: Variable[]): Module {
-    this.importedModules = importedModules;
+  public get importedModules(): { name: string; module: Module }[] {
+    return _.map(this.importedModuleTable, (v, k) => { return { name: k, module: v }; });
+  }
+
+  public initialize(importedModuleTable: ModuleTable, modules: Module[], types: Type[], variables: Variable[]): Module {
+    this.importedModuleTable = importedModuleTable;
     this.modules = modules;
     this.types = types;
     this.variables = variables;

@@ -16,13 +16,13 @@ No comment.
 
 ## Imported Modules
 
-{{#unless hasImportedModules}}
-No Imported Modules.
+{{#if importedModules}}
+{{#each importedModules}}
+* {{name}} - {{module}}
+{{/each}}
 {{else}}
-{{#eachProperty importedModules}}
-* {{key}} - {{value}}
-{{/eachProperty}}
-{{/unless}}
+No Imported Modules.
+{{/if}}
 
 ## Modules
 

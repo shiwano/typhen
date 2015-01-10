@@ -82,7 +82,7 @@ class TypeScriptParser {
     var modules = this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Module)
       .filter(s => isTargetOfParser(s))
       .map(s => this.parseModule(s));
-    var importedModules = <Symbol.ModuleTable>this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Import)
+    var importedModuleTable = <Symbol.ModuleTable>this.typeChecker.getSymbolsInScope(null, ts.SymbolFlags.Import)
       .reduce((results, s) => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         results[s.name] = this.parseModule(aliasedSymbol, s.name);
@@ -97,7 +97,7 @@ class TypeScriptParser {
       .filter(s => isTargetOfParser(s))
       .map(s => this.parseVariable(s));
 
-    typhenSymbol.initialize(importedModules, modules, types, variables);
+    typhenSymbol.initialize(importedModuleTable, modules, types, variables);
   }
 
   public validate(): void {
@@ -284,7 +284,7 @@ class TypeScriptParser {
     var modules = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
       .map(s => this.parseModule(s));
-    var importedModules = <Symbol.ModuleTable>exportedSymbols
+    var importedModuleTable = <Symbol.ModuleTable>exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Import))
       .reduce((results, s) => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
@@ -298,7 +298,7 @@ class TypeScriptParser {
     var variables = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Variable))
       .map(s => this.parseVariable(s));
-    return typhenSymbol.initialize(importedModules, modules, types, variables);
+    return typhenSymbol.initialize(importedModuleTable, modules, types, variables);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
