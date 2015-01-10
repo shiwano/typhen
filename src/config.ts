@@ -7,13 +7,6 @@ import Runner = require('./runner');
 import Environment = require('./environments/environment');
 import NodeJsEnvironment = require('./environments/node_js');
 
-export interface DisallowOptions {
-  any?: boolean;
-  tuple?: boolean;
-  overload?: boolean;
-  generics?: boolean;
-}
-
 export interface ConfigObject {
   plugin: Plugin.Plugin;
   src: string;
@@ -21,7 +14,6 @@ export interface ConfigObject {
   cwd?: string;
   typingDirectory?: string;
   defaultLibFileName?: string;
-  disallow?: DisallowOptions;
   env?: Environment;
   noWrite?: boolean;
 }
@@ -33,7 +25,6 @@ export class Config implements ConfigObject {
   public cwd: string = process.cwd();
   public typingDirectory: string;
   public defaultLibFileName: string;
-  public disallow: DisallowOptions = {};
   public env: Environment;
   public noWrite: boolean = false;
 

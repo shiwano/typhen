@@ -207,7 +207,7 @@ export class PrimitiveType extends Type {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.any && this.rawName === 'any') {
+    if (this.runner.plugin.disallow.any && this.rawName === 'any') {
       return 'Disallow the any type';
     }
   }
@@ -246,7 +246,7 @@ export class Function extends Type {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.overload && this.callSignatures.length > 1) {
+    if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
   }
@@ -313,9 +313,9 @@ export class Interface extends ObjectType {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.generics && this.isGenericType) {
+    if (this.runner.plugin.disallow.generics && this.isGenericType) {
       return 'Disallow the generics';
-    } else if (this.runner.config.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
+    } else if (this.runner.plugin.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
       return 'Disallow the function overloading';
     }
   }
@@ -368,7 +368,7 @@ export class Tuple extends Type {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.tuple) {
+    if (this.runner.plugin.disallow.tuple) {
       return 'Disallow the tuple type';
     }
   }
@@ -404,7 +404,7 @@ export class Method extends Symbol {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.overload && this.callSignatures.length > 1) {
+    if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
   }
@@ -425,7 +425,7 @@ export class Signature extends Symbol {
   }
 
   public validate(): string {
-    if (this.runner.config.disallow.generics && this.typeParameters.length > 0) {
+    if (this.runner.plugin.disallow.generics && this.typeParameters.length > 0) {
       return 'Disallow the generics';
     }
   }
