@@ -14173,6 +14173,7 @@ declare var WScript: {
 }
 
 
+/// <reference no-default-lib="true"/>
 
 interface TyphenPrimitiveType {}
 
