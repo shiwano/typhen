@@ -76,19 +76,13 @@ module.exports = function(typhen) {
     optionName: 'option value'
   });
 
-  return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
+  return typhen.run({                   // typhen.run returns a Promise object of the bluebird.
     plugin: plugin,
     src: 'typings/lib/definitions.d.ts',
     dest: 'generated',
-    cwd: '../other/current',             // Optional. Default value is process.cwd().
-    typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
-    defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
-    disallow: {                          // Optional. Default value is {}.
-      any: true,
-      tuple: true,
-      overload: true,
-      generics: true
-    }
+    cwd: '../other/current',            // Optional. Default value is process.cwd().
+    typingDirectory: 'typings',         // Optional. Default value is the directory name of the src.
+    defaultLibFileName: 'lib.core.d.ts' // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
   }).then(function(files) {
     console.log('Done!');
   }).catch(function(e) {
@@ -109,6 +103,12 @@ module.exports = function(typhen, options) {
     pluginDirectory: __dirname,
     newLine: '\r\n',          // Optional. Default value is '\n'.
     namespaceSeparator: '::', // Optional. Default value is '.'.
+    disallow: {               // Optional. Default value is {}.
+      any: true,
+      tuple: true,
+      overload: true,
+      generics: true
+    },
     handlebarsOptions: {      // Optional. Default value is null.
       data: options,          // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
