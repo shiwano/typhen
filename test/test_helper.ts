@@ -62,7 +62,7 @@ export function createEnum(runner?: Runner.Runner): Symbol.Enum {
   var appModule = new Symbol.Module(runner, 'App', [''], [], null, '').initialize({}, [], [], []);
   var typeModule = new Symbol.Module(runner, 'Type', [''], [], appModule, '').initialize({}, [], [], []);
 
-  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@type Enum'], [], typeModule, '');
+  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@type Invalid', '@type Enum'], [], typeModule, '');
   type.initialize([
     new Symbol.EnumMember(runner, 'Bar', [''], [], typeModule, '').initialize(0),
     new Symbol.EnumMember(runner, 'Baz', [''], [], typeModule, '').initialize(1)

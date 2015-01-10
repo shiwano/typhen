@@ -25,6 +25,13 @@ export enum SymbolKinds {
   Variable
 }
 
+export class Tag {
+  constructor(
+      public name: string,
+      public value: string) {
+  }
+}
+
 export class DeclarationInfo {
   constructor(
       public fileName: string,
@@ -87,11 +94,16 @@ export class Symbol {
       .join(this.runner.plugin.newLine);
   }
 
-  public get tags(): { name: string; value: string; }[] {
-    return _.chain(this.docComment).map(comment => {
+  public get tagTable(): { [name: string]: Tag } {
+    return _.reduce(this.docComment, (result, comment) => {
       var matches = comment.match(Symbol.tagPattern);
-      return matches == null ? null : { name: matches[1], value: matches[2] };
-    }).compact().value();
+      if (matches != null) { result[matches[1]] = new Tag(matches[1], matches[2]); }
+      return result;
+    }, <{ [name: string]: Tag }>{});
+  }
+
+  public get tags(): Tag[] {
+    return _.values(this.tagTable);
   }
 
   public get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }

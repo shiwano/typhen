@@ -32,8 +32,8 @@ describe('Symbol', () => {
       });
       it('should have tags', () => {
         assert.deepEqual(instance.tags, [
-          { name: 'default', value: 'FooType.Bar' },
-          { name: 'type', value: 'Enum' }
+          new Symbol.Tag('default', 'FooType.Bar'),
+          new Symbol.Tag('type', 'Enum')
         ]);
       });
 
