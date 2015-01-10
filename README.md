@@ -156,9 +156,6 @@ module.exports = function(typhen, options) {
 ### Templating
 The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following global helpers and custom helpers which are defined in the typhenfile.js or a plugin.
 
-#### Swag Helpers
-See the [documentation](http://elving.github.io/swag/) for the helpers in the Swag library.
-
 #### underscore Helper
 Transforms a string to underscore.
 
@@ -186,9 +183,27 @@ Usage:
                       fooBarBaz
 ```
 
+#### pluralize
+Transforms a string to plural form.
+
+Usage:
+```hbs
+    {{pluralize 'person'}}
+                 people
+```
+
+#### singularize
+Transforms a string to singular form.
+
+Usage:
+```hbs
+    {{singularize 'people'}}
+                   person
+```
+
 ### Custom Primitive Types
 
-If you want to use a custom primitive type, define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive type. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
+If you want to use a custom primitive type, you will define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive type. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
 
 #### integer
 
