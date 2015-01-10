@@ -3,7 +3,6 @@
 import _ = require('lodash');
 import inflection = require('inflection');
 import Handlebars = require('handlebars');
-import Swag = require('swag');
 
 function applyHelperToStringWithSeparator(str: string, helper: (str: string) => string): string {
   var separators = _.uniq(str.match(/[^a-z_]+/gi));
@@ -32,7 +31,6 @@ export module HandlebarsHelpers {
 }
 
 export function registerHelpers(handlebars: typeof Handlebars): void {
-  Swag.registerHelpers(handlebars);
   _.forEach(HandlebarsHelpers, (helper: Function, helperName: string) => {
     handlebars.registerHelper(helperName, helper);
   });

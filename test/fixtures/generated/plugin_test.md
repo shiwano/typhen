@@ -8,9 +8,6 @@ Author: shiwano
 
 ### Global helpers
 
-#### Swag helpers
-15
-
 #### underscore
 foo_bar_baz
 
