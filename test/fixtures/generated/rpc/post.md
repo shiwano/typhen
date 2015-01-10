@@ -1,7 +1,7 @@
 # Rpc.Post
 
 * Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L71)
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L73)
 
 No comment.
 

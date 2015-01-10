@@ -34,47 +34,45 @@ describe('TypeScriptParser', () => {
     });
 
     it('should return the parsed types', () => {
-      assert.deepEqual(
-          instance.types.map(t => t.fullName),
-          [
-            // Array
-            'Line[]',
-            // Tuple
-            'NumberAndNumberTuple',
-            // Function
-            'Rpc.Get.getRange',
-            'Rpc.Post.setOptions',
-            'Type.ColoredSquareSetColorCallbackFunction',
-            'Type.LineSetColorCallbackFunction',
-            'emitLog',
-            // ObjectType
-            'Rpc.Get.GetRangeObject',
-            'Rpc.Post.SetOptionsOptionsObject',
-            // Enum
-            'Type.Color',
-            // Interface
-            'Type.ColoredSquare',
-            'Type.Point',
-            'Type.Range',
-            'Type.RangeWithNumber',
-            'Type.Square',
-            'Type.SquareDictionary',
-            'Type.Transformer',
-            // Class
-            'Type.Line',
-            'Type.LineDrawer',
-            // TypeParameter
-            'Type.T',
-            'Type.T',
-            // PrimitiveType
-            'boolean',
-            'integer',
-            'number',
-            'string',
-            'void',
-            'any'
-          ].sort()
-      );
+      var expected = [
+        // Array
+        'Line[]',
+        // Tuple
+        'NumberAndNumberTuple',
+        // Function
+        'Rpc.Get.getRange',
+        'Rpc.Post.setOptions',
+        'Type.ColoredSquareSetColorCallbackFunction',
+        'Type.LineSetColorCallbackFunction',
+        'emitLog',
+        // ObjectType
+        'Rpc.Get.GetRangeObject',
+        'Rpc.Post.SetOptionsOptionsObject',
+        // Enum
+        'Type.Color',
+        // Interface
+        'Type.ColoredSquare',
+        'Type.Point',
+        'Type.Range',
+        'Type.RangeWithNumber',
+        'Type.Square',
+        'Type.SquareDictionary',
+        'Type.Transformer',
+        // Class
+        'Type.Line',
+        'Type.LineDrawer',
+        // TypeParameter
+        'Type.T',
+        'Type.T',
+        // PrimitiveType
+        'boolean',
+        'integer',
+        'number',
+        'string',
+        'void',
+        'any'
+      ].sort().join('\n');
+      assert(instance.types.map(t => t.fullName).join('\n') === expected);
     });
   });
 
@@ -84,10 +82,8 @@ describe('TypeScriptParser', () => {
     });
 
     it('should return the parsed modules', () => {
-      assert.deepEqual(
-        instance.modules.map(t => t.fullName),
-        ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort()
-      );
+      var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort().join('\n');
+      assert(instance.modules.map(t => t.fullName).join('\n') === expected);
     });
   });
 

@@ -1,7 +1,7 @@
 # Rpc.Get.getRange
 
 * Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L69)
+  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L71)
 
 No comment.
 

@@ -53,6 +53,8 @@ declare module Type {
     color: Color;
     constructor(src: Point, dest: Point);
     setColor(color: Color, callback?: (color: Color) => void): void;
+    private ownColor;
+    private draw();
   }
 
   class LineDrawer {

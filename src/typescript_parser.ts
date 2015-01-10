@@ -322,10 +322,12 @@ class TypeScriptParser {
     var typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
     var properties = genericType.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
+            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
     var methods = genericType.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
+            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseMethod(s, _.contains(genericType.declaredProperties, s)));
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
@@ -356,10 +358,12 @@ class TypeScriptParser {
       var staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
         .filter(s => !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
       staticProperties = staticPropertySymbols
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
+            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseProperty(s));
       staticMethods = staticPropertySymbols
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
+            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseMethod(s));
     }
     return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
@@ -371,10 +375,10 @@ class TypeScriptParser {
     var typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
 
     var properties = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined)
         .map(s => this.parseProperty(s));
     var methods = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.declarations !== undefined)
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined)
         .map(s => this.parseMethod(s));
     var stringIndexType = this.parseType(type.getStringIndexType());
     var numberIndexType = this.parseType(type.getNumberIndexType());
@@ -428,7 +432,7 @@ class TypeScriptParser {
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
-    var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
+    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var propertyType = this.parseType(type);
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
@@ -437,7 +441,7 @@ class TypeScriptParser {
   }
 
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
-    var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
+    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
@@ -458,7 +462,7 @@ class TypeScriptParser {
   }
 
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
-    var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
+    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var parameterType = this.parseType(type);
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
@@ -467,7 +471,7 @@ class TypeScriptParser {
   }
 
   private parseVariable(symbol: ts.Symbol): Symbol.Variable {
-    var type = this.typeChecker.getTypeOfNode(symbol.declarations[0]);
+    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var variableType = this.parseType(type);
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
 
