@@ -1,13 +1,12 @@
 # {{fullName}}
 
-{{#empty declarationInfos}}
-No declarations.
-{{else}}
+{{#if declarationInfos}}
 {{#each declarationInfos}}
-* Declarations
-  * [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
 {{/each}}
-{{/empty}}
+{{else}}
+No declarations.
+{{/if}}
 
 {{#if comment}}
 {{comment}}
@@ -21,21 +20,19 @@ ObjectType
 
 ## Properties
 
-{{#empty properties}}
-Properties is empty.
-{{else}}
+{{#if properties}}
 Name|TypeName|IsOptional|Comment
 ---|---|---|---
 {{#each properties}}
 {{name}}|{{type.name}}|{{isOptional}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+Properties is empty.
+{{/if}}
 
 ## Methods
 
-{{#empty methods}}
-Methods is empty.
-{{else}}
+{{#if methods}}
 Name|Parameter(TypeName - IsOptional)|ReturnTypeName|IsOptional|Comment
 ---|---|---|---|---
 {{#each methods}}
@@ -43,7 +40,9 @@ Name|Parameter(TypeName - IsOptional)|ReturnTypeName|IsOptional|Comment
 {{../name}}|{{#each parameters}}{{name}}({{type}} - {{isOptional}}) {{/each}}|{{returnType}}|{{../isOptional}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
-{{/empty}}
+{{else}}
+Methods is empty.
+{{/if}}
 
 ## StringIndexType
 

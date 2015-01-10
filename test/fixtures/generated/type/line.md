@@ -1,7 +1,6 @@
 # Type.Line
 
-* Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L50)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L52)
 
 No comment.
 

@@ -1,13 +1,12 @@
 # {{fullName}}
 
-{{#empty declarationInfos}}
-No declarations.
-{{else}}
+{{#if declarationInfos}}
 {{#each declarationInfos}}
-* Declarations
-  * [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
 {{/each}}
-{{/empty}}
+{{else}}
+No declarations.
+{{/if}}
 
 {{#if comment}}
 {{comment}}
@@ -21,79 +20,77 @@ Interface or Class (isGenericType: {{isGenericType}})
 
 ## BaseTypes
 
-{{#empty baseTypes}}
-BaseTypes is empty.
-{{else}}
+{{#if baseTypes}}
 {{#each baseTypes}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+BaseTypes is empty.
+{{/if}}
 
 ## TypeParameters
 
-{{#empty typeParameters}}
-TypeParameters is empty.
-{{else}}
+{{#if typeParameters}}
 Name|ConstraintTypeName|Comment
 ---|---|---
 {{#each typeParameters}}
 {{name}}|{{constraint.name}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+TypeParameters is empty.
+{{/if}}
 
 ## TypeArugments
 
-{{#empty typeArguments}}
-TypeArguments is empty.
-{{else}}
+{{#if typeArguments}}
 Name|Comment
 ---|---
 {{#each typeArguments}}
 {{name}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+TypeArguments is empty.
+{{/if}}
 
 ## ConstructorSignatures
 
-{{#empty constructorSignatures}}
-ConstructorSignatures is empty.
-{{else}}
+{{#if constructorSignatures}}
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
 ---|---|---|---
 {{#each constructorSignatures}}
 constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+ConstructorSignatures is empty.
+{{/if}}
 
 ## CallSignatures
 
-{{#empty callSignatures}}
-CallSignatures is empty.
-{{else}}
+{{#if callSignatures}}
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
 ---|---|---|---
 {{#each callSignatures}}
 {{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+CallSignatures is empty.
+{{/if}}
 
 ## Properties
 
-{{#empty properties}}
-Properties is empty.
-{{else}}
+{{#if properties}}
 Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---|---
 {{#each properties}}
 {{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+Properties is empty.
+{{/if}}
 
 ## Methods
 
-{{#empty methods}}
-Methods is empty.
-{{else}}
+{{#if methods}}
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
 ---|---|---|---|---|---
 {{#each methods}}
@@ -101,25 +98,25 @@ Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comme
 {{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
-{{/empty}}
+{{else}}
+Methods is empty.
+{{/if}}
 
 ## Static Properties
 
-{{#empty staticProperties}}
-Static Properties is empty.
-{{else}}
+{{#if staticProperties}}
 Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---
 {{#each staticProperties}}
 {{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
-{{/empty}}
+{{else}}
+Static Properties is empty.
+{{/if}}
 
 ## Static Methods
 
-{{#empty staticMethods}}
-Static Methods is empty.
-{{else}}
+{{#if staticMethods}}
 Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
 ---|---|---|---|---|---
 {{#each staticMethods}}
@@ -127,7 +124,9 @@ Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comme
 {{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}}  {{comment}}
 {{/each}}
 {{/each}}
-{{/empty}}
+{{else}}
+Static Methods is empty.
+{{/if}}
 
 ## StringIndexType
 

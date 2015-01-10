@@ -1,7 +1,6 @@
 # Type.LineDrawer
 
-* Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L58)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L60)
 
 No comment.
 

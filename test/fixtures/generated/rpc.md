@@ -1,7 +1,6 @@
 # Rpc
 
-* Declarations
-  * [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L64)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L66)
 
 No comment.
 

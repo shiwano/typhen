@@ -1,13 +1,12 @@
 # {{fullName}}
 
-{{#empty declarationInfos}}
-No declarations.
-{{else}}
+{{#if declarationInfos}}
 {{#each declarationInfos}}
-* Declarations
-  * [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
 {{/each}}
-{{/empty}}
+{{else}}
+No declarations.
+{{/if}}
 
 {{#if comment}}
 {{comment}}

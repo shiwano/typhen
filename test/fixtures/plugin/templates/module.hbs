@@ -1,13 +1,12 @@
 # {{fullName}}
 
-{{#empty declarationInfos}}
-No declarations.
-{{else}}
+{{#if declarationInfos}}
 {{#each declarationInfos}}
-* Declarations
-  * [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
 {{/each}}
-{{/empty}}
+{{else}}
+No declarations.
+{{/if}}
 
 {{#if comment}}
 {{comment}}
@@ -27,60 +26,60 @@ No Imported Modules.
 
 ## Modules
 
-{{#empty modules}}
-No Modules.
-{{else}}
+{{#if modules}}
 {{#each modules}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Modules.
+{{/if}}
 
 ## Enums
 
-{{#empty enums}}
-No Enums.
-{{else}}
+{{#if enums}}
 {{#each enums}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Enums.
+{{/if}}
 
 ## Functions
 
-{{#empty functions}}
-No Functions.
-{{else}}
+{{#if functions}}
 {{#each functions}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Functions.
+{{/if}}
 
 ## Interfaces
 
-{{#empty interfaces}}
-No Interfaces.
-{{else}}
+{{#if interfaces}}
 {{#each interfaces}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Interfaces.
+{{/if}}
 
 ## Classes
 
-{{#empty classes}}
-No Classes.
-{{else}}
+{{#if classes}}
 {{#each classes}}
 * {{name}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Classes.
+{{/if}}
 
 ## Variables
 
-{{#empty variables}}
-No Variables.
-{{else}}
+{{#if variables}}
 {{#each variables}}
 * {{name}} - {{type}}
 {{/each}}
-{{/empty}}
+{{else}}
+No Variables.
+{{/if}}
