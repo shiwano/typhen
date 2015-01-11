@@ -34,7 +34,8 @@ gulp.task('jshint', function() {
   return gulp.src(paths.gulpfile)
     .pipe(plugins.plumber())
     .pipe(plugins.jshint())
-    .pipe(plugins.jshint.reporter('default'));
+    .pipe(plugins.jshint.reporter('default'))
+    .pipe(plugins.jshint.reporter('fail'));
 });
 
 gulp.task('tslint', function() {
