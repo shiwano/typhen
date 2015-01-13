@@ -36,8 +36,8 @@ CallSignatures is empty.
 
 Name|TypeName|IsOptional|isOwn|Tags|Comment
 ---|---|---|---|---|---
-start|T|false|true||
-end|T|false|true||
+start|number|false|true||
+end|number|false|true||
 
 ## Methods
 
