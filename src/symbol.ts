@@ -273,19 +273,35 @@ export class ObjectType extends Type {
   }
 }
 
+export class TypeReference {
+  public get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
+
+  constructor(
+      public typeParameters: TypeParameter[],
+      private rawTypeArguments: Type[]) {
+  }
+
+  public getTypeByTypeParameter(typeParameter: TypeParameter): Type {
+    var index = this.typeParameters.indexOf(typeParameter);
+    if (index < 0) { return null; }
+    var type = this.typeArguments[index];
+    return _.isObject(type) && type.isTypeParameter ? null : type;
+  }
+}
+
 export class Interface extends ObjectType {
   public kind: SymbolKinds = SymbolKinds.Interface;
 
   public constructorSignatures: Signature[] = [];
   public callSignatures: Signature[] = [];
   public baseTypes: Interface[] = [];
-  public typeParameters: TypeParameter[] = [];
-  public rawTypeArguments: Type[] = [];
+  public typeReference: TypeReference;
   public staticProperties: Property[] = [];
   public staticMethods: Method[] = [];
 
   public get isGenericType(): boolean { return this.typeParameters.length > 0; }
-  public get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
+  public get typeParameters(): Type[] { return this.typeReference.typeParameters; }
+  public get typeArguments(): Type[] { return this.typeReference.typeArguments; }
 
   public get assumedName(): string {
     if (this.typeArguments.length === 0) { return ''; }
@@ -298,15 +314,13 @@ export class Interface extends ObjectType {
 
   public initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
       constructorSignatures: Signature[], callSignatures: Signature[], baseTypes: Interface[],
-      typeParameters: TypeParameter[], rawTypeArguments: Type[],
-      staticProperties: Property[], staticMethods: Method[]): Interface {
+      typeReference: TypeReference, staticProperties: Property[], staticMethods: Method[]): Interface {
     super.initialize(properties, methods, stringIndexType, numberIndexType);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;
     this.baseTypes = baseTypes;
-    this.typeParameters = typeParameters;
-    this.rawTypeArguments = rawTypeArguments;
+    this.typeReference = typeReference;
     this.staticProperties = staticProperties;
     this.staticMethods = staticMethods;
     return this;

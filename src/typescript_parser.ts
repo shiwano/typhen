@@ -341,6 +341,7 @@ class TypeScriptParser {
       genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var typeArguments = type.typeArguments === undefined ? [] :
       type.typeArguments.map(t => this.parseType(t));
+    var typeReference = new Symbol.TypeReference(typeParameters, typeArguments);
 
     var staticProperties: Symbol.Property[] = [];
     var staticMethods: Symbol.Method[] = [];
@@ -367,8 +368,7 @@ class TypeScriptParser {
         .map(s => this.parseMethod(s));
     }
     return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
-        constructorSignatures, callSignatures, baseTypes, typeParameters,
-        typeArguments, staticProperties, staticMethods);
+        constructorSignatures, callSignatures, baseTypes, typeReference, staticProperties, staticMethods);
   }
 
   private parseObjectType(type: ts.ResolvedObjectType): Symbol.ObjectType {
