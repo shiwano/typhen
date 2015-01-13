@@ -156,6 +156,26 @@ module.exports = function(typhen, options) {
 ### Templating
 The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following global helpers and custom helpers which are defined in the typhenfile.js or a plugin.
 
+#### and Helper
+Conditionally render a block if all values are truthy.
+
+Usage:
+```hbs
+    {{#and type.isInterface type.isGenericType type.typeArguments}}
+      This type is an instantiation of a generic interface.
+    {{/and}}
+```
+
+#### or Helper
+Conditionally render a block if one of the values is truthy.
+
+Usage:
+```hbs
+    {{#or type.isArray type.isTuple type.isClass}}
+      This type is an array, a tuple, or a class.
+    {{/and}}
+```
+
 #### underscore Helper
 Transforms a string to underscore.
 
