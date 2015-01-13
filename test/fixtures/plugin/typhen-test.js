@@ -7,10 +7,7 @@ module.exports = function(typhen, options) {
       data: options,
       helpers: {
         'link': function(text, url) {
-          text = typhen.Handlebars.Utils.escapeExpression(text);
-          url = typhen.Handlebars.Utils.escapeExpression(url);
-          var result = '[' + text + '](' + url + ')';
-          return new typhen.Handlebars.SafeString(result);
+          return '[' + text + '](' + url + ')';
         }
       }
     },

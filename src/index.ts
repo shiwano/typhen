@@ -12,7 +12,6 @@ import LocalHandlebars = require('./local_handlebars');
 
 module Typhen {
   export import SymbolKinds = Symbol.SymbolKinds;
-  export import Handlebars = LocalHandlebars.handlebars;
   export var logger = Logger;
 
   export function run(configArgs: Config.ConfigObject): Promise<Vinyl[]> {

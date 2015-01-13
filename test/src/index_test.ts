@@ -13,12 +13,6 @@ describe('Typhen', () => {
     });
   });
 
-  describe('.Handlebars', () => {
-    it('should export local handlebars', () => {
-      assert(Typhen.Handlebars === LocalHandlebars.handlebars);
-    });
-  });
-
   describe('.logger', () => {
     it('should export logger', () => {
       assert(Typhen.logger === Logger);
