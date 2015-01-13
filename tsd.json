@@ -41,9 +41,6 @@
     "chalk/chalk.d.ts": {
       "commit": "c8f3fe257908ae25fde1f1f27139716a3e95c92a"
     },
-    "swag/swag.d.ts": {
-      "commit": "a8e45e394dda6e11cfd648233bc53e3934fde555"
-    },
     "bluebird/bluebird.d.ts": {
       "commit": "ec6e0ae9525a165ca94d751932dd387078800c1e"
     },
