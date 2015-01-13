@@ -8,6 +8,14 @@ Author: shiwano
 
 ### Global helpers
 
+#### and
+and helper
+and helper else
+
+#### or
+or helper
+or helper else
+
 #### underscore
 foo_bar_baz
 

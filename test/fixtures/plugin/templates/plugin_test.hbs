@@ -8,6 +8,24 @@ Author: {{@author}}
 
 ### Global helpers
 
+#### and
+{{#and 'foo' 'bar' 'baz'}}
+and helper
+{{/and}}
+{{#and 'foo' '' ''}}
+{{else}}
+and helper else
+{{/and}}
+
+#### or
+{{#or '' 'foo' ''}}
+or helper
+{{/or}}
+{{#or '' '' ''}}
+{{else}}
+or helper else
+{{/or}}
+
 #### underscore
 {{underscore 'FooBarBaz'}}
 

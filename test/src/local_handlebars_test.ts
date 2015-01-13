@@ -12,6 +12,42 @@ describe('LocalHandlebars', () => {
   });
 
   describe('.HandlebarsHelpers', () => {
+    describe('.and', () => {
+      context('with truthy values', () => {
+        it('should call options#fn', () => {
+          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          var response = LocalHandlebars.HandlebarsHelpers.and(true, ['foo'], 'bar', options);
+          assert(response === 'fn');
+        });
+      });
+
+      context('with falsy values', () => {
+        it('should call options#inverse', () => {
+          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          var response = LocalHandlebars.HandlebarsHelpers.and(true, [], 'bar', options);
+          assert(response === 'inverse');
+        });
+      });
+    });
+
+    describe('.or', () => {
+      context('with truthy values', () => {
+        it('should call options#fn', () => {
+          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          var response = LocalHandlebars.HandlebarsHelpers.or(false, [], 0, options);
+          assert(response === 'fn');
+        });
+      });
+
+      context('with falsy values', () => {
+        it('should call options#inverse', () => {
+          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          var response = LocalHandlebars.HandlebarsHelpers.or(false, [], '', options);
+          assert(response === 'inverse');
+        });
+      });
+    });
+
     describe('.underscore', () => {
       it('should return a underscored string', () => {
         assert(LocalHandlebars.HandlebarsHelpers.underscore('App.FooBar.Qux') === 'app.foo_bar.qux');
