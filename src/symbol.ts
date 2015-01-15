@@ -141,6 +141,14 @@ export class Symbol {
   public get isParameter(): boolean { return this.kind === SymbolKinds.Parameter; }
   public get isVariable(): boolean { return this.kind === SymbolKinds.Variable; }
 
+  public get isGenerationTarget(): boolean {
+    return this.declarationInfos.every(d => {
+      var resolvedPath = this.runner.config.env.resolvePath(d.path);
+      return resolvedPath !== this.runner.config.env.defaultLibFileName &&
+        _.contains(resolvedPath, this.runner.config.typingDirectory);
+    });
+  }
+
   public toString(): string {
     return this.name;
   }
@@ -210,6 +218,7 @@ export class Module extends Symbol {
 
 export class PrimitiveType extends Type {
   public kind: SymbolKinds = SymbolKinds.PrimitiveType;
+  public get isGenerationTarget(): boolean { return true; }
 
   public initialize(rawName: string): PrimitiveType {
     this.rawName = rawName;
@@ -352,6 +361,8 @@ export class Class extends Interface {
 export class Array extends Type {
   public kind: SymbolKinds = SymbolKinds.Array;
   public type: Type = null;
+
+  public get isGenerationTarget(): boolean { return true; }
 
   public get assumedName(): string {
     if (this.type === null) { return this.rawName; }

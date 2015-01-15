@@ -61,11 +61,17 @@ class TypeScriptParser {
   }
 
   public get types(): Symbol.Type[] {
-    return _.sortBy(_.values(this.typeCache), t => t.fullName);
+    return _.chain(<Symbol.Type[]>_.values(this.typeCache))
+      .filter(t => t.isGenerationTarget)
+      .sortBy(t => t.fullName)
+      .value();
   }
 
   public get modules(): Symbol.Module[] {
-    return _.sortBy(_.values(this.moduleCache), m => m.fullName);
+    return _.chain(<Symbol.Module[]>_.values(this.moduleCache))
+      .filter(t => t.isGenerationTarget)
+      .sortBy(t => t.fullName)
+      .value();
   }
 
   public parse(): void {
