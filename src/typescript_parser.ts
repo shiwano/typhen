@@ -370,7 +370,9 @@ class TypeScriptParser {
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
-    var constructorSignatures = genericType.getConstructSignatures().map(s => this.parseSignature(s, 'Constructor'));
+    var constructorSignatures = genericType.getConstructSignatures()
+      .filter(s => _.isObject(s.declaration)) // the constructor signature that has no declaration will be created by using typeof keyword.
+      .map(s => this.parseSignature(s, 'Constructor'));
     var callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
     var baseTypes = genericType.baseTypes === undefined ? [] :
