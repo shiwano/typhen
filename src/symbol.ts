@@ -166,6 +166,7 @@ export class Module extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Module;
 
   public importedModuleTable: ObjectTable<Module> = {};
+  public importedTypeTable: ObjectTable<Type> = {};
   public modules: Module[] = [];
   public types: Type[] = [];
   public variables: Variable[] = [];
@@ -192,8 +193,14 @@ export class Module extends Symbol {
     return _.map(this.importedModuleTable, (v, k) => { return { name: k, module: v }; });
   }
 
-  public initialize(importedModuleTable: ObjectTable<Module>, modules: Module[], types: Type[], variables: Variable[]): Module {
+  public get importedTypes(): { name: string; type: Type }[] {
+    return _.map(this.importedTypeTable, (v, k) => { return { name: k, type: v }; });
+  }
+
+  public initialize(importedModuleTable: ObjectTable<Module>, importedTypeTable: ObjectTable<Type>,
+      modules: Module[], types: Type[], variables: Variable[]): Module {
     this.importedModuleTable = importedModuleTable;
+    this.importedTypeTable = importedTypeTable;
     this.modules = modules;
     this.types = types;
     this.variables = variables;

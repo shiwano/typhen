@@ -65,6 +65,7 @@ declare module Type {
 
 declare module Rpc {
   export import RpcType = Type;
+  export import Transformer = RpcType.Transformer;
   var baseUrl: string;
   var anyAny: any;
 

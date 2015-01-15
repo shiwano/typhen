@@ -9,6 +9,10 @@ No comment.
 
 No Imported Modules.
 
+## Imported Types
+
+No Imported Types.
+
 ## Modules
 
 No Modules.

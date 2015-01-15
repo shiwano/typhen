@@ -278,11 +278,15 @@ class TypeScriptParser {
     var modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
       .map(s => this.parseModule(s));
     var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
+    var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
     this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Import)
       .forEach(s => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
-          importedModuleTable[s.name] = this.parseModule(aliasedSymbol, s.name);
+          importedModuleTable[s.name] = this.parseModule(aliasedSymbol);
+        } else {
+          var aliasedType = this.typeChecker.getTypeOfNode(aliasedSymbol.declarations[0]);
+          importedTypeTable[s.name] = this.parseType(aliasedType);
         }
       });
     var types = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Type)
@@ -292,10 +296,10 @@ class TypeScriptParser {
     var variables = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Variable)
       .map(s => this.parseVariable(s));
 
-    typhenSymbol.initialize(importedModuleTable, modules, types, variables);
+    typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables);
   }
 
-  private parseModule(symbol: ts.Symbol, assumedName?: string): Symbol.Module {
+  private parseModule(symbol: ts.Symbol): Symbol.Module {
     if (this.moduleCache[symbol.name] !== undefined) { return this.moduleCache[symbol.name]; }
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
@@ -306,11 +310,17 @@ class TypeScriptParser {
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
       .map(s => this.parseModule(s));
     var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
+    var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
     exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Import))
       .forEach(s => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
-        importedModuleTable[s.name] = this.parseModule(aliasedSymbol, s.name);
+        if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
+          importedModuleTable[s.name] = this.parseModule(aliasedSymbol);
+        } else {
+          var aliasedType = this.typeChecker.getTypeOfNode(aliasedSymbol.declarations[0]);
+          importedTypeTable[s.name] = this.parseType(aliasedType);
+        }
       });
     var types = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Type) || this.checkFlags(s.flags, ts.SymbolFlags.Function))
@@ -319,7 +329,7 @@ class TypeScriptParser {
     var variables = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Variable))
       .map(s => this.parseVariable(s));
-    return typhenSymbol.initialize(importedModuleTable, modules, types, variables);
+    return typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
