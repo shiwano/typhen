@@ -1,0 +1,3 @@
+interface Bar {}
+
+export = Bar;

@@ -25,6 +25,10 @@ export enum SymbolKinds {
   Variable
 }
 
+export interface ObjectTable<T> {
+  [name: string]: T;
+}
+
 export class Tag {
   constructor(
       public name: string,
@@ -103,12 +107,12 @@ export class Symbol {
       .join(this.runner.plugin.newLine);
   }
 
-  public get tagTable(): { [name: string]: Tag } {
-    return <{ [name: string]: Tag }>_.reduce(this.docComment, (result, comment) => {
+  public get tagTable(): ObjectTable<Tag> {
+    return <ObjectTable<Tag>>_.reduce(this.docComment, (result, comment) => {
       var matches = comment.match(Symbol.tagPattern);
       if (matches != null) { result[matches[1]] = new Tag(matches[1], matches[2]); }
       return result;
-    }, <{ [name: string]: Tag }>{});
+    }, <ObjectTable<Tag>>{});
   }
 
   public get tags(): Tag[] {
@@ -158,14 +162,10 @@ export class Type extends Symbol {
   public get isType(): boolean { return true; }
 }
 
-export interface ModuleTable {
-  [moduleName: string]: Module;
-}
-
 export class Module extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Module;
 
-  public importedModuleTable: ModuleTable = {};
+  public importedModuleTable: ObjectTable<Module> = {};
   public modules: Module[] = [];
   public types: Type[] = [];
   public variables: Variable[] = [];
@@ -178,8 +178,11 @@ export class Module extends Symbol {
   public get isGlobalModule(): boolean { return this.rawName === '' && this.parentModule === null; }
 
   public get name(): string {
-    var name = this.isGlobalModule ? 'Global' : this.rawName.replace(/["']/g, '');
-    if (name[0] === '/') {
+    var name = this.isGlobalModule ? 'Global' : this.rawName;
+
+    if (/^['"']/.test(name)) {
+      name = name.replace(/['"]/g, '').replace('\\', '/');
+      name = this.runner.config.env.resolvePath(name);
       name = this.runner.config.env.relativePath(this.runner.config.typingDirectory, name);
     }
     return this.runner.plugin.rename(this, name);
@@ -189,7 +192,7 @@ export class Module extends Symbol {
     return _.map(this.importedModuleTable, (v, k) => { return { name: k, module: v }; });
   }
 
-  public initialize(importedModuleTable: ModuleTable, modules: Module[], types: Type[], variables: Variable[]): Module {
+  public initialize(importedModuleTable: ObjectTable<Module>, modules: Module[], types: Type[], variables: Variable[]): Module {
     this.importedModuleTable = importedModuleTable;
     this.modules = modules;
     this.types = types;
