@@ -177,6 +177,15 @@ class TypeScriptParser {
     return <T>typhenType;
   }
 
+  private getOrCreateTyphenModule(symbol: ts.Symbol): Symbol.Module {
+    var name = _.isObject(symbol) ? symbol.name : '';
+    if (this.moduleCache[name] !== undefined) { return this.moduleCache[name]; }
+
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
+    this.moduleCache[name] = typhenSymbol;
+    return typhenSymbol;
+  }
+
   private getDeclarationInfos(symbol: ts.Symbol): Symbol.DeclarationInfo[] {
     if (!_.isObject(symbol) || symbol.declarations === undefined) { return []; }
 
@@ -195,7 +204,7 @@ class TypeScriptParser {
     var parentDecl = symbol.declarations[0].parent;
     while (parentDecl !== undefined) {
       if (parentDecl.symbol && this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Module)) {
-        return this.moduleCache[parentDecl.symbol.name];
+        return this.getOrCreateTyphenModule(parentDecl.symbol);
       }
       parentDecl = parentDecl.parent;
     }
@@ -275,8 +284,7 @@ class TypeScriptParser {
   }
 
   private parseSourceFile(sourceFile: ts.SourceFile): void {
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(sourceFile.symbol, Symbol.Module);
-    this.moduleCache[typhenSymbol.rawName] = typhenSymbol;
+    var typhenSymbol = this.getOrCreateTyphenModule(sourceFile.symbol);
 
     var modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
       .map(s => this.parseModule(s));
@@ -303,10 +311,7 @@ class TypeScriptParser {
   }
 
   private parseModule(symbol: ts.Symbol): Symbol.Module {
-    if (this.moduleCache[symbol.name] !== undefined) { return this.moduleCache[symbol.name]; }
-
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
-    this.moduleCache[symbol.name] = typhenSymbol;
+    var typhenSymbol = this.getOrCreateTyphenModule(symbol);
 
     var exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
     var modules = exportedSymbols
