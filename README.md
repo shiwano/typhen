@@ -119,7 +119,7 @@ module.exports = function(typhen, options) {
     },
 
     rename: function(symbol, name) { // Optional. Default value is a function that returns just the name.
-      if (symbol.kind === typhen.SymbolKinds.Array) {
+      if (symbol.kind === typhen.SymbolKind.Array) {
         return '[]';
       }
       return name;
@@ -130,11 +130,11 @@ module.exports = function(typhen, options) {
 
       types.forEach(function(type) {
         switch (type.kind) {
-          case typhen.SymbolKinds.Enum:
+          case typhen.SymbolKind.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.rb', type);
             break;
-          case typhen.SymbolKinds.Interface:
-          case typhen.SymbolKinds.Class:
+          case typhen.SymbolKind.Interface:
+          case typhen.SymbolKind.Class:
             generator.generate('templates/class.hbs', 'underscore:**/*.rb', type);
             break;
         }
@@ -173,7 +173,7 @@ Usage:
 ```hbs
     {{#or type.isArray type.isTuple type.isClass}}
       This type is an array, a tuple, or a class.
-    {{/and}}
+    {{/or}}
 ```
 
 #### underscore Helper
