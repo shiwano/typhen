@@ -7,9 +7,9 @@ import Logger = require('../../src/logger');
 import LocalHandlebars = require('../../src/local_handlebars');
 
 describe('Typhen', () => {
-  describe('.SymbolKinds', () => {
-    it('should export SymbolKinds', () => {
-      assert(Typhen.SymbolKinds === Symbol.SymbolKinds);
+  describe('.SymbolKind', () => {
+    it('should export SymbolKind', () => {
+      assert(Typhen.SymbolKind === Symbol.SymbolKind);
     });
   });
 

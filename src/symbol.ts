@@ -5,7 +5,7 @@ import inflection = require('inflection');
 
 import Runner = require('./runner');
 
-export enum SymbolKinds {
+export enum SymbolKind {
   Invalid,
   Module,
   PrimitiveType,
@@ -65,7 +65,7 @@ export class DeclarationInfo {
 
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s*([^\s@]*)\s*$/m;
-  public kind: SymbolKinds = SymbolKinds.Invalid;
+  public kind: SymbolKind = SymbolKind.Invalid;
   private isDestroyed: boolean = false;
 
   constructor(
@@ -124,22 +124,22 @@ export class Symbol {
   public get isGenericType(): boolean { return false; }
   public get isGlobalModule(): boolean { return false; }
 
-  public get isModule(): boolean { return this.kind === SymbolKinds.Module; }
-  public get isPrimitiveType(): boolean { return this.kind === SymbolKinds.PrimitiveType; }
-  public get isEnum(): boolean { return this.kind === SymbolKinds.Enum; }
-  public get isEnumMember(): boolean { return this.kind === SymbolKinds.EnumMember; }
-  public get isObjectType(): boolean { return this.kind === SymbolKinds.ObjectType; }
-  public get isInterface(): boolean { return this.kind === SymbolKinds.Interface; }
-  public get isClass(): boolean { return this.kind === SymbolKinds.Class; }
-  public get isArray(): boolean { return this.kind === SymbolKinds.Array; }
-  public get isFunction(): boolean { return this.kind === SymbolKinds.Function; }
-  public get isTypeParameter(): boolean { return this.kind === SymbolKinds.TypeParameter; }
-  public get isTuple(): boolean { return this.kind === SymbolKinds.Tuple; }
-  public get isProperty(): boolean { return this.kind === SymbolKinds.Property; }
-  public get isMethod(): boolean { return this.kind === SymbolKinds.Method; }
-  public get isSignature(): boolean { return this.kind === SymbolKinds.Signature; }
-  public get isParameter(): boolean { return this.kind === SymbolKinds.Parameter; }
-  public get isVariable(): boolean { return this.kind === SymbolKinds.Variable; }
+  public get isModule(): boolean { return this.kind === SymbolKind.Module; }
+  public get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
+  public get isEnum(): boolean { return this.kind === SymbolKind.Enum; }
+  public get isEnumMember(): boolean { return this.kind === SymbolKind.EnumMember; }
+  public get isObjectType(): boolean { return this.kind === SymbolKind.ObjectType; }
+  public get isInterface(): boolean { return this.kind === SymbolKind.Interface; }
+  public get isClass(): boolean { return this.kind === SymbolKind.Class; }
+  public get isArray(): boolean { return this.kind === SymbolKind.Array; }
+  public get isFunction(): boolean { return this.kind === SymbolKind.Function; }
+  public get isTypeParameter(): boolean { return this.kind === SymbolKind.TypeParameter; }
+  public get isTuple(): boolean { return this.kind === SymbolKind.Tuple; }
+  public get isProperty(): boolean { return this.kind === SymbolKind.Property; }
+  public get isMethod(): boolean { return this.kind === SymbolKind.Method; }
+  public get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
+  public get isParameter(): boolean { return this.kind === SymbolKind.Parameter; }
+  public get isVariable(): boolean { return this.kind === SymbolKind.Variable; }
 
   public get isGenerationTarget(): boolean {
     return this.declarationInfos.every(d => {
@@ -171,7 +171,7 @@ export class Type extends Symbol {
 }
 
 export class Module extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Module;
+  public kind: SymbolKind = SymbolKind.Module;
 
   public importedModuleTable: ObjectTable<Module> = {};
   public importedTypeTable: ObjectTable<Type> = {};
@@ -217,7 +217,7 @@ export class Module extends Symbol {
 }
 
 export class PrimitiveType extends Type {
-  public kind: SymbolKinds = SymbolKinds.PrimitiveType;
+  public kind: SymbolKind = SymbolKind.PrimitiveType;
   public get isGenerationTarget(): boolean { return true; }
 
   public initialize(rawName: string): PrimitiveType {
@@ -233,7 +233,7 @@ export class PrimitiveType extends Type {
 }
 
 export class Enum extends Type {
-  public kind: SymbolKinds = SymbolKinds.Enum;
+  public kind: SymbolKind = SymbolKind.Enum;
 
   public members: EnumMember[] = [];
 
@@ -244,7 +244,7 @@ export class Enum extends Type {
 }
 
 export class EnumMember extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.EnumMember;
+  public kind: SymbolKind = SymbolKind.EnumMember;
 
   public value: number;
 
@@ -255,7 +255,7 @@ export class EnumMember extends Symbol {
 }
 
 export class Function extends Type {
-  public kind: SymbolKinds = SymbolKinds.Function;
+  public kind: SymbolKind = SymbolKind.Function;
 
   public callSignatures: Signature[] = [];
 
@@ -272,7 +272,7 @@ export class Function extends Type {
 }
 
 export class ObjectType extends Type {
-  public kind: SymbolKinds = SymbolKinds.ObjectType;
+  public kind: SymbolKind = SymbolKind.ObjectType;
 
   public properties: Property[] = [];
   public methods: Method[] = [];
@@ -309,7 +309,7 @@ export class TypeReference {
 }
 
 export class Interface extends ObjectType {
-  public kind: SymbolKinds = SymbolKinds.Interface;
+  public kind: SymbolKind = SymbolKind.Interface;
 
   public constructorSignatures: Signature[] = [];
   public callSignatures: Signature[] = [];
@@ -355,11 +355,11 @@ export class Interface extends ObjectType {
 }
 
 export class Class extends Interface {
-  public kind: SymbolKinds = SymbolKinds.Class;
+  public kind: SymbolKind = SymbolKind.Class;
 }
 
 export class Array extends Type {
-  public kind: SymbolKinds = SymbolKinds.Array;
+  public kind: SymbolKind = SymbolKind.Array;
   public type: Type = null;
 
   public get isGenerationTarget(): boolean { return true; }
@@ -376,7 +376,7 @@ export class Array extends Type {
 }
 
 export class TypeParameter extends Type {
-  public kind: SymbolKinds = SymbolKinds.TypeParameter;
+  public kind: SymbolKind = SymbolKind.TypeParameter;
 
   public constraint: Type = null;
 
@@ -387,7 +387,7 @@ export class TypeParameter extends Type {
 }
 
 export class Tuple extends Type {
-  public kind: SymbolKinds = SymbolKinds.Tuple;
+  public kind: SymbolKind = SymbolKind.Tuple;
 
   public types: Type[] = [];
   public baseArrayType: Type = null;
@@ -410,7 +410,7 @@ export class Tuple extends Type {
 }
 
 export class Property extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Property;
+  public kind: SymbolKind = SymbolKind.Property;
 
   public type: Type = null;
   public isOptional: boolean = false;
@@ -425,7 +425,7 @@ export class Property extends Symbol {
 }
 
 export class Method extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Method;
+  public kind: SymbolKind = SymbolKind.Method;
 
   public callSignatures: Signature[] = [];
   public isOptional: boolean = false;
@@ -446,7 +446,7 @@ export class Method extends Symbol {
 }
 
 export class Signature extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Method;
+  public kind: SymbolKind = SymbolKind.Method;
 
   public typeParameters: TypeParameter[] = [];
   public parameters: Parameter[] = [];
@@ -467,7 +467,7 @@ export class Signature extends Symbol {
 }
 
 export class Parameter extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Parameter;
+  public kind: SymbolKind = SymbolKind.Parameter;
 
   public type: Type = null;
   public isOptional: boolean = false;
@@ -480,7 +480,7 @@ export class Parameter extends Symbol {
 }
 
 export class Variable extends Symbol {
-  public kind: SymbolKinds = SymbolKinds.Variable;
+  public kind: SymbolKind = SymbolKind.Variable;
 
   public type: Type = null;
   public module: Module = null;

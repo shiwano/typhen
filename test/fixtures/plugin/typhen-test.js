@@ -13,7 +13,7 @@ module.exports = function(typhen, options) {
     },
 
     rename: function(symbol, name) {
-      if (symbol.kind === typhen.SymbolKinds.Array) {
+      if (symbol.kind === typhen.SymbolKind.Array) {
         return 'ArrayOf' + symbol.type.name;
       }
       return name;
@@ -25,20 +25,20 @@ module.exports = function(typhen, options) {
 
       types.forEach(function(type) {
         switch (type.kind) {
-          case typhen.SymbolKinds.Enum:
+          case typhen.SymbolKind.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolKinds.Tuple:
+          case typhen.SymbolKind.Tuple:
             generator.generate('templates/tuple.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolKinds.Interface:
-          case typhen.SymbolKinds.Class:
+          case typhen.SymbolKind.Interface:
+          case typhen.SymbolKind.Class:
             generator.generate('templates/interface.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolKinds.ObjectType:
+          case typhen.SymbolKind.ObjectType:
             generator.generate('templates/object_type.hbs', 'underscore:**/*.md', type);
             break;
-          case typhen.SymbolKinds.Function:
+          case typhen.SymbolKind.Function:
             generator.generate('templates/function.hbs', 'underscore:**/*.md', type);
             break;
         }
