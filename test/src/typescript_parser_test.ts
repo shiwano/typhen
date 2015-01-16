@@ -80,7 +80,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse modules', () => {
-        var expected = ['Global', 'externals/foo', 'externals/foo.A', 'externals/bar'].sort().join('\n');
+        var expected = ['externals/foo', 'externals/foo.A', 'externals/bar'].sort().join('\n');
         assert(instance.modules.map(t => t.fullName).join('\n') === expected);
       });
     });

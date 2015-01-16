@@ -76,7 +76,6 @@ class TypeScriptParser {
 
   public parse(): void {
     Logger.debug('Parsing the TypeScript symbols');
-    this.parseSourceFile();
     this.sourceFiles.forEach(s => {
       this.parseSourceFile(s);
     });
@@ -275,10 +274,8 @@ class TypeScriptParser {
       });
   }
 
-  private parseSourceFile(sourceFile: ts.SourceFile = null): void {
-    var moduleSymbol = sourceFile != null && ts.isExternalModule(sourceFile) ? sourceFile.symbol : null;
-
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(moduleSymbol, Symbol.Module);
+  private parseSourceFile(sourceFile: ts.SourceFile): void {
+    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(sourceFile.symbol, Symbol.Module);
     this.moduleCache[typhenSymbol.rawName] = typhenSymbol;
 
     var modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
