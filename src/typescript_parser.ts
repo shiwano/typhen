@@ -516,12 +516,19 @@ class TypeScriptParser {
   }
 
   private parseVariable(symbol: ts.Symbol): Symbol.Variable {
-    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
-    var variableType = this.parseType(type);
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
+    var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
+    var variableType: Symbol.Type = null;
+    var variableModule: Symbol.Module = null;
+
+    if (_.isObject(type.symbol) && this.checkFlags(type.symbol.flags, ts.SymbolFlags.Module)) {
+      variableModule = this.parseModule(type.symbol);
+    } else {
+      variableType = this.parseType(type);
+    }
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Variable>(symbol, Symbol.Variable);
-    return typhenSymbol.initialize(variableType, isOptional);
+    return typhenSymbol.initialize(variableType, variableModule, isOptional);
   }
 }
 

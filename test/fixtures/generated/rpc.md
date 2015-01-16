@@ -35,5 +35,12 @@ No Classes.
 
 ## Variables
 
-* baseUrl - string
-* anyAny - any
+* type
+  * Type - None
+  * Module - Type
+* baseUrl
+  * Type - string
+  * Module - None
+* anyAny
+  * Type - any
+  * Module - None

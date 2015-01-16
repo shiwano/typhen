@@ -483,10 +483,12 @@ export class Variable extends Symbol {
   public kind: SymbolKinds = SymbolKinds.Variable;
 
   public type: Type = null;
+  public module: Module = null;
   public isOptional: boolean = false;
 
-  public initialize(type: Type, isOptional: boolean): Variable {
+  public initialize(type: Type, module: Module, isOptional: boolean): Variable {
     this.type = type;
+    this.module = module;
     this.isOptional = isOptional;
     return this;
   }
