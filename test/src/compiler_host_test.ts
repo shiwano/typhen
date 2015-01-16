@@ -43,10 +43,13 @@ describe('CompilerHost', () => {
   });
 
   describe('#writeFile', () => {
-    it('should raise a error', () => {
-      assert.throws(() => {
-        instance.writeFile('invalid.ts', '', false);
-      });
+    beforeEach(() => {
+      sandbox.stub(env, 'writeFile');
+    });
+
+    it('should not write a file', () => {
+      instance.writeFile('invalid.ts', '', false);
+      assert((<SinonStub>env.writeFile).notCalled);
     });
   });
 

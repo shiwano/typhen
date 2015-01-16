@@ -12,7 +12,7 @@ class NodeJsEnvironment implements Environment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
   public defaultLibFileName: string = path.resolve(__dirname, '../../lib.typhen.d.ts');
-  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.d.ts');
+  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.d.ts'); // Concatenate with lib.typhen.d.ts
 
   constructor(currentDirectory: string, public newLine: string, baseDefaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);

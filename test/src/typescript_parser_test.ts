@@ -29,7 +29,7 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#parse', () => {
-    context('when non external modules are given', () => {
+    context('when *.d.ts files as non external modules are given', () => {
       beforeEach(() => {
         instance.parse();
       });
@@ -66,7 +66,7 @@ describe('TypeScriptParser', () => {
       });
     });
 
-    context('when external modules are given', () => {
+    context('when *.d.ts files as external modules are given', () => {
       var definitionPath = 'test/fixtures/typings/externals/foo.d.ts';
 
       beforeEach(() => {
@@ -81,6 +81,25 @@ describe('TypeScriptParser', () => {
 
       it('should parse modules', () => {
         var expected = ['externals/foo', 'externals/foo.A', 'externals/bar'].sort().join('\n');
+        assert(instance.modules.map(t => t.fullName).join('\n') === expected);
+      });
+    });
+
+    context('when *.ts files are given', () => {
+      var definitionPath = 'test/fixtures/typings/ts_files/foo.ts';
+
+      beforeEach(() => {
+        instance = new TypeScriptParser([definitionPath], runner);
+        instance.parse();
+      });
+
+      it('should parse types', () => {
+        var expected = ['ts_files/foo.A.Foo', 'ts_files/bar.Bar', 'void', 'string'].sort().join('\n');
+        assert(instance.types.map(t => t.fullName).join('\n') === expected);
+      });
+
+      it('should parse modules', () => {
+        var expected = ['ts_files/foo', 'ts_files/foo.A', 'ts_files/bar'].sort().join('\n');
         assert(instance.modules.map(t => t.fullName).join('\n') === expected);
       });
     });

@@ -28,13 +28,6 @@ class TypeScriptParser {
     this.program = ts.createProgram(fileNames, this.runner.compilerOptions, this.runner.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
 
-    var unsupportedSourceFileNames = this.sourceFiles
-      .filter(s => !ts.isDeclarationFile(s))
-      .map(s => s.filename);
-    if (unsupportedSourceFileNames.length > 0) {
-      throw new Error('Not declaration files: ' + unsupportedSourceFileNames.join(', '));
-    }
-
     Logger.debug('Compiling the TypeScript files');
     var errors = this.program.getDiagnostics();
     if (errors.length === 0) {

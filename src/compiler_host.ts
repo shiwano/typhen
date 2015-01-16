@@ -2,6 +2,7 @@
 
 import tss = require('typescript-services-api');
 import Environment = require('./environments/environment');
+import Logger = require('./logger');
 
 class CompilerHost implements tss.ts.CompilerHost {
   private cachedSources: {[index: string]: tss.ts.SourceFile} = {};
@@ -32,20 +33,24 @@ class CompilerHost implements tss.ts.CompilerHost {
 
   public writeFile(fileName: string, data: string, writeByteOrderMark: boolean,
       onError?: (message: string) => void): void {
-    throw new Error('The TypeScript compiler should not write a file!');
+    Logger.debug('Skip to write: ' + fileName);
   }
 
   public getCurrentDirectory(): string {
     return this.env.currentDirectory;
   }
 
-  public getCanonicalFileName(fileName: string): string {
-    return this.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
-  }
-
-  public useCaseSensitiveFileNames(): boolean {
+  // NOTE: This is a workaround that when the TypeScript compiler emits files,
+  // the context of "this" will change from the CompilerHost instance.
+  public useCaseSensitiveFileNames = (): boolean => {
     return this.env.useCaseSensitiveFileNames;
-  }
+  };
+
+  // NOTE: This is a workaround that when the TypeScript compiler emits files,
+  // the context of "this" will change from the CompilerHost instance.
+  public getCanonicalFileName = (fileName: string): string => {
+    return this.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
+  };
 
   public getNewLine(): string {
     return this.env.newLine;
