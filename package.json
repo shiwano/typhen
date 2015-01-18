@@ -1,6 +1,6 @@
 {
   "name": "typhen",
-  "description": "Generates the code from the TypeScript declaration source files.",
+  "description": "Generates the code or the documentation from TypeScript files.",
   "version": "0.2.3",
   "homepage": "https://github.com/shiwano/typhen",
   "author": {
