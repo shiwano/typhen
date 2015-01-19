@@ -59,7 +59,6 @@ $ typhen --plugin typhen-awesome-plugin --dest generated definitions.d.ts
 ## Documentation
 
 ### typhenfile.js
-
 The typhenfile.js is a valid JavaScript file that belongs in the root directory of your project, and should be committed with your project source.
 
 The typhenfile.js is comprised of the following parts:
@@ -92,7 +91,6 @@ module.exports = function(typhen) {
 ```
 
 ### Plugin
-
 A typhen plugin can be defined in the typhenfile.js or an external module.
 
 Example:
@@ -222,15 +220,17 @@ Usage:
 ```
 
 ### Custom Primitive Types
-
 If you want to use a custom primitive type, you will define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive type. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
 
 #### integer
-
 A number without a fraction or exponent part.
 
-## TypeScript Version
+## Plugins
+If you want to add your project here, feel free to submit a pull request.
 
+* [typhen-json-schema](https://github.com/shiwano/typhen-json-schema)
+
+## TypeScript Version
 1.3.0
 
 ## Contributing
