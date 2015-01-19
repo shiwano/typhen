@@ -76,13 +76,13 @@ module.exports = function(typhen) {
     optionName: 'option value'
   });
 
-  return typhen.run({                   // typhen.run returns a Promise object of the bluebird.
+  return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
     plugin: plugin,
-    src: 'typings/lib/definitions.d.ts',
+    src: 'typings/lib/definitions.d.ts', // string or string[]
     dest: 'generated',
-    cwd: '../other/current',            // Optional. Default value is process.cwd().
-    typingDirectory: 'typings',         // Optional. Default value is the directory name of the src.
-    defaultLibFileName: 'lib.core.d.ts' // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+    cwd: '../other/current',             // Optional. Default value is process.cwd().
+    typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
+    defaultLibFileName: 'lib.core.d.ts'  // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
   }).then(function(files) {
     console.log('Done!');
   }).catch(function(e) {
