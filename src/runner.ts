@@ -39,7 +39,7 @@ export class Runner {
   public run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve: (r: Vinyl[]) => void, reject: (e: Error) => void) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
-      var parser = new TypeScriptParser([this.config.src], this);
+      var parser = new TypeScriptParser(this.config.src, this);
       parser.parse();
       parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
