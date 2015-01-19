@@ -228,7 +228,7 @@ A number without a fraction or exponent part.
 ## Plugins
 If you want to add your project here, feel free to submit a pull request.
 
-* [typhen-json-schema](https://github.com/shiwano/typhen-json-schema)
+* [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - A typhen plugin for JSON Schema
 
 ## TypeScript Version
 1.3.0
