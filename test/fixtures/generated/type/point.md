@@ -33,17 +33,17 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---|---
-x|number|false|true||
-y|number|false|true||
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
+x|number|false|true|false||
+y|number|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
----|---|---|---|---|---
-set|x:number:false y:number:false |void|false|true| 
-set|args:NumberAndNumberTuple:false |void|false|true| 
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
+set|x:number:false y:number:false |void|false|true|false| 
+set|args:NumberAndNumberTuple:false |void|false|true|false| 
 
 ## Static Properties
 

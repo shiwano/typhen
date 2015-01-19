@@ -473,18 +473,20 @@ class TypeScriptParser {
     var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var propertyType = this.parseType(type);
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
+    var isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
-    return typhenSymbol.initialize(propertyType, isOptional, isOwn);
+    return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected);
   }
 
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
     var type = this.typeChecker.getTypeOfNode(symbol.valueDeclaration);
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     var isOptional = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.QuestionMark);
+    var isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
-    return typhenSymbol.initialize(callSignatures, isOptional, isOwn);
+    return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isProtected);
   }
 
   private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {

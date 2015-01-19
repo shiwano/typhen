@@ -415,11 +415,13 @@ export class Property extends Symbol {
   public type: Type = null;
   public isOptional: boolean = false;
   public isOwn: boolean = false;
+  public isProtected: boolean = false;
 
-  public initialize(type: Type, isOptional: boolean, isOwn: boolean): Property {
+  public initialize(type: Type, isOptional: boolean, isOwn: boolean, isProtected: boolean): Property {
     this.type = type;
     this.isOptional = isOptional;
     this.isOwn = isOwn;
+    this.isProtected = isProtected;
     return this;
   }
 }
@@ -430,11 +432,13 @@ export class Method extends Symbol {
   public callSignatures: Signature[] = [];
   public isOptional: boolean = false;
   public isOwn: boolean = false;
+  public isProtected: boolean = false;
 
-  public initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean): Method {
+  public initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean, isProtected: boolean): Method {
     this.callSignatures = callSignatures;
     this.isOptional = isOptional;
     this.isOwn = isOwn;
+    this.isProtected = isProtected;
     return this;
   }
 

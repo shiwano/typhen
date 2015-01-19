@@ -32,15 +32,16 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---|---
-color|Color|false|true||
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
+color|Color|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
----|---|---|---|---|---
-setColor|color:Color:false callback:LineSetColorCallbackFunction:true |void|false|true| 
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
+setColor|color:Color:false callback:LineSetColorCallbackFunction:true |void|false|true|false| 
+draw||void|false|true|true| 
 
 ## Static Properties
 

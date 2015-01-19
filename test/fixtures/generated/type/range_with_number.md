@@ -34,10 +34,10 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---|---
-start|number|false|true||
-end|number|false|true||
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
+start|number|false|true|false||
+end|number|false|true|false||
 
 ## Methods
 

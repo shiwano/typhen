@@ -21,10 +21,10 @@ ObjectType
 ## Properties
 
 {{#if properties}}
-Name|TypeName|IsOptional|Comment
----|---|---|---
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
 {{#each properties}}
-{{name}}|{{type.name}}|{{isOptional}}|{{comment}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{isProtected}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
 {{else}}
 Properties is empty.
@@ -33,11 +33,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameter(TypeName - IsOptional)|ReturnTypeName|IsOptional|Comment
----|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}({{type}} - {{isOptional}}) {{/each}}|{{returnType}}|{{../isOptional}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

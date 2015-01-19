@@ -38,15 +38,15 @@ Methods is empty.
 
 ## Static Properties
 
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---
-lines|ArrayOfLine|false|true||
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
+lines|ArrayOfLine|false|true|false||
 
 ## Static Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
----|---|---|---|---|---
-draw|src:Point:false dest:Point:false |Line|false|true|  
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
+draw|src:Point:false dest:Point:false |Line|false|true|false|  
 
 ## StringIndexType
 

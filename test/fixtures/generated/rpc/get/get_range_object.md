@@ -10,9 +10,9 @@ ObjectType
 
 ## Properties
 
-Name|TypeName|IsOptional|Comment
----|---|---|---
-range|RangeWithNumber|false|
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
+range|RangeWithNumber|false|true|false||
 
 ## Methods
 

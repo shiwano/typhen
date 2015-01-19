@@ -79,10 +79,10 @@ CallSignatures is empty.
 ## Properties
 
 {{#if properties}}
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---|---
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
 {{#each properties}}
-{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{isProtected}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
 {{else}}
 Properties is empty.
@@ -91,11 +91,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
----|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
@@ -105,10 +105,10 @@ Methods is empty.
 ## Static Properties
 
 {{#if staticProperties}}
-Name|TypeName|IsOptional|isOwn|Tags|Comment
----|---|---|---|---
+Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
+---|---|---|---|---|---|---
 {{#each staticProperties}}
-{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{isProtected}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
 {{else}}
 Static Properties is empty.
@@ -117,11 +117,11 @@ Static Properties is empty.
 ## Static Methods
 
 {{#if staticMethods}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|Comment
----|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+---|---|---|---|---|---|---
 {{#each staticMethods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../comment}}  {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}}  {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
