@@ -154,7 +154,7 @@ module.exports = function(typhen, options) {
 ```
 
 ### Templating
-The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render the code, so you can use the following global helpers and custom helpers which are defined in the typhenfile.js or a plugin.
+The typhen has used the [Handlebars template engine](http://handlebarsjs.com/) to render code, so you can use the following global helpers and custom helpers which are defined in the typhenfile.js or a plugin.
 
 #### and Helper
 Conditionally render a block if all values are truthy.
