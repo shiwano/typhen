@@ -1,0 +1,54 @@
+{
+  "repos": [
+    {
+      "url": "https://github.com/borisyankov/DefinitelyTyped.git",
+      "ref": "master"
+    }
+  ],
+  "path": "typings",
+  "bundle": "typings/bundle.d.ts",
+  "dependencies": {
+    "node/node.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "mocha/mocha.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "sinon/sinon.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "assert/assert.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "lodash/lodash.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "inflection/inflection.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "handlebars/handlebars.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "mkdirp/mkdirp.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "glob/glob.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "rimraf/rimraf.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "minimatch/minimatch.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "chalk/chalk.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "bluebird/bluebird.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "vinyl/vinyl.d.ts": {
+      "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    }
+  }
+}
