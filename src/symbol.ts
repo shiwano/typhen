@@ -18,6 +18,7 @@ export enum SymbolKind {
   Function,
   TypeParameter,
   Tuple,
+  UnionType,
   Property,
   Method,
   Signature,
@@ -135,6 +136,7 @@ export class Symbol {
   public get isFunction(): boolean { return this.kind === SymbolKind.Function; }
   public get isTypeParameter(): boolean { return this.kind === SymbolKind.TypeParameter; }
   public get isTuple(): boolean { return this.kind === SymbolKind.Tuple; }
+  public get isUnionType(): boolean { return this.kind === SymbolKind.UnionType; }
   public get isProperty(): boolean { return this.kind === SymbolKind.Property; }
   public get isMethod(): boolean { return this.kind === SymbolKind.Method; }
   public get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
@@ -406,6 +408,21 @@ export class Tuple extends Type {
     if (this.runner.plugin.disallow.tuple) {
       return 'Disallow the tuple type';
     }
+  }
+}
+
+export class UnionType extends Type {
+  public kind: SymbolKind = SymbolKind.UnionType;
+
+  public types: Type[] = [];
+
+  public get assumedName(): string {
+    return this.types.map(t => inflection.classify(t.name)).join('And') + 'UnionType';
+  }
+
+  public initialize(types: Type[]): UnionType {
+    this.types = types;
+    return this;
   }
 }
 

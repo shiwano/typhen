@@ -33,6 +33,7 @@ No Functions.
 * ColoredSquare
 * SquareDictionary
 * Transformer
+* Time
 
 ## Classes
 

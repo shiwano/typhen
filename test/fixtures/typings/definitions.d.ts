@@ -61,6 +61,10 @@ declare module Type {
     static lines: Line[];
     static draw(src: Point, dest: Point): Line;
   }
+
+  interface Time {
+    now: number|Date;
+  }
 }
 
 declare module Rpc {

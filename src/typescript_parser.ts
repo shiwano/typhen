@@ -106,6 +106,8 @@ class TypeScriptParser {
         this.parsePrimitiveType(<ts.IntrinsicType>type);
       } else if (type.flags & ts.TypeFlags.Tuple) {
         this.parseTuple(<ts.TupleType>type);
+      } else if (type.flags & ts.TypeFlags.Union) {
+        this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
@@ -462,11 +464,15 @@ class TypeScriptParser {
 
   private parseTuple(type: ts.TupleType): Symbol.Tuple {
     var typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
-
     var elementTypes = type.elementTypes.map(t => this.parseType(t));
     var baseArrayType = this.parseType(type.baseArrayType);
-
     return typhenType.initialize(elementTypes, baseArrayType);
+  }
+
+  private parseUnionType(type: ts.UnionType): Symbol.UnionType {
+    var typhenType = this.createTyphenType<Symbol.UnionType>(type, Symbol.UnionType);
+    var types = type.types.map(t => this.parseType(t));
+    return typhenType.initialize(types);
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {

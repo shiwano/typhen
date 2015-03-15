@@ -36,8 +36,11 @@ describe('TypeScriptParser', () => {
         var expected = [
           // Array
           'Line[]',
+          'string[]', // FIXME: Strange to say, this type is created by UnionType declaration.
           // Tuple
           'NumberAndNumberTuple',
+          // UnionType
+          'NumberAndDateUnionType',
           // Function
           'Rpc.Get.getRange', 'Rpc.Post.setOptions', 'Type.ColoredSquareSetColorCallbackFunction',
           'Type.LineSetColorCallbackFunction', 'emitLog',
@@ -47,7 +50,7 @@ describe('TypeScriptParser', () => {
           'Type.Color',
           // Interface
           'Type.ColoredSquare', 'Type.Point', 'Type.Range', 'Type.RangeWithNumber',
-          'Type.Square', 'Type.SquareDictionary', 'Type.Transformer',
+          'Type.Square', 'Type.SquareDictionary', 'Type.Transformer', 'Type.Time',
           // Class
           'Type.Line', 'Type.LineDrawer',
           // TypeParameter

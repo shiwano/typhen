@@ -1,0 +1,25 @@
+# {{fullName}}
+
+{{#if declarationInfos}}
+{{#each declarationInfos}}
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+{{/each}}
+{{else}}
+No declarations.
+{{/if}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+UnionType
+
+## Types
+
+{{#each types}}
+* {{fullName}}
+{{/each}}
