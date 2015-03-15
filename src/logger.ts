@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/bundle.d.ts" />
 
 import chalk = require('chalk');
 

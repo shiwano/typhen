@@ -75,7 +75,7 @@ gulp.task('compile', ['clean:dest'], function(){
   var jsStream = tsStream.js
     .pipe(gulp.dest(paths.dest));
   var dtsStream = tsStream.dts
-    .pipe(plugins.replace(/^\/\/\/\s*<reference\s+path="[\.\/]+typings\/tsd.d.ts"\s*\/>$/gm, ''))
+    .pipe(plugins.replace(/^\/\/\/\s*<reference\s+path="[\.\/]+typings\/bundle.d.ts"\s*\/>$/gm, ''))
     .pipe(gulp.dest(paths.dest));
   return merge(jsStream, dtsStream);
 });

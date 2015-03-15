@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/bundle.d.ts" />
 
 import _ = require('lodash');
 import tss = require('typescript-services-api');
