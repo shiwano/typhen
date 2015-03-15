@@ -213,7 +213,8 @@ class TypeScriptParser {
       _.chain(docComment)
         .map(c => c.kind === 'text' ? c.text : null)
         .compact()
-        .forEach(text => results.push(text));
+        .forEach(text => results.push(text))
+        .value();
     });
   }
 
