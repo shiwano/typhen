@@ -1,7 +1,7 @@
 /// <reference path="../typings/bundle.d.ts" />
 
 import _ = require('lodash');
-import tss = require('typescript-services-api');
+import ts = require('typescript');
 import chalk = require('chalk');
 import Promise = require('bluebird');
 import Vinyl = require('vinyl');
@@ -17,7 +17,7 @@ export class Runner {
   public config: Config.Config;
   public plugin: Plugin.Plugin;
   public compilerHost: CompilerHost;
-  public compilerOptions: tss.ts.CompilerOptions;
+  public compilerOptions: ts.CompilerOptions;
 
   constructor(config: Config.Config) {
     this.config = config;
@@ -28,9 +28,9 @@ export class Runner {
       declaration: true,
       diagnostics: true,
       emitBOM: false,
-      module: tss.ts.ModuleKind.CommonJS,
+      module: ts.ModuleKind.CommonJS,
       noImplicitAny: true,
-      target: tss.ts.ScriptTarget.ES5,
+      target: ts.ScriptTarget.ES5,
       noLib: false,
       noLibCheck: false
     };

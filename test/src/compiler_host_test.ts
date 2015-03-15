@@ -1,6 +1,6 @@
 import helper = require('../test_helper');
 
-import tss = require('typescript-services-api');
+import ts = require('typescript');
 
 import CompilerHost = require('../../src/compiler_host');
 
@@ -22,7 +22,7 @@ describe('CompilerHost', () => {
   describe('#getSourceFile', () => {
     context('with a valid file name', () => {
       it('should return the instance of SourceFile which has the specified file data', () => {
-        var languageVersion = tss.ts.ScriptTarget.ES5;
+        var languageVersion = ts.ScriptTarget.ES5;
         var expected = '# test';
         assert(instance.getSourceFile('/test.d.ts', languageVersion).text === expected);
       });
@@ -30,7 +30,7 @@ describe('CompilerHost', () => {
 
     context('with a file name which does not exists', () => {
       it('should return undefined', () => {
-        var languageVersion = tss.ts.ScriptTarget.ES5;
+        var languageVersion = ts.ScriptTarget.ES5;
         assert(instance.getSourceFile('', languageVersion) === undefined);
       });
     });

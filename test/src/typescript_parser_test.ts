@@ -1,7 +1,5 @@
 import helper = require('../test_helper');
 
-import tss = require('typescript-services-api');
-
 import TypeScriptParser = require('../../src/typescript_parser');
 import Symbol = require('../../src/symbol');
 

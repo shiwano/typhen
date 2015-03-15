@@ -1,18 +1,18 @@
 /// <reference path='../typings/bundle.d.ts' />
 
-import tss = require('typescript-services-api');
+import ts = require('typescript');
 import Environment = require('./environments/environment');
 import Logger = require('./logger');
 
-class CompilerHost implements tss.ts.CompilerHost {
-  private cachedSources: {[index: string]: tss.ts.SourceFile} = {};
+class CompilerHost implements ts.CompilerHost {
+  private cachedSources: {[index: string]: ts.SourceFile} = {};
   private version: number = 0;
 
   constructor(private env: Environment) {
   }
 
-  public getSourceFile(fileName: string, languageVersion: tss.ts.ScriptTarget,
-      onError?: (message: string) => void): tss.ts.SourceFile {
+  public getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
+      onError?: (message: string) => void): ts.SourceFile {
     if (this.cachedSources[fileName] === undefined) {
       var text: string;
 
@@ -21,7 +21,7 @@ class CompilerHost implements tss.ts.CompilerHost {
       } catch (e) {
         return undefined;
       }
-      this.cachedSources[fileName] = tss.ts.createSourceFile(fileName, text,
+      this.cachedSources[fileName] = ts.createSourceFile(fileName, text,
           languageVersion, this.version.toString(), false);
     }
     return this.cachedSources[fileName];
