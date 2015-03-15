@@ -424,6 +424,12 @@ export class UnionType extends Type {
     this.types = types;
     return this;
   }
+
+  public validate(): string {
+    if (this.runner.plugin.disallow.unionType) {
+      return 'Disallow the union type';
+    }
+  }
 }
 
 export class Property extends Symbol {

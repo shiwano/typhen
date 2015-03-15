@@ -104,6 +104,7 @@ module.exports = function(typhen, options) {
     disallow: {               // Optional. Default value is {}.
       any: true,
       tuple: true,
+      unionType: true,
       overload: true,
       generics: true
     },

@@ -139,6 +139,15 @@ describe('TypeScriptParser', () => {
       });
     });
 
+    context('when dissalow#unionType is true', () => {
+      beforeEach(() => {
+        runner.plugin.disallow.unionType = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /union type/);
+      });
+    });
+
     context('when dissalow#generics is true', () => {
       beforeEach(() => {
         runner.plugin.disallow.generics = true;

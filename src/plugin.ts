@@ -10,6 +10,7 @@ import Generator = require('./generator');
 export interface DisallowOptions {
   any?: boolean;
   tuple?: boolean;
+  unionType?: boolean;
   overload?: boolean;
   generics?: boolean;
 }
