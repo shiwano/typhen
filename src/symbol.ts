@@ -328,7 +328,7 @@ export class Interface extends ObjectType {
     if (this.typeArguments.length === 0) { return ''; }
 
     return this.rawName + this.typeArguments.map((type, index) => {
-      var prefix = index === 0 ? 'With' : 'And';
+      var prefix = index === 0 ? 'Of' : 'And';
       return prefix + inflection.classify(type.name);
     }).join('');
   }

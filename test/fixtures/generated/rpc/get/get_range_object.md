@@ -12,7 +12,7 @@ ObjectType
 
 Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
 ---|---|---|---|---|---|---
-range|RangeWithNumber|false|true|false||
+range|RangeOfNumber|false|true|false||
 
 ## Methods
 

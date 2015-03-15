@@ -49,7 +49,7 @@ describe('TypeScriptParser', () => {
           // Enum
           'Type.Color',
           // Interface
-          'Type.ColoredSquare', 'Type.Point', 'Type.Range', 'Type.RangeWithNumber',
+          'Type.ColoredSquare', 'Type.Point', 'Type.Range', 'Type.RangeOfNumber',
           'Type.Square', 'Type.SquareDictionary', 'Type.Transformer', 'Type.Time',
           // Class
           'Type.Line', 'Type.LineDrawer',
