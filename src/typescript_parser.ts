@@ -168,7 +168,7 @@ class TypeScriptParser {
     }
     var typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
     this.typeCache[type.id] = typhenType;
-    return <T>typhenType;
+    return typhenType;
   }
 
   private getOrCreateTyphenModule(symbol: ts.Symbol): Symbol.Module {
@@ -301,8 +301,10 @@ class TypeScriptParser {
       .map(s => this.parseType(s));
     var variables = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Variable)
       .map(s => this.parseVariable(s));
+    var typeAliases = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.TypeAlias)
+      .map(s => this.parseTypeAlias(s));
 
-    typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables);
+    typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables, typeAliases);
   }
 
   private parseModule(symbol: ts.Symbol): Symbol.Module {
@@ -332,7 +334,11 @@ class TypeScriptParser {
     var variables = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Variable))
       .map(s => this.parseVariable(s));
-    return typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables);
+    var typeAliases = exportedSymbols
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.TypeAlias))
+      .map(s => this.parseTypeAlias(s));
+
+    return typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables, typeAliases);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
@@ -530,6 +536,13 @@ class TypeScriptParser {
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Variable>(symbol, Symbol.Variable);
     return typhenSymbol.initialize(variableType, variableModule, isOptional);
+  }
+
+  private parseTypeAlias(symbol: ts.Symbol): Symbol.TypeAlias {
+    var type = this.typeChecker.getDeclaredTypeOfSymbol(symbol);
+    var aliasedType = this.parseType(type);
+    var typhenSymbol = this.createTyphenSymbol<Symbol.TypeAlias>(symbol, Symbol.TypeAlias);
+    return typhenSymbol.initialize(aliasedType);
   }
 }
 

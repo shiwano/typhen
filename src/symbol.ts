@@ -23,7 +23,8 @@ export enum SymbolKind {
   Method,
   Signature,
   Parameter,
-  Variable
+  Variable,
+  TypeAlias
 }
 
 export interface ObjectTable<T> {
@@ -142,6 +143,7 @@ export class Symbol {
   public get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
   public get isParameter(): boolean { return this.kind === SymbolKind.Parameter; }
   public get isVariable(): boolean { return this.kind === SymbolKind.Variable; }
+  public get isTypeAlias(): boolean { return this.kind === SymbolKind.TypeAlias; }
 
   public get isGenerationTarget(): boolean {
     return this.declarationInfos.every(d => {
@@ -180,6 +182,7 @@ export class Module extends Symbol {
   public modules: Module[] = [];
   public types: Type[] = [];
   public variables: Variable[] = [];
+  public typeAliases: TypeAlias[] = [];
 
   public get enums(): Enum[] { return <Enum[]>this.types.filter(t => t.isEnum); }
   public get functions(): Function[] { return <Function[]>this.types.filter(t => t.isFunction); }
@@ -208,12 +211,13 @@ export class Module extends Symbol {
   }
 
   public initialize(importedModuleTable: ObjectTable<Module>, importedTypeTable: ObjectTable<Type>,
-      modules: Module[], types: Type[], variables: Variable[]): Module {
+      modules: Module[], types: Type[], variables: Variable[], typeAliases: TypeAlias[]): Module {
     this.importedModuleTable = importedModuleTable;
     this.importedTypeTable = importedTypeTable;
     this.modules = modules;
     this.types = types;
     this.variables = variables;
+    this.typeAliases = typeAliases;
     return this;
   }
 }
@@ -517,6 +521,17 @@ export class Variable extends Symbol {
     this.type = type;
     this.module = module;
     this.isOptional = isOptional;
+    return this;
+  }
+}
+
+export class TypeAlias extends Symbol {
+  public kind: SymbolKind = SymbolKind.TypeAlias;
+
+  public type: Type = null;
+
+  public initialize(type: Type): TypeAlias {
+    this.type = type;
     return this;
   }
 }
