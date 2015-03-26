@@ -1,4 +1,4 @@
-/* tslint:disable: no-unused-variable */
+/* tslint:disable: no-unused-variable class-name */
 
 /// <reference path="./color/color.d.ts" />
 
@@ -28,7 +28,7 @@ declare module Type {
      * @minimum 1
      * @maximum 5
      */
-    size: integer;
+    size: number;
   }
 
   interface ColoredSquare extends Square {

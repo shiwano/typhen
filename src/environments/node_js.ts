@@ -11,14 +11,13 @@ import Environment = require('./environment');
 class NodeJsEnvironment implements Environment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
-  public defaultLibFileName: string = path.resolve(__dirname, '../../lib.typhen.d.ts');
-  private baseDefaultLibFileName: string = path.resolve(__dirname, '../../lib.d.ts'); // Concatenate with lib.typhen.d.ts
+  public defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
 
-  constructor(currentDirectory: string, public newLine: string, baseDefaultLibFileName?: string) {
+  constructor(currentDirectory: string, public newLine: string, defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
 
-    if (_.isString(baseDefaultLibFileName) && baseDefaultLibFileName.length > 0) {
-      this.baseDefaultLibFileName = this.resolvePath(baseDefaultLibFileName);
+    if (_.isString(defaultLibFileName) && defaultLibFileName.length > 0) {
+      this.defaultLibFileName = this.resolvePath(defaultLibFileName);
     }
   }
 
@@ -64,11 +63,7 @@ class NodeJsEnvironment implements Environment {
 
   public getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
-    var defaultLibFileData = fs.readFileSync(this.defaultLibFileName, 'utf-8');
-    var baseDefaultLibFileData = fs.readFileSync(this.baseDefaultLibFileName, 'utf-8').replace(/\r\n/g, '\n');
-    return defaultLibFileData.replace(
-        /^\/\/\/\s*<reference\s+path="[^"]+"\s*\/>/mi,
-        '\n' + baseDefaultLibFileData + '\n');
+    return fs.readFileSync(this.defaultLibFileName, 'utf-8');
   }
 }
 

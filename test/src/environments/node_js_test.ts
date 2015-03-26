@@ -27,7 +27,7 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have defaultLibFileName', () => {
-    assert(instance.defaultLibFileName === process.cwd() + '/.tmp/lib.typhen.d.ts');
+    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/typescript/bin/lib.d.ts');
   });
 
   describe('#writeFile', () => {
@@ -89,7 +89,7 @@ describe('NodeJsEnvironment', () => {
   describe('#getDefaultLibFileData', () => {
     it('should return the joined defaultLibFile data', () => {
       var actual = instance.getDefaultLibFileData();
-      var expected = fs.readFileSync(process.cwd() + '/test/fixtures/lib.typhen-test.d.ts', 'utf-8');
+      var expected = fs.readFileSync(process.cwd() + '/node_modules/typescript/bin/lib.d.ts', 'utf-8');
       assert(actual === expected);
     });
   });

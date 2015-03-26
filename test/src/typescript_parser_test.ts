@@ -56,7 +56,7 @@ describe('TypeScriptParser', () => {
           // TypeParameter
           'Type.T', 'Type.T',
           // PrimitiveType
-          'boolean', 'integer', 'number', 'string', 'void', 'any'
+          'boolean', 'number', 'string', 'void', 'any'
         ].sort().join('\n');
         assert(instance.types.map(t => t.fullName).join('\n') === expected);
       });
