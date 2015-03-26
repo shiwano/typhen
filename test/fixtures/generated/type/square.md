@@ -1,6 +1,6 @@
 # Type.Square
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L22)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L24)
 
 No comment.
 
@@ -34,7 +34,7 @@ Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
 ---|---|---|---|---|---|---
 center|Point|false|true|false||
 margin|number|true|true|false||
-size|number|false|true|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+size|integer|false|true|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 

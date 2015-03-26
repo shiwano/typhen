@@ -4,6 +4,8 @@
 
 declare function emitLog(text: string): void;
 
+interface integer {}
+
 declare module Type {
   interface Range<T> {
     start: T;
@@ -28,7 +30,7 @@ declare module Type {
      * @minimum 1
      * @maximum 5
      */
-    size: number;
+    size: integer;
   }
 
   interface ColoredSquare extends Square {

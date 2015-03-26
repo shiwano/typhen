@@ -26,6 +26,7 @@ export interface PluginObject {
   pluginDirectory: string;
   newLine?: string;
   namespaceSeparator?: string;
+  customPrimitiveTypes?: string[];
   disallow?: DisallowOptions;
   handlebarsOptions?: HandlebarsOptions;
   rename?(symbol: Symbol.Symbol, name: string): string;
@@ -36,6 +37,7 @@ export class Plugin implements PluginObject {
   public pluginDirectory: string;
   public newLine: string = '\n';
   public namespaceSeparator: string = '.';
+  public customPrimitiveTypes: string[] = [];
   public disallow: DisallowOptions = {};
   public handlebarsOptions: HandlebarsOptions = null;
 

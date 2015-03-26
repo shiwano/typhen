@@ -1,6 +1,6 @@
 # Type.ColoredSquare
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L34)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L36)
 
 No comment.
 
@@ -35,7 +35,7 @@ Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
 color|Color|false|true|false|default:Color.Red |Default color is red.
 center|Point|false|false|false||
 margin|number|true|false|false||
-size|number|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+size|integer|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 

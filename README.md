@@ -99,17 +99,18 @@ Example:
 module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
-    newLine: '\r\n',          // Optional. Default value is '\n'.
-    namespaceSeparator: '::', // Optional. Default value is '.'.
-    disallow: {               // Optional. Default value is {}.
+    newLine: '\r\n',                   // Optional. Default value is '\n'.
+    namespaceSeparator: '::',          // Optional. Default value is '.'.
+    customPrimitiveTypes: ['integer'], // Optional. Default value is [].
+    disallow: {                        // Optional. Default value is {}.
       any: true,
       tuple: true,
       unionType: true,
       overload: true,
       generics: true
     },
-    handlebarsOptions: {      // Optional. Default value is null.
-      data: options,          // For details, see: http://handlebarsjs.com/execution.html
+    handlebarsOptions: {               // Optional. Default value is null.
+      data: options,                   // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
         baz: function(str) {
           return str + '-baz';
@@ -221,10 +222,7 @@ Usage:
 ```
 
 ### Custom Primitive Types
-If you want to use a custom primitive type, you will define the interface which is extended from the `TyphenPrimitiveType` in your definitions. Then the typhen will parse the interface as a primitive type. By default, the typhen has prepared the following primitive types in the [lib.typhen.d.ts](./lib.typhen.d.ts).
-
-#### integer
-A number without a fraction or exponent part.
+If you want to use a custom primitive type, you will add the interface name to `customPrimitiveTypes` option in your plugin. Then the typhen will parse the interface as a primitive type.
 
 ## Plugins
 If you want to add your project here, feel free to submit a pull request.

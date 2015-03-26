@@ -16,7 +16,6 @@ class TypeScriptParser {
   private typeCache: { [id: number]: Symbol.Type } = {};
   private symbols: Symbol.Symbol[] = [];
 
-  private typhenPrimitiveTypeName: string = 'TyphenPrimitiveType';
   private arrayTypeName: string = 'Array';
 
   private typeReferenceStack: Symbol.TypeReference[] = [];
@@ -98,9 +97,7 @@ class TypeScriptParser {
     if (!_.isObject(type)) { return null; }
 
     if (this.typeCache[type.id] === undefined) {
-      if (this.isTyphenPrimitiveType(type)) {
-        return null;
-      } else if (type.flags & ts.TypeFlags.StringLiteral) {
+      if (type.flags & ts.TypeFlags.StringLiteral) {
         this.parsePrimitiveType(<ts.StringLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Intrinsic) {
         this.parsePrimitiveType(<ts.IntrinsicType>type);
@@ -120,7 +117,7 @@ class TypeScriptParser {
       } else if (type.symbol.flags & ts.SymbolFlags.Class) {
         this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
       } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
-        if (this.isExtendedTyphenPrimitiveType(<ts.GenericType>type)) {
+        if (this.isTyphenPrimitiveType(type)) {
           this.parsePrimitiveType(<ts.GenericType>type);
         } else if (this.isArrayType(<ts.GenericType>type)) {
           this.parseArray(<ts.GenericType>type);
@@ -242,23 +239,7 @@ class TypeScriptParser {
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {
-    return _.isObject(type.symbol) &&
-           type.symbol.name === this.typhenPrimitiveTypeName &&
-           this.getParentModule(type.symbol) === null;
-  }
-
-  private isExtendedTyphenPrimitiveType(type: ts.GenericType): boolean {
-    var isExtendedTyphenPrimitiveType = type.baseTypes === undefined ? false :
-      _.any(type.baseTypes, (t) => this.isTyphenPrimitiveType(t));
-
-    if (isExtendedTyphenPrimitiveType) {
-      if (this.getParentModule(type.symbol) === null) {
-        return true;
-      } else {
-        this.throwErrorWithSymbol('Found the interface with module which is extended from the TyphenPrimitiveType', type.symbol);
-      }
-    }
-    return false;
+    return _.isObject(type.symbol) && _.include(this.runner.plugin.customPrimitiveTypes, type.symbol.name);
   }
 
   private isArrayType(type: ts.Type): boolean {

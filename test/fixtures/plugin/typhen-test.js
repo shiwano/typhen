@@ -3,6 +3,7 @@
 module.exports = function(typhen, options) {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
+    customPrimitiveTypes: ['integer'],
     handlebarsOptions: {
       data: options,
       helpers: {

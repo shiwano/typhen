@@ -1,6 +1,6 @@
 # Rpc.Post.setOptions
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L82)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L84)
 
 No comment.
 
