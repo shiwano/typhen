@@ -40,17 +40,13 @@ class CompilerHost implements ts.CompilerHost {
     return this.env.currentDirectory;
   }
 
-  // NOTE: This is a workaround that when the TypeScript compiler emits files,
-  // the context of "this" will change from the CompilerHost instance.
-  public useCaseSensitiveFileNames = (): boolean => {
+  public useCaseSensitiveFileNames(): boolean {
     return this.env.useCaseSensitiveFileNames;
-  };
+  }
 
-  // NOTE: This is a workaround that when the TypeScript compiler emits files,
-  // the context of "this" will change from the CompilerHost instance.
-  public getCanonicalFileName = (fileName: string): string => {
+  public getCanonicalFileName(fileName: string): string {
     return this.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
-  };
+  }
 
   public getNewLine(): string {
     return this.env.newLine;
