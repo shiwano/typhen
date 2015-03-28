@@ -16,7 +16,7 @@ class NodeJsEnvironment implements Environment {
   constructor(currentDirectory: string, public newLine: string, defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
 
-    if (_.isString(defaultLibFileName) && defaultLibFileName.length > 0) {
+    if (typeof defaultLibFileName === 'string' && defaultLibFileName.length > 0) {
       this.defaultLibFileName = this.resolvePath(defaultLibFileName);
     }
   }

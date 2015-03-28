@@ -30,7 +30,7 @@ export interface PluginObject {
   disallow?: DisallowOptions;
   handlebarsOptions?: HandlebarsOptions;
   rename?(symbol: Symbol.Symbol, name: string): string;
-  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): any; // void or Promise<void>
+  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void>;
 }
 
 export class Plugin implements PluginObject {
@@ -49,7 +49,7 @@ export class Plugin implements PluginObject {
     return name;
   }
 
-  public generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): any {
+  public generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void> {
     throw new Error('The plugin does not implement the generate function');
   }
 }

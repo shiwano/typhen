@@ -77,7 +77,7 @@ class TypeScriptParser {
     this.symbols.forEach(symbol => {
       var result = symbol.validate();
 
-      if (_.isString(result) && !_.isEmpty(result)) {
+      if (typeof result === 'string') {
         throw new Error(result + ': ' + symbol.declarationInfos.map(d => d.toString()).join(', '));
       }
     });
@@ -331,7 +331,7 @@ class TypeScriptParser {
     var members = _(symbol.exports)
       .map((memberSymbol: ts.Symbol, name: string) => {
         var value = this.typeChecker.getEnumMemberValue(<ts.EnumMember>memberSymbol.valueDeclaration);
-        memberValue = _.isNumber(value) ? value : memberValue + 1;
+        memberValue = typeof value === 'number' ? value : memberValue + 1;
         return this.createTyphenSymbol<Symbol.EnumMember>(memberSymbol, Symbol.EnumMember)
           .initialize(memberValue);
       }).value();
@@ -434,7 +434,7 @@ class TypeScriptParser {
   private parsePrimitiveType(type: any): Symbol.PrimitiveType {
     var name: string;
 
-    if (_.isString(type.intrinsicName)) {
+    if (typeof type.intrinsicName === 'string') {
       name = type.intrinsicName;
     } else if (_.isObject(type.symbol)) {
       name = type.symbol.name;

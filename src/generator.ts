@@ -35,8 +35,8 @@ class Generator {
   public generate(src: string, dest: string, overwrite?: boolean): Vinyl;
   public generate(src: string, dest: string, context: Symbol.Symbol, overwrite?: boolean): Vinyl;
   public generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
-    if (_.isBoolean(context)) {
-      overwrite = <boolean>context;
+    if (typeof context === 'boolean') {
+      overwrite = context;
       context = null;
     }
 
@@ -67,7 +67,7 @@ class Generator {
   }
 
   public createFile(options: { cwd?: string; base?: string; path?: string; contents?: any; }): Vinyl {
-    if (_.isString(options.contents)) {
+    if (typeof options.contents === 'string') {
       options.contents = new Buffer(options.contents);
     }
     return new Vinyl(options);

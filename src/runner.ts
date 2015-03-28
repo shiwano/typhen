@@ -66,7 +66,7 @@ export class Runner {
         resolve(generator.files);
       };
 
-      if (_.isObject(generateResult) && _.isFunction(generateResult.then)) {
+      if (_.isObject(generateResult) && typeof (<any>generateResult).then === 'function') {
         (<Promise<void>>generateResult).then(afterGenerate).catch(reject);
       } else {
         afterGenerate();

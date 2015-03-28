@@ -18,6 +18,7 @@ export module HandlebarsHelpers {
   export function and(...valuesAndOptions: any[]): any {
     var options = _.last(valuesAndOptions);
     var values = valuesAndOptions.filter((i: any) => i !== options);
+
     if (_.every(values, (v: any) => !(<any>Handlebars).Utils.isEmpty(v))) {
       return options.fn(this);
     } else {
@@ -28,6 +29,7 @@ export module HandlebarsHelpers {
   export function or(...valuesAndOptions: any[]): any {
     var options = _.last(valuesAndOptions);
     var values = valuesAndOptions.filter((i: any) => i !== options);
+
     if (_.any(values, (v: any) => !(<any>Handlebars).Utils.isEmpty(v))) {
       return options.fn(this);
     } else {

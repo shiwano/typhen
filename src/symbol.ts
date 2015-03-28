@@ -39,7 +39,7 @@ export class Tag {
 
   public get number(): number {
     var n = Number(this.value);
-    return _.isNumber(n) ? n : 0;
+    return typeof n === 'number' ? n : 0;
   }
 
   public get boolean(): boolean {
@@ -71,7 +71,7 @@ export class Symbol {
   private isDestroyed: boolean = false;
 
   constructor(
-      public runner: Runner.Runner,
+      protected runner: Runner.Runner,
       public rawName: string,
       public docComment: string[],
       public declarationInfos: DeclarationInfo[],
@@ -157,8 +157,7 @@ export class Symbol {
     return this.name;
   }
 
-  public validate(): string {
-    return null;
+  public validate(): void {
   }
 
   public destroy(ok: boolean = false): void {
@@ -231,7 +230,7 @@ export class PrimitiveType extends Type {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.any && this.rawName === 'any') {
       return 'Disallow the any type';
     }
@@ -272,7 +271,7 @@ export class Function extends Type {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
@@ -353,7 +352,7 @@ export class Interface extends ObjectType {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.generics && this.isGenericType) {
       return 'Disallow the generics';
     } else if (this.runner.plugin.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
@@ -410,7 +409,7 @@ export class Tuple extends Type {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.tuple) {
       return 'Disallow the tuple type';
     }
@@ -431,7 +430,7 @@ export class UnionType extends Type {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.unionType) {
       return 'Disallow the union type';
     }
@@ -471,7 +470,7 @@ export class Method extends Symbol {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
@@ -492,7 +491,7 @@ export class Signature extends Symbol {
     return this;
   }
 
-  public validate(): string {
+  public validate(): void | string {
     if (this.runner.plugin.disallow.generics && this.typeParameters.length > 0) {
       return 'Disallow the generics';
     }

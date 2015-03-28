@@ -9,7 +9,7 @@ import NodeJsEnvironment = require('./environments/node_js');
 
 export interface ConfigObject {
   plugin: Plugin.Plugin;
-  src: any; // string or string[]
+  src: string | string[];
   dest: string;
   cwd?: string;
   typingDirectory?: string;
@@ -33,7 +33,7 @@ export class Config implements ConfigObject {
     this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine, args.defaultLibFileName);
     this.defaultLibFileName = this.env.defaultLibFileName;
 
-    this.src = typeof args.src === 'string' ? [args.src] : args.src;
+    this.src = typeof args.src === 'string' ? [<string>args.src] : <string[]>args.src;
     this.src = this.src.map(s => this.env.resolvePath(s));
     this.dest = this.env.resolvePath(args.dest);
     this.cwd = this.env.resolvePath(this.cwd);
