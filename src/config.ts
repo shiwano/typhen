@@ -7,6 +7,7 @@ import Plugin = require('./plugin');
 import Runner = require('./runner');
 import Environment = require('./environments/environment');
 import NodeJsEnvironment = require('./environments/node_js');
+import CompilerHost = require('./compiler_host');
 
 export interface ConfigObject {
   plugin: Plugin.Plugin;
@@ -30,6 +31,7 @@ export class Config implements ConfigObject {
   public env: Environment;
   public noWrite: boolean;
   public compilerOptions: ts.CompilerOptions;
+  public compilerHost: CompilerHost;
 
   constructor(args: ConfigObject) {
     this.cwd = args.cwd || process.cwd();
@@ -52,6 +54,8 @@ export class Config implements ConfigObject {
       noImplicitAny: true,
       target: ts.ScriptTarget.ES5
     }, args.compilerOptions);
+
+    this.compilerHost = new CompilerHost(this.env);
   }
 
   public getTypingDirectory(src: string[]): string {

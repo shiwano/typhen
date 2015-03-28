@@ -112,7 +112,7 @@ describe('TypeScriptParser', () => {
     });
 
     afterEach(() => {
-      runner.plugin.disallow = {};
+      runner.config.plugin.disallow = {};
     });
 
     context('in general', () => {
@@ -123,7 +123,7 @@ describe('TypeScriptParser', () => {
 
     context('when dissalow#any is true', () => {
       beforeEach(() => {
-        runner.plugin.disallow.any = true;
+        runner.config.plugin.disallow.any = true;
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /any type/);
@@ -132,7 +132,7 @@ describe('TypeScriptParser', () => {
 
     context('when dissalow#tuple is true', () => {
       beforeEach(() => {
-        runner.plugin.disallow.tuple = true;
+        runner.config.plugin.disallow.tuple = true;
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /tuple type/);
@@ -141,7 +141,7 @@ describe('TypeScriptParser', () => {
 
     context('when dissalow#unionType is true', () => {
       beforeEach(() => {
-        runner.plugin.disallow.unionType = true;
+        runner.config.plugin.disallow.unionType = true;
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /union type/);
@@ -150,7 +150,7 @@ describe('TypeScriptParser', () => {
 
     context('when dissalow#generics is true', () => {
       beforeEach(() => {
-        runner.plugin.disallow.generics = true;
+        runner.config.plugin.disallow.generics = true;
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /generics/);
@@ -159,7 +159,7 @@ describe('TypeScriptParser', () => {
 
     context('when dissalow#overload is true', () => {
       beforeEach(() => {
-        runner.plugin.disallow.overload = true;
+        runner.config.plugin.disallow.overload = true;
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /overload/);

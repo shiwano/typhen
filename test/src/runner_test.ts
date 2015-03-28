@@ -16,12 +16,12 @@ describe('Runner', () => {
 
   describe('#run', () => {
     beforeEach(() => {
-      sandbox.stub(instance.plugin, 'generate');
+      sandbox.stub(instance.config.plugin, 'generate');
     });
 
     it('should call Plugin#generate', (done) => {
       instance.run().then(() => {
-        assert((<SinonStub>instance.plugin.generate).calledOnce);
+        assert((<SinonStub>instance.config.plugin.generate).calledOnce);
         done();
       });
     });

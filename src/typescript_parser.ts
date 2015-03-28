@@ -23,7 +23,7 @@ class TypeScriptParser {
 
   constructor(fileNames: string[], private runner: Runner.Runner) {
     Logger.debug('Loading the TypeScript files');
-    this.program = ts.createProgram(fileNames, this.runner.compilerOptions, this.runner.compilerHost);
+    this.program = ts.createProgram(fileNames, this.runner.config.compilerOptions, this.runner.config.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
 
     Logger.debug('Compiling the TypeScript files');
@@ -239,7 +239,7 @@ class TypeScriptParser {
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {
-    return _.isObject(type.symbol) && _.include(this.runner.plugin.customPrimitiveTypes, type.symbol.name);
+    return _.isObject(type.symbol) && _.include(this.runner.config.plugin.customPrimitiveTypes, type.symbol.name);
   }
 
   private isArrayType(type: ts.Type): boolean {

@@ -14,17 +14,7 @@ import Generator = require('./generator');
 import TypeScriptParser = require('./typescript_parser');
 
 export class Runner {
-  public config: Config.Config;
-  public plugin: Plugin.Plugin;
-  public compilerHost: CompilerHost;
-  public compilerOptions: ts.CompilerOptions;
-
-  constructor(config: Config.Config) {
-    this.config = config;
-    this.plugin = config.plugin;
-
-    this.compilerHost = new CompilerHost(this.config.env);
-    this.compilerOptions = config.compilerOptions;
+  constructor(public config: Config.Config) {
   }
 
   public run(): Promise<Vinyl[]> {
@@ -40,8 +30,8 @@ export class Runner {
 
       Logger.log(Logger.underline('Generating files'));
       var generator = new Generator(this.config.env, this.config.dest,
-          this.plugin.pluginDirectory, this.plugin.handlebarsOptions);
-      var generateResult = this.plugin.generate(generator, parser.types, parser.modules);
+          this.config.plugin.pluginDirectory, this.config.plugin.handlebarsOptions);
+      var generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);
 
       var afterGenerate = () => {
         generator.files.forEach(file => {

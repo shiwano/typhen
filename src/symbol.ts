@@ -81,16 +81,16 @@ export class Symbol {
 
   public get name(): string {
     var name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
-    return this.runner.plugin.rename(this, name);
+    return this.runner.config.plugin.rename(this, name);
   }
 
   public get fullName(): string {
     if (this.parentModule === null) { return this.name; }
-    return [this.namespace, this.name].join(this.runner.plugin.namespaceSeparator);
+    return [this.namespace, this.name].join(this.runner.config.plugin.namespaceSeparator);
   }
 
   public get namespace(): string {
-    return this.ancestorModules.map(s => s.name).join(this.runner.plugin.namespaceSeparator);
+    return this.ancestorModules.map(s => s.name).join(this.runner.config.plugin.namespaceSeparator);
   }
 
   public get ancestorModules(): Module[] {
@@ -106,7 +106,7 @@ export class Symbol {
   public get comment(): string {
     return this.docComment
       .filter(c => !Symbol.tagPattern.test(c))
-      .join(this.runner.plugin.newLine);
+      .join(this.runner.config.plugin.newLine);
   }
 
   public get tagTable(): ObjectTable<Tag> {
@@ -198,7 +198,7 @@ export class Module extends Symbol {
       name = this.runner.config.env.resolvePath(name);
       name = this.runner.config.env.relativePath(this.runner.config.typingDirectory, name);
     }
-    return this.runner.plugin.rename(this, name);
+    return this.runner.config.plugin.rename(this, name);
   }
 
   public get importedModules(): { name: string; module: Module }[] {
@@ -231,7 +231,7 @@ export class PrimitiveType extends Type {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.any && this.rawName === 'any') {
+    if (this.runner.config.plugin.disallow.any && this.rawName === 'any') {
       return 'Disallow the any type';
     }
   }
@@ -272,7 +272,7 @@ export class Function extends Type {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
+    if (this.runner.config.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
   }
@@ -353,9 +353,9 @@ export class Interface extends ObjectType {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.generics && this.isGenericType) {
+    if (this.runner.config.plugin.disallow.generics && this.isGenericType) {
       return 'Disallow the generics';
-    } else if (this.runner.plugin.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
+    } else if (this.runner.config.plugin.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
       return 'Disallow the function overloading';
     }
   }
@@ -410,7 +410,7 @@ export class Tuple extends Type {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.tuple) {
+    if (this.runner.config.plugin.disallow.tuple) {
       return 'Disallow the tuple type';
     }
   }
@@ -431,7 +431,7 @@ export class UnionType extends Type {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.unionType) {
+    if (this.runner.config.plugin.disallow.unionType) {
       return 'Disallow the union type';
     }
   }
@@ -471,7 +471,7 @@ export class Method extends Symbol {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.overload && this.callSignatures.length > 1) {
+    if (this.runner.config.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
     }
   }
@@ -492,7 +492,7 @@ export class Signature extends Symbol {
   }
 
   public validate(): void | string {
-    if (this.runner.plugin.disallow.generics && this.typeParameters.length > 0) {
+    if (this.runner.config.plugin.disallow.generics && this.typeParameters.length > 0) {
       return 'Disallow the generics';
     }
   }
