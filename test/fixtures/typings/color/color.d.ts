@@ -1,5 +1,5 @@
 declare module Type {
-  enum Color {
+  const enum Color {
     Red,
     Green = 999,
     Blue

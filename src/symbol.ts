@@ -242,9 +242,11 @@ export class Enum extends Type {
   public kind: SymbolKind = SymbolKind.Enum;
 
   public members: EnumMember[] = [];
+  public isConst: boolean = false;
 
-  public initialize(members: EnumMember[]): Enum {
+  public initialize(members: EnumMember[], isConst: boolean): Enum {
     this.members = members;
+    this.isConst = isConst;
     return this;
   }
 }

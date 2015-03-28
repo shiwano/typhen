@@ -67,7 +67,7 @@ export function createEnum(runner?: Runner.Runner): Symbol.Enum {
   type.initialize([
     new Symbol.EnumMember(runner, 'Bar', [''], [], typeModule, '').initialize(0),
     new Symbol.EnumMember(runner, 'Baz', [''], [], typeModule, '').initialize(1)
-  ]);
+  ], false);
   return type;
 }
 

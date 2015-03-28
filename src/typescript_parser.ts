@@ -326,6 +326,7 @@ class TypeScriptParser {
     var typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
     var symbol = type.symbol;
 
+    var isConst = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Const);
     var memberValue = -1;
     var members = _(symbol.exports)
       .map((memberSymbol: ts.Symbol, name: string) => {
@@ -335,7 +336,7 @@ class TypeScriptParser {
           .initialize(memberValue);
       }).value();
 
-    return typhenType.initialize(members);
+    return typhenType.initialize(members, isConst);
   }
 
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
