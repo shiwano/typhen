@@ -95,3 +95,14 @@ No Classes.
 {{else}}
 No Variables.
 {{/if}}
+
+## TypeAliases
+
+{{#if typeAliases}}
+{{#each typeAliases}}
+* {{name}}
+  * Type - {{#if type}}{{type}}{{else}}None{{/if}}
+{{/each}}
+{{else}}
+No TypeAliases.
+{{/if}}

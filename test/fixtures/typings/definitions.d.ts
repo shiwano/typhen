@@ -64,8 +64,10 @@ declare module Type {
     static draw(src: Point, dest: Point): Line;
   }
 
+  type time = number | Date;
+
   interface Time {
-    now: number|Date;
+    now: time;
   }
 }
 

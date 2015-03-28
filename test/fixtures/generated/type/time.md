@@ -1,6 +1,6 @@
 # Type.Time
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L67)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L69)
 
 No comment.
 

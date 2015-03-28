@@ -36,3 +36,7 @@ No Classes.
 ## Variables
 
 No Variables.
+
+## TypeAliases
+
+No TypeAliases.

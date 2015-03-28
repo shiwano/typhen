@@ -43,3 +43,8 @@ No Functions.
 ## Variables
 
 No Variables.
+
+## TypeAliases
+
+* time
+  * Type - NumberAndDateUnionType

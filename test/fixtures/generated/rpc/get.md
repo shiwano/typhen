@@ -1,6 +1,6 @@
 # Rpc.Get
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L79)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L81)
 
 No comment.
 
@@ -35,3 +35,7 @@ No Classes.
 ## Variables
 
 No Variables.
+
+## TypeAliases
+
+No TypeAliases.

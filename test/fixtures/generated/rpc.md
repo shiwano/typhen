@@ -1,6 +1,6 @@
 # Rpc
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L72)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L74)
 
 No comment.
 
@@ -44,3 +44,7 @@ No Classes.
 * anyAny
   * Type - any
   * Module - None
+
+## TypeAliases
+
+No TypeAliases.
