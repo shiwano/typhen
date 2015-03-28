@@ -27,6 +27,7 @@ function addTestSuite(expectedFileNames: string[]) {
   it('should generate specific files only', () => {
     var actualFileNames = glob.sync('./.tmp/generated/**/*.md')
        .map(f => f.replace('./.tmp', './test/fixtures'));
+    actualFileNames.sort();
     assert.deepEqual(actualFileNames, expectedFileNames);
   });
 }
