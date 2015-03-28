@@ -1,6 +1,7 @@
 /// <reference path="../typings/bundle.d.ts" />
 
 import _ = require('lodash');
+import ts = require('typescript');
 
 import Plugin = require('./plugin');
 import Runner = require('./runner');
@@ -16,6 +17,7 @@ export interface ConfigObject {
   defaultLibFileName?: string;
   env?: Environment;
   noWrite?: boolean;
+  compilerOptions?: ts.CompilerOptions;
 }
 
 export class Config implements ConfigObject {
@@ -27,6 +29,7 @@ export class Config implements ConfigObject {
   public defaultLibFileName: string;
   public env: Environment;
   public noWrite: boolean;
+  public compilerOptions: ts.CompilerOptions;
 
   constructor(args: ConfigObject) {
     this.cwd = args.cwd || process.cwd();
@@ -43,6 +46,12 @@ export class Config implements ConfigObject {
 
     this.plugin = args.plugin;
     this.noWrite = args.noWrite || false;
+
+    this.compilerOptions = <ts.CompilerOptions>_.defaults({
+      module: ts.ModuleKind.CommonJS,
+      noImplicitAny: true,
+      target: ts.ScriptTarget.ES5
+    }, args.compilerOptions);
   }
 
   public getTypingDirectory(src: string[]): string {

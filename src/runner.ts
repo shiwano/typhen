@@ -24,16 +24,7 @@ export class Runner {
     this.plugin = config.plugin;
 
     this.compilerHost = new CompilerHost(this.config.env);
-    this.compilerOptions = {
-      declaration: true,
-      diagnostics: true,
-      emitBOM: false,
-      module: ts.ModuleKind.CommonJS,
-      noImplicitAny: true,
-      target: ts.ScriptTarget.ES5,
-      noLib: false,
-      noLibCheck: false
-    };
+    this.compilerOptions = config.compilerOptions;
   }
 
   public run(): Promise<Vinyl[]> {

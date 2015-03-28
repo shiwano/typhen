@@ -81,7 +81,10 @@ module.exports = function(typhen) {
     dest: 'generated',
     cwd: '../other/current',             // Optional. Default value is process.cwd().
     typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
-    defaultLibFileName: 'lib.core.d.ts'  // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+    defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+    compilerOptions: {                   // Optional. Default value is { module: 'commonjs', noImplicitAny: true, target: 'ES5' }
+      target: 'ES6'
+    }
   }).then(function(files) {
     console.log('Done!');
   }).catch(function(e) {
