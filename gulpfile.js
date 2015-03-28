@@ -27,7 +27,8 @@ var tsProject = plugins.typescript.createProject({
 });
 
 var mochaOptions = {
-  reporter: 'spec'
+  reporter: 'spec',
+  timeout: 10000
 };
 
 gulp.task('jshint', function() {
