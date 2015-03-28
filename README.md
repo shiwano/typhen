@@ -233,7 +233,7 @@ If you want to add your project here, feel free to submit a pull request.
 * [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - A typhen plugin for JSON Schema
 
 ## TypeScript Version
-1.3.0
+1.4.1
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).
