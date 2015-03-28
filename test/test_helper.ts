@@ -57,16 +57,16 @@ export class TestEnvironment implements Environment {
   }
 }
 
-export function createEnum(runner?: Runner.Runner): Symbol.Enum {
-  if (runner === undefined) { runner = createRunner(); }
-  var appModule = new Symbol.Module(runner, 'App', [''], [], null, '').initialize({}, {}, [], [], [], []);
-  var typeModule = new Symbol.Module(runner, 'Type', [''], [], appModule, '').initialize({}, {}, [], [], [], []);
+export function createEnum(config?: Config.Config): Symbol.Enum {
+  if (config === undefined) { config = createConfig(); }
+  var appModule = new Symbol.Module(config, 'App', [''], [], null, '').initialize({}, {}, [], [], [], []);
+  var typeModule = new Symbol.Module(config, 'Type', [''], [], appModule, '').initialize({}, {}, [], [], [], []);
 
-  var type = new Symbol.Enum(runner, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
+  var type = new Symbol.Enum(config, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
       '@type Invalid', '@type Enum', '@true', '@false false'], [], typeModule, '');
   type.initialize([
-    new Symbol.EnumMember(runner, 'Bar', [''], [], typeModule, '').initialize(0),
-    new Symbol.EnumMember(runner, 'Baz', [''], [], typeModule, '').initialize(1)
+    new Symbol.EnumMember(config, 'Bar', [''], [], typeModule, '').initialize(0),
+    new Symbol.EnumMember(config, 'Baz', [''], [], typeModule, '').initialize(1)
   ], false);
   return type;
 }

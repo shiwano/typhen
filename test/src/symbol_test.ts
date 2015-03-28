@@ -1,6 +1,6 @@
 import helper = require('../test_helper');
 
-import Runner = require('../../src/runner');
+import Config = require('../../src/config');
 import Symbol = require('../../src/symbol');
 
 describe('Symbol', () => {
@@ -10,12 +10,11 @@ describe('Symbol', () => {
   });
 
   describe('.Enum', () => {
-    var runner: Runner.Runner;
     var instance: Symbol.Enum;
 
     beforeEach(() => {
-      runner = helper.createRunner();
-      instance = helper.createEnum(runner);
+      var config = helper.createConfig();
+      instance = helper.createEnum(config);
     });
 
     describe('#constructor', () => {

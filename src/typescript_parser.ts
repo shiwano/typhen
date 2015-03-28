@@ -6,7 +6,7 @@ import inflection = require('inflection');
 
 import Logger = require('./logger');
 import Symbol = require('./symbol');
-import Runner = require('./runner');
+import Config = require('./config');
 
 class TypeScriptParser {
   private program: ts.Program;
@@ -21,9 +21,9 @@ class TypeScriptParser {
   private typeReferenceStack: Symbol.TypeReference[] = [];
   private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
 
-  constructor(fileNames: string[], private runner: Runner.Runner) {
+  constructor(fileNames: string[], private config: Config.Config) {
     Logger.debug('Loading the TypeScript files');
-    this.program = ts.createProgram(fileNames, this.runner.config.compilerOptions, this.runner.config.compilerHost);
+    this.program = ts.createProgram(fileNames, this.config.compilerOptions, this.config.compilerHost);
     this.typeChecker = this.program.getTypeChecker(true);
 
     Logger.debug('Compiling the TypeScript files');
@@ -45,9 +45,9 @@ class TypeScriptParser {
   public get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
       .filter(s => {
-        var resolvedPath = this.runner.config.env.resolvePath(s.filename);
-        return resolvedPath !== this.runner.config.env.defaultLibFileName &&
-          _.contains(resolvedPath, this.runner.config.typingDirectory);
+        var resolvedPath = this.config.env.resolvePath(s.filename);
+        return resolvedPath !== this.config.env.defaultLibFileName &&
+          _.contains(resolvedPath, this.config.typingDirectory);
       });
   }
 
@@ -148,7 +148,7 @@ class TypeScriptParser {
     var name = _.isObject(symbol) ? symbol.name.replace(/^__.*$/, '') : '';
     var assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
       this.getAssumedName(symbol, assumedNameSuffix) : '';
-    var typhenSymbol = <T>new typhenSymbolClass(this.runner, name,
+    var typhenSymbol = <T>new typhenSymbolClass(this.config, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
         this.getParentModule(symbol), assumedName);
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
@@ -182,8 +182,8 @@ class TypeScriptParser {
 
     return symbol.declarations.map(d => {
       var sourceFile = d.getSourceFile();
-      var resolvedPath = this.runner.config.env.resolvePath(sourceFile.filename);
-      var relativePath = this.runner.config.env.relativePath(resolvedPath);
+      var resolvedPath = this.config.env.resolvePath(sourceFile.filename);
+      var relativePath = this.config.env.relativePath(resolvedPath);
       var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.getStart());
       return new Symbol.DeclarationInfo(relativePath, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
@@ -239,7 +239,7 @@ class TypeScriptParser {
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {
-    return _.isObject(type.symbol) && _.include(this.runner.config.plugin.customPrimitiveTypes, type.symbol.name);
+    return _.isObject(type.symbol) && _.include(this.config.plugin.customPrimitiveTypes, type.symbol.name);
   }
 
   private isArrayType(type: ts.Type): boolean {
@@ -252,9 +252,9 @@ class TypeScriptParser {
     return this.typeChecker.getSymbolsInScope(node, symbolFlags)
       .filter(s => {
         return s.declarations.every(d => {
-          var resolvedPath = this.runner.config.env.resolvePath(d.getSourceFile().filename);
-          return resolvedPath !== this.runner.config.env.defaultLibFileName &&
-            _.contains(resolvedPath, this.runner.config.typingDirectory);
+          var resolvedPath = this.config.env.resolvePath(d.getSourceFile().filename);
+          return resolvedPath !== this.config.env.defaultLibFileName &&
+            _.contains(resolvedPath, this.config.typingDirectory);
         });
       });
   }
