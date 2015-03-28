@@ -2,14 +2,11 @@
 
 import _ = require('lodash');
 import ts = require('typescript');
-import chalk = require('chalk');
 import Promise = require('bluebird');
 import Vinyl = require('vinyl');
 
-import Plugin = require('./plugin');
 import Config = require('./config');
 import Logger = require('./logger');
-import CompilerHost = require('./compiler_host');
 import Generator = require('./generator');
 import TypeScriptParser = require('./typescript_parser');
 

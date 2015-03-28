@@ -21,25 +21,7 @@ class TypeScriptParser {
   private typeReferenceStack: Symbol.TypeReference[] = [];
   private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
 
-  constructor(fileNames: string[], private config: Config.Config) {
-    Logger.debug('Loading the TypeScript files');
-    this.program = ts.createProgram(fileNames, this.config.compilerOptions, this.config.compilerHost);
-    this.typeChecker = this.program.getTypeChecker(true);
-
-    Logger.debug('Compiling the TypeScript files');
-    var errors = this.program.getDiagnostics();
-    if (errors.length === 0) {
-      var semanticErrors = this.typeChecker.getDiagnostics();
-      var emitOutput = this.typeChecker.emitFiles();
-      var emitErrors = emitOutput.diagnostics;
-      errors = errors.concat(semanticErrors, emitErrors);
-    }
-
-    errors.forEach(d => {
-      var info = _.isObject(d.file) ? [d.file.filename, '(', d.start, ',', d.length, '):'].join('') : '';
-      Logger.error(Logger.red(info), d.messageText);
-      throw new Error('Detect diagnostic messages of the TypeScript compiler');
-    });
+  constructor(private fileNames: string[], private config: Config.Config) {
   }
 
   public get sourceFiles(): ts.SourceFile[] {
@@ -66,6 +48,25 @@ class TypeScriptParser {
   }
 
   public parse(): void {
+    Logger.debug('Loading the TypeScript files');
+    this.program = ts.createProgram(this.fileNames, this.config.compilerOptions, this.config.compilerHost);
+    this.typeChecker = this.program.getTypeChecker(true);
+
+    Logger.debug('Compiling the TypeScript files');
+    var errors = this.program.getDiagnostics();
+    if (errors.length === 0) {
+      var semanticErrors = this.typeChecker.getDiagnostics();
+      var emitOutput = this.typeChecker.emitFiles();
+      var emitErrors = emitOutput.diagnostics;
+      errors = errors.concat(semanticErrors, emitErrors);
+    }
+
+    errors.forEach(d => {
+      var info = _.isObject(d.file) ? [d.file.filename, '(', d.start, ',', d.length, '):'].join('') : '';
+      Logger.error(Logger.red(info), d.messageText);
+      throw new Error('Detect diagnostic messages of the TypeScript compiler');
+    });
+
     Logger.debug('Parsing the TypeScript symbols');
     this.sourceFiles.forEach(s => {
       this.parseSourceFile(s);
