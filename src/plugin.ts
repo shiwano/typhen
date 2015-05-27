@@ -19,7 +19,7 @@ export interface DisallowOptions {
 export interface HandlebarsOptions {
   data?: any;
   helpers?: { [helperName: string]: (...args: any[]) => any };
-  partials: { [partialName: string]: any }
+  partials?: { [partialName: string]: any }
 }
 
 export interface PluginObject {
@@ -39,7 +39,7 @@ export class Plugin implements PluginObject {
   public namespaceSeparator: string = '.';
   public customPrimitiveTypes: string[] = [];
   public disallow: DisallowOptions = {};
-  public handlebarsOptions: HandlebarsOptions = null;
+  public handlebarsOptions: HandlebarsOptions = {};
 
   constructor(args: PluginObject) {
     _.assign(this, args);

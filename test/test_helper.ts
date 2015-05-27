@@ -94,7 +94,7 @@ export function createGenerator(): Generator  {
     '/plugin/README.md': 'This is README.',
     '/plugin/enum.hbs': '{{name}}\n{{#each members}}{{name}}: {{value}}\n{{/each}}'
   });
-  return new Generator(env, '/generated', '/plugin', null);
+  return new Generator(env, '/generated', '/plugin', {});
 }
 
 export function createRunner(): Runner.Runner {
