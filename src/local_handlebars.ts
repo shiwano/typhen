@@ -5,6 +5,10 @@ import inflection = require('inflection');
 import Handlebars = require('handlebars');
 
 function applyHelperToStringWithSeparator(str: string, helper: (str: string) => string): string {
+  if (typeof str !== 'string') {
+    str = str.toString();
+  }
+
   var separators = _.uniq(str.match(/[^a-z_]+/gi));
 
   if (separators.length === 1) {
