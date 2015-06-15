@@ -71,6 +71,10 @@ class TypeScriptParser {
     this.sourceFiles.forEach(s => {
       this.parseSourceFile(s);
     });
+
+    this.types.filter(t => t.isAnonymousType && t.parentModule != null).forEach(t => {
+      t.parentModule.anonymousTypes.push(t);
+    });
   }
 
   public validate(): void {

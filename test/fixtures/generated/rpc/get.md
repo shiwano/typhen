@@ -39,3 +39,7 @@ No Variables.
 ## TypeAliases
 
 No TypeAliases.
+
+## AnonymousTypes
+
+* GetRangeObject

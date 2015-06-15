@@ -180,6 +180,7 @@ export class Module extends Symbol {
   public importedTypeTable: ObjectTable<Type> = {};
   public modules: Module[] = [];
   public types: Type[] = [];
+  public anonymousTypes: Type[] = [];
   public variables: Variable[] = [];
   public typeAliases: TypeAlias[] = [];
 

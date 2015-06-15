@@ -40,3 +40,7 @@ No Variables.
 ## TypeAliases
 
 No TypeAliases.
+
+## AnonymousTypes
+
+No AnonymousTypes.

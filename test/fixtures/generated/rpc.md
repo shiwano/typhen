@@ -48,3 +48,7 @@ No Classes.
 ## TypeAliases
 
 No TypeAliases.
+
+## AnonymousTypes
+
+No AnonymousTypes.

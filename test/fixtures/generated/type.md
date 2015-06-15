@@ -48,3 +48,8 @@ No Variables.
 
 * time
   * Type - NumberAndDateUnionType
+
+## AnonymousTypes
+
+* ColoredSquareSetColorCallbackFunction
+* LineSetColorCallbackFunction
