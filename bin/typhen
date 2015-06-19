@@ -68,7 +68,7 @@ if (options.argv.remain.length === 0) {
 } else {
   var fileNames = options.argv.remain.map(function (p) { return path.resolve(p); });
 
-  if (fileNames.length === 1 && _.contains(fileNames[0], 'typhenfile.js')) {
+  if (fileNames.length === 1 && _.contains(fileNames[0], 'typhenfile')) {
     typhen.runByTyphenfile(fileNames[0]).done(function() {}, function(e) { throw e; });
   } else if (_.isString(options.dest) && _.isString(options.plugin)) {
     var pluginOptions = _.isString(options['plugin-options']) ?
