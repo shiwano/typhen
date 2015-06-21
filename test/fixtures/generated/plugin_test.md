@@ -31,6 +31,9 @@ people
 #### singularize
 person
 
+#### defaultValue
+defaultValue
+
 ### Custom helpers
 
 #### Plugin Helpers

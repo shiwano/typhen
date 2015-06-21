@@ -62,6 +62,10 @@ export module HandlebarsHelpers {
   export function singularize(str: string): string {
     return inflection.singularize(str);
   }
+
+  export function defaultValue(value: any, defaultValue: any): any {
+    return value !== null && value !== undefined ? value : defaultValue;
+  }
 }
 
 export function registerHelpers(handlebars: typeof Handlebars): void {

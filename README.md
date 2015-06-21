@@ -224,6 +224,15 @@ Usage:
                    person
 ```
 
+#### defaultValue
+Render a fallback value if a value doesn't exist.
+
+Usage:
+```hbs
+    {{defaultValue noExistingValue 'missing'}}
+                   missing
+```
+
 ### Custom Primitive Types
 If you want to use a custom primitive type, you will add the interface name to `customPrimitiveTypes` option in your plugin. Then the typhen will parse the interface as a primitive type.
 

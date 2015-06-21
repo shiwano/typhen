@@ -77,6 +77,21 @@ describe('LocalHandlebars', () => {
         assert(LocalHandlebars.HandlebarsHelpers.singularize('people') === 'person');
       });
     });
+
+    describe('.defaultValue', () => {
+      context('with existing value', () => {
+        it('should return value', () => {
+          assert(LocalHandlebars.HandlebarsHelpers.defaultValue('value', 'defaultValue') === 'value');
+        });
+      });
+
+      context('with no existing value', () => {
+        it('should return default value', () => {
+          assert(LocalHandlebars.HandlebarsHelpers.defaultValue(null, 'defaultValue') === 'defaultValue');
+          assert(LocalHandlebars.HandlebarsHelpers.defaultValue(undefined, 'defaultValue') === 'defaultValue');
+        });
+      });
+    });
   });
 
   describe('.handlebars', () => {
