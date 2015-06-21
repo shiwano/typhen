@@ -40,8 +40,8 @@ class Generator {
       context = null;
     }
 
-    if (context instanceof Symbol.Type || context instanceof Symbol.Module) {
-      dest = this.replaceStarsOfFileName(dest, <Symbol.Type>context);
+    if (context instanceof Symbol.Symbol) {
+      dest = this.replaceStarsOfFileName(dest, <Symbol.Symbol>context);
     }
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
     var data: string;
@@ -73,8 +73,6 @@ class Generator {
     return new Vinyl(options);
   }
 
-  public replaceStarsOfFileName(fileName: string, symbol: Symbol.Type): string;
-  public replaceStarsOfFileName(fileName: string, symbol: Symbol.Module): string;
   public replaceStarsOfFileName(fileName: string, symbol: Symbol.Symbol): string {
     var matches = fileName.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches == null) { return fileName; }
