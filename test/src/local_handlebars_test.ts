@@ -2,6 +2,7 @@ require('../test_helper');
 
 import Handlebars = require('handlebars');
 
+import Helpers = require('../../src/helpers');
 import LocalHandlebars = require('../../src/local_handlebars');
 
 describe('LocalHandlebars', () => {
@@ -49,32 +50,42 @@ describe('LocalHandlebars', () => {
     });
 
     describe('.underscore', () => {
-      it('should return a underscored string', () => {
-        assert(LocalHandlebars.HandlebarsHelpers.underscore('App.FooBar.Qux') === 'app.foo_bar.qux');
+      it('should call Helpers.underscore', () => {
+        var spy = sandbox.spy(Helpers, 'underscore');
+        LocalHandlebars.HandlebarsHelpers.underscore('App.FooBar.Qux');
+        assert(spy.calledWith('App.FooBar.Qux'));
       });
     });
 
     describe('.upperCamelCase', () => {
-      it('should return a upperCamelCaseed string', () => {
-        assert(LocalHandlebars.HandlebarsHelpers.upperCamelCase('app.foo_bar.qux') === 'App.FooBar.Qux');
+      it('should call Helpers.upperCamelCase', () => {
+        var spy = sandbox.spy(Helpers, 'upperCamelCase');
+        LocalHandlebars.HandlebarsHelpers.upperCamelCase('app.foo_bar.qux');
+        assert(spy.calledWith('app.foo_bar.qux'));
       });
     });
 
     describe('.lowerCamelCase', () => {
-      it('should return a lowerCamelCaseed string', () => {
-        assert(LocalHandlebars.HandlebarsHelpers.lowerCamelCase('app.foo_bar.qux') === 'app.fooBar.qux');
+      it('should call Helpers.lowerCamelCase', () => {
+        var spy = sandbox.spy(Helpers, 'lowerCamelCase');
+        LocalHandlebars.HandlebarsHelpers.lowerCamelCase('app.foo_bar.qux');
+        assert(spy.calledWith('app.foo_bar.qux'));
       });
     });
 
     describe('.pluralize', () => {
-      it('should return a pluralized string', () => {
-        assert(LocalHandlebars.HandlebarsHelpers.pluralize('person') === 'people');
+      it('should call Helpers.pluralize', () => {
+        var spy = sandbox.spy(Helpers, 'pluralize');
+        LocalHandlebars.HandlebarsHelpers.pluralize('person');
+        assert(spy.calledWith('person'));
       });
     });
 
     describe('.singularize', () => {
-      it('should return a singularized string', () => {
-        assert(LocalHandlebars.HandlebarsHelpers.singularize('people') === 'person');
+      it('should call Helpers.singularize', () => {
+        var spy = sandbox.spy(Helpers, 'singularize');
+        LocalHandlebars.HandlebarsHelpers.singularize('people');
+        assert(spy.calledWith('people'));
       });
     });
 

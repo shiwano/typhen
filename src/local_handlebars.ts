@@ -4,19 +4,7 @@ import _ = require('lodash');
 import inflection = require('inflection');
 import Handlebars = require('handlebars');
 
-function applyHelperToStringWithSeparator(str: string, helper: (str: string) => string): string {
-  if (typeof str !== 'string') {
-    str = str.toString();
-  }
-
-  var separators = _.uniq(str.match(/[^a-z_]+/gi));
-
-  if (separators.length === 1) {
-    return str.split(separators[0]).map(s => helper(s)).join(separators[0]);
-  } else {
-    return helper(str);
-  }
-}
+import Helpers = require('./helpers');
 
 export module HandlebarsHelpers {
   export function and(...valuesAndOptions: any[]): any {
@@ -42,25 +30,23 @@ export module HandlebarsHelpers {
   }
 
   export function underscore(str: string): string {
-    return applyHelperToStringWithSeparator(str, inflection.underscore);
+    return Helpers.underscore(str);
   }
 
   export function upperCamelCase(str: string): string {
-    return applyHelperToStringWithSeparator(str, inflection.camelize);
+    return Helpers.upperCamelCase(str);
   }
 
   export function lowerCamelCase(str: string): string {
-    return applyHelperToStringWithSeparator(str, s => {
-      return inflection.camelize(s, true);
-    });
+    return Helpers.lowerCamelCase(str);
   }
 
   export function pluralize(str: string): string {
-    return inflection.pluralize(str);
+    return Helpers.pluralize(str);
   }
 
   export function singularize(str: string): string {
-    return inflection.singularize(str);
+    return Helpers.singularize(str);
   }
 
   export function defaultValue(value: any, defaultValue: any): any {
