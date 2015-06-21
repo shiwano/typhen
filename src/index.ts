@@ -8,11 +8,12 @@ import Config = require('./config');
 import Runner = require('./runner');
 import Symbol = require('./symbol');
 import Logger = require('./logger');
-import LocalHandlebars = require('./local_handlebars');
+import Helpers = require('./helpers');
 
 module Typhen {
   export import SymbolKind = Symbol.SymbolKind;
   export var logger = Logger;
+  export var helpers = Helpers;
 
   export function run(configArgs: Config.ConfigObject): Promise<Vinyl[]> {
     var config = new Config.Config(configArgs);

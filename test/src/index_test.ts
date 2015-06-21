@@ -4,7 +4,7 @@ import Typhen = require('../../src/index');
 import Plugin = require('../../src/plugin');
 import Symbol = require('../../src/symbol');
 import Logger = require('../../src/logger');
-import LocalHandlebars = require('../../src/local_handlebars');
+import Helpers = require('../../src/helpers');
 
 describe('Typhen', () => {
   describe('.SymbolKind', () => {
@@ -16,6 +16,12 @@ describe('Typhen', () => {
   describe('.logger', () => {
     it('should export logger', () => {
       assert(Typhen.logger === Logger);
+    });
+  });
+
+  describe('.helpers', () => {
+    it('should export helpers', () => {
+      assert(Typhen.helpers === Helpers);
     });
   });
 
