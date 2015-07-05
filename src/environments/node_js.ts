@@ -18,6 +18,10 @@ class NodeJsEnvironment implements Environment {
 
     if (typeof defaultLibFileName === 'string' && defaultLibFileName.length > 0) {
       this.defaultLibFileName = this.resolvePath(defaultLibFileName);
+
+      if (!this.exists(this.defaultLibFileName)) {
+        this.defaultLibFileName = path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
+      }
     }
   }
 
