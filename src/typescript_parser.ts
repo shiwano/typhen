@@ -503,10 +503,13 @@ class TypeScriptParser {
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
     var type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
     var parameterType = this.parseType(type);
-    var isOptional = (<ts.ParameterDeclaration>symbol.valueDeclaration).questionToken != null;
+
+    var valueDecl = (<ts.ParameterDeclaration>symbol.valueDeclaration);
+    var isOptional = valueDecl.questionToken != null;
+    var isVariadic = valueDecl.dotDotDotToken != null;
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
-    return typhenSymbol.initialize(parameterType, isOptional);
+    return typhenSymbol.initialize(parameterType, isOptional, isVariadic);
   }
 
   private parseVariable(symbol: ts.Symbol): Symbol.Variable {

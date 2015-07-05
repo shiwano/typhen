@@ -1,6 +1,6 @@
 # Type.SquareDictionary
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L45)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L46)
 
 No comment.
 

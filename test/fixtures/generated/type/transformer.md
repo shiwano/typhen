@@ -1,6 +1,6 @@
 # Type.Transformer
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L50)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L51)
 
 No comment.
 
@@ -26,9 +26,9 @@ ConstructorSignatures is empty.
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-Transformer|squeare:Square:false scale:number:false |void|
+Transformer|squeare:Square:false:false scale:number:false:false |void|
 
 ## Properties
 

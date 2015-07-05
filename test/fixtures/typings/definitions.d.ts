@@ -19,6 +19,7 @@ declare module Type {
     set(args: [number, number]): void;
     new(x: number, y: number): Point;
     new(args: [number, number]): Point;
+    new(...variadicArgs: number[]): Point;
   }
 
   interface Square {

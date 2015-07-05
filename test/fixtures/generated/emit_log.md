@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-emitLog|text:string:false |void|
+emitLog|text:string:false:false |void|

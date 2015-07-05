@@ -55,10 +55,10 @@ TypeArguments is empty.
 ## ConstructorSignatures
 
 {{#if constructorSignatures}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
 {{#each constructorSignatures}}
-constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
+constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{comment}}
 {{/each}}
 {{else}}
 ConstructorSignatures is empty.
@@ -67,10 +67,10 @@ ConstructorSignatures is empty.
 ## CallSignatures
 
 {{#if callSignatures}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}} {{/each}}|{{returnType}}|{{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{comment}}
 {{/each}}
 {{else}}
 CallSignatures is empty.
@@ -91,11 +91,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
@@ -117,11 +117,11 @@ Static Properties is empty.
 ## Static Methods
 
 {{#if staticMethods}}
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
 {{#each staticMethods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}}  {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}}  {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

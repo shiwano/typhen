@@ -1,6 +1,6 @@
 # Type.LineSetColorCallbackFunction
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L57)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L58)
 
 No comment.
 
@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-LineSetColorCallbackFunction|color:Color:false |void|
+LineSetColorCallbackFunction|color:Color:false:false |void|

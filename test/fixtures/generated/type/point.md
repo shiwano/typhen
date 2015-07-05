@@ -22,10 +22,11 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-constructor|x:number:false y:number:false |Point|
-constructor|args:NumberAndNumberTuple:false |Point|
+constructor|x:number:false:false y:number:false:false |Point|
+constructor|args:NumberAndNumberTuple:false:false |Point|
+constructor|variadicArgs:ArrayOfnumber:false:true |Point|
 
 ## CallSignatures
 
@@ -40,10 +41,10 @@ y|number|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
-set|x:number:false y:number:false |void|false|true|false| 
-set|args:NumberAndNumberTuple:false |void|false|true|false| 
+set|x:number:false:false y:number:false:false |void|false|true|false| 
+set|args:NumberAndNumberTuple:false:false |void|false|true|false| 
 
 ## Static Properties
 

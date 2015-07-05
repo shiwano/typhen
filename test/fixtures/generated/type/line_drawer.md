@@ -1,6 +1,6 @@
 # Type.LineDrawer
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L62)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L63)
 
 No comment.
 
@@ -44,9 +44,9 @@ lines|ArrayOfLine|false|true|false||
 
 ## Static Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
-draw|src:Point:false dest:Point:false |Line|false|true|false|  
+draw|src:Point:false:false dest:Point:false:false |Line|false|true|false|  
 
 ## StringIndexType
 

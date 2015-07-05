@@ -36,6 +36,7 @@ describe('TypeScriptParser', () => {
         var expected = [
           // Array
           'Line[]',
+          'number[]',
           'string[]', // FIXME: Strange to say, this type is created by UnionType declaration.
           // Tuple
           'NumberAndNumberTuple',

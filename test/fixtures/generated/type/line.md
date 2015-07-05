@@ -1,6 +1,6 @@
 # Type.Line
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L54)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L55)
 
 No comment.
 
@@ -22,9 +22,9 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-constructor|src:Point:false dest:Point:false |Line|
+constructor|src:Point:false:false dest:Point:false:false |Line|
 
 ## CallSignatures
 
@@ -38,9 +38,9 @@ color|Color|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
-setColor|color:Color:false callback:LineSetColorCallbackFunction:true |void|false|true|false| 
+setColor|color:Color:false:false callback:LineSetColorCallbackFunction:true:false |void|false|true|false| 
 draw||void|false|true|true| 
 
 ## Static Properties

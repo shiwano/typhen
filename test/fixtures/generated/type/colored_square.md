@@ -1,6 +1,6 @@
 # Type.ColoredSquare
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L36)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L37)
 
 No comment.
 
@@ -39,9 +39,9 @@ size|integer|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
 ---|---|---|---|---|---|---
-setColor|color:Color:false callback:ColoredSquareSetColorCallbackFunction:true |void|false|true|false| 
+setColor|color:Color:false:false callback:ColoredSquareSetColorCallbackFunction:true:false |void|false|true|false| 
 
 ## Static Properties
 

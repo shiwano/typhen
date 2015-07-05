@@ -1,6 +1,6 @@
 # Rpc.Post.setOptions
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L86)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L87)
 
 No comment.
 
@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-setOptions|options:SetOptionsOptionsObject:false |boolean|
+setOptions|options:SetOptionsOptionsObject:false:false |boolean|

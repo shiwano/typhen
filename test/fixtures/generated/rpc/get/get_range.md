@@ -1,6 +1,6 @@
 # Rpc.Get.getRange
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L82)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L83)
 
 No comment.
 
@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-getRange|start:Point:false dest:Point:false |GetRangeObject|
+getRange|start:Point:false:false dest:Point:false:false |GetRangeObject|

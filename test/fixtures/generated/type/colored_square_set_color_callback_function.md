@@ -1,6 +1,6 @@
 # Type.ColoredSquareSetColorCallbackFunction
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L42)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L43)
 
 No comment.
 
@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional)|ReturnTypeName|Comment
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
 ---|---|---|---
-ColoredSquareSetColorCallbackFunction|color:Color:false |void|
+ColoredSquareSetColorCallbackFunction|color:Color:false:false |void|

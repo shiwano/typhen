@@ -504,10 +504,12 @@ export class Parameter extends Symbol {
 
   public type: Type = null;
   public isOptional: boolean = false;
+  public isVariadic: boolean = false;
 
-  public initialize(type: Type, isOptional: boolean): Parameter {
+  public initialize(type: Type, isOptional: boolean, isVariadic: boolean): Parameter {
     this.type = type;
     this.isOptional = isOptional;
+    this.isVariadic = isVariadic;
     return this;
   }
 }
