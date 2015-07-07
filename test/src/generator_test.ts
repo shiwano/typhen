@@ -28,10 +28,6 @@ describe('Generator', () => {
   describe('#generate', () => {
     var data = helper.createEnum();
 
-    beforeEach(() => {
-      sandbox.stub(instance.env, 'writeFile');
-    });
-
     context('with a file name', () => {
       var generated = 'This is README.';
 
@@ -51,9 +47,15 @@ describe('Generator', () => {
     context('when overwrite argument is false', () => {
       var generated = 'This is README.';
 
-      it('should not overwrite', () => {
+      it('should not overwrite a existing file', () => {
         instance.generate('README.md', 'README.md', false);
-        assert(!(<SinonStub>instance.env.writeFile).calledWith('generated/README.md', generated));
+        assert(instance.files.length === 0);
+      });
+
+      it('should not overwrite a existing virtual file', () => {
+        instance.generate('README.md', 'NEW_README.md');
+        instance.generate('README.md', 'NEW_README.md', false);
+        assert(instance.files.length === 1);
       });
     });
   });

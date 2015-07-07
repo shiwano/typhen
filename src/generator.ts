@@ -53,7 +53,7 @@ class Generator {
       data = this.getFileFromPluginDirectory(src);
     }
 
-    if (_.contains([true, undefined], overwrite) || !this.env.exists(resolvedDest)) {
+    if (overwrite !== false || (!this.env.exists(resolvedDest) && this.files.every(f => f.path !== resolvedDest))) {
       var file = this.createFile({
         cwd: this.env.currentDirectory,
         base: this.outputDirectory,
