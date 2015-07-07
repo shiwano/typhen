@@ -91,5 +91,11 @@ describe('Generator', () => {
         assert(instance.replaceStars('lowerCamelCase:**/*.txt', type) === 'app/type/fooType.txt');
       });
     });
+
+    context('with a seperator', () => {
+      it('should return a joined string with the separator', () => {
+        assert(instance.replaceStars('lowerCamelCase:**/*.txt', type, '-') === 'app-type/fooType.txt');
+      });
+    });
   });
 });

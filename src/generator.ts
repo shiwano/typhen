@@ -73,9 +73,9 @@ class Generator {
     return new Vinyl(options);
   }
 
-  public replaceStars(fileName: string, symbol: Symbol.Symbol): string {
-    var matches = fileName.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
-    if (matches == null) { return fileName; }
+  public replaceStars(str: string, symbol: Symbol.Symbol, separator: string = '/'): string {
+    var matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
+    if (matches == null) { return str; }
 
     var inflect = (name: string, inflectionType: string): string => {
       if (_.contains(name, '/')) { return name; }
@@ -88,7 +88,7 @@ class Generator {
       }
     };
     return matches[2]
-      .replace('**', symbol.ancestorModules.map(s => inflect(s.name, matches[1])).join('/'))
+      .replace('**', symbol.ancestorModules.map(s => inflect(s.name, matches[1])).join(separator))
       .replace('*', inflect(symbol.name, matches[1]))
       .replace(/^\//, ''); // Avoid making an absolute path
   }
