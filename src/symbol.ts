@@ -45,6 +45,10 @@ export class Tag {
   public get boolean(): boolean {
     return this.value !== 'false';
   }
+
+  public toString(): string {
+    return this.value;
+  }
 }
 
 export class DeclarationInfo {
