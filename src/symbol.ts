@@ -279,6 +279,8 @@ export class Function extends Type {
   public validate(): void | string {
     if (this.config.plugin.disallow.overload && this.callSignatures.length > 1) {
       return 'Disallow the function overloading';
+    } else if (this.config.plugin.disallow.anonymousFunction && this.isAnonymousType) {
+      return 'Disallow the anonymous function';
     }
   }
 }
@@ -301,6 +303,12 @@ export class ObjectType extends Type {
     this.stringIndexType = stringIndexType;
     this.numberIndexType = numberIndexType;
     return this;
+  }
+
+  public validate(): void | string {
+    if (this.config.plugin.disallow.anonymousObject && this.isAnonymousType) {
+      return 'Disallow the anonymous object';
+    }
   }
 }
 

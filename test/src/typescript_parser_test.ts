@@ -166,5 +166,23 @@ describe('TypeScriptParser', () => {
         assert.throws(() => instance.validate(), /overload/);
       });
     });
+
+    context('when dissalow#anonymousFunction is true', () => {
+      beforeEach(() => {
+        config.plugin.disallow.anonymousFunction = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /anonymous function/);
+      });
+    });
+
+    context('when dissalow#anonymousObject is true', () => {
+      beforeEach(() => {
+        config.plugin.disallow.anonymousObject = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /anonymous object/);
+      });
+    });
   });
 });

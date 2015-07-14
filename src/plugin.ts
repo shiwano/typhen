@@ -13,6 +13,8 @@ export interface DisallowOptions {
   unionType?: boolean;
   overload?: boolean;
   generics?: boolean;
+  anonymousFunction?: boolean;
+  anonymousObject?: boolean;
 }
 
 // For details, see: http://handlebarsjs.com/execution.html

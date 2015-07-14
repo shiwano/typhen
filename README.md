@@ -110,7 +110,9 @@ module.exports = function(typhen, options) {
       tuple: true,
       unionType: true,
       overload: true,
-      generics: true
+      generics: true,
+      anonymousObject: true,
+      anonymousFunction: true
     },
     handlebarsOptions: {               // Optional. Default value is null.
       data: options,                   // For details, see: http://handlebarsjs.com/execution.html
