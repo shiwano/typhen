@@ -1,6 +1,7 @@
 require('../../test_helper');
 
 import fs = require('fs');
+import glob = require('glob');
 
 import NodeJsEnvironment = require('../../../src/environments/node_js');
 
@@ -91,6 +92,30 @@ describe('NodeJsEnvironment', () => {
       var actual = instance.getDefaultLibFileData();
       var expected = fs.readFileSync(process.cwd() + '/node_modules/typescript/bin/lib.d.ts', 'utf-8');
       assert(actual === expected);
+    });
+  });
+
+  describe('#glob', () => {
+    beforeEach(() => {
+      sandbox.stub(glob, 'sync').returns(['test/test.ts']);
+    });
+
+    it('should call glob', () => {
+      assert.deepEqual(instance.glob('test/**/*.ts', 'test'), ['test/test.ts']);
+      assert((<SinonStub>glob.sync).calledWith('test/**/*.ts', {
+        cwd: 'test',
+        nodir: true
+      }));
+    });
+
+    context('with no cwd', () => {
+      it('should set currentDirectory as cwd', () => {
+        instance.glob('test/**/*.ts');
+        assert((<SinonStub>glob.sync).calledWith('test/**/*.ts', {
+          cwd: instance.currentDirectory,
+          nodir: true
+        }));
+      });
     });
   });
 });

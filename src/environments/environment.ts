@@ -12,6 +12,7 @@ interface Environment {
   relativePath(...pathSegments: string[]): string;
   dirname(fileName: string): string;
   exists(fileName: string): boolean;
+  glob(pattern: string, cwd?: string): string[];
 }
 
 export = Environment;

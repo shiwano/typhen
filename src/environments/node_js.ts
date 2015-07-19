@@ -4,6 +4,7 @@ import fs = require('fs');
 import path = require('path');
 import mkdirp = require('mkdirp');
 import _ = require('lodash');
+import glob = require('glob');
 
 import Logger = require('../logger');
 import Environment = require('./environment');
@@ -68,6 +69,13 @@ class NodeJsEnvironment implements Environment {
   public getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
     return fs.readFileSync(this.defaultLibFileName, 'utf-8');
+  }
+
+  public glob(pattern: string, cwd: string = this.currentDirectory): string[] {
+    return glob.sync(pattern, {
+      cwd: cwd,
+      nodir: true
+    });
   }
 }
 

@@ -29,6 +29,7 @@ export class TestEnvironment implements Environment {
   }
 
   public writeFile(fileName: string, data: string): void {}
+  public glob(pattern: string, cwd?: string): string[] { return []; }
 
   public readFile(fileName: string): string {
     if (!this.fileData[fileName]) { throw new Error('Invalid file name: ' + fileName); }
