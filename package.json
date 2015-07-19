@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "del": "^1.1.1",
-    "glob": "^5.0.3",
     "gulp": "^3.8.11",
     "gulp-changed": "^1.2.1",
     "gulp-copy": "0.0.2",
@@ -59,6 +58,7 @@
   "dependencies": {
     "bluebird": "^2.9.14",
     "chalk": "^1.0.0",
+    "glob": "^5.0.14",
     "handlebars": "^3.0.0",
     "here": "0.0.2",
     "inflection": "^1.6.0",
