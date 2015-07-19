@@ -14,6 +14,19 @@ describe('Generator', () => {
     sandbox.restore();
   });
 
+  describe('#generateFiles', () => {
+    beforeEach(() => {
+      sandbox.stub(instance, 'generate');
+      sandbox.stub(instance.env, 'glob').returns(['README.md', 'enum.hbs']);
+    });
+
+    it('should call Generator#generate', () => {
+      instance.generateFiles('/plugin', '**/*', 'plugins');
+      assert((<SinonStub>instance.generate).calledWith('/plugin/README.md', '/generated/plugins/README.md'));
+      assert((<SinonStub>instance.generate).calledWith('/plugin/enum.hbs', '/generated/plugins/enum.hbs'));
+    });
+  });
+
   describe('#generateUnlessExist', () => {
     beforeEach(() => {
       sandbox.stub(instance, 'generate');

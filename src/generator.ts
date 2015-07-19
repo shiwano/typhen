@@ -28,6 +28,18 @@ class Generator {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
+  public generateFiles(cwd: string, pattern: string, dest: string): void {
+    var resolvedCwd = this.env.resolvePath(this.pluginDirectory, cwd);
+    var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
+
+    this.env.glob(pattern, resolvedCwd).forEach(path => {
+      this.generate(
+        this.env.resolvePath(resolvedCwd, path),
+        this.env.resolvePath(resolvedDest, path)
+      );
+    });
+  }
+
   public generateUnlessExist(src: string, dest: string, context: any = null): Vinyl {
     return this.generate(src, dest, context, false);
   }

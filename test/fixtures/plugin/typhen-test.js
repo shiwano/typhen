@@ -23,6 +23,7 @@ module.exports = function(typhen, options) {
     generate: function(generator, types, modules) {
       generator.generateUnlessExist('templates/README.md', 'README.md');
       generator.generate('templates/plugin_test.hbs', 'plugin_test.md');
+      generator.generateFiles('templates/files', '**/*.md', 'files');
 
       types.forEach(function(type) {
         switch (type.kind) {
