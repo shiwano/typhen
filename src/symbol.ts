@@ -491,7 +491,7 @@ export class Method extends Symbol {
 }
 
 export class Signature extends Symbol {
-  public kind: SymbolKind = SymbolKind.Method;
+  public kind: SymbolKind = SymbolKind.Signature;
 
   public typeParameters: TypeParameter[] = [];
   public parameters: Parameter[] = [];
