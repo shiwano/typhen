@@ -1,5 +1,4 @@
-/// <reference path='../typings/bundle.d.ts' />
-
+import fs = require('fs');
 import ts = require('typescript');
 import Environment = require('./environments/environment');
 import Logger = require('./logger');
@@ -8,8 +7,9 @@ class CompilerHost implements ts.CompilerHost {
   private cachedSources: {[index: string]: ts.SourceFile} = {};
   private version: number = 0;
 
-  constructor(private env: Environment) {
-  }
+  fileExists: any = fs.statSync;
+  readFile: any = fs.readFileSync;
+  constructor(private env: Environment) {}
 
   public getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
       onError?: (message: string) => void): ts.SourceFile {
@@ -21,13 +21,12 @@ class CompilerHost implements ts.CompilerHost {
       } catch (e) {
         return undefined;
       }
-      this.cachedSources[fileName] = ts.createSourceFile(fileName, text,
-          languageVersion, this.version.toString(), false);
+      this.cachedSources[fileName] = ts.createSourceFile(fileName, text, this.version, false);
     }
     return this.cachedSources[fileName];
   }
 
-  public getDefaultLibFilename(): string {
+  public getDefaultLibFileName(): string {
     return this.env.defaultLibFileName;
   }
 

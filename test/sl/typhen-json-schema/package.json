@@ -1,0 +1,77 @@
+{
+  "name": "typhen-json-schema",
+  "description": "A typhen plugin for JSON Schema",
+  "version": "0.2.1",
+  "homepage": "https://github.com/shiwano/typhen-json-schema",
+  "author": {
+    "name": "Shogo Iwano",
+    "email": "shiwano@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shiwano/typhen-json-schema.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shiwano/typhen-json-schema/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/shiwano/typhen-json-schema/blob/master/LICENSE"
+    }
+  ],
+  "main": "index",
+  "engines": {
+    "node": ">= 0.10.0",
+    "npm": ">= 1.4.0"
+  },
+  "scripts": {
+    "test": "./node_modules/gulp/bin/gulp.js"
+  },
+  "devDependencies": {
+    "del": "^1.1.1",
+    "glob": "^5.0.3",
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.9.4",
+    "gulp-load-plugins": "^0.9.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-spawn-mocha": "^2.0.1",
+    "rimraf": "^2.3.2",
+    "run-sequence": "^1.0.2",
+    "tv4": "^1.1.9",
+    "tv4-formats": "^1.0.0",
+    "typhen": "^0.4.0"
+  },
+  "keywords": [
+    "typhen",
+    "jsonschema"
+  ],
+  "dependencies": {
+    "inflection": "^1.7.0",
+    "jsesc": "^0.5.0",
+    "lodash": "^3.6.0"
+  },
+  "gitHead": "cf80dc4b7472ae91d36183ded7296e984767d1f1",
+  "_id": "typhen-json-schema@0.2.1",
+  "_shasum": "614b51f7f5e029e81ebb8ece9d6b58ea747e08de",
+  "_from": "typhen-json-schema@*",
+  "_npmVersion": "2.5.1",
+  "_nodeVersion": "0.12.1",
+  "_npmUser": {
+    "name": "shiwano",
+    "email": "shiwano@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "shiwano",
+      "email": "shiwano@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "614b51f7f5e029e81ebb8ece9d6b58ea747e08de",
+    "tarball": "http://registry.npmjs.org/typhen-json-schema/-/typhen-json-schema-0.2.1.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/typhen-json-schema/-/typhen-json-schema-0.2.1.tgz",
+  "readme": "ERROR: No README data found!"
+}

@@ -1,5 +1,3 @@
-/// <reference path='../../typings/bundle.d.ts' />
-
 import fs = require('fs');
 import path = require('path');
 import mkdirp = require('mkdirp');
@@ -45,7 +43,7 @@ class NodeJsEnvironment implements Environment {
   }
 
   public resolvePath(...pathSegments: string[]): string {
-    var args = _.flatten([[this.currentDirectory], pathSegments], true);
+    var args = _.flatten([this.currentDirectory, pathSegments], true);
     return path.resolve.apply(null, args);
   }
 

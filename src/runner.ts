@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import _ = require('lodash');
 import ts = require('typescript');
 import Promise = require('bluebird');
@@ -11,8 +9,7 @@ import Generator = require('./generator');
 import TypeScriptParser = require('./typescript_parser');
 
 export class Runner {
-  constructor(public config: Config.Config) {
-  }
+  constructor(public config: Config.Config) {}
 
   public run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve: (r: Vinyl[]) => void, reject: (e: Error) => void) => {
@@ -21,11 +18,12 @@ export class Runner {
       parser.parse();
       parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
-        var relative = this.config.env.relativePath(sourceFile.filename);
+        var relative = this.config.env.relativePath(sourceFile.fileName);
         Logger.info('Parsed', Logger.cyan(relative));
       });
 
       Logger.log(Logger.underline('Generating files'));
+
       var generator = new Generator(this.config.env, this.config.dest,
           this.config.plugin.pluginDirectory, this.config.plugin.handlebarsOptions);
       var generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);

@@ -40,7 +40,7 @@
     "gulp-sourcemaps": "^1.5.0",
     "gulp-spawn-mocha": "^2.0.1",
     "gulp-tslint": "^1.4.4",
-    "gulp-typescript": "~2.4.2",
+    "gulp-typescript": "^2.4.2",
     "merge-stream": "^0.1.7",
     "node-inspector": "^0.9.2",
     "open": "0.0.5",
@@ -55,7 +55,11 @@
     "generator",
     "typhen",
     "tool",
+    "interface",
+    "convert",
+    "json",
     "schema",
+    "json schema",
     "metadata",
     "handlebars"
   ],
@@ -69,7 +73,7 @@
     "lodash": "^3.5.0",
     "mkdirp": "^0.5.0",
     "nopt": "^3.0.1",
-    "typescript": "1.4.1",
+    "typescript": "^1.6.2",
     "vinyl": "^0.4.6"
   },
   "typescript": {

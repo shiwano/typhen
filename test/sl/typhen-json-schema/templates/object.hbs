@@ -1,0 +1,37 @@
+"type": "object",
+"properties": {
+{{#each properties}}
+  "{{name}}": {
+  {{#if comment}}
+    "description": "{{{escape comment}}}",
+  {{/if}}
+  {{#if tags}}
+    {{#each tags}}
+    {{{keyword ../type this}}}
+    {{/each}}
+  {{/if}}
+  {{#or type.isArray type.isTuple}}
+    "type": "array",
+    {{#if type.isArray}}
+    "items": {
+      {{{typeProperty type.type}}}
+    }
+    {{else}}
+    "items": [
+      {{#each type.types}}
+      { {{{typeProperty this}}} }{{#unless @last}},{{/unless}}
+      {{/each}}
+    ]
+    {{/if}}
+  {{else}}
+    {{#if type.isObjectType}}
+      {{> object type}}
+    {{else}}
+    {{{typeProperty type tagTable}}}
+    {{/if}}
+  {{/or}}
+  }{{#unless @last}},{{/unless}}
+{{/each}}
+},
+"additionalProperties": false,
+"required": [{{{required properties}}}]

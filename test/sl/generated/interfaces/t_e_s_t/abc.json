@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Abc",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "text": {
+      
+    },
+    "detect": {
+      "anyOf": [{"$ref": "http://example.com/my-schema/array.json"},]
+    },
+    "fallback": {
+      
+    },
+    "minLength": {
+      
+    },
+    "minScore": {
+      
+    },
+    "distance": {
+      
+    }
+  },
+  "additionalProperties": false,
+  "required": []
+}
