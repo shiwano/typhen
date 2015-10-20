@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import chalk = require('chalk');
 
 module Logger {

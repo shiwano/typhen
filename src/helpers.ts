@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import _ = require('lodash');
 import inflection = require('inflection');
 

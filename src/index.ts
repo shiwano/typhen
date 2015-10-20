@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import path = require('path');
 import Vinyl = require('vinyl');
 

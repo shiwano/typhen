@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "declaration": true,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "outDir": "./lib",
+        "sourceMap": true
+    },
+    "compileOnSave": true,
+    "filesGlob": [
+        "./src/**/*.ts",
+        "./src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "./src/compiler_host.ts",
+        "./src/config.ts",
+        "./src/environments/environment.ts",
+        "./src/environments/node_js.ts",
+        "./src/generator.ts",
+        "./src/helpers.ts",
+        "./src/index.ts",
+        "./src/local_handlebars.ts",
+        "./src/logger.ts",
+        "./src/plugin.ts",
+        "./src/runner.ts",
+        "./src/symbol.ts",
+        "./src/typescript_parser.ts",
+        "./src/typings/bluebird.d.ts",
+        "./src/typings/chalk.d.ts",
+        "./src/typings/glob.d.ts",
+        "./src/typings/handlebars.d.ts",
+        "./src/typings/inflection.d.ts",
+        "./src/typings/lodash.d.ts",
+        "./src/typings/minimatch.d.ts",
+        "./src/typings/mkdirp.d.ts",
+        "./src/typings/node.d.ts",
+        "./src/typings/typescript.d.ts",
+        "./src/typings/vinyl.d.ts"
+    ]
+}
