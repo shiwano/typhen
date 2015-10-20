@@ -1,5 +1,3 @@
-/// <reference path="../typings/bundle.d.ts" />
-
 import ts = require('typescript');
 import _ = require('lodash');
 import inflection = require('inflection');
@@ -7,6 +5,13 @@ import inflection = require('inflection');
 import Logger = require('./logger');
 import Symbol = require('./symbol');
 import Config = require('./config');
+
+
+/* internal */
+// Intrinsic types (TypeFlags.Intrinsic)
+interface IntrinsicType extends ts.Type {
+    intrinsicName: string;  // Name of intrinsic type
+}
 
 class TypeScriptParser {
   private program: ts.Program;
@@ -21,13 +26,12 @@ class TypeScriptParser {
   private typeReferenceStack: Symbol.TypeReference[] = [];
   private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
 
-  constructor(private fileNames: string[], private config: Config.Config) {
-  }
+  constructor(private fileNames: string[], private config: Config.Config) {}
 
   public get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
       .filter(s => {
-        var resolvedPath = this.config.env.resolvePath(s.filename);
+        var resolvedPath = this.config.env.resolvePath(s.fileName);
         return resolvedPath !== this.config.env.defaultLibFileName &&
           _.contains(resolvedPath, this.config.typingDirectory);
       });
@@ -50,19 +54,13 @@ class TypeScriptParser {
   public parse(): void {
     Logger.debug('Loading the TypeScript files');
     this.program = ts.createProgram(this.fileNames, this.config.compilerOptions, this.config.compilerHost);
-    this.typeChecker = this.program.getTypeChecker(true);
+    this.typeChecker = this.program.getTypeChecker();
 
     Logger.debug('Compiling the TypeScript files');
-    var errors = this.program.getDiagnostics();
-    if (errors.length === 0) {
-      var semanticErrors = this.typeChecker.getDiagnostics();
-      var emitOutput = this.typeChecker.emitFiles();
-      var emitErrors = emitOutput.diagnostics;
-      errors = errors.concat(semanticErrors, emitErrors);
-    }
+    var errors = ts.getPreEmitDiagnostics(this.program);
 
     errors.forEach(d => {
-      var info = _.isObject(d.file) ? [d.file.filename, '(', d.start, ',', d.length, '):'].join('') : '';
+      var info = _.isObject(d.file) ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
       Logger.error(Logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
@@ -72,7 +70,7 @@ class TypeScriptParser {
       this.parseSourceFile(s);
     });
 
-    this.types.filter(t => t.isAnonymousType && t.parentModule != null).forEach(t => {
+    this.types.filter(t => typeof t === 'object' && t.isAnonymousType && t.parentModule != null).forEach(t => {
       t.parentModule.anonymousTypes.push(t);
     });
   }
@@ -81,10 +79,11 @@ class TypeScriptParser {
     Logger.debug('Validating the typhen symbols');
     this.symbols.forEach(symbol => {
       var result = symbol.validate();
-
+      /*
       if (typeof result === 'string') {
         throw new Error(result + ': ' + symbol.declarationInfos.map(d => d.toString()).join(', '));
       }
+      */
     });
   }
 
@@ -100,12 +99,15 @@ class TypeScriptParser {
 
   private parseType(type: ts.Type): Symbol.Type {
     if (!_.isObject(type)) { return null; }
+      console.log('!:', type, type.flags);
 
-    if (this.typeCache[type.id] === undefined) {
+    if (this.typeCache[type.flags] === undefined) {
       if (type.flags & ts.TypeFlags.StringLiteral) {
         this.parsePrimitiveType(<ts.StringLiteralType>type);
+/* TODO : @internal
       } else if (type.flags & ts.TypeFlags.Intrinsic) {
-        this.parsePrimitiveType(<ts.IntrinsicType>type);
+        this.parsePrimitiveType(<IntrinsicType>type);
+*/
       } else if (type.flags & ts.TypeFlags.Tuple) {
         this.parseTuple(<ts.TupleType>type);
       } else if (type.flags & ts.TypeFlags.Union) {
@@ -113,35 +115,37 @@ class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
-      } else if (type.symbol.flags & ts.SymbolFlags.Function) {
-        this.parseFunction(<ts.ResolvedType>type);
-      } else if (type.symbol.flags & ts.SymbolFlags.Enum) {
-        this.parseEnum(type);
-      } else if (type.symbol.flags & ts.SymbolFlags.TypeParameter) {
-        this.parseTypeParameter(<ts.TypeParameter>type);
-      } else if (type.symbol.flags & ts.SymbolFlags.Class) {
-        this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
-      } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
-        if (this.isTyphenPrimitiveType(type)) {
-          this.parsePrimitiveType(<ts.GenericType>type);
-        } else if (this.isArrayType(<ts.GenericType>type)) {
-          this.parseArray(<ts.GenericType>type);
+      } else if (type.hasOwnProperty('symbol')) {
+        if (type.symbol.flags & ts.SymbolFlags.Function) {
+          this.parseFunction(<ts.InterfaceTypeWithDeclaredMembers>type);
+        } else if (type.symbol.flags & ts.SymbolFlags.Enum) {
+          this.parseEnum(type);
+        } else if (type.symbol.flags & ts.SymbolFlags.TypeParameter) {
+          this.parseTypeParameter(<ts.TypeParameter>type);
+        } else if (type.symbol.flags & ts.SymbolFlags.Class) {
+          this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
+        } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
+          if (this.isTyphenPrimitiveType(type)) {
+            this.parsePrimitiveType(<ts.GenericType>type);
+          } else if (this.isArrayType(<ts.GenericType>type)) {
+            this.parseArray(<ts.GenericType>type);
+          } else {
+            this.parseGenericType<Symbol.Interface>(<ts.GenericType>type, Symbol.Interface);
+          }
+        } else if (type.symbol.flags & ts.SymbolFlags.TypeLiteral) {
+          if (_.isEmpty(type.getCallSignatures())) {
+            this.parseObjectType(<ts.InterfaceTypeWithDeclaredMembers>type);
+          } else {
+            this.parseFunction(<ts.InterfaceTypeWithDeclaredMembers>type);
+          }
         } else {
-          this.parseGenericType<Symbol.Interface>(<ts.GenericType>type, Symbol.Interface);
+          this.throwErrorWithSymbol('Unsupported type', type.symbol);
         }
-      } else if (type.symbol.flags & ts.SymbolFlags.TypeLiteral) {
-        if (_.isEmpty(type.getCallSignatures())) {
-          this.parseObjectType(<ts.ResolvedType>type);
-        } else {
-          this.parseFunction(<ts.ResolvedType>type);
-        }
-      } else {
-        this.throwErrorWithSymbol('Unsupported type', type.symbol);
       }
     }
-    var typhenType = this.typeCache[type.id];
+    var typhenType = this.typeCache[type.flags];
 
-    if (typhenType.isTypeParameter && _.isObject(this.currentTypeReference)) {
+    if (typhenType && typhenType.isTypeParameter && _.isObject(this.currentTypeReference)) {
       return this.currentTypeReference.getTypeByTypeParameter(<Symbol.TypeParameter>typhenType) || typhenType;
     } else {
       return typhenType;
@@ -165,11 +169,11 @@ class TypeScriptParser {
 
   private createTyphenType<T extends Symbol.Type>(type: ts.Type,
       typhenTypeClass: typeof Symbol.Type, assumedNameSuffix?: string): T {
-    if (this.typeCache[type.id] !== undefined) {
+    if (this.typeCache[type.flags] !== undefined) {
       this.throwErrorWithSymbol('Already created the type', type.symbol);
     }
     var typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
-    this.typeCache[type.id] = typhenType;
+    this.typeCache[type.flags] = typhenType;
     return typhenType;
   }
 
@@ -187,9 +191,9 @@ class TypeScriptParser {
 
     return symbol.declarations.map(d => {
       var sourceFile = d.getSourceFile();
-      var resolvedPath = this.config.env.resolvePath(sourceFile.filename);
+      var resolvedPath = this.config.env.resolvePath(sourceFile.fileName);
       var relativePath = this.config.env.relativePath(resolvedPath);
-      var lineAndCharacterNumber = sourceFile.getLineAndCharacterFromPosition(d.getStart());
+      var lineAndCharacterNumber = sourceFile.getLineAndCharacterOfPosition(d.getStart());
       return new Symbol.DeclarationInfo(relativePath, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
   }
@@ -199,8 +203,8 @@ class TypeScriptParser {
 
     var parentDecl = symbol.declarations[0].parent;
     while (parentDecl !== undefined) {
-      if (parentDecl.symbol && this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Module)) {
-        return this.getOrCreateTyphenModule(parentDecl.symbol);
+      if (parentDecl.hasOwnProperty('symbol') && this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Module)) {
+        return this.getOrCreateTyphenModule(parentDecl['symbol']);
       }
       parentDecl = parentDecl.parent;
     }
@@ -227,15 +231,15 @@ class TypeScriptParser {
 
       var parentDecl = symbol.declarations[0].parent;
       while (parentDecl !== undefined) {
-        if (parentDecl.symbol && (
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Class) ||
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Interface) ||
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Property) ||
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Function) ||
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Method) ||
-            this.checkFlags(parentDecl.symbol.flags, ts.SymbolFlags.Variable)
+        if (parentDecl.hasOwnProperty('symbol') && (
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Class) ||
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Interface) ||
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Property) ||
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Function) ||
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Method) ||
+            this.checkFlags(parentDecl['symbol'].flags, ts.SymbolFlags.Variable)
             )) {
-          results.push(inflection.camelize(parentDecl.symbol.name));
+          results.push(inflection.camelize(parentDecl['symbol'].name));
         }
         parentDecl = parentDecl.parent;
       }
@@ -257,7 +261,7 @@ class TypeScriptParser {
     return this.typeChecker.getSymbolsInScope(node, symbolFlags)
       .filter(s => {
         return s.declarations.every(d => {
-          var resolvedPath = this.config.env.resolvePath(d.getSourceFile().filename);
+          var resolvedPath = this.config.env.resolvePath(d.getSourceFile().fileName);
           return resolvedPath !== this.config.env.defaultLibFileName &&
             _.contains(resolvedPath, this.config.typingDirectory);
         });
@@ -265,13 +269,13 @@ class TypeScriptParser {
   }
 
   private parseSourceFile(sourceFile: ts.SourceFile): void {
-    var typhenSymbol = this.getOrCreateTyphenModule(sourceFile.symbol);
+    var typhenSymbol = this.getOrCreateTyphenModule(sourceFile['symbol']);
 
     var modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
       .map(s => this.parseModule(s));
     var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
     var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
-    this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Import)
+    this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Merged)
       .forEach(s => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
@@ -303,7 +307,7 @@ class TypeScriptParser {
     var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
     var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
     exportedSymbols
-      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Import))
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Merged))
       .forEach(s => {
         var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
@@ -335,7 +339,7 @@ class TypeScriptParser {
     var memberValue = -1;
     var members = _(symbol.exports)
       .map((memberSymbol: ts.Symbol, name: string) => {
-        var value = this.typeChecker.getEnumMemberValue(<ts.EnumMember>memberSymbol.valueDeclaration);
+        var value = this.typeChecker.getConstantValue(<ts.EnumMember>memberSymbol.valueDeclaration);
         memberValue = typeof value === 'number' ? value : memberValue + 1;
         return this.createTyphenSymbol<Symbol.EnumMember>(memberSymbol, Symbol.EnumMember)
           .initialize(memberValue);
@@ -358,11 +362,11 @@ class TypeScriptParser {
     var properties = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseProperty(s, _.contains(genericType.declaredProperties, s)));
+        .map(s => this.parseProperty(s, _.contains(genericType['declaredProperties'], s)));
     var methods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseMethod(s, _.contains(genericType.declaredProperties, s)));
+        .map(s => this.parseMethod(s, _.contains(genericType['declaredProperties'], s)));
     var stringIndexType = this.parseType(genericType.getStringIndexType());
     var numberIndexType = this.parseType(genericType.getNumberIndexType());
 
@@ -371,8 +375,8 @@ class TypeScriptParser {
       .map(s => this.parseSignature(s, 'Constructor'));
     var callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
-    var baseTypes = genericType.baseTypes === undefined ? [] :
-      genericType.baseTypes.map(t => <Symbol.Interface>this.parseType(t));
+    var baseTypes = (genericType['baseTypes'] === undefined) ? [] :
+      genericType['baseTypes'].map(t => <Symbol.Interface>this.parseType(t));
 
     var staticProperties: Symbol.Property[] = [];
     var staticMethods: Symbol.Method[] = [];
@@ -404,7 +408,7 @@ class TypeScriptParser {
         constructorSignatures, callSignatures, baseTypes, typeReference, staticProperties, staticMethods);
   }
 
-  private parseObjectType(type: ts.ResolvedType): Symbol.ObjectType {
+  private parseObjectType(type: ts.InterfaceTypeWithDeclaredMembers): Symbol.ObjectType {
     var typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
 
     var properties = type.getProperties()
@@ -427,14 +431,14 @@ class TypeScriptParser {
     return typhenType.initialize(arrayType);
   }
 
-  private parseFunction(type: ts.ResolvedType): Symbol.Function {
+  private parseFunction(type: ts.InterfaceTypeWithDeclaredMembers): Symbol.Function {
     var typhenType = this.createTyphenType<Symbol.Function>(type, Symbol.Function, 'Function');
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     return typhenType.initialize(callSignatures);
   }
 
   private parsePrimitiveType(type: ts.GenericType): Symbol.PrimitiveType; // For TyphenPrimitiveType
-  private parsePrimitiveType(type: ts.IntrinsicType): Symbol.PrimitiveType;
+  private parsePrimitiveType(type: IntrinsicType): Symbol.PrimitiveType;
   private parsePrimitiveType(type: ts.StringLiteralType): Symbol.PrimitiveType;
   private parsePrimitiveType(type: any): Symbol.PrimitiveType {
     var name: string;
@@ -489,8 +493,7 @@ class TypeScriptParser {
   }
 
   private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {
-    var symbol = signature.declaration.symbol;
-
+    var symbol = signature.declaration['symbol'];
     var typeParameters = signature.typeParameters === undefined ? [] :
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var parameters = signature.getParameters().map(s => this.parseParameter(s));

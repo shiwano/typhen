@@ -241,7 +241,7 @@ If you want to use a custom primitive type, you will add the interface name to `
 ## Plugins
 If you want to add your project here, feel free to submit a pull request.
 
-* [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - Converts TypeScript Interfaces to JSON Schema
+* [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - A typhen plugin for JSON Schema
 
 ## TypeScript Version
 1.4.1

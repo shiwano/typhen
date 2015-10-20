@@ -1,5 +1,3 @@
-/// <reference path="../../typings/bundle.d.ts" />
-
 interface Environment {
   currentDirectory: string;
   newLine: string;
@@ -7,7 +5,7 @@ interface Environment {
   defaultLibFileName: string;
 
   readFile(fileName: string): string;
-  writeFile(fileName: string, data: string): void;
+  writeFile(fileName: string, data: Buffer | NodeJS.ReadableStream): void;
   resolvePath(...pathSegments: string[]): string;
   relativePath(...pathSegments: string[]): string;
   dirname(fileName: string): string;

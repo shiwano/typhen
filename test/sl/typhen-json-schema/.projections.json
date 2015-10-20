@@ -1,0 +1,13 @@
+{
+  "index.js": {
+    "type": "lib",
+    "alternate": "test/plugin_test.js"
+  },
+  "test/plugin_test.js": {
+    "type": "test",
+    "alternate": "index.js"
+  },
+  "README.md": {
+    "type": "doc"
+  }
+}
