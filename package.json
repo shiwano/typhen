@@ -42,7 +42,7 @@
     "gulp-tslint": "^1.4.4",
     "gulp-typescript": "~2.4.2",
     "merge-stream": "^0.1.7",
-    "node-inspector": "^0.9.2",
+    "node-inspector": "^0.12.3",
     "open": "0.0.5",
     "power-assert": "^0.10.2",
     "rimraf": "^2.3.2",
