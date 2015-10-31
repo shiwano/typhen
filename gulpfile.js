@@ -58,12 +58,12 @@ gulp.task('test:watch:debug', function(callback) {
   test(true, true, callback);
 });
 
-gulp.task('clean:dest', function(callback) {
-  del(paths.dest, callback);
+gulp.task('clean:dest', function() {
+  return del(paths.dest);
 });
 
-gulp.task('clean:testDest', function(callback) {
-  del(paths.testDest, callback);
+gulp.task('clean:testDest', function() {
+  return del(paths.testDest);
 });
 
 gulp.task('compile', ['clean:dest'], function(){
