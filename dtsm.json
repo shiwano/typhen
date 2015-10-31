@@ -49,6 +49,9 @@
     },
     "vinyl/vinyl.d.ts": {
       "ref": "95d860879fb90c405aeb13eea7b8564f9c0df2bf"
+    },
+    "path-exists/path-exists.d.ts": {
+      "ref": "eb59a40d3c2f3257e34ec2ede181046230814a41"
     }
   },
   "link": {
