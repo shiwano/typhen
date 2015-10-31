@@ -120,7 +120,7 @@ export class Symbol {
   }
 
   public get tags(): Tag[] {
-    return <Tag[]>_.values(this.tagTable);
+    return _.values(this.tagTable);
   }
 
   public get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }
@@ -383,7 +383,7 @@ export class Array extends Type {
   public get isGenerationTarget(): boolean { return true; }
 
   public get assumedName(): string {
-    if (!this.type) { return this.rawName; }
+    if (this.type === null) { return this.rawName; }
     return this.type.name + '[]';
   }
 
@@ -433,8 +433,7 @@ export class UnionType extends Type {
   public types: Type[] = [];
 
   public get assumedName(): string {
-    return this.types.filter(t => typeof t === 'object' && t.isAnonymousType && t.parentModule != null)
-            .map(t => inflection.classify(t.name)).join('And') + 'UnionType';
+    return this.types.map(t => inflection.classify(t.name)).join('And') + 'UnionType';
   }
 
   public initialize(types: Type[]): UnionType {

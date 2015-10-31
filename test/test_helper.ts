@@ -76,7 +76,6 @@ export function createPlugin(): Plugin.Plugin {
   return new Plugin.Plugin({
     pluginDirectory: process.cwd() + '/test/fixtures/plugin',
     customPrimitiveTypes: ['integer'],
-    defaultLibFileName: 'lib.d.ts',
     generate: function(types, generator) {}
   });
 }

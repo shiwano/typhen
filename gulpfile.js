@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var pathExists = require('path-exists');
 var gulp = require('gulp');
 var del = require('del');
 var runSequence = require('run-sequence');
@@ -19,12 +20,7 @@ var paths = {
   defaultLibFiles: ['lib.typhen.d.ts', 'lib.d.ts']
 };
 
-var tsProject = plugins.typescript.createProject({
-  target: 'ES5',
-  module: 'commonjs',
-  noImplicitAny: true,
-  declarationFiles: true
-});
+var tsProject = plugins.typescript.createProject('tsconfig.json');
 
 var mochaOptions = {
   reporter: 'spec',
@@ -67,11 +63,11 @@ gulp.task('clean:testDest', function() {
 });
 
 gulp.task('compile', ['clean:dest'], function(){
-  var tsStream = gulp.src(paths.src)
-    .pipe(plugins.plumber({errorHandler: function() {
-      process.exit(1);
-    }}))
-    .pipe(plugins.typescript(tsProject));
+  var tsStream = tsProject.src()
+      .pipe(plugins.plumber({errorHandler: function() {
+        process.exit(1);
+      }}))
+      .pipe(plugins.typescript(tsProject));
 
   var jsStream = tsStream.js
     .pipe(gulp.dest(paths.dest));
@@ -131,7 +127,7 @@ function test(watching, debug, callback) {
 }
 
 function hasChangedForTest(stream, callback, sourceFile, destPath) {
-  if (!fs.existsSync(destPath)) {
+  if (!pathExists.sync(destPath)) {
     stream.push(sourceFile);
     return callback();
   }
@@ -145,7 +141,7 @@ function hasChangedForTest(stream, callback, sourceFile, destPath) {
       .replace(/_test.ts$/, '.ts')
       .replace(process.cwd() + '/test', process.cwd());
 
-    if (fs.existsSync(testTargetPath)) {
+    if (pathExists.sync(testTargetPath)) {
       var testTargetStat = fs.statSync(testTargetPath);
 
       if (testTargetStat.mtime > destStat.mtime) {

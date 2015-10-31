@@ -22,7 +22,7 @@ describe('TypeScriptParser', () => {
 
     it('should return loaded instances of ts.SourceFile', () => {
       var expected = [colorPath, definitionPath];
-      assert.deepEqual(instance.sourceFiles.map(d => d.filename), expected);
+      assert.deepEqual(instance.sourceFiles.map(d => d.fileName), expected);
     });
   });
 

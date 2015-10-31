@@ -1,4 +1,4 @@
-require('../test_helper');
+import '../test_helper';
 
 import Helpers = require('../../src/helpers');
 

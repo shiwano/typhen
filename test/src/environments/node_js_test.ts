@@ -1,6 +1,7 @@
-require('../../test_helper');
+import '../../test_helper';
 
 import fs = require('fs');
+import pathExists = require('path-exists');
 import glob = require('glob');
 
 import NodeJsEnvironment = require('../../../src/environments/node_js');
@@ -28,7 +29,7 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have defaultLibFileName', () => {
-    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/ff-typescript/bin/lib.d.ts');
+    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/ff-typescript/lib/lib.d.ts');
   });
 
   describe('#writeFile', () => {
@@ -78,19 +79,19 @@ describe('NodeJsEnvironment', () => {
 
   describe('#exists', () => {
     beforeEach(() => {
-      sandbox.stub(fs, 'existsSync').returns(true);
+      sandbox.stub(pathExists, 'sync').returns(true);
     });
 
-    it('should call fs#existsSync', () => {
+    it('should call pathExists#sync', () => {
       instance.exists('invalid.js');
-      assert((<SinonStub>fs.existsSync).calledOnce);
+      assert((<SinonStub>pathExists.sync).calledOnce);
     });
   });
 
   describe('#getDefaultLibFileData', () => {
     it('should return the joined defaultLibFile data', () => {
       var actual = instance.getDefaultLibFileData();
-      var expected = fs.readFileSync(process.cwd() + '/node_modules/ff-typescript/bin/lib.d.ts', 'utf-8');
+      var expected = fs.readFileSync(process.cwd() + '/node_modules/ff-typescript/lib/lib.d.ts', 'utf-8');
       assert(actual === expected);
     });
   });

@@ -3,8 +3,8 @@
 'use strict';
 
 var _ = require('lodash'),
-    fs = require('fs'),
     path = require('path'),
+    pathExists = require('path-exists'),
     nopt = require('nopt'),
     here = require('here').here,
     knownOptions = {
@@ -60,7 +60,7 @@ if (options.verbose) {
 }
 
 if (options.argv.remain.length === 0) {
-  if (fs.existsSync(process.cwd() + '/typhenfile.js')) {
+  if (pathExists.sync(process.cwd() + '/typhenfile.js')) {
     typhen.runByTyphenfile(process.cwd() + '/typhenfile.js').done(function() {}, function(e) { throw e; });
   } else {
     console.log('No typhenfile found');

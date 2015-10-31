@@ -36,9 +36,9 @@ describe('CompilerHost', () => {
     });
   });
 
-  describe('#getDefaultLibFilename', () => {
+  describe('#getDefaultLibFileName', () => {
     it('should return the defaultLibFileName', () => {
-      assert(instance.getDefaultLibFilename() === 'lib.typhen.d.ts');
+      assert(instance.getDefaultLibFileName() === 'lib.typhen.d.ts');
     });
   });
 

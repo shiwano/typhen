@@ -1,4 +1,4 @@
-var helper = require('../test_helper');
+import helper = require('../test_helper');
 
 import Generator = require('../../src/generator');
 

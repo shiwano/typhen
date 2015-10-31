@@ -1,4 +1,3 @@
-import fs = require('fs');
 import ts = require('ff-typescript');
 import Environment = require('./environments/environment');
 import Logger = require('./logger');
@@ -7,8 +6,6 @@ class CompilerHost implements ts.CompilerHost {
   private cachedSources: {[index: string]: ts.SourceFile} = {};
   private version: number = 0;
 
-  fileExists: any = fs.statSync;
-  readFile: any = fs.readFileSync;
   constructor(private env: Environment) {}
 
   public getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
@@ -28,6 +25,14 @@ class CompilerHost implements ts.CompilerHost {
 
   public getDefaultLibFileName(): string {
     return this.env.defaultLibFileName;
+  }
+
+  public fileExists(fileName: string): boolean {
+    return this.env.exists(fileName);
+  }
+
+  public readFile(fileName: string): string {
+    return this.env.readFile(fileName);
   }
 
   public writeFile(fileName: string, data: string, writeByteOrderMark: boolean,

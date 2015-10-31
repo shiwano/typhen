@@ -1,4 +1,4 @@
-require('../test_helper');
+import '../test_helper';
 
 import fs = require('fs');
 import path = require('path');

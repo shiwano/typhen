@@ -19,7 +19,7 @@ export interface DisallowOptions {
 export interface HandlebarsOptions {
   data?: any;
   helpers?: { [helperName: string]: (...args: any[]) => any };
-  partials?: { [partialName: string]: any }
+  partials?: { [partialName: string]: any };
 }
 
 export interface PluginObject {

@@ -5,7 +5,7 @@ interface Environment {
   defaultLibFileName: string;
 
   readFile(fileName: string): string;
-  writeFile(fileName: string, data: Buffer | NodeJS.ReadableStream): void;
+  writeFile(fileName: string, data: string): void;
   resolvePath(...pathSegments: string[]): string;
   relativePath(...pathSegments: string[]): string;
   dirname(fileName: string): string;

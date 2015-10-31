@@ -1,5 +1,6 @@
 import fs = require('fs');
 import path = require('path');
+import pathExists = require('path-exists');
 import mkdirp = require('mkdirp');
 import _ = require('lodash');
 import glob = require('glob');
@@ -61,7 +62,7 @@ class NodeJsEnvironment implements Environment {
 
   public exists(fileName: string): boolean {
     var filePath = this.resolvePath(fileName);
-    return fs.existsSync(filePath);
+    return pathExists.sync(filePath);
   }
 
   public getDefaultLibFileData(): string {
@@ -70,7 +71,7 @@ class NodeJsEnvironment implements Environment {
   }
 
   public glob(pattern: string, cwd: string = this.currentDirectory): string[] {
-    return glob.sync(pattern, {
+    return glob.sync(pattern, <any>{
       cwd: cwd,
       nodir: true
     });
