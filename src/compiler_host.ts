@@ -1,5 +1,5 @@
 import fs = require('fs');
-import ts = require('typescript');
+import ts = require('ff-typescript');
 import Environment = require('./environments/environment');
 import Logger = require('./logger');
 

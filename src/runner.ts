@@ -1,5 +1,5 @@
 import _ = require('lodash');
-import ts = require('typescript');
+import ts = require('ff-typescript');
 import Promise = require('bluebird');
 import Vinyl = require('vinyl');
 

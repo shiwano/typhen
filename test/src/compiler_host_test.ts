@@ -1,6 +1,6 @@
 import helper = require('../test_helper');
 
-import ts = require('typescript');
+import ts = require('ff-typescript');
 
 import CompilerHost = require('../../src/compiler_host');
 

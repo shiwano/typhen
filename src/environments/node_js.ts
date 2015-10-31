@@ -10,7 +10,7 @@ import Environment = require('./environment');
 class NodeJsEnvironment implements Environment {
   public currentDirectory: string;
   public useCaseSensitiveFileNames: boolean = false;
-  public defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
+  public defaultLibFileName: string = path.join(path.dirname(require.resolve('ff-typescript')), 'lib.d.ts');
 
   constructor(currentDirectory: string, public newLine: string, defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
@@ -19,7 +19,7 @@ class NodeJsEnvironment implements Environment {
       this.defaultLibFileName = this.resolvePath(defaultLibFileName);
 
       if (!this.exists(this.defaultLibFileName)) {
-        this.defaultLibFileName = path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
+        this.defaultLibFileName = path.join(path.dirname(require.resolve('ff-typescript')), defaultLibFileName);
       }
     }
   }

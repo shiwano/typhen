@@ -1,4 +1,4 @@
-import ts = require('typescript');
+import ts = require('ff-typescript');
 import _ = require('lodash');
 import inflection = require('inflection');
 
