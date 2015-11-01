@@ -12,7 +12,7 @@ var open = require('open');
 
 var paths = {
   gulpfile: 'gulpfile.js',
-  src: 'src/**/*.ts',
+  src: ['src/**/*.ts', 'typings/bundle.d.ts'],
   test: 'test/{src,integration}/**/*_test.ts',
   dest: 'lib/',
   testDest: '.tmp/',
@@ -63,7 +63,7 @@ gulp.task('clean:testDest', function() {
 });
 
 gulp.task('compile', ['clean:dest'], function(){
-  var tsStream = tsProject.src()
+  var tsStream = gulp.src(paths.src)
       .pipe(plugins.plumber({errorHandler: function() {
         process.exit(1);
       }}))
@@ -72,7 +72,6 @@ gulp.task('compile', ['clean:dest'], function(){
   var jsStream = tsStream.js
     .pipe(gulp.dest(paths.dest));
   var dtsStream = tsStream.dts
-    .pipe(plugins.replace(/^\/\/\/\s*<reference\s+path="[\.\/]+typings\/bundle.d.ts"\s*\/>$/gm, ''))
     .pipe(gulp.dest(paths.dest));
   return merge(jsStream, dtsStream);
 });

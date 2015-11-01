@@ -36,7 +36,6 @@
     "gulp-jshint": "^1.9.2",
     "gulp-load-plugins": "^1.0.0",
     "gulp-plumber": "^1.0.0",
-    "gulp-replace": "^0.5.3",
     "gulp-sourcemaps": "^1.5.0",
     "gulp-spawn-mocha": "^2.0.1",
     "gulp-tslint": "^3.5.0",
