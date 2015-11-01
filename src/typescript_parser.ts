@@ -21,7 +21,7 @@ class TypeScriptParser {
 
   constructor(private fileNames: string[], private config: Config.Config) {}
 
-  public get sourceFiles(): ts.SourceFile[] {
+  get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
       .filter(s => {
         var resolvedPath = this.config.env.resolvePath(s.fileName);
@@ -30,21 +30,21 @@ class TypeScriptParser {
       });
   }
 
-  public get types(): Symbol.Type[] {
+  get types(): Symbol.Type[] {
     return _.chain(<Symbol.Type[]>_.values(this.typeCache))
       .filter(t => t.isGenerationTarget)
       .sortBy(t => t.fullName)
       .value();
   }
 
-  public get modules(): Symbol.Module[] {
+  get modules(): Symbol.Module[] {
     return _.chain(<Symbol.Module[]>_.values(this.moduleCache))
       .filter(t => t.isGenerationTarget)
       .sortBy(t => t.fullName)
       .value();
   }
 
-  public parse(): void {
+  parse(): void {
     Logger.debug('Loading the TypeScript files');
     this.program = ts.createProgram(this.fileNames, this.config.compilerOptions, this.config.compilerHost);
     this.typeChecker = this.program.getTypeChecker();
@@ -68,7 +68,7 @@ class TypeScriptParser {
     });
   }
 
-  public validate(): void {
+  validate(): void {
     Logger.debug('Validating the typhen symbols');
     this.symbols.forEach(symbol => {
       var result = symbol.validate();

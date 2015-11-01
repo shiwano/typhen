@@ -8,7 +8,7 @@ class CompilerHost implements ts.CompilerHost {
 
   constructor(private env: Environment) {}
 
-  public getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
+  getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
       onError?: (message: string) => void): ts.SourceFile {
     if (this.cachedSources[fileName] === undefined) {
       var text: string;
@@ -23,36 +23,36 @@ class CompilerHost implements ts.CompilerHost {
     return this.cachedSources[fileName];
   }
 
-  public getDefaultLibFileName(): string {
+  getDefaultLibFileName(): string {
     return this.env.defaultLibFileName;
   }
 
-  public fileExists(fileName: string): boolean {
+  fileExists(fileName: string): boolean {
     return this.env.exists(fileName);
   }
 
-  public readFile(fileName: string): string {
+  readFile(fileName: string): string {
     return this.env.readFile(fileName);
   }
 
-  public writeFile(fileName: string, data: string, writeByteOrderMark: boolean,
+  writeFile(fileName: string, data: string, writeByteOrderMark: boolean,
       onError?: (message: string) => void): void {
     Logger.debug('Skip to write: ' + fileName);
   }
 
-  public getCurrentDirectory(): string {
+  getCurrentDirectory(): string {
     return this.env.currentDirectory;
   }
 
-  public useCaseSensitiveFileNames(): boolean {
+  useCaseSensitiveFileNames(): boolean {
     return this.env.useCaseSensitiveFileNames;
   }
 
-  public getCanonicalFileName(fileName: string): string {
+  getCanonicalFileName(fileName: string): string {
     return this.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
   }
 
-  public getNewLine(): string {
+  getNewLine(): string {
     return this.env.newLine;
   }
 }

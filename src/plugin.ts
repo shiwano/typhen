@@ -34,22 +34,22 @@ export interface PluginObject {
 }
 
 export class Plugin implements PluginObject {
-  public pluginDirectory: string;
-  public newLine: string = '\n';
-  public namespaceSeparator: string = '.';
-  public customPrimitiveTypes: string[] = [];
-  public disallow: DisallowOptions = {};
-  public handlebarsOptions: HandlebarsOptions = {};
+  pluginDirectory: string;
+  newLine: string = '\n';
+  namespaceSeparator: string = '.';
+  customPrimitiveTypes: string[] = [];
+  disallow: DisallowOptions = {};
+  handlebarsOptions: HandlebarsOptions = {};
 
   constructor(args: PluginObject) {
     _.assign(this, args);
   }
 
-  public rename(symbol: Symbol.Symbol, name: string): string {
+  rename(symbol: Symbol.Symbol, name: string): string {
     return name;
   }
 
-  public generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void> {
+  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void> {
     throw new Error('The plugin does not implement the generate function');
   }
 }

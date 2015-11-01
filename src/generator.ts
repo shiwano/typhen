@@ -16,7 +16,7 @@ interface HandlebarsTemplate {
 class Generator {
   private fileDataCache: { [index: string]: string } = {};
   private templateCache: { [index: string]: HandlebarsTemplate } = {};
-  public files: Vinyl[] = [];
+  files: Vinyl[] = [];
 
   constructor(
       public env: Environment,
@@ -26,7 +26,7 @@ class Generator {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
-  public generateFiles(cwd: string, pattern: string, dest: string): void {
+  generateFiles(cwd: string, pattern: string, dest: string): void {
     var resolvedCwd = this.env.resolvePath(this.pluginDirectory, cwd);
     var resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
 
@@ -38,13 +38,13 @@ class Generator {
     });
   }
 
-  public generateUnlessExist(src: string, dest: string, context: any = null): Vinyl {
+  generateUnlessExist(src: string, dest: string, context: any = null): Vinyl {
     return this.generate(src, dest, context, false);
   }
 
-  public generate(src: string, dest: string, overwrite?: boolean): Vinyl;
-  public generate(src: string, dest: string, context: Symbol.Symbol, overwrite?: boolean): Vinyl;
-  public generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
+  generate(src: string, dest: string, overwrite?: boolean): Vinyl;
+  generate(src: string, dest: string, context: Symbol.Symbol, overwrite?: boolean): Vinyl;
+  generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
     if (typeof context === 'boolean') {
       overwrite = context;
       context = null;
@@ -76,14 +76,14 @@ class Generator {
     return null;
   }
 
-  public createFile(options: { cwd?: string; base?: string; path?: string; contents?: any; }): Vinyl {
+  createFile(options: { cwd?: string; base?: string; path?: string; contents?: any; }): Vinyl {
     if (typeof options.contents === 'string') {
       options.contents = new Buffer(options.contents);
     }
     return new Vinyl(options);
   }
 
-  public replaceStars(str: string, symbol: Symbol.Symbol, separator: string = '/'): string {
+  replaceStars(str: string, symbol: Symbol.Symbol, separator: string = '/'): string {
     var matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches == null) { return str; }
 

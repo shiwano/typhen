@@ -11,7 +11,7 @@ import TypeScriptParser = require('./typescript_parser');
 export class Runner {
   constructor(public config: Config.Config) {}
 
-  public run(): Promise<Vinyl[]> {
+  run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve: (r: Vinyl[]) => void, reject: (e: Error) => void) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
       var parser = new TypeScriptParser(this.config.src, this.config);

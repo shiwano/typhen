@@ -19,29 +19,29 @@ import Environment = require('../src/environments/environment');
 Logger.level = Logger.LogLevel.Silent;
 
 export class TestEnvironment implements Environment {
-  public currentDirectory: string = process.cwd() + '/test/fixtures/typings';
-  public newLine: string = '\n';
-  public useCaseSensitiveFileNames: boolean = false;
-  public defaultLibFileName: string = 'lib.typhen.d.ts';
+  currentDirectory: string = process.cwd() + '/test/fixtures/typings';
+  newLine: string = '\n';
+  useCaseSensitiveFileNames: boolean = false;
+  defaultLibFileName: string = 'lib.typhen.d.ts';
 
   constructor(
       private fileData: { [fileName: string]: string } = {}) {
   }
 
-  public writeFile(fileName: string, data: string): void {}
-  public glob(pattern: string, cwd?: string): string[] { return []; }
+  writeFile(fileName: string, data: string): void {}
+  glob(pattern: string, cwd?: string): string[] { return []; }
 
-  public readFile(fileName: string): string {
+  readFile(fileName: string): string {
     if (!this.fileData[fileName]) { throw new Error('Invalid file name: ' + fileName); }
     return this.fileData[fileName];
   }
 
-  public resolvePath(...pathSegments: string[]): string {
+  resolvePath(...pathSegments: string[]): string {
     pathSegments = ['/'].concat(pathSegments);
     return path.resolve.apply(this, pathSegments);
   }
 
-  public relativePath(from: string, to?: string): string {
+  relativePath(from: string, to?: string): string {
     if (to === undefined) {
       from = '/';
       to = from;
@@ -49,11 +49,11 @@ export class TestEnvironment implements Environment {
     return path.relative(from, to);
   }
 
-  public dirname(fileName: string): string {
+  dirname(fileName: string): string {
     return path.dirname(fileName);
   }
 
-  public exists(fileName: string): boolean {
+  exists(fileName: string): boolean {
     return _.any(Object.keys(this.fileData), n => _.contains(fileName, n));
   }
 }

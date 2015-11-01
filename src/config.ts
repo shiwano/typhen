@@ -20,16 +20,16 @@ export interface ConfigObject {
 }
 
 export class Config implements ConfigObject {
-  public plugin: Plugin.Plugin;
-  public src: string[];
-  public dest: string;
-  public cwd: string;
-  public typingDirectory: string;
-  public defaultLibFileName: string;
-  public env: Environment;
-  public noWrite: boolean;
-  public compilerOptions: ts.CompilerOptions;
-  public compilerHost: CompilerHost;
+  plugin: Plugin.Plugin;
+  src: string[];
+  dest: string;
+  cwd: string;
+  typingDirectory: string;
+  defaultLibFileName: string;
+  env: Environment;
+  noWrite: boolean;
+  compilerOptions: ts.CompilerOptions;
+  compilerHost: CompilerHost;
 
   constructor(args: ConfigObject) {
     this.cwd = args.cwd || process.cwd();
@@ -56,7 +56,7 @@ export class Config implements ConfigObject {
     this.compilerHost = new CompilerHost(this.env);
   }
 
-  public getTypingDirectory(src: string[]): string {
+  getTypingDirectory(src: string[]): string {
     var dirnames = src.map(s => {
       var resolvedPath = this.env.resolvePath(s);
       return this.env.dirname(resolvedPath).replace('\\', '/');
