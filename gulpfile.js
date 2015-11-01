@@ -62,7 +62,11 @@ gulp.task('clean:testDest', function() {
   return del(paths.testDest);
 });
 
-gulp.task('compile', ['clean:dest'], function(){
+gulp.task('tsconfig', function() {
+  return gulp.src(paths.src).pipe(plugins.tsconfigUpdate());
+});
+
+gulp.task('compile', ['clean:dest', 'tsconfig'], function(){
   var tsStream = gulp.src(paths.src)
       .pipe(plugins.plumber({errorHandler: function() {
         process.exit(1);
