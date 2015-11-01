@@ -22,8 +22,8 @@ describe('Generator', () => {
 
     it('should call Generator#generate', () => {
       instance.generateFiles('/plugin', '**/*', 'plugins');
-      assert((<SinonStub>instance.generate).calledWith('/plugin/README.md', '/generated/plugins/README.md'));
-      assert((<SinonStub>instance.generate).calledWith('/plugin/enum.hbs', '/generated/plugins/enum.hbs'));
+      assert((<Sinon.SinonStub>instance.generate).calledWith('/plugin/README.md', '/generated/plugins/README.md'));
+      assert((<Sinon.SinonStub>instance.generate).calledWith('/plugin/enum.hbs', '/generated/plugins/enum.hbs'));
     });
   });
 
@@ -34,7 +34,7 @@ describe('Generator', () => {
 
     it('should call Generator#generate', () => {
       instance.generateUnlessExist('README.md', 'README.md');
-      assert((<SinonStub>instance.generate).calledWith('README.md', 'README.md', null, false));
+      assert((<Sinon.SinonStub>instance.generate).calledWith('README.md', 'README.md', null, false));
     });
   });
 

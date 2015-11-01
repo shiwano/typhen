@@ -39,7 +39,7 @@ describe('NodeJsEnvironment', () => {
 
     it('should call fs#writeFileSync', () => {
       instance.writeFile('invalid.js', '');
-      assert((<SinonStub>fs.writeFileSync).calledOnce);
+      assert((<Sinon.SinonStub>fs.writeFileSync).calledOnce);
     });
   });
 
@@ -53,7 +53,7 @@ describe('NodeJsEnvironment', () => {
     });
     it('should call fs#readFileSync', () => {
       instance.readFile('invalid.js');
-      assert((<SinonStub>fs.readFileSync).calledOnce);
+      assert((<Sinon.SinonStub>fs.readFileSync).calledOnce);
     });
   });
 
@@ -84,7 +84,7 @@ describe('NodeJsEnvironment', () => {
 
     it('should call pathExists#sync', () => {
       instance.exists('invalid.js');
-      assert((<SinonStub>pathExists.sync).calledOnce);
+      assert((<Sinon.SinonStub>pathExists.sync).calledOnce);
     });
   });
 
@@ -103,7 +103,7 @@ describe('NodeJsEnvironment', () => {
 
     it('should call glob', () => {
       assert.deepEqual(instance.glob('test/**/*.ts', 'test'), ['test/test.ts']);
-      assert((<SinonStub>glob.sync).calledWith('test/**/*.ts', {
+      assert((<Sinon.SinonStub>glob.sync).calledWith('test/**/*.ts', {
         cwd: 'test',
         nodir: true
       }));
@@ -112,7 +112,7 @@ describe('NodeJsEnvironment', () => {
     context('with no cwd', () => {
       it('should set currentDirectory as cwd', () => {
         instance.glob('test/**/*.ts');
-        assert((<SinonStub>glob.sync).calledWith('test/**/*.ts', {
+        assert((<Sinon.SinonStub>glob.sync).calledWith('test/**/*.ts', {
           cwd: instance.currentDirectory,
           nodir: true
         }));

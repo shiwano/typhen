@@ -119,7 +119,7 @@ describe('LocalHandlebars', () => {
     });
 
     it('should register all helpers to Handlebars', () => {
-      var handlebarStub = (<SinonStub>Handlebars.registerHelper);
+      var handlebarStub = (<Sinon.SinonStub>Handlebars.registerHelper);
 
       assert.deepEqual(handlebarStub.args.every(a => a[1] instanceof Function), true);
       assert.deepEqual(handlebarStub.args.map(a => a[0]), Object.keys(LocalHandlebars.HandlebarsHelpers));

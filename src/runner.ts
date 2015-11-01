@@ -31,7 +31,7 @@ export class Runner {
       var afterGenerate = () => {
         generator.files.forEach(file => {
           if (!this.config.noWrite) {
-            this.config.env.writeFile(file.path, file.contents);
+            this.config.env.writeFile(file.path, file.contents.toString());
           }
           var relative = this.config.env.relativePath(file.path);
           Logger.info('Generated', Logger.cyan(relative));

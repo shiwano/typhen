@@ -49,7 +49,7 @@ describe('CompilerHost', () => {
 
     it('should not write a file', () => {
       instance.writeFile('invalid.ts', '', false);
-      assert((<SinonStub>env.writeFile).notCalled);
+      assert((<Sinon.SinonStub>env.writeFile).notCalled);
     });
   });
 

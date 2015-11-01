@@ -2,8 +2,8 @@
 
 require('source-map-support').install();
 
-global.assert = require('power-assert');
-global.sinon = require('sinon');
+(<any>global).assert = require('power-assert');
+(<any>global).sinon = require('sinon');
 
 import _ = require('lodash');
 import path = require('path');

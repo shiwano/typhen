@@ -4,7 +4,7 @@ import Logger = require('../../src/logger');
 
 describe('Logger', () => {
   var sandbox = sinon.sandbox.create();
-  var logStub: SinonStub;
+  var logStub: Sinon.SinonStub;
 
   beforeEach(() => {
     Logger.enableColor(false);

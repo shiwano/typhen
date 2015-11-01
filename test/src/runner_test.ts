@@ -21,7 +21,7 @@ describe('Runner', () => {
 
     it('should call Plugin#generate', (done) => {
       instance.run().then(() => {
-        assert((<SinonStub>instance.config.plugin.generate).calledOnce);
+        assert((<Sinon.SinonStub>instance.config.plugin.generate).calledOnce);
         done();
       });
     });

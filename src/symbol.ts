@@ -120,7 +120,7 @@ export class Symbol {
   }
 
   public get tags(): Tag[] {
-    return _.values(this.tagTable);
+    return <Tag[]>_.values(this.tagTable);
   }
 
   public get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }
