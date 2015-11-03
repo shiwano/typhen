@@ -52,6 +52,9 @@
     },
     "path-exists/path-exists.d.ts": {
       "ref": "eb59a40d3c2f3257e34ec2ede181046230814a41"
+    },
+    "hashmap/hashmap.d.ts": {
+      "ref": "0dd29bf8253536ae24e61c109524e924ea510046"
     }
   },
   "link": {

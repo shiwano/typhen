@@ -70,6 +70,7 @@
     "ff-typescript": "^1.6.2",
     "glob": "^5.0.14",
     "handlebars": "^4.0.4",
+    "hashmap": "^2.0.4",
     "here": "0.0.2",
     "inflection": "^1.6.0",
     "lodash": "^3.5.0",
