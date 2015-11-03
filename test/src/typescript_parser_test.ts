@@ -54,6 +54,8 @@ describe('TypeScriptParser', () => {
           'Type.Square', 'Type.SquareDictionary', 'Type.Transformer', 'Type.Time',
           // Class
           'Type.Line', 'Type.LineDrawer',
+          // Abstract Class
+          'Type.AbstractClass',
           // TypeParameter
           'Type.T', 'Type.T',
           // PrimitiveType

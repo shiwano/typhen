@@ -383,8 +383,11 @@ class TypeScriptParser {
 
     var staticProperties: Symbol.Property[] = [];
     var staticMethods: Symbol.Method[] = [];
+    var isAbstract = false;
 
     if (genericType.symbol.flags & ts.SymbolFlags.Class) {
+      isAbstract = this.checkFlags(genericType.symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
+
       (<ts.Symbol[]>_.values(genericType.symbol.members))
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Constructor))
         .forEach(s => {
@@ -408,7 +411,8 @@ class TypeScriptParser {
 
     this.typeReferenceStack.pop();
     return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
-        constructorSignatures, callSignatures, baseTypes, typeReference, staticProperties, staticMethods);
+        constructorSignatures, callSignatures, baseTypes, typeReference,
+        staticProperties, staticMethods, isAbstract);
   }
 
   private parseObjectType(type: ts.ObjectType): Symbol.ObjectType {
@@ -496,9 +500,10 @@ class TypeScriptParser {
     var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     var isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
     var isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
+    var isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
-    return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isProtected);
+    return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isProtected, isAbstract);
   }
 
   private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {

@@ -1,16 +1,16 @@
-# Type.ColoredSquare
+# Type.AbstractClass
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L37)
+* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L74)
 
 No comment.
 
 ## Type
 
-Interface or Class (isGenericType: false, isAbstract: false)
+Interface or Class (isGenericType: false, isAbstract: true)
 
 ## BaseTypes
 
-* Square
+BaseTypes is empty.
 
 ## TypeParameters
 
@@ -30,18 +30,13 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-color|Color|false|true|false|default:Color.Red |Default color is red.
-center|Point|false|false|false||
-margin|number|true|false|false||
-size|integer|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+Properties is empty.
 
 ## Methods
 
 Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
 ---|---|---|---|---|---|---|---
-setColor|color:Color:false:false callback:ColoredSquareSetColorCallbackFunction:true:false |void|false|true|false|false| 
+abstractMethod||void|false|true|false|true| 
 
 ## Static Properties
 

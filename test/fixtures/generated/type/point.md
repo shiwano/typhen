@@ -6,7 +6,7 @@ No comment.
 
 ## Type
 
-Interface or Class (isGenericType: false)
+Interface or Class (isGenericType: false, isAbstract: false)
 
 ## BaseTypes
 
@@ -41,10 +41,10 @@ y|number|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
----|---|---|---|---|---|---
-set|x:number:false:false y:number:false:false |void|false|true|false| 
-set|args:NumberAndNumberTuple:false:false |void|false|true|false| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
+---|---|---|---|---|---|---|---
+set|x:number:false:false y:number:false:false |void|false|true|false|false| 
+set|args:NumberAndNumberTuple:false:false |void|false|true|false|false| 
 
 ## Static Properties
 

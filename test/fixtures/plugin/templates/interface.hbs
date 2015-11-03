@@ -16,7 +16,7 @@ No comment.
 
 ## Type
 
-Interface or Class (isGenericType: {{isGenericType}})
+Interface or Class (isGenericType: {{isGenericType}}, isAbstract: {{isAbstract}})
 
 ## BaseTypes
 
@@ -91,11 +91,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
----|---|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
+---|---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
@@ -117,11 +117,11 @@ Static Properties is empty.
 ## Static Methods
 
 {{#if staticMethods}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
----|---|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
+---|---|---|---|---|---|---|---
 {{#each staticMethods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}}  {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

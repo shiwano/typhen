@@ -335,6 +335,7 @@ export class Interface extends ObjectType {
   typeReference: TypeReference;
   staticProperties: Property[] = [];
   staticMethods: Method[] = [];
+  isAbstract: boolean = false;
 
   get isGenericType(): boolean { return this.typeParameters.length > 0; }
   get typeParameters(): Type[] { return this.typeReference.typeParameters; }
@@ -351,7 +352,8 @@ export class Interface extends ObjectType {
 
   initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
       constructorSignatures: Signature[], callSignatures: Signature[], baseTypes: Interface[],
-      typeReference: TypeReference, staticProperties: Property[], staticMethods: Method[]): Interface {
+      typeReference: TypeReference, staticProperties: Property[], staticMethods: Method[],
+      isAbstract: boolean): Interface {
     super.initialize(properties, methods, stringIndexType, numberIndexType);
 
     this.constructorSignatures = constructorSignatures;
@@ -360,6 +362,7 @@ export class Interface extends ObjectType {
     this.typeReference = typeReference;
     this.staticProperties = staticProperties;
     this.staticMethods = staticMethods;
+    this.isAbstract = isAbstract;
     return this;
   }
 
@@ -472,12 +475,15 @@ export class Method extends Symbol {
   isOptional: boolean = false;
   isOwn: boolean = false;
   isProtected: boolean = false;
+  isAbstract: boolean = false;
 
-  initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean, isProtected: boolean): Method {
+  initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean,
+      isProtected: boolean, isAbstract: boolean): Method {
     this.callSignatures = callSignatures;
     this.isOptional = isOptional;
     this.isOwn = isOwn;
     this.isProtected = isProtected;
+    this.isAbstract = isAbstract;
     return this;
   }
 

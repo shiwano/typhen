@@ -70,6 +70,10 @@ declare module Type {
   interface Time {
     now: time;
   }
+
+  abstract class AbstractClass {
+    abstract abstractMethod(): void;
+  }
 }
 
 declare module Rpc {

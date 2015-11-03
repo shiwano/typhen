@@ -6,7 +6,7 @@ No comment.
 
 ## Type
 
-Interface or Class (isGenericType: false)
+Interface or Class (isGenericType: false, isAbstract: false)
 
 ## BaseTypes
 
@@ -38,10 +38,10 @@ color|Color|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
----|---|---|---|---|---|---
-setColor|color:Color:false:false callback:LineSetColorCallbackFunction:true:false |void|false|true|false| 
-draw||void|false|true|true| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
+---|---|---|---|---|---|---|---
+setColor|color:Color:false:false callback:LineSetColorCallbackFunction:true:false |void|false|true|false|false| 
+draw||void|false|true|true|false| 
 
 ## Static Properties
 

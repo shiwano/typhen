@@ -6,7 +6,7 @@ No comment.
 
 ## Type
 
-Interface or Class (isGenericType: true)
+Interface or Class (isGenericType: true, isAbstract: false)
 
 ## BaseTypes
 
