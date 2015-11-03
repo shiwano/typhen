@@ -1,4 +1,4 @@
-import ts = require('ff-typescript');
+import ts = require('typescript');
 import Environment = require('./environments/environment');
 import Logger = require('./logger');
 

@@ -1,5 +1,5 @@
 import _ = require('lodash');
-import ts = require('ff-typescript');
+import ts = require('typescript');
 
 import Plugin = require('./plugin');
 import Runner = require('./runner');

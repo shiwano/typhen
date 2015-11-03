@@ -29,7 +29,7 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have defaultLibFileName', () => {
-    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/ff-typescript/lib/lib.d.ts');
+    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/typescript/lib/lib.d.ts');
   });
 
   describe('#writeFile', () => {
@@ -91,7 +91,7 @@ describe('NodeJsEnvironment', () => {
   describe('#getDefaultLibFileData', () => {
     it('should return the joined defaultLibFile data', () => {
       var actual = instance.getDefaultLibFileData();
-      var expected = fs.readFileSync(process.cwd() + '/node_modules/ff-typescript/lib/lib.d.ts', 'utf-8');
+      var expected = fs.readFileSync(process.cwd() + '/node_modules/typescript/lib/lib.d.ts', 'utf-8');
       assert(actual === expected);
     });
   });
