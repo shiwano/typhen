@@ -47,7 +47,7 @@ describe('Integration Test', () => {
           });
           Typhen.run({
             plugin: plugin,
-            src: 'test/fixtures/typings/definitions.d.ts',
+            src: 'test/fixtures/typings/integration/index.d.ts',
             dest: '.tmp/generated'
           }).done((files) => {
             generatedFiles = files;
@@ -75,7 +75,7 @@ describe('Integration Test', () => {
             '--plugin-options', '{"author": "shiwano"}',
             '--dest', '.tmp/generated',
             '--__main', '.tmp/src/index',
-            'test/fixtures/typings/definitions.d.ts'
+            'test/fixtures/typings/integration/index.d.ts'
           ], {
             cwd: process.cwd()
           });

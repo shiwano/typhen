@@ -1,6 +1,6 @@
 # Type.RangeOfNumber
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L10)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L10)
 
 No comment.
 

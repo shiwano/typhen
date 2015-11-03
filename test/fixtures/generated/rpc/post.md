@@ -1,6 +1,6 @@
 # Rpc.Post
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L90)
+* [test/fixtures/typings/integration/rpc.d.ts](/test/fixtures/typings/integration/rpc.d.ts#L16)
 
 No comment.
 

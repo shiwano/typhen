@@ -1,6 +1,6 @@
 # Type.Color
 
-* [test/fixtures/typings/color/color.d.ts](/test/fixtures/typings/color/color.d.ts#L2)
+* [test/fixtures/typings/integration/color/color.d.ts](/test/fixtures/typings/integration/color/color.d.ts#L2)
 
 No comment.
 

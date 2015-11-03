@@ -1,6 +1,6 @@
 # Rpc.Get
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L86)
+* [test/fixtures/typings/integration/rpc.d.ts](/test/fixtures/typings/integration/rpc.d.ts#L12)
 
 No comment.
 

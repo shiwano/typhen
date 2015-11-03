@@ -80,10 +80,10 @@ export function createPlugin(): Plugin.Plugin {
   });
 }
 
-export function createConfig(): Config.Config {
+export function createConfig(src: string | string[] = 'test/fixtures/typings/integration/index.d.ts'): Config.Config {
   return new Config.Config({
     plugin: createPlugin(),
-    src: 'test/fixtures/typings/definitions.d.ts',
+    src: src,
     dest: '.tmp/generated'
   });
 }

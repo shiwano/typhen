@@ -1,6 +1,6 @@
 # Type.ColoredSquare
 
-* [test/fixtures/typings/definitions.d.ts](/test/fixtures/typings/definitions.d.ts#L37)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L37)
 
 No comment.
 

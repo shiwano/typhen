@@ -7,7 +7,7 @@ module.exports = function(typhen) {
 
   return typhen.run({
     plugin: plugin,
-    src: 'test/fixtures/typings/definitions.d.ts',
+    src: 'test/fixtures/typings/integration/index.d.ts',
     dest: '.tmp/generated'
   });
 };

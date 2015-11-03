@@ -5,23 +5,22 @@ import Symbol = require('../../src/symbol');
 
 describe('TypeScriptParser', () => {
   var instance: TypeScriptParser;
-
-  var definitionPath = 'test/fixtures/typings/definitions.d.ts';
-  var colorPath = 'test/fixtures/typings/color/color.d.ts';
-
-  var config = helper.createConfig();
-
-  beforeEach(() => {
-    instance = new TypeScriptParser([definitionPath], config);
-  });
+  var definitionPath = 'test/fixtures/typings/integration/index.d.ts';
 
   describe('#sourceFiles', () => {
     beforeEach(() => {
+      var config = helper.createConfig();
+      instance = new TypeScriptParser([definitionPath], config);
       instance.parse();
     });
 
     it('should return loaded instances of ts.SourceFile', () => {
-      var expected = [colorPath, definitionPath];
+      var expected = [
+        'test/fixtures/typings/integration/color/color.d.ts',
+        'test/fixtures/typings/integration/type.d.ts',
+        'test/fixtures/typings/integration/rpc.d.ts',
+        definitionPath
+      ];
       assert.deepEqual(instance.sourceFiles.map(d => d.fileName), expected);
     });
   });
@@ -29,6 +28,8 @@ describe('TypeScriptParser', () => {
   describe('#parse', () => {
     context('when *.d.ts files as non external modules are given', () => {
       beforeEach(() => {
+        var config = helper.createConfig();
+        var instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
@@ -60,13 +61,13 @@ describe('TypeScriptParser', () => {
           'Type.T', 'Type.T',
           // PrimitiveType
           'boolean', 'number', 'string', 'void', 'any', 'integer'
-        ].sort().join('\n');
-        assert(instance.types.map(t => t.fullName).join('\n') === expected);
+        ].sort();
+        assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
 
       it('should parse modules', () => {
-        var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort().join('\n');
-        assert(instance.modules.map(t => t.fullName).join('\n') === expected);
+        var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort();
+        assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
 
@@ -74,18 +75,19 @@ describe('TypeScriptParser', () => {
       var definitionPath = 'test/fixtures/typings/externals/foo.d.ts';
 
       beforeEach(() => {
+        var config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse types', () => {
-        var expected = ['externals/foo.A.Foo', 'externals/bar.Bar'].sort().join('\n');
-        assert(instance.types.map(t => t.fullName).join('\n') === expected);
+        var expected = ['foo.A.Foo', 'bar.Bar'].sort();
+        assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
 
       it('should parse modules', () => {
-        var expected = ['externals/foo', 'externals/foo.A', 'externals/bar'].sort().join('\n');
-        assert(instance.modules.map(t => t.fullName).join('\n') === expected);
+        var expected = ['foo', 'foo.A', 'bar'].sort();
+        assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
 
@@ -93,24 +95,28 @@ describe('TypeScriptParser', () => {
       var definitionPath = 'test/fixtures/typings/ts_files/foo.ts';
 
       beforeEach(() => {
+        var config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse types', () => {
-        var expected = ['ts_files/foo.A.Foo', 'ts_files/bar.Bar', 'void', 'string'].sort().join('\n');
-        assert(instance.types.map(t => t.fullName).join('\n') === expected);
+        var expected = ['foo.A.Foo', 'bar.Bar', 'void', 'string'].sort();
+        assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
 
       it('should parse modules', () => {
-        var expected = ['ts_files/foo', 'ts_files/foo.A', 'ts_files/bar'].sort().join('\n');
-        assert(instance.modules.map(t => t.fullName).join('\n') === expected);
+        var expected = ['foo', 'foo.A', 'bar'].sort();
+        assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
   });
 
   describe('#validate', () => {
+    var config = helper.createConfig();
+
     beforeEach(() => {
+      instance = new TypeScriptParser([definitionPath], config);
       instance.parse();
     });
 

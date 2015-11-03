@@ -17,7 +17,7 @@ describe('Config', () => {
 
   context('when the typingDirectory option is not given', () => {
     it('should have the typingDirectory', () => {
-      assert(instance.typingDirectory === process.cwd() + '/test/fixtures/typings');
+      assert(instance.typingDirectory === process.cwd() + '/test/fixtures/typings/integration');
     });
   });
 
