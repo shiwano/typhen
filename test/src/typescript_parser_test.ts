@@ -55,10 +55,12 @@ describe('TypeScriptParser', () => {
           'Type.Square', 'Type.SquareDictionary', 'Type.Transformer', 'Type.Time',
           // Class
           'Type.Line', 'Type.LineDrawer',
+          // TypeAlias
+          'Type.Predicate',
           // Abstract Class
           'Type.AbstractClass',
           // TypeParameter
-          'Type.T', 'Type.T',
+          'Type.T', 'Type.T', 'Type.T',
           // PrimitiveType
           'boolean', 'number', 'string', 'void', 'any', 'integer'
         ].sort();

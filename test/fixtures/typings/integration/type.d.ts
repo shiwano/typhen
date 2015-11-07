@@ -74,4 +74,6 @@ declare module Type {
   abstract class AbstractClass {
     abstract abstractMethod(): void;
   }
+
+  type Predicate<T> = (element: T) => boolean;
 }

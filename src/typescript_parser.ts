@@ -227,26 +227,32 @@ class TypeScriptParser {
   }
 
   private getAssumedName(symbol: ts.Symbol, typeName: string): string {
-    var parentNames = _.tap([], (results) => {
-      if (!_.isObject(symbol)) { return; }
+    if (!_.isObject(symbol)) {
+      return typeName;
+    }
 
-      var parentDecl = symbol.declarations[0].parent;
-      while (parentDecl !== undefined) {
-        var parentSymbol = this.getSymbolAtLocation(parentDecl);
+    var parentNames: string[] = [];
+    var parentDecl = symbol.declarations[0].parent;
 
-        if (parentSymbol && (
-            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Class) ||
+    while (parentDecl !== undefined) {
+      var parentSymbol = this.getSymbolAtLocation(parentDecl);
+
+      if (parentSymbol !== undefined) {
+        if (this.checkFlags(parentSymbol.flags, ts.SymbolFlags.TypeAlias)) {
+          return parentSymbol.name;
+        } else if (
+            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Class)     ||
             this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Interface) ||
-            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Property) ||
-            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Function) ||
-            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Method) ||
-            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Variable))) {
-          results.push(inflection.camelize(parentSymbol.name));
+            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Property)  ||
+            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Function)  ||
+            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Method)    ||
+            this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Variable)) {
+          parentNames.push(inflection.camelize(parentSymbol.name));
         }
-        parentDecl = parentDecl.parent;
       }
-    }).reverse();
-    return parentNames.join('') + typeName;
+      parentDecl = parentDecl.parent;
+    }
+    return parentNames.reverse().join('') + typeName;
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {

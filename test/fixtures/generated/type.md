@@ -23,7 +23,7 @@ No Modules.
 
 ## Functions
 
-No Functions.
+* Predicate
 
 ## Interfaces
 
@@ -49,8 +49,11 @@ No Variables.
 
 * time
   * Type - NumberAndDateUnionType
+* Predicate
+  * Type - Predicate
 
 ## AnonymousTypes
 
 * ColoredSquareSetColorCallbackFunction
 * LineSetColorCallbackFunction
+* Predicate
