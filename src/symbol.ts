@@ -123,7 +123,8 @@ export class Symbol {
     return <Tag[]>_.values(this.tagTable);
   }
 
-  get isAnonymousType(): boolean { return this.isType && this.rawName.length <= 0; }
+  get isAnonymous(): boolean { return this.rawName.length <= 0; }
+  get isAnonymousType(): boolean { return this.isType && this.isAnonymous; }
   get isType(): boolean { return false; }
   get isGenericType(): boolean { return false; }
   get isGlobalModule(): boolean { return false; }
