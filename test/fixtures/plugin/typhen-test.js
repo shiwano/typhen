@@ -34,7 +34,8 @@ module.exports = function(typhen, options) {
             generator.generate('templates/tuple.hbs', 'underscore:**/*.md', type);
             break;
           case typhen.SymbolKind.UnionType:
-            generator.generate('templates/union_type.hbs', 'underscore:**/*.md', type);
+          case typhen.SymbolKind.IntersectionType:
+            generator.generate('templates/union_or_intersection_type.hbs', 'underscore:**/*.md', type);
             break;
           case typhen.SymbolKind.Interface:
           case typhen.SymbolKind.Class:

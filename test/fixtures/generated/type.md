@@ -34,6 +34,9 @@ No Modules.
 * SquareDictionary
 * Transformer
 * Time
+* A
+* B
+* C
 
 ## Classes
 
@@ -51,6 +54,8 @@ No Variables.
   * Type - NumberAndDateUnionType
 * Predicate
   * Type - Predicate
+* IntersectionType
+  * Type - AAndBAndCIntersectionType
 
 ## AnonymousTypes
 
