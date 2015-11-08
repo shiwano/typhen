@@ -84,7 +84,10 @@ export function createConfig(src: string | string[] = 'test/fixtures/typings/int
   return new Config.Config({
     plugin: createPlugin(),
     src: src,
-    dest: '.tmp/generated'
+    dest: '.tmp/generated',
+    compilerOptions: {
+      target: <any>'ES6'
+    }
   });
 }
 
