@@ -57,6 +57,9 @@ describe('TypeScriptParser', () => {
           'Type.Line', 'Type.LineDrawer',
           // TypeAlias
           'Type.Predicate',
+          // IntersectionType
+          'Type.A', 'Type.B', 'Type.C',
+          'AAndBAndCIntersectionType',
           // Abstract Class
           'Type.AbstractClass',
           // TypeParameter

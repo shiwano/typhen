@@ -17,6 +17,7 @@ export enum SymbolKind {
   TypeParameter,
   Tuple,
   UnionType,
+  IntersectionType,
   Property,
   Method,
   Signature,
@@ -141,6 +142,7 @@ export class Symbol {
   get isTypeParameter(): boolean { return this.kind === SymbolKind.TypeParameter; }
   get isTuple(): boolean { return this.kind === SymbolKind.Tuple; }
   get isUnionType(): boolean { return this.kind === SymbolKind.UnionType; }
+  get isIntersectionType(): boolean { return this.kind === SymbolKind.IntersectionType; }
   get isProperty(): boolean { return this.kind === SymbolKind.Property; }
   get isMethod(): boolean { return this.kind === SymbolKind.Method; }
   get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
@@ -448,6 +450,27 @@ export class UnionType extends Type {
   validate(): void | string {
     if (this.config.plugin.disallow.unionType) {
       return 'Disallow the union type';
+    }
+  }
+}
+
+export class IntersectionType extends Type {
+  kind: SymbolKind = SymbolKind.IntersectionType;
+
+  types: Type[] = [];
+
+  get assumedName(): string {
+    return this.types.map(t => inflection.classify(t.name)).join('And') + 'IntersectionType';
+  }
+
+  initialize(types: Type[]): UnionType {
+    this.types = types;
+    return this;
+  }
+
+  validate(): void | string {
+    if (this.config.plugin.disallow.intersectionType) {
+      return 'Disallow the intersection type';
     }
   }
 }

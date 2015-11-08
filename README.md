@@ -109,6 +109,7 @@ module.exports = function(typhen, options) {
       any: true,
       tuple: true,
       unionType: true,
+      intersectionType: true,
       overload: true,
       generics: true,
       anonymousObject: true,

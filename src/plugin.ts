@@ -9,6 +9,7 @@ export interface DisallowOptions {
   any?: boolean;
   tuple?: boolean;
   unionType?: boolean;
+  intersectionType?: boolean;
   overload?: boolean;
   generics?: boolean;
   anonymousFunction?: boolean;

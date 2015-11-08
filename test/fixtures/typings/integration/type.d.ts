@@ -76,4 +76,9 @@ declare module Type {
   }
 
   type Predicate<T> = (element: T) => boolean;
+
+  interface A { a: string }
+  interface B { b: string }
+  interface C { c: string }
+  type IntersectionType = A & B & C;
 }

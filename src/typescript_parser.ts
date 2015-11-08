@@ -112,6 +112,8 @@ class TypeScriptParser {
         this.parseTuple(<ts.TupleType>type);
       } else if (type.flags & ts.TypeFlags.Union) {
         this.parseUnionType(<ts.UnionType>type);
+      } else if (type.flags & ts.TypeFlags.Intersection) {
+        this.parseIntersectionType(<ts.IntersectionType>type);
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
@@ -487,6 +489,12 @@ class TypeScriptParser {
 
   private parseUnionType(type: ts.UnionType): Symbol.UnionType {
     var typhenType = this.createTyphenType<Symbol.UnionType>(type, Symbol.UnionType);
+    var types = type.types.map(t => this.parseType(t));
+    return typhenType.initialize(types);
+  }
+
+  private parseIntersectionType(type: ts.IntersectionType): Symbol.IntersectionType {
+    var typhenType = this.createTyphenType<Symbol.IntersectionType>(type, Symbol.IntersectionType);
     var types = type.types.map(t => this.parseType(t));
     return typhenType.initialize(types);
   }
