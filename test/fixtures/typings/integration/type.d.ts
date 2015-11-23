@@ -81,4 +81,6 @@ declare module Type {
   interface B { b: string }
   interface C { c: string }
   type IntersectionType = A & B & C;
+
+  var ESSymbol: symbol;
 }

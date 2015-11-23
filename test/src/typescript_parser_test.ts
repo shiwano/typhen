@@ -65,7 +65,7 @@ describe('TypeScriptParser', () => {
           // TypeParameter
           'Type.T', 'Type.T', 'Type.T',
           // PrimitiveType
-          'boolean', 'number', 'string', 'void', 'any', 'integer'
+          'boolean', 'number', 'symbol', 'string', 'void', 'any', 'integer'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

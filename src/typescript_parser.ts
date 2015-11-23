@@ -99,15 +99,17 @@ class TypeScriptParser {
 
     if (this.typeCache.get(type) === undefined) {
       if (type.flags & ts.TypeFlags.String) {
-        this.parsePrimitiveType(<ts.Type>type);
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Number) {
-        this.parsePrimitiveType(<ts.Type>type);
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Boolean) {
-        this.parsePrimitiveType(<ts.Type>type);
+        this.parsePrimitiveType(type);
+      } else if (type.flags & ts.TypeFlags.ESSymbol) {
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Void) {
-        this.parsePrimitiveType(<ts.Type>type);
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Any) {
-        this.parsePrimitiveType(<ts.Type>type);
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Tuple) {
         this.parseTuple(<ts.TupleType>type);
       } else if (type.flags & ts.TypeFlags.Union) {
@@ -463,6 +465,8 @@ class TypeScriptParser {
       name = 'boolean';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Number)) {
       name = 'number';
+    } else if (this.checkFlags(type.flags, ts.TypeFlags.ESSymbol)) {
+      name = 'symbol';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Void)) {
       name = 'void';
     } else if (_.isObject(type.symbol)) {

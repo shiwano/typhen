@@ -46,7 +46,9 @@ No Modules.
 
 ## Variables
 
-No Variables.
+* ESSymbol
+  * Type - symbol
+  * Module - None
 
 ## TypeAliases
 
