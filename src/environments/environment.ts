@@ -11,6 +11,7 @@ interface Environment {
   dirname(fileName: string): string;
   exists(fileName: string): boolean;
   glob(pattern: string, cwd?: string): string[];
+  eval(code: string): any;
 }
 
 export = Environment;

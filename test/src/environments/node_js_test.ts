@@ -119,4 +119,10 @@ describe('NodeJsEnvironment', () => {
       });
     });
   });
+
+  describe('#eval', () => {
+    it('should eval the code safely', () => {
+      assert(instance.eval('function() { return "foobar"; }')() === 'foobar');
+    });
+  });
 });

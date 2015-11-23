@@ -1,5 +1,6 @@
 import fs = require('fs');
 import path = require('path');
+import vm = require('vm');
 import pathExists = require('path-exists');
 import mkdirp = require('mkdirp');
 import _ = require('lodash');
@@ -9,9 +10,9 @@ import Logger = require('../logger');
 import Environment = require('./environment');
 
 class NodeJsEnvironment implements Environment {
-  public currentDirectory: string;
-  public useCaseSensitiveFileNames: boolean = false;
-  public defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
+  currentDirectory: string;
+  useCaseSensitiveFileNames: boolean = false;
+  defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
 
   constructor(currentDirectory: string, public newLine: string, defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
@@ -25,7 +26,7 @@ class NodeJsEnvironment implements Environment {
     }
   }
 
-  public readFile(fileName: string): string {
+  readFile(fileName: string): string {
     var resolvedPath = this.resolvePath(fileName);
 
     if (resolvedPath === this.defaultLibFileName) {
@@ -36,19 +37,19 @@ class NodeJsEnvironment implements Environment {
     }
   }
 
-  public writeFile(fileName: string, data: string): void {
+  writeFile(fileName: string, data: string): void {
     var filePath = this.resolvePath(fileName);
     Logger.debug('Writing: ' + filePath);
     mkdirp.sync(path.dirname(filePath));
     fs.writeFileSync(filePath, data);
   }
 
-  public resolvePath(...pathSegments: string[]): string {
+  resolvePath(...pathSegments: string[]): string {
     var args = _.flatten([this.currentDirectory, pathSegments], true);
     return path.resolve.apply(null, args);
   }
 
-  public relativePath(from: string, to?: string): string {
+  relativePath(from: string, to?: string): string {
     if (to === undefined) {
       to = from;
       from = this.currentDirectory;
@@ -56,25 +57,33 @@ class NodeJsEnvironment implements Environment {
     return path.relative(from, to);
   }
 
-  public dirname(fileName: string): string {
+  dirname(fileName: string): string {
     return path.dirname(fileName);
   }
 
-  public exists(fileName: string): boolean {
+  exists(fileName: string): boolean {
     var filePath = this.resolvePath(fileName);
     return pathExists.sync(filePath);
   }
 
-  public getDefaultLibFileData(): string {
+  getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
     return fs.readFileSync(this.defaultLibFileName, 'utf-8');
   }
 
-  public glob(pattern: string, cwd: string = this.currentDirectory): string[] {
+  glob(pattern: string, cwd: string = this.currentDirectory): string[] {
     return glob.sync(pattern, <any>{
       cwd: cwd,
       nodir: true
     });
+  }
+
+  eval(code: string): any {
+    var sandbox: any = {};
+    var resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
+    sandbox[resultKey] = {};
+    vm.runInNewContext(resultKey + '=' + code, sandbox);
+    return sandbox[resultKey]
   }
 }
 

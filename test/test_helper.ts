@@ -30,6 +30,7 @@ export class TestEnvironment implements Environment {
 
   writeFile(fileName: string, data: string): void {}
   glob(pattern: string, cwd?: string): string[] { return []; }
+  eval(core: string): any { return null; }
 
   readFile(fileName: string): string {
     if (!this.fileData[fileName]) { throw new Error('Invalid file name: ' + fileName); }
@@ -86,7 +87,8 @@ export function createConfig(src: string | string[] = 'test/fixtures/typings/int
     src: src,
     dest: '.tmp/generated',
     compilerOptions: {
-      target: <any>'ES6'
+      target: <any>'ES6',
+      experimentalDecorators: true
     }
   });
 }
