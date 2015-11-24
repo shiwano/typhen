@@ -4,7 +4,7 @@ import Handlebars = require('handlebars');
 
 import Helpers = require('./helpers');
 
-export module HandlebarsHelpers {
+export namespace HandlebarsHelpers {
   export function and(...valuesAndOptions: any[]): any {
     var options = _.last(valuesAndOptions);
     var values = valuesAndOptions.filter((i: any) => i !== options);

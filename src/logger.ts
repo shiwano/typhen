@@ -1,6 +1,6 @@
 import chalk = require('chalk');
 
-module Logger {
+namespace Logger {
   export enum LogLevel {
     Debug,
     Info,

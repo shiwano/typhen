@@ -8,7 +8,7 @@ import Symbol = require('./symbol');
 import Logger = require('./logger');
 import Helpers = require('./helpers');
 
-module Typhen {
+namespace Typhen {
   export import SymbolKind = Symbol.SymbolKind;
   export var logger = Logger;
   export var helpers = Helpers;
