@@ -161,7 +161,7 @@ class TypeScriptParser {
       this.getAssumedName(symbol, assumedNameSuffix) : '';
     var typhenSymbol = <T>new typhenSymbolClass(this.config, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
-        this.getParentModule(symbol), assumedName);
+        this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
         'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
         'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
@@ -199,6 +199,15 @@ class TypeScriptParser {
       lineAndCharacterNumber.line += 1;
       return new Symbol.DeclarationInfo(relativePath, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
+  }
+
+  private getDecorators(symbol: ts.Symbol): Symbol.Decorator[] {
+    if (!_.isObject(symbol) ||
+        symbol.valueDeclaration === undefined ||
+        symbol.valueDeclaration.decorators === undefined) {
+      return [];
+    }
+    return symbol.valueDeclaration.decorators.map(d => this.parseDecorator(d));
   }
 
   private getParentModule(symbol: ts.Symbol): Symbol.Module {
@@ -278,6 +287,33 @@ class TypeScriptParser {
             _.contains(resolvedPath, this.config.typingDirectory);
         });
       });
+  }
+
+  private parseDecorator(decorator: ts.Decorator): Symbol.Decorator {
+    var type = decorator.expression.getChildCount() == 0 ?
+      this.typeChecker.getTypeAtLocation(decorator.expression) :
+      this.typeChecker.getTypeAtLocation(decorator.expression.getChildAt(0));
+    var decoratorFunction = this.parseType(type) as Symbol.Function;
+    var argumentTable = decorator.expression.getChildCount() == 0 ?
+      {} :
+      _.zipObject(
+        decoratorFunction.callSignatures[0].parameters.map(p => p.name),
+        decorator.expression.getChildAt(2).getChildren()
+          .filter(node => node.kind != ts.SyntaxKind.CommaToken)
+          .map(node => {
+            if (node.kind === ts.SyntaxKind.FunctionExpression ||
+                node.kind === ts.SyntaxKind.ArrowFunction) {
+              return node.getText();
+            } else {
+              try {
+                return this.config.env.eval(node.getText());
+              } catch(e) {
+                return node.getText();
+              }
+            }
+          })
+      );
+    return new Symbol.Decorator(decoratorFunction, argumentTable);
   }
 
   private parseSourceFile(sourceFile: ts.SourceFile): void {

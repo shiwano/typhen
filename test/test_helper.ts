@@ -61,14 +61,14 @@ export class TestEnvironment implements Environment {
 
 export function createEnum(config?: Config.Config): Symbol.Enum {
   if (config === undefined) { config = createConfig(); }
-  var appModule = new Symbol.Module(config, 'App', [''], [], null, '').initialize({}, {}, [], [], [], []);
-  var typeModule = new Symbol.Module(config, 'Type', [''], [], appModule, '').initialize({}, {}, [], [], [], []);
+  var appModule = new Symbol.Module(config, 'App', [''], [], [], null, '').initialize({}, {}, [], [], [], []);
+  var typeModule = new Symbol.Module(config, 'Type', [''], [], [], appModule, '').initialize({}, {}, [], [], [], []);
 
   var type = new Symbol.Enum(config, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
-      '@type Invalid', '@type Enum', '@true', '@false false'], [], typeModule, '');
+      '@type Invalid', '@type Enum', '@true', '@false false'], [], [], typeModule, '');
   type.initialize([
-    new Symbol.EnumMember(config, 'Bar', [''], [], typeModule, '').initialize(0),
-    new Symbol.EnumMember(config, 'Baz', [''], [], typeModule, '').initialize(1)
+    new Symbol.EnumMember(config, 'Bar', [''], [], [], typeModule, '').initialize(0),
+    new Symbol.EnumMember(config, 'Baz', [''], [], [], typeModule, '').initialize(1)
   ], false);
   return type;
 }

@@ -68,6 +68,29 @@ export class DeclarationInfo {
   }
 }
 
+export class Decorator {
+  get name(): string {
+    return this.decoratorFunction.name;
+  }
+
+  get parameters(): Parameter[] {
+    return this.arguments.length > 0 ? this.decoratorFunction.callSignatures[0].parameters : [];
+  }
+
+  get arguments(): any[] {
+    return <any[]>_.values(this.argumentTable);
+  }
+
+  constructor(
+      public decoratorFunction: Function,
+      public argumentTable: ObjectTable<any>) {
+  }
+
+  toString(): string {
+    return this.name;
+  }
+}
+
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s*([^\s@]*)\s*$/m;
   kind: SymbolKind = SymbolKind.Invalid;
@@ -78,6 +101,7 @@ export class Symbol {
       public rawName: string,
       public docComment: string[],
       public declarationInfos: DeclarationInfo[],
+      public decorators: Decorator[],
       public parentModule: Module,
       public assumedName: string) {
   }

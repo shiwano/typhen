@@ -115,6 +115,58 @@ describe('TypeScriptParser', () => {
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
+
+    context('when ts files that includes decorators are given', () => {
+      var definitionPath = 'test/fixtures/typings/decorators/index.ts';
+      var decoratedClass: Symbol.Class;
+
+      beforeEach(() => {
+        var config = helper.createConfig(definitionPath);
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+        decoratedClass = instance.types.filter(t => t.name === 'DecoratedClass')[0] as Symbol.Class;
+      });
+
+      it('should parse class decorators', () => {
+        assert(decoratedClass.decorators.length === 1);
+        assert.deepEqual(decoratedClass.decorators[0].argumentTable, {});
+      });
+
+      it('should parse property decorators', () => {
+        var decoratedProperty = decoratedClass.properties.filter(p => p.name === 'decoratedProperty')[0];
+        var decoratedProperty2 = decoratedClass.properties.filter(p => p.name === 'decoratedProperty2')[0];
+        assert(decoratedProperty.decorators.length === 1);
+        assert(decoratedProperty2.decorators.length === 1);
+        assert.deepEqual(decoratedProperty.decorators[0].argumentTable, {
+          num: 1,
+          str: 'foo',
+          bool: true,
+          func: "function() { return '1'; }"
+        });
+        assert.deepEqual(decoratedProperty2.decorators[0].argumentTable, {
+          num: -1,
+          str: null,
+          bool: false,
+          func: "() => '2'"
+        });
+      });
+
+      it('should parse method decorators', () => {
+        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0];
+        assert(decoratedMethod.decorators.length === 2);
+        assert.deepEqual(decoratedMethod.decorators[0].argumentTable, {});
+        assert.deepEqual(decoratedMethod.decorators[1].argumentTable, {});
+        assert(decoratedMethod.decorators[0].name === 'methodDecorator2');
+        assert(decoratedMethod.decorators[1].name === 'methodDecorator');
+      });
+
+      it('should parse parameter decorators', () => {
+        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0] as Symbol.Method;
+        var decoratedParameter =  decoratedMethod.callSignatures[0].parameters[0];
+        assert(decoratedParameter.decorators.length === 1);
+        assert.deepEqual(decoratedParameter.decorators[0].argumentTable, {});
+      });
+    });
   });
 
   describe('#validate', () => {
