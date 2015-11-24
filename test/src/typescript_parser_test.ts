@@ -141,13 +141,13 @@ describe('TypeScriptParser', () => {
           num: 1,
           str: 'foo',
           bool: true,
-          func: "function() { return '1'; }"
+          func: 'function() { return \'1\'; }'
         });
         assert.deepEqual(decoratedProperty2.decorators[0].argumentTable, {
           num: -1,
           str: null,
           bool: false,
-          func: "() => '2'"
+          func: '() => \'2\''
         });
       });
 

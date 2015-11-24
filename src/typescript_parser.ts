@@ -290,16 +290,16 @@ class TypeScriptParser {
   }
 
   private parseDecorator(decorator: ts.Decorator): Symbol.Decorator {
-    var type = decorator.expression.getChildCount() == 0 ?
+    var type = decorator.expression.getChildCount() === 0 ?
       this.typeChecker.getTypeAtLocation(decorator.expression) :
       this.typeChecker.getTypeAtLocation(decorator.expression.getChildAt(0));
     var decoratorFunction = this.parseType(type) as Symbol.Function;
-    var argumentTable = decorator.expression.getChildCount() == 0 ?
+    var argumentTable = decorator.expression.getChildCount() === 0 ?
       {} :
       _.zipObject(
         decoratorFunction.callSignatures[0].parameters.map(p => p.name),
         decorator.expression.getChildAt(2).getChildren()
-          .filter(node => node.kind != ts.SyntaxKind.CommaToken)
+          .filter(node => node.kind !== ts.SyntaxKind.CommaToken)
           .map(node => {
             if (node.kind === ts.SyntaxKind.FunctionExpression ||
                 node.kind === ts.SyntaxKind.ArrowFunction) {
@@ -307,7 +307,7 @@ class TypeScriptParser {
             } else {
               try {
                 return this.config.env.eval(node.getText());
-              } catch(e) {
+              } catch (e) {
                 return node.getText();
               }
             }

@@ -83,7 +83,7 @@ class NodeJsEnvironment implements Environment {
     var resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
     sandbox[resultKey] = {};
     vm.runInNewContext(resultKey + '=' + code, sandbox);
-    return sandbox[resultKey]
+    return sandbox[resultKey];
   }
 }
 
