@@ -12,7 +12,7 @@ export class Runner {
   constructor(public config: Config.Config) {}
 
   run(): Promise<Vinyl[]> {
-    return new Promise<Vinyl[]>((resolve: (r: Vinyl[]) => void, reject: (e: Error) => void) => {
+    return new Promise<Vinyl[]>((resolve, reject) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
       var parser = new TypeScriptParser(this.config.src, this.config);
       parser.parse();
