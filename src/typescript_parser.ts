@@ -293,10 +293,10 @@ class TypeScriptParser {
     var type = decorator.expression.getChildCount() === 0 ?
       this.typeChecker.getTypeAtLocation(decorator.expression) :
       this.typeChecker.getTypeAtLocation(decorator.expression.getChildren()
-        .filter(c => c.kind == ts.SyntaxKind.Identifier).slice(-1)[0]);
+        .filter(c => c.kind === ts.SyntaxKind.Identifier).slice(-1)[0]);
     var decoratorFunction = this.parseType(type) as Symbol.Function;
     var syntaxList = decorator.expression.getChildren()
-      .filter(c => c.kind == ts.SyntaxKind.SyntaxList).slice(-1)[0];
+      .filter(c => c.kind === ts.SyntaxKind.SyntaxList).slice(-1)[0];
     var argumentTable = syntaxList === undefined ?
       {} :
       _.zipObject(
