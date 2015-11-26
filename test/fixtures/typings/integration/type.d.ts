@@ -83,4 +83,10 @@ declare module Type {
   type IntersectionType = A & B & C;
 
   var ESSymbol: symbol;
+
+  function classDecorator<TFunction extends Function>(target: TFunction): TFunction;
+
+  @classDecorator
+  class DecoratedClass {
+  }
 }

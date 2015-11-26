@@ -48,7 +48,10 @@ describe('Integration Test', () => {
           Typhen.run({
             plugin: plugin,
             src: 'test/fixtures/typings/integration/index.d.ts',
-            dest: '.tmp/generated'
+            dest: '.tmp/generated',
+            compilerOptions: {
+              experimentalDecorators: true
+            }
           }).done((files) => {
             generatedFiles = files;
             done();
@@ -73,6 +76,7 @@ describe('Integration Test', () => {
           var command = childProcess.spawn('bin/typhen', [
             '--plugin', 'test/fixtures/plugin/typhen-test',
             '--plugin-options', '{"author": "shiwano"}',
+            '--compiler-options', '{"experimentalDecorators": true}',
             '--dest', '.tmp/generated',
             '--__main', '.tmp/src/index',
             'test/fixtures/typings/integration/index.d.ts'

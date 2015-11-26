@@ -24,6 +24,7 @@ No Modules.
 ## Functions
 
 * Predicate
+* classDecorator
 
 ## Interfaces
 
@@ -43,6 +44,7 @@ No Modules.
 * Line
 * LineDrawer
 * AbstractClass
+* DecoratedClass
 
 ## Variables
 

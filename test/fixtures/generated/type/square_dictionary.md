@@ -53,3 +53,7 @@ T
 ## NumberIndexType
 
 T
+
+## Decorators
+
+Decorators is empty.

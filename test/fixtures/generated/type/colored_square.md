@@ -58,3 +58,7 @@ StringIndexType is undefined.
 ## NumberIndexType
 
 NumberIndexType is undefined.
+
+## Decorators
+
+Decorators is empty.

@@ -1,6 +1,6 @@
-# Type.Square
+# Type.DecoratedClass
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L25)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L89)
 
 No comment.
 
@@ -30,11 +30,7 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-center|Point|false|true|false||
-margin|number|true|true|false||
-size|integer|false|true|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+Properties is empty.
 
 ## Methods
 
@@ -58,4 +54,4 @@ NumberIndexType is undefined.
 
 ## Decorators
 
-Decorators is empty.
+* classDecorator
