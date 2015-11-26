@@ -10,6 +10,7 @@ var _ = require('lodash'),
     knownOptions = {
       plugin: String,
       'plugin-options': String,
+      'compiler-options': String,
       dest: path,
       help: Boolean,
       version: Boolean,
@@ -19,6 +20,7 @@ var _ = require('lodash'),
     shortHands = {
       p: '--plugin',
       P: '--plugin-options',
+      o: '--compiler-options',
       d: '--dest',
       h: '--help',
       v: '--version',
@@ -39,12 +41,13 @@ if (options.help) {
         typhen --plugin typhen-json-schema --dest generated definitions.d.ts
 
       Options:
-        -p, --plugin         Specify plugin name or file path.
-        -P, --plugin-options Specify plugin options (JSON string).
-        -d, --dest           Generate files to the directory.
-        -h, --help           Print this message.
-        -v, --version        Print the package's version.
-        -V, --verbose        Verbose mode. A lot more information output.*/).unindent());
+        -p, --plugin           Specify plugin name or file path.
+        -P, --plugin-options   Specify plugin options (JSON string).
+        -o, --compiler-options Specify compiler options (JSON string).
+        -d, --dest             Generate files to the directory.
+        -h, --help             Print this message.
+        -v, --version          Print the package's version.
+        -V, --verbose          Verbose mode. A lot more information output.*/).unindent());
    return;
 }
 
@@ -73,12 +76,15 @@ if (options.argv.remain.length === 0) {
   } else if (_.isString(options.dest) && _.isString(options.plugin)) {
     var pluginOptions = _.isString(options['plugin-options']) ?
       JSON.parse(options['plugin-options']) : {};
+    var compilerOptions = _.isString(options['compiler-options']) ?
+      JSON.parse(options['compiler-options']) : undefined;
     var plugin = typhen.loadPlugin(options.plugin, pluginOptions);
 
     typhen.run({
       plugin: plugin,
       src: fileNames,
-      dest: options.dest
+      dest: options.dest,
+      compilerOptions: compilerOptions
     }).done(function() {}, function(e) { throw e; });
   } else {
     console.log('Insufficient arguments');
