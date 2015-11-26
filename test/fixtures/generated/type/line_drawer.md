@@ -44,9 +44,9 @@ lines|ArrayOfLine|false|true|false||
 
 ## Static Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
-draw|src:Point:false:false dest:Point:false:false |Line|false|true|false|false| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
+draw|src:Point:false:false dest:Point:false:false |Line|false|true|false|false|| 
 
 ## StringIndexType
 

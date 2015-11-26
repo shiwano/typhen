@@ -33,11 +33,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|Comment
----|---|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|TypePredicate|Comment
+---|---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{typePredicate}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

@@ -89,4 +89,7 @@ declare module Type {
   @classDecorator
   class DecoratedClass {
   }
+
+  interface Cat {}
+  function isCat(a: any): a is Cat;
 }

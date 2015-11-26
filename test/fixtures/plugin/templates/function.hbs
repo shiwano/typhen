@@ -20,8 +20,8 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{typePredicate}}|{{comment}}
 {{/each}}

@@ -34,9 +34,9 @@ Properties is empty.
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
-abstractMethod||void|false|true|false|true| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
+abstractMethod||void|false|true|false|true|| 
 
 ## Static Properties
 

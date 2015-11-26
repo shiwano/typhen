@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
-setOptions|options:SetOptionsOptionsObject:false:false |boolean|
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
+setOptions|options:SetOptionsOptionsObject:false:false |boolean||

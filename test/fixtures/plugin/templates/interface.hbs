@@ -55,10 +55,10 @@ TypeArguments is empty.
 ## ConstructorSignatures
 
 {{#if constructorSignatures}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
 {{#each constructorSignatures}}
-constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{comment}}
+constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{typePredicate}}|{{comment}}
 {{/each}}
 {{else}}
 ConstructorSignatures is empty.
@@ -67,10 +67,10 @@ ConstructorSignatures is empty.
 ## CallSignatures
 
 {{#if callSignatures}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{typePredicate}}|{{comment}}
 {{/each}}
 {{else}}
 CallSignatures is empty.
@@ -91,11 +91,11 @@ Properties is empty.
 ## Methods
 
 {{#if methods}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
@@ -117,11 +117,11 @@ Static Properties is empty.
 ## Static Methods
 
 {{#if staticMethods}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
 {{#each staticMethods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

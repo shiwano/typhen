@@ -25,6 +25,7 @@ No Modules.
 
 * Predicate
 * classDecorator
+* isCat
 
 ## Interfaces
 
@@ -38,6 +39,7 @@ No Modules.
 * A
 * B
 * C
+* Cat
 
 ## Classes
 

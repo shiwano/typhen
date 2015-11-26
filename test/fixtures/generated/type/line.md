@@ -22,9 +22,9 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
-constructor|src:Point:false:false dest:Point:false:false |Line|
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
+constructor|src:Point:false:false dest:Point:false:false |Line||
 
 ## CallSignatures
 
@@ -38,10 +38,10 @@ color|Color|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
-setColor|color:Color:false:false callback:LineSetColorCallbackFunction:true:false |void|false|true|false|false| 
-draw||void|false|true|true|false| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
+setColor|color:Color:false:false callback:LineSetColorCallbackFunction:true:false |void|false|true|false|false|| 
+draw||void|false|true|true|false|| 
 
 ## Static Properties
 

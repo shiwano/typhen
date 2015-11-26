@@ -39,9 +39,9 @@ size|integer|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
-setColor|color:Color:false:false callback:ColoredSquareSetColorCallbackFunction:true:false |void|false|true|false|false| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
+setColor|color:Color:false:false callback:ColoredSquareSetColorCallbackFunction:true:false |void|false|true|false|false|| 
 
 ## Static Properties
 

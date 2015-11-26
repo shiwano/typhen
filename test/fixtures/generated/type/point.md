@@ -22,11 +22,11 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|Comment
----|---|---|---
-constructor|x:number:false:false y:number:false:false |Point|
-constructor|args:NumberAndNumberTuple:false:false |Point|
-constructor|variadicArgs:ArrayOfnumber:false:true |Point|
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
+---|---|---|---|---
+constructor|x:number:false:false y:number:false:false |Point||
+constructor|args:NumberAndNumberTuple:false:false |Point||
+constructor|variadicArgs:ArrayOfnumber:false:true |Point||
 
 ## CallSignatures
 
@@ -41,10 +41,10 @@ y|number|false|true|false||
 
 ## Methods
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|Comment
----|---|---|---|---|---|---|---
-set|x:number:false:false y:number:false:false |void|false|true|false|false| 
-set|args:NumberAndNumberTuple:false:false |void|false|true|false|false| 
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
+---|---|---|---|---|---|---|---|---
+set|x:number:false:false y:number:false:false |void|false|true|false|false|| 
+set|args:NumberAndNumberTuple:false:false |void|false|true|false|false|| 
 
 ## Static Properties
 

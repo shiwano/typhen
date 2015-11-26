@@ -1,6 +1,6 @@
-# Type.Transformer
+# Type.Cat
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L51)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L93)
 
 No comment.
 
@@ -26,9 +26,7 @@ ConstructorSignatures is empty.
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-Transformer|squeare:Square:false:false scale:number:false:false |void||
+CallSignatures is empty.
 
 ## Properties
 

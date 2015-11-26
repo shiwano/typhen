@@ -67,9 +67,9 @@ describe('TypeScriptParser', () => {
           // PrimitiveType
           'boolean', 'number', 'symbol', 'string', 'void', 'any', 'integer',
           // Decorator
-          'Type.TFunction',
-          'Type.classDecorator',
-          'Type.DecoratedClass'
+          'Type.TFunction', 'Type.classDecorator', 'Type.DecoratedClass',
+          // Type Guard
+          'Type.Cat', 'Type.isCat'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

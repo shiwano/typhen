@@ -91,6 +91,17 @@ export class Decorator {
   }
 }
 
+export class TypePredicate {
+  constructor(
+      public type: Type,
+      public parameter: Parameter) {
+  }
+
+  toString(): string {
+    return this.parameter.name + ' is ' + this.type.name;
+  }
+}
+
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s*([^\s@]*)\s*$/m;
   kind: SymbolKind = SymbolKind.Invalid;
@@ -548,11 +559,14 @@ export class Signature extends Symbol {
   typeParameters: TypeParameter[] = [];
   parameters: Parameter[] = [];
   returnType: Type = null;
+  typePredicate: TypePredicate = null;
 
-  initialize(typeParameters: TypeParameter[], parameters: Parameter[], returnType: Type): Signature {
+  initialize(typeParameters: TypeParameter[], parameters: Parameter[],
+      returnType: Type, typePredicate: TypePredicate): Signature {
     this.typeParameters = typeParameters;
     this.parameters = parameters;
     this.returnType = returnType;
+    this.typePredicate = typePredicate;
     return this;
   }
 

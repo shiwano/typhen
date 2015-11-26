@@ -570,9 +570,12 @@ class TypeScriptParser {
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     var parameters = signature.getParameters().map(s => this.parseParameter(s));
     var returnType = this.parseType(signature.getReturnType());
+    var typePredicate = signature.typePredicate === undefined ? null :
+      new Symbol.TypePredicate(this.parseType(signature.typePredicate.type),
+        parameters[signature.typePredicate.parameterIndex]);
 
     var typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
-    return typhenSymbol.initialize(typeParameters, parameters, returnType);
+    return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate);
   }
 
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
