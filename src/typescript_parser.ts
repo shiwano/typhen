@@ -292,13 +292,16 @@ class TypeScriptParser {
   private parseDecorator(decorator: ts.Decorator): Symbol.Decorator {
     var type = decorator.expression.getChildCount() === 0 ?
       this.typeChecker.getTypeAtLocation(decorator.expression) :
-      this.typeChecker.getTypeAtLocation(decorator.expression.getChildAt(0));
+      this.typeChecker.getTypeAtLocation(decorator.expression.getChildren()
+        .filter(c => c.kind == ts.SyntaxKind.Identifier).slice(-1)[0]);
     var decoratorFunction = this.parseType(type) as Symbol.Function;
-    var argumentTable = decorator.expression.getChildCount() === 0 ?
+    var syntaxList = decorator.expression.getChildren()
+      .filter(c => c.kind == ts.SyntaxKind.SyntaxList).slice(-1)[0];
+    var argumentTable = syntaxList === undefined ?
       {} :
       _.zipObject(
         decoratorFunction.callSignatures[0].parameters.map(p => p.name),
-        decorator.expression.getChildAt(2).getChildren()
+        syntaxList.getChildren()
           .filter(node => node.kind !== ts.SyntaxKind.CommaToken)
           .map(node => {
             if (node.kind === ts.SyntaxKind.FunctionExpression ||

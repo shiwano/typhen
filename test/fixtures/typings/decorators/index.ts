@@ -1,3 +1,5 @@
+import * as external from './external';
+
 function classDecorator<TFunction extends Function>(target: TFunction): TFunction {
   return target;
 }
@@ -12,9 +14,6 @@ function methodDecorator(target: Object, propertyKey: string, descriptor: TypedP
 function methodDecorator2(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
 }
 
-function parameterDecorator(target: Object, propertyKey: string | symbol, parameterIndex: number): void {
-}
-
 @classDecorator
 class DecoratedClass {
   @propertyDecorator(1, 'foo', true, function() { return '1'; })
@@ -23,5 +22,5 @@ class DecoratedClass {
   decoratedProperty2: number;
   @methodDecorator2
   @methodDecorator
-  decoratedMethod(@parameterDecorator arg: string): void { }
+  decoratedMethod(@external.parameterDecorator arg: string): void { }
 }

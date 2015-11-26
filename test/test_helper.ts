@@ -87,6 +87,7 @@ export function createConfig(src: string | string[] = 'test/fixtures/typings/int
     src: src,
     dest: '.tmp/generated',
     compilerOptions: {
+      module: <any>'commonjs',
       target: <any>'ES6',
       experimentalDecorators: true
     }
