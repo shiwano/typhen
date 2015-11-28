@@ -1,10 +1,10 @@
 import helper = require('../test_helper');
 
-import Runner = require('../../src/runner');
+import Runner from '../../src/runner';
 
 describe('Runner', () => {
   var sandbox = sinon.sandbox.create();
-  var instance: Runner.Runner;
+  var instance: Runner;
 
   beforeEach(() => {
     instance = helper.createRunner();

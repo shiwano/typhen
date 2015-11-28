@@ -1,8 +1,9 @@
-import ts = require('typescript');
-import Environment = require('./environments/environment');
-import Logger = require('./logger');
+import * as ts from 'typescript';
 
-class CompilerHost implements ts.CompilerHost {
+import * as logger from './logger';
+import { Environment } from './environments/environment';
+
+export default class CompilerHost implements ts.CompilerHost {
   private cachedSources: {[index: string]: ts.SourceFile} = {};
   private version: number = 0;
 
@@ -37,7 +38,7 @@ class CompilerHost implements ts.CompilerHost {
 
   writeFile(fileName: string, data: string, writeByteOrderMark: boolean,
       onError?: (message: string) => void): void {
-    Logger.debug('Skip to write: ' + fileName);
+    logger.debug('Skip to write: ' + fileName);
   }
 
   getCurrentDirectory(): string {
@@ -56,5 +57,3 @@ class CompilerHost implements ts.CompilerHost {
     return this.env.newLine;
   }
 }
-
-export = CompilerHost;

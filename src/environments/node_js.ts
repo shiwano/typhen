@@ -1,15 +1,15 @@
-import fs = require('fs');
-import path = require('path');
-import vm = require('vm');
-import pathExists = require('path-exists');
-import mkdirp = require('mkdirp');
-import _ = require('lodash');
-import glob = require('glob');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as vm from 'vm';
+import * as pathExists from 'path-exists';
+import * as mkdirp from 'mkdirp';
+import * as _ from 'lodash';
+import * as glob from 'glob';
 
-import Logger = require('../logger');
-import Environment = require('./environment');
+import * as Logger from '../logger';
+import { Environment } from './environment';
 
-class NodeJsEnvironment implements Environment {
+export default class NodeJsEnvironment implements Environment {
   currentDirectory: string;
   useCaseSensitiveFileNames: boolean = false;
   defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
@@ -86,5 +86,3 @@ class NodeJsEnvironment implements Environment {
     return sandbox[resultKey];
   }
 }
-
-export = NodeJsEnvironment;

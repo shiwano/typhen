@@ -1,37 +1,37 @@
-import path = require('path');
+import * as path from 'path';
 import Vinyl = require('vinyl');
 
-import Plugin = require('./plugin');
-import Config = require('./config');
-import Runner = require('./runner');
-import Symbol = require('./symbol');
-import Logger = require('./logger');
-import Helpers = require('./helpers');
+import * as plugin from './plugin';
+import * as config from './config';
+import * as symbol from './symbol';
+import * as typhenLogger from './logger';
+import * as typhenHelpers from './helpers';
+import Runner from './runner';
 
 namespace Typhen {
-  export import SymbolKind = Symbol.SymbolKind;
-  export const logger = Logger;
-  export const helpers = Helpers;
+  export import SymbolKind = symbol.SymbolKind;
+  export const logger = typhenLogger;
+  export const helpers = typhenHelpers;
 
-  export function run(configArgs: Config.ConfigObject): Promise<Vinyl[]> {
-    let config = new Config.Config(configArgs);
-    return new Runner.Runner(config).run();
+  export function run(configArgs: config.ConfigObject): Promise<Vinyl[]> {
+    let runningConfig = new config.Config(configArgs);
+    return new Runner(runningConfig).run();
   }
 
   export function runByTyphenfile(fileName: string): Promise<Vinyl[]> {
     return require(fileName)(Typhen);
   }
 
-  export function createPlugin(pluginArgs: Plugin.PluginObject): Plugin.Plugin {
-    return new Plugin.Plugin(pluginArgs);
+  export function createPlugin(pluginArgs: plugin.PluginObject): plugin.Plugin {
+    return new plugin.Plugin(pluginArgs);
   }
 
-  export function loadPlugin(pluginName: string, options: any = {}): Plugin.Plugin {
+  export function loadPlugin(pluginName: string, options: any = {}): plugin.Plugin {
     try {
-      return <Plugin.Plugin>require(pluginName)(Typhen, options);
+      return <plugin.Plugin>require(pluginName)(Typhen, options);
     } catch (e) {
       let resolvedPath = path.resolve(pluginName);
-      return <Plugin.Plugin>require(resolvedPath)(Typhen, options);
+      return <plugin.Plugin>require(resolvedPath)(Typhen, options);
     }
   }
 }

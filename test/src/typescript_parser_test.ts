@@ -1,7 +1,7 @@
-import helper = require('../test_helper');
+import * as helper from '../test_helper';
 
-import TypeScriptParser = require('../../src/typescript_parser');
-import Symbol = require('../../src/symbol');
+import * as symbol from '../../src/symbol';
+import TypeScriptParser from '../../src/typescript_parser';
 
 describe('TypeScriptParser', () => {
   var instance: TypeScriptParser;
@@ -122,13 +122,13 @@ describe('TypeScriptParser', () => {
 
     context('when ts files that includes decorators are given', () => {
       var definitionPath = 'test/fixtures/typings/decorators/index.ts';
-      var decoratedClass: Symbol.Class;
+      var decoratedClass: symbol.Class;
 
       beforeEach(() => {
         var config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
-        decoratedClass = instance.types.filter(t => t.name === 'DecoratedClass')[0] as Symbol.Class;
+        decoratedClass = instance.types.filter(t => t.name === 'DecoratedClass')[0] as symbol.Class;
       });
 
       it('should parse class decorators', () => {
@@ -165,7 +165,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse parameter decorators', () => {
-        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0] as Symbol.Method;
+        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0] as symbol.Method;
         var decoratedParameter =  decoratedMethod.callSignatures[0].parameters[0];
         assert(decoratedParameter.decorators.length === 1);
         assert.deepEqual(decoratedParameter.decorators[0].argumentTable, {});

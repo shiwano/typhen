@@ -1,16 +1,16 @@
 import helper = require('../test_helper');
 
-import Config = require('../../src/config');
-import Symbol = require('../../src/symbol');
+import * as config from '../../src/config';
+import * as symbol from '../../src/symbol';
 
-describe('Symbol', () => {
+describe('symbol', () => {
   it('should export symbols for compiling', () => {
-    assert(Symbol.Enum);
-    assert(Symbol.Interface);
+    assert(symbol.Enum);
+    assert(symbol.Interface);
   });
 
   describe('.Enum', () => {
-    var instance: Symbol.Enum;
+    var instance: symbol.Enum;
 
     beforeEach(() => {
       var config = helper.createConfig();
@@ -26,7 +26,7 @@ describe('Symbol', () => {
       it('should have members', () => {
         assert.deepEqual(instance.members.map(m => m.name), ['Bar', 'Baz']);
         instance.members.forEach(m => {
-          assert(m instanceof Symbol.EnumMember);
+          assert(m instanceof symbol.EnumMember);
         });
       });
       it('should have tags', () => {

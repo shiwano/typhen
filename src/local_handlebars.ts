@@ -1,8 +1,8 @@
-import _ = require('lodash');
-import inflection = require('inflection');
-import Handlebars = require('handlebars');
+import * as _ from 'lodash';
+import * as inflection from 'inflection';
+import * as Handlebars from 'handlebars';
 
-import Helpers = require('./helpers');
+import * as helpers from './helpers';
 
 export namespace HandlebarsHelpers {
   export function and(...valuesAndOptions: any[]): any {
@@ -28,23 +28,23 @@ export namespace HandlebarsHelpers {
   }
 
   export function underscore(str: string): string {
-    return Helpers.underscore(str);
+    return helpers.underscore(str);
   }
 
   export function upperCamelCase(str: string): string {
-    return Helpers.upperCamelCase(str);
+    return helpers.upperCamelCase(str);
   }
 
   export function lowerCamelCase(str: string): string {
-    return Helpers.lowerCamelCase(str);
+    return helpers.lowerCamelCase(str);
   }
 
   export function pluralize(str: string): string {
-    return Helpers.pluralize(str);
+    return helpers.pluralize(str);
   }
 
   export function singularize(str: string): string {
-    return Helpers.singularize(str);
+    return helpers.singularize(str);
   }
 
   export function defaultValue(value: any, defaultValue: any): any {

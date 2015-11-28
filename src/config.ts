@@ -1,14 +1,14 @@
-import _ = require('lodash');
-import ts = require('typescript');
+import * as _ from 'lodash';
+import * as ts from 'typescript';
 
-import Plugin = require('./plugin');
-import Runner = require('./runner');
-import Environment = require('./environments/environment');
-import NodeJsEnvironment = require('./environments/node_js');
-import CompilerHost = require('./compiler_host');
+import * as plugin from './plugin';
+import { Environment } from './environments/environment';
+import Runner from './runner';
+import NodeJsEnvironment from './environments/node_js';
+import CompilerHost from './compiler_host';
 
 export interface ConfigObject {
-  plugin: Plugin.Plugin;
+  plugin: plugin.Plugin;
   src: string | string[];
   dest: string;
   cwd?: string;
@@ -20,7 +20,7 @@ export interface ConfigObject {
 }
 
 export class Config implements ConfigObject {
-  plugin: Plugin.Plugin;
+  plugin: plugin.Plugin;
   src: string[];
   dest: string;
   cwd: string;

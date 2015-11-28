@@ -1,19 +1,19 @@
-import _ = require('lodash');
-import inflection = require('inflection');
+import * as _ from 'lodash';
+import * as inflection from 'inflection';
 import Vinyl = require('vinyl');
 
-import Environment = require('./environments/environment');
-import Symbol = require('./symbol');
-import Plugin = require('./plugin');
-import Logger = require('./logger');
-import LocalHandlebars = require('./local_handlebars');
-import Helpers = require('./helpers');
+import * as symbol from './symbol';
+import * as plugin from './plugin';
+import * as logger from './logger';
+import * as localHandlebars from './local_handlebars';
+import * as helpers from './helpers';
+import { Environment } from './environments/environment';
 
 interface HandlebarsTemplate {
   (context: any, options?: any): string;
 }
 
-class Generator {
+export default class Generator {
   private fileDataCache: { [index: string]: string } = {};
   private templateCache: { [index: string]: HandlebarsTemplate } = {};
   files: Vinyl[] = [];
@@ -22,7 +22,7 @@ class Generator {
       public env: Environment,
       public outputDirectory: string,
       public pluginDirectory: string,
-      private handlebarsOptions: Plugin.HandlebarsOptions) {
+      private handlebarsOptions: plugin.HandlebarsOptions) {
     this.outputDirectory = this.env.resolvePath(this.outputDirectory);
   }
 
@@ -43,21 +43,21 @@ class Generator {
   }
 
   generate(src: string, dest: string, overwrite?: boolean): Vinyl;
-  generate(src: string, dest: string, context: Symbol.Symbol, overwrite?: boolean): Vinyl;
+  generate(src: string, dest: string, context: symbol.Symbol, overwrite?: boolean): Vinyl;
   generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
     if (typeof context === 'boolean') {
       overwrite = context;
       context = null;
     }
 
-    if (context instanceof Symbol.Symbol) {
-      dest = this.replaceStars(dest, <Symbol.Symbol>context);
+    if (context instanceof symbol.Symbol) {
+      dest = this.replaceStars(dest, <symbol.Symbol>context);
     }
     let resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
     let data: string;
 
     if (context !== null && /^.+\.hbs$/.test(src)) {
-      Logger.debug('Rendering: ' + src + ', ' + context);
+      logger.debug('Rendering: ' + src + ', ' + context);
       data = this.getTemplate(src)(context, this.handlebarsOptions);
     } else {
       data = this.getFileFromPluginDirectory(src);
@@ -83,7 +83,7 @@ class Generator {
     return new Vinyl(options);
   }
 
-  replaceStars(str: string, symbol: Symbol.Symbol, separator: string = '/'): string {
+  replaceStars(str: string, symbol: symbol.Symbol, separator: string = '/'): string {
     let matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches == null) { return str; }
 
@@ -91,9 +91,9 @@ class Generator {
       if (_.contains(name, '/')) { return name; }
 
       switch (inflectionType) {
-        case 'underscore':     return Helpers.underscore(name);
-        case 'upperCamelCase': return Helpers.upperCamelCase(name);
-        case 'lowerCamelCase': return Helpers.lowerCamelCase(name);
+        case 'underscore':     return helpers.underscore(name);
+        case 'upperCamelCase': return helpers.upperCamelCase(name);
+        case 'lowerCamelCase': return helpers.lowerCamelCase(name);
         default:               return name;
       }
     };
@@ -117,11 +117,9 @@ class Generator {
 
     if (!this.templateCache[filePath]) {
       let templateSource = this.getFileFromPluginDirectory(filePath);
-      Logger.debug('Compiling the Template: ' + templateName);
-      this.templateCache[filePath] = LocalHandlebars.handlebars.compile(templateSource);
+      logger.debug('Compiling the Template: ' + templateName);
+      this.templateCache[filePath] = localHandlebars.handlebars.compile(templateSource);
     }
     return this.templateCache[filePath];
   }
 }
-
-export = Generator;

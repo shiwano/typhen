@@ -1,9 +1,9 @@
-import helper = require('../test_helper');
+import * as helper from '../test_helper';
 
-import Config = require('../../src/config');
+import { Config } from '../../src/config';
 
 describe('Config', () => {
-  var instance: Config.Config;
+  var instance: Config;
 
   beforeEach(() => {
     instance = helper.createConfig();

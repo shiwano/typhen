@@ -1,10 +1,10 @@
 import '../../test_helper';
 
-import fs = require('fs');
-import pathExists = require('path-exists');
-import glob = require('glob');
+import * as fs from 'fs';
+import * as pathExists from 'path-exists';
+import * as glob from 'glob';
 
-import NodeJsEnvironment = require('../../../src/environments/node_js');
+import NodeJsEnvironment from '../../../src/environments/node_js';
 
 describe('NodeJsEnvironment', () => {
   var sandbox = sinon.sandbox.create();

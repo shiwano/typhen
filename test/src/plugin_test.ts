@@ -1,9 +1,9 @@
 import helper = require('../test_helper');
 
-import Plugin = require('../../src/plugin');
+import * as plugin from '../../src/plugin';
 
-describe('Plugin', () => {
-  var instance: Plugin.Plugin;
+describe('plugin', () => {
+  var instance: plugin.Plugin;
 
   beforeEach(() => {
     instance = helper.createPlugin();

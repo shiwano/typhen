@@ -1,9 +1,9 @@
-import _ = require('lodash');
+import * as _ from 'lodash';
 
-import Symbol = require('./symbol');
-import Runner = require('./runner');
-import NodeJsEnvironment = require('./environments/node_js');
-import Generator = require('./generator');
+import * as symbol from './symbol';
+import Runner from './runner';
+import NodeJsEnvironment from './environments/node_js';
+import Generator from './generator';
 
 export interface DisallowOptions {
   any?: boolean;
@@ -30,8 +30,8 @@ export interface PluginObject {
   customPrimitiveTypes?: string[];
   disallow?: DisallowOptions;
   handlebarsOptions?: HandlebarsOptions;
-  rename?(symbol: Symbol.Symbol, name: string): string;
-  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void>;
+  rename?(symbol: symbol.Symbol, name: string): string;
+  generate(generator: Generator, types: symbol.Type[], modules: symbol.Module[]): void | Promise<void>;
 }
 
 export class Plugin implements PluginObject {
@@ -46,11 +46,11 @@ export class Plugin implements PluginObject {
     _.assign(this, args);
   }
 
-  rename(symbol: Symbol.Symbol, name: string): string {
+  rename(symbol: symbol.Symbol, name: string): string {
     return name;
   }
 
-  generate(generator: Generator, types: Symbol.Type[], modules: Symbol.Module[]): void | Promise<void> {
+  generate(generator: Generator, types: symbol.Type[], modules: symbol.Module[]): void | Promise<void> {
     throw new Error('The plugin does not implement the generate function');
   }
 }

@@ -1,17 +1,17 @@
 import '../test_helper';
 
-import fs = require('fs');
-import glob = require('glob');
-import rimraf = require('rimraf');
+import * as fs from 'fs';
+import * as glob from 'glob';
+import * as rimraf from 'rimraf';
 
-import Typhen = require('../../src/index');
+import typhen = require('../../src/index');
 
 describe('Error Test', () => {
   var errorFileNames = glob.sync('./test/fixtures/typings/errors/**/*.ts');
 
   errorFileNames.forEach((errorFileName) => {
     context(errorFileName.replace('./test/fixtures/typings/errors/', ''), () => {
-      var plugin = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
+      var plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
         author: 'shiwano'
       });
 
@@ -20,7 +20,7 @@ describe('Error Test', () => {
       });
 
       it('should raise error', (done) => {
-        Typhen.run({
+        typhen.run({
           plugin: plugin,
           src: errorFileName,
           dest: '.tmp/generated'

@@ -1,35 +1,35 @@
 import '../test_helper';
 
-import Helpers = require('../../src/helpers');
+import * as helpers from '../../src/helpers';
 
-describe('Helpers', () => {
+describe('helpers', () => {
   describe('.underscore', () => {
     it('should return a underscored string', () => {
-      assert(Helpers.underscore('App1.FooBar.Qux') === 'app1.foo_bar.qux');
+      assert(helpers.underscore('App1.FooBar.Qux') === 'app1.foo_bar.qux');
     });
   });
 
   describe('.upperCamelCase', () => {
     it('should return a upperCamelCaseed string', () => {
-      assert(Helpers.upperCamelCase('app1.foo_bar.qux') === 'App1.FooBar.Qux');
+      assert(helpers.upperCamelCase('app1.foo_bar.qux') === 'App1.FooBar.Qux');
     });
   });
 
   describe('.lowerCamelCase', () => {
     it('should return a lowerCamelCaseed string', () => {
-      assert(Helpers.lowerCamelCase('app1.foo_bar.qux') === 'app1.fooBar.qux');
+      assert(helpers.lowerCamelCase('app1.foo_bar.qux') === 'app1.fooBar.qux');
     });
   });
 
   describe('.pluralize', () => {
     it('should return a pluralized string', () => {
-      assert(Helpers.pluralize('person') === 'people');
+      assert(helpers.pluralize('person') === 'people');
     });
   });
 
   describe('.singularize', () => {
     it('should return a singularized string', () => {
-      assert(Helpers.singularize('people') === 'person');
+      assert(helpers.singularize('people') === 'person');
     });
   });
 });

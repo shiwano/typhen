@@ -1,13 +1,13 @@
-import ts = require('typescript');
-import _ = require('lodash');
-import inflection = require('inflection');
+import * as ts from 'typescript';
+import * as _ from 'lodash';
+import * as inflection from 'inflection';
 import HashMap = require('hashmap');
 
-import Logger = require('./logger');
-import Symbol = require('./symbol');
-import Config = require('./config');
+import * as logger from './logger';
+import * as config from './config';
+import * as Symbol from './symbol';
 
-class TypeScriptParser {
+export default class TypeScriptParser {
   private program: ts.Program;
   private typeChecker: ts.TypeChecker;
 
@@ -20,7 +20,7 @@ class TypeScriptParser {
   private typeReferenceStack: Symbol.TypeReference[] = [];
   private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
 
-  constructor(private fileNames: string[], private config: Config.Config) { }
+  constructor(private fileNames: string[], private config: config.Config) { }
 
   get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
@@ -46,20 +46,20 @@ class TypeScriptParser {
   }
 
   parse(): void {
-    Logger.debug('Loading the TypeScript files');
+    logger.debug('Loading the TypeScript files');
     this.program = ts.createProgram(this.fileNames, this.config.compilerOptions, this.config.compilerHost);
     this.typeChecker = this.program.getTypeChecker();
 
-    Logger.debug('Compiling the TypeScript files');
+    logger.debug('Compiling the TypeScript files');
     let errors = ts.getPreEmitDiagnostics(this.program);
 
     errors.forEach(d => {
       let info = _.isObject(d.file) ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
-      Logger.error(Logger.red(info), d.messageText);
+      logger.error(logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
 
-    Logger.debug('Parsing the TypeScript symbols');
+    logger.debug('Parsing the TypeScript symbols');
     this.sourceFiles.forEach(s => {
       this.parseSourceFile(s);
     });
@@ -70,7 +70,7 @@ class TypeScriptParser {
   }
 
   validate(): void {
-    Logger.debug('Validating the typhen symbols');
+    logger.debug('Validating the typhen symbols');
     this.symbols.forEach(symbol => {
       let result = symbol.validate();
 
@@ -162,7 +162,7 @@ class TypeScriptParser {
     let typhenSymbol = <T>new typhenSymbolClass(this.config, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
         this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
-    Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
+    logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
         'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
         'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
     this.symbols.push(typhenSymbol);
@@ -614,5 +614,3 @@ class TypeScriptParser {
     return typhenSymbol.initialize(aliasedType);
   }
 }
-
-export = TypeScriptParser;

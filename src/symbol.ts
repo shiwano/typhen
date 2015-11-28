@@ -1,7 +1,7 @@
-import _ = require('lodash');
-import inflection = require('inflection');
+import * as _ from 'lodash';
+import * as inflection from 'inflection';
 
-import Config = require('./config');
+import * as config from './config';
 
 export enum SymbolKind {
   Invalid,
@@ -108,7 +108,7 @@ export class Symbol {
   private isDestroyed: boolean = false;
 
   constructor(
-      protected config: Config.Config,
+      protected config: config.Config,
       public rawName: string,
       public docComment: string[],
       public declarationInfos: DeclarationInfo[],

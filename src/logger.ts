@@ -1,4 +1,4 @@
-import chalk = require('chalk');
+import * as chalk from 'chalk';
 
 namespace Logger {
   export enum LogLevel {

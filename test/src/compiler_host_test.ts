@@ -1,8 +1,8 @@
-import helper = require('../test_helper');
+import * as helper from '../test_helper';
 
-import ts = require('typescript');
+import * as ts from 'typescript';
 
-import CompilerHost = require('../../src/compiler_host');
+import CompilerHost from '../../src/compiler_host';
 
 describe('CompilerHost', () => {
   var sandbox = sinon.sandbox.create();

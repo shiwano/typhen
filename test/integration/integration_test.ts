@@ -1,14 +1,14 @@
 import '../test_helper';
 
-import fs = require('fs');
-import path = require('path');
-import childProcess = require('child_process');
-import _ = require('lodash');
-import glob = require('glob');
-import rimraf = require('rimraf');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as childProcess from 'child_process';
+import * as _ from 'lodash';
+import * as glob from 'glob';
+import * as rimraf from 'rimraf';
 import Vinyl = require('vinyl');
 
-import Typhen = require('../../src/index');
+import * as typhen from '../../src/index';
 
 function addTestSuite(expectedFileNames: string[]) {
   expectedFileNames.forEach((expectedFileName) => {
@@ -42,10 +42,10 @@ describe('Integration Test', () => {
 
       before((done) => {
         rimraf('./.tmp/generated', () => {
-          var plugin = Typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
+          var plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
             author: 'shiwano'
           });
-          Typhen.run({
+          typhen.run({
             plugin: plugin,
             src: 'test/fixtures/typings/integration/index.d.ts',
             dest: '.tmp/generated',

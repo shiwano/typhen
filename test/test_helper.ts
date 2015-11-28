@@ -1,22 +1,23 @@
 /// <reference path="../typings/bundle.d.ts" />
+/// <reference path="../node_modules/typescript/lib/typescript.d.ts" />
 
 require('source-map-support').install();
 
 (<any>global).assert = require('power-assert');
 (<any>global).sinon = require('sinon');
 
-import _ = require('lodash');
-import path = require('path');
+import * as _ from 'lodash';
+import * as path from 'path';
 
-import Symbol = require('../src/symbol');
-import Plugin = require('../src/plugin');
-import Runner = require('../src/runner');
-import Config = require('../src/config');
-import Logger = require('../src/logger');
-import Generator = require('../src/generator');
-import Environment = require('../src/environments/environment');
+import * as symbol from '../src/symbol';
+import * as plugin from '../src/plugin';
+import * as config from '../src/config';
+import * as logger from '../src/logger';
+import { Environment } from '../src/environments/environment';
+import Runner from '../src/runner';
+import Generator from '../src/generator';
 
-Logger.level = Logger.LogLevel.Silent;
+logger.level = logger.LogLevel.Silent;
 
 export class TestEnvironment implements Environment {
   currentDirectory: string = process.cwd() + '/test/fixtures/typings';
@@ -59,30 +60,30 @@ export class TestEnvironment implements Environment {
   }
 }
 
-export function createEnum(config?: Config.Config): Symbol.Enum {
+export function createEnum(config?: config.Config): symbol.Enum {
   if (config === undefined) { config = createConfig(); }
-  var appModule = new Symbol.Module(config, 'App', [''], [], [], null, '').initialize({}, {}, [], [], [], []);
-  var typeModule = new Symbol.Module(config, 'Type', [''], [], [], appModule, '').initialize({}, {}, [], [], [], []);
+  var appModule = new symbol.Module(config, 'App', [''], [], [], null, '').initialize({}, {}, [], [], [], []);
+  var typeModule = new symbol.Module(config, 'Type', [''], [], [], appModule, '').initialize({}, {}, [], [], [], []);
 
-  var type = new Symbol.Enum(config, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
+  var type = new symbol.Enum(config, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
       '@type Invalid', '@type Enum', '@true', '@false false'], [], [], typeModule, '');
   type.initialize([
-    new Symbol.EnumMember(config, 'Bar', [''], [], [], typeModule, '').initialize(0),
-    new Symbol.EnumMember(config, 'Baz', [''], [], [], typeModule, '').initialize(1)
+    new symbol.EnumMember(config, 'Bar', [''], [], [], typeModule, '').initialize(0),
+    new symbol.EnumMember(config, 'Baz', [''], [], [], typeModule, '').initialize(1)
   ], false);
   return type;
 }
 
-export function createPlugin(): Plugin.Plugin {
-  return new Plugin.Plugin({
+export function createPlugin(): plugin.Plugin {
+  return new plugin.Plugin({
     pluginDirectory: process.cwd() + '/test/fixtures/plugin',
     customPrimitiveTypes: ['integer'],
     generate: function(types, generator) {}
   });
 }
 
-export function createConfig(src: string | string[] = 'test/fixtures/typings/integration/index.d.ts'): Config.Config {
-  return new Config.Config({
+export function createConfig(src: string | string[] = 'test/fixtures/typings/integration/index.d.ts'): config.Config {
+  return new config.Config({
     plugin: createPlugin(),
     src: src,
     dest: '.tmp/generated',
@@ -103,6 +104,6 @@ export function createGenerator(): Generator  {
   return new Generator(env, '/generated', '/plugin', {});
 }
 
-export function createRunner(): Runner.Runner {
-  return new Runner.Runner(createConfig());
+export function createRunner(): Runner {
+  return new Runner(createConfig());
 }

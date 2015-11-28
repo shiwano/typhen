@@ -1,6 +1,6 @@
-import helper = require('../test_helper');
+import * as helper from '../test_helper';
 
-import Generator = require('../../src/generator');
+import Generator from '../../src/generator';
 
 describe('Generator', () => {
   var sandbox = sinon.sandbox.create();

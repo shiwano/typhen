@@ -1,28 +1,28 @@
-import _ = require('lodash');
-import ts = require('typescript');
-import Promise = require('bluebird');
+import * as _ from 'lodash';
+import * as ts from 'typescript';
+import * as Promise from 'bluebird';
 import Vinyl = require('vinyl');
 
-import Config = require('./config');
-import Logger = require('./logger');
-import Generator = require('./generator');
-import TypeScriptParser = require('./typescript_parser');
+import * as config from './config';
+import * as logger from './logger';
+import Generator from './generator';
+import TypeScriptParser from './typescript_parser';
 
-export class Runner {
-  constructor(public config: Config.Config) {}
+export default class Runner {
+  constructor(public config: config.Config) {}
 
   run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve, reject) => {
-      Logger.log(Logger.underline('Parsing TypeScript files'));
+      logger.log(logger.underline('Parsing TypeScript files'));
       let parser = new TypeScriptParser(this.config.src, this.config);
       parser.parse();
       parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
         let relative = this.config.env.relativePath(sourceFile.fileName);
-        Logger.info('Parsed', Logger.cyan(relative));
+        logger.info('Parsed', logger.cyan(relative));
       });
 
-      Logger.log(Logger.underline('Generating files'));
+      logger.log(logger.underline('Generating files'));
 
       let generator = new Generator(this.config.env, this.config.dest,
           this.config.plugin.pluginDirectory, this.config.plugin.handlebarsOptions);
@@ -34,11 +34,11 @@ export class Runner {
             this.config.env.writeFile(file.path, file.contents.toString());
           }
           let relative = this.config.env.relativePath(file.path);
-          Logger.info('Generated', Logger.cyan(relative));
+          logger.info('Generated', logger.cyan(relative));
         });
         parser.types.forEach(t => t.destroy(true));
         parser.modules.forEach(m => m.destroy(true));
-        Logger.log('\n' + Logger.green('✓'), 'Finished successfully!');
+        logger.log('\n' + logger.green('✓'), 'Finished successfully!');
         resolve(generator.files);
       };
 

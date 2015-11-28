@@ -1,4 +1,4 @@
-interface Environment {
+export interface Environment {
   currentDirectory: string;
   newLine: string;
   useCaseSensitiveFileNames: boolean;
@@ -13,5 +13,3 @@ interface Environment {
   glob(pattern: string, cwd?: string): string[];
   eval(code: string): any;
 }
-
-export = Environment;

@@ -1,5 +1,5 @@
-import _ = require('lodash');
-import inflection = require('inflection');
+import * as _ from 'lodash';
+import * as inflection from 'inflection';
 
 function applyHelperToStringWithSeparator(str: string, helper: (str: string) => string): string {
   if (typeof str !== 'string') {
