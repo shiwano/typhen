@@ -25,7 +25,7 @@ class TypeScriptParser {
   get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
       .filter(s => {
-        var resolvedPath = this.config.env.resolvePath(s.fileName);
+        let resolvedPath = this.config.env.resolvePath(s.fileName);
         return resolvedPath !== this.config.env.defaultLibFileName &&
           _.contains(resolvedPath, this.config.typingDirectory);
       });
@@ -51,10 +51,10 @@ class TypeScriptParser {
     this.typeChecker = this.program.getTypeChecker();
 
     Logger.debug('Compiling the TypeScript files');
-    var errors = ts.getPreEmitDiagnostics(this.program);
+    let errors = ts.getPreEmitDiagnostics(this.program);
 
     errors.forEach(d => {
-      var info = _.isObject(d.file) ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
+      let info = _.isObject(d.file) ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
       Logger.error(Logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
@@ -72,7 +72,7 @@ class TypeScriptParser {
   validate(): void {
     Logger.debug('Validating the typhen symbols');
     this.symbols.forEach(symbol => {
-      var result = symbol.validate();
+      let result = symbol.validate();
 
       if (typeof result === 'string') {
         throw new Error(result + ': ' + symbol.declarationInfos.map(d => d.toString()).join(', '));
@@ -89,8 +89,8 @@ class TypeScriptParser {
   }
 
   private throwErrorWithSymbolInfo(message: string, symbol: ts.Symbol): void {
-    var infos = this.getDeclarationInfos(symbol);
-    var symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
+    let infos = this.getDeclarationInfos(symbol);
+    let symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
     throw new Error(message + symbolInfo);
   }
 
@@ -145,7 +145,7 @@ class TypeScriptParser {
         this.throwErrorWithSymbolInfo('Unsupported type', type.symbol);
       }
     }
-    var typhenType = this.typeCache.get(type);
+    let typhenType = this.typeCache.get(type);
 
     if (typhenType.isTypeParameter && _.isObject(this.currentTypeReference)) {
       return this.currentTypeReference.getTypeByTypeParameter(<Symbol.TypeParameter>typhenType) || typhenType;
@@ -156,10 +156,10 @@ class TypeScriptParser {
 
   private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol,
       typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
-    var name = _.isObject(symbol) ? symbol.name.replace(/^__.*$/, '') : '';
-    var assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
+    let name = _.isObject(symbol) ? symbol.name.replace(/^__.*$/, '') : '';
+    let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
       this.getAssumedName(symbol, assumedNameSuffix) : '';
-    var typhenSymbol = <T>new typhenSymbolClass(this.config, name,
+    let typhenSymbol = <T>new typhenSymbolClass(this.config, name,
         this.getDocComment(symbol), this.getDeclarationInfos(symbol),
         this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
     Logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
@@ -174,16 +174,16 @@ class TypeScriptParser {
     if (this.typeCache.get(type) !== undefined) {
       this.throwErrorWithSymbolInfo('Already created the type', type.symbol);
     }
-    var typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
+    let typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
     this.typeCache.set(type, typhenType);
     return typhenType;
   }
 
   private getOrCreateTyphenModule(symbol: ts.Symbol): Symbol.Module {
-    var name = _.isObject(symbol) ? symbol.name : '';
+    let name = _.isObject(symbol) ? symbol.name : '';
     if (this.moduleCache.get(name) !== undefined) { return this.moduleCache.get(name); }
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Module>(symbol, Symbol.Module);
     this.moduleCache.set(name, typhenSymbol);
     return typhenSymbol;
   }
@@ -192,10 +192,10 @@ class TypeScriptParser {
     if (!_.isObject(symbol) || symbol.declarations === undefined) { return []; }
 
     return symbol.declarations.map(d => {
-      var sourceFile = d.getSourceFile();
-      var resolvedPath = this.config.env.resolvePath(sourceFile.fileName);
-      var relativePath = this.config.env.relativePath(resolvedPath);
-      var lineAndCharacterNumber = sourceFile.getLineAndCharacterOfPosition(d.getStart());
+      let sourceFile = d.getSourceFile();
+      let resolvedPath = this.config.env.resolvePath(sourceFile.fileName);
+      let relativePath = this.config.env.relativePath(resolvedPath);
+      let lineAndCharacterNumber = sourceFile.getLineAndCharacterOfPosition(d.getStart());
       lineAndCharacterNumber.line += 1;
       return new Symbol.DeclarationInfo(relativePath, resolvedPath, d.getFullText(), lineAndCharacterNumber);
     });
@@ -213,9 +213,9 @@ class TypeScriptParser {
   private getParentModule(symbol: ts.Symbol): Symbol.Module {
     if (!_.isObject(symbol)) { return null; }
 
-    var parentDecl = symbol.declarations[0].parent;
+    let parentDecl = symbol.declarations[0].parent;
     while (parentDecl !== undefined) {
-      var parentSymbol = this.getSymbolAtLocation(parentDecl);
+      let parentSymbol = this.getSymbolAtLocation(parentDecl);
 
       if (parentSymbol && this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Module)) {
         return this.getOrCreateTyphenModule(parentSymbol);
@@ -228,7 +228,7 @@ class TypeScriptParser {
   private getDocComment(symbol: ts.Symbol): string[] {
     return _.tap([], (results) => {
       if (!_.isObject(symbol)) { return; }
-      var docComment = symbol.getDocumentationComment();
+      let docComment = symbol.getDocumentationComment();
       if (docComment === undefined) { return; }
 
       _.chain(docComment)
@@ -244,11 +244,11 @@ class TypeScriptParser {
       return typeName;
     }
 
-    var parentNames: string[] = [];
-    var parentDecl = symbol.declarations[0].parent;
+    let parentNames: string[] = [];
+    let parentDecl = symbol.declarations[0].parent;
 
     while (parentDecl !== undefined) {
-      var parentSymbol = this.getSymbolAtLocation(parentDecl);
+      let parentSymbol = this.getSymbolAtLocation(parentDecl);
 
       if (parentSymbol !== undefined) {
         if (this.checkFlags(parentSymbol.flags, ts.SymbolFlags.TypeAlias)) {
@@ -282,7 +282,7 @@ class TypeScriptParser {
     return this.typeChecker.getSymbolsInScope(node, symbolFlags)
       .filter(s => {
         return s.declarations.every(d => {
-          var resolvedPath = this.config.env.resolvePath(d.getSourceFile().fileName);
+          let resolvedPath = this.config.env.resolvePath(d.getSourceFile().fileName);
           return resolvedPath !== this.config.env.defaultLibFileName &&
             _.contains(resolvedPath, this.config.typingDirectory);
         });
@@ -290,14 +290,14 @@ class TypeScriptParser {
   }
 
   private parseDecorator(decorator: ts.Decorator): Symbol.Decorator {
-    var type = decorator.expression.getChildCount() === 0 ?
+    let type = decorator.expression.getChildCount() === 0 ?
       this.typeChecker.getTypeAtLocation(decorator.expression) :
       this.typeChecker.getTypeAtLocation(decorator.expression.getChildren()
         .filter(c => c.kind === ts.SyntaxKind.Identifier).slice(-1)[0]);
-    var decoratorFunction = this.parseType(type) as Symbol.Function;
-    var syntaxList = decorator.expression.getChildren()
+    let decoratorFunction = this.parseType(type) as Symbol.Function;
+    let syntaxList = decorator.expression.getChildren()
       .filter(c => c.kind === ts.SyntaxKind.SyntaxList).slice(-1)[0];
-    var argumentTable = syntaxList === undefined ?
+    let argumentTable = syntaxList === undefined ?
       {} :
       _.zipObject(
         decoratorFunction.callSignatures[0].parameters.map(p => p.name),
@@ -320,63 +320,63 @@ class TypeScriptParser {
   }
 
   private parseSourceFile(sourceFile: ts.SourceFile): void {
-    var sourceSymbol = this.getSymbolAtLocation(sourceFile);
-    var typhenSymbol = this.getOrCreateTyphenModule(sourceSymbol);
+    let sourceSymbol = this.getSymbolAtLocation(sourceFile);
+    let typhenSymbol = this.getOrCreateTyphenModule(sourceSymbol);
 
-    var modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
+    let modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
       .map(s => this.parseModule(s));
-    var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
-    var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
+    let importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
+    let importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
     this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Alias)
       .forEach(s => {
-        var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
+        let aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
           importedModuleTable[s.name] = this.parseModule(aliasedSymbol);
         } else {
-          var aliasedType = this.typeChecker.getTypeAtLocation(aliasedSymbol.declarations[0]);
+          let aliasedType = this.typeChecker.getTypeAtLocation(aliasedSymbol.declarations[0]);
           importedTypeTable[s.name] = this.parseType(aliasedType);
         }
       });
-    var types = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Type)
+    let types = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Type)
       .concat(this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Function))
       .map(s => this.typeChecker.getTypeAtLocation(s.declarations[0]))
       .map(s => this.parseType(s));
-    var variables = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Variable)
+    let variables = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Variable)
       .map(s => this.parseVariable(s));
-    var typeAliases = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.TypeAlias)
+    let typeAliases = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.TypeAlias)
       .map(s => this.parseTypeAlias(s));
 
     typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables, typeAliases);
   }
 
   private parseModule(symbol: ts.Symbol): Symbol.Module {
-    var typhenSymbol = this.getOrCreateTyphenModule(symbol);
+    let typhenSymbol = this.getOrCreateTyphenModule(symbol);
 
-    var exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
-    var modules = exportedSymbols
+    let exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
+    let modules = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
       .map(s => this.parseModule(s));
-    var importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
-    var importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
+    let importedModuleTable: Symbol.ObjectTable<Symbol.Module> = {};
+    let importedTypeTable: Symbol.ObjectTable<Symbol.Type> = {};
     exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Alias))
       .forEach(s => {
-        var aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
+        let aliasedSymbol = this.typeChecker.getAliasedSymbol(s);
         if (this.checkFlags(aliasedSymbol.flags, ts.SymbolFlags.Module)) {
           importedModuleTable[s.name] = this.parseModule(aliasedSymbol);
         } else {
-          var aliasedType = this.typeChecker.getTypeAtLocation(aliasedSymbol.declarations[0]);
+          let aliasedType = this.typeChecker.getTypeAtLocation(aliasedSymbol.declarations[0]);
           importedTypeTable[s.name] = this.parseType(aliasedType);
         }
       });
-    var types = exportedSymbols
+    let types = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Type) || this.checkFlags(s.flags, ts.SymbolFlags.Function))
       .map(s => this.typeChecker.getTypeAtLocation(s.declarations[0]))
       .map(t => this.parseType(t));
-    var variables = exportedSymbols
+    let variables = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Variable))
       .map(s => this.parseVariable(s));
-    var typeAliases = exportedSymbols
+    let typeAliases = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.TypeAlias))
       .map(s => this.parseTypeAlias(s));
 
@@ -384,14 +384,14 @@ class TypeScriptParser {
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {
-    var typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
-    var symbol = type.symbol;
+    let typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
+    let symbol = type.symbol;
 
-    var isConst = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Const);
-    var memberValue = -1;
-    var members = _(symbol.exports)
+    let isConst = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Const);
+    let memberValue = -1;
+    let members = _(symbol.exports)
       .map((memberSymbol: ts.Symbol, name: string) => {
-        var value = this.typeChecker.getConstantValue(<ts.EnumMember>memberSymbol.valueDeclaration);
+        let value = this.typeChecker.getConstantValue(<ts.EnumMember>memberSymbol.valueDeclaration);
         memberValue = typeof value === 'number' ? value : memberValue + 1;
         return this.createTyphenSymbol<Symbol.EnumMember>(memberSymbol, Symbol.EnumMember)
           .initialize(memberValue);
@@ -401,38 +401,38 @@ class TypeScriptParser {
   }
 
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
-    var genericType = type.target === undefined ? type : type.target;
-    var typhenType = this.createTyphenType<T>(type, typhenTypeClass);
+    let genericType = type.target === undefined ? type : type.target;
+    let typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
-    var typeParameters = genericType.typeParameters === undefined ? [] :
+    let typeParameters = genericType.typeParameters === undefined ? [] :
       genericType.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
-    var typeArguments = type.typeArguments === undefined ? [] :
+    let typeArguments = type.typeArguments === undefined ? [] :
       type.typeArguments.map(t => this.parseType(t));
-    var typeReference = new Symbol.TypeReference(typeParameters, typeArguments);
+    let typeReference = new Symbol.TypeReference(typeParameters, typeArguments);
     this.typeReferenceStack.push(typeReference);
 
-    var properties = genericType.getProperties()
+    let properties = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseProperty(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
-    var methods = genericType.getProperties()
+    let methods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseMethod(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
-    var stringIndexType = this.parseType(genericType.getStringIndexType());
-    var numberIndexType = this.parseType(genericType.getNumberIndexType());
+    let stringIndexType = this.parseType(genericType.getStringIndexType());
+    let numberIndexType = this.parseType(genericType.getNumberIndexType());
 
-    var constructorSignatures = genericType.getConstructSignatures()
+    let constructorSignatures = genericType.getConstructSignatures()
       .filter(s => _.isObject(s.declaration)) // the constructor signature that has no declaration will be created by using typeof keyword.
       .map(s => this.parseSignature(s, 'Constructor'));
-    var callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
+    let callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
-    var baseTypes = this.typeChecker.getBaseTypes(genericType)
+    let baseTypes = this.typeChecker.getBaseTypes(genericType)
       .map(t => <Symbol.Interface>this.parseType(t));
 
-    var staticProperties: Symbol.Property[] = [];
-    var staticMethods: Symbol.Method[] = [];
-    var isAbstract = false;
+    let staticProperties: Symbol.Property[] = [];
+    let staticMethods: Symbol.Method[] = [];
+    let isAbstract = false;
 
     if (genericType.symbol.flags & ts.SymbolFlags.Class) {
       isAbstract = this.checkFlags(genericType.symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
@@ -441,12 +441,12 @@ class TypeScriptParser {
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Constructor))
         .forEach(s => {
           s.declarations.forEach(d => {
-            var signatureSymbol = this.typeChecker.getSignatureFromDeclaration(<ts.SignatureDeclaration>d);
-            var constructorSignature = this.parseSignature(signatureSymbol, 'Constructor');
+            let signatureSymbol = this.typeChecker.getSignatureFromDeclaration(<ts.SignatureDeclaration>d);
+            let constructorSignature = this.parseSignature(signatureSymbol, 'Constructor');
             constructorSignatures.push(constructorSignature);
         });
       });
-      var staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
+      let staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
         .filter(s => !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
       staticProperties = staticPropertySymbols
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
@@ -465,38 +465,38 @@ class TypeScriptParser {
   }
 
   private parseObjectType(type: ts.ObjectType): Symbol.ObjectType {
-    var typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
+    let typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
 
-    var properties = type.getProperties()
+    let properties = type.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined)
         .map(s => this.parseProperty(s));
-    var methods = type.getProperties()
+    let methods = type.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined)
         .map(s => this.parseMethod(s));
-    var stringIndexType = this.parseType(type.getStringIndexType());
-    var numberIndexType = this.parseType(type.getNumberIndexType());
+    let stringIndexType = this.parseType(type.getStringIndexType());
+    let numberIndexType = this.parseType(type.getNumberIndexType());
 
     return typhenType.initialize(properties, methods, stringIndexType, numberIndexType);
   }
 
   private parseArray(type: ts.GenericType): Symbol.Array {
-    var typhenType = this.createTyphenType<Symbol.Array>(type, Symbol.Array);
-    var typeArguments = type.typeArguments === undefined ? [] :
+    let typhenType = this.createTyphenType<Symbol.Array>(type, Symbol.Array);
+    let typeArguments = type.typeArguments === undefined ? [] :
       type.typeArguments.map(t => this.parseType(t));
-    var arrayType = typeArguments.length > 0 ? typeArguments[0] : null;
+    let arrayType = typeArguments.length > 0 ? typeArguments[0] : null;
     return typhenType.initialize(arrayType);
   }
 
   private parseFunction(type: ts.ObjectType): Symbol.Function {
-    var typhenType = this.createTyphenType<Symbol.Function>(type, Symbol.Function, 'Function');
-    var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
+    let typhenType = this.createTyphenType<Symbol.Function>(type, Symbol.Function, 'Function');
+    let callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     return typhenType.initialize(callSignatures);
   }
 
   private parsePrimitiveType(type: ts.GenericType): Symbol.PrimitiveType; // For TyphenPrimitiveType
   private parsePrimitiveType(type: ts.Type): Symbol.PrimitiveType;
   private parsePrimitiveType(type: any): Symbol.PrimitiveType {
-    var name: string;
+    let name: string;
 
     if (this.checkFlags(type.flags, ts.TypeFlags.String)) {
       name = 'string';
@@ -514,88 +514,88 @@ class TypeScriptParser {
       name = 'any';
     }
 
-    var typhenType = this.createTyphenType<Symbol.PrimitiveType>(type, Symbol.PrimitiveType);
+    let typhenType = this.createTyphenType<Symbol.PrimitiveType>(type, Symbol.PrimitiveType);
     return typhenType.initialize(name);
   }
 
   private parseTypeParameter(type: ts.TypeParameter): Symbol.TypeParameter {
-    var typhenType = this.createTyphenType<Symbol.TypeParameter>(type, Symbol.TypeParameter);
+    let typhenType = this.createTyphenType<Symbol.TypeParameter>(type, Symbol.TypeParameter);
     return typhenType.initialize(this.parseType(type.constraint));
   }
 
   private parseTuple(type: ts.TupleType): Symbol.Tuple {
-    var typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
-    var elementTypes = type.elementTypes.map(t => this.parseType(t));
-    var baseArrayType = this.parseType(type.baseArrayType);
+    let typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
+    let elementTypes = type.elementTypes.map(t => this.parseType(t));
+    let baseArrayType = this.parseType(type.baseArrayType);
     return typhenType.initialize(elementTypes, baseArrayType);
   }
 
   private parseUnionType(type: ts.UnionType): Symbol.UnionType {
-    var typhenType = this.createTyphenType<Symbol.UnionType>(type, Symbol.UnionType);
-    var types = type.types.map(t => this.parseType(t));
+    let typhenType = this.createTyphenType<Symbol.UnionType>(type, Symbol.UnionType);
+    let types = type.types.map(t => this.parseType(t));
     return typhenType.initialize(types);
   }
 
   private parseIntersectionType(type: ts.IntersectionType): Symbol.IntersectionType {
-    var typhenType = this.createTyphenType<Symbol.IntersectionType>(type, Symbol.IntersectionType);
-    var types = type.types.map(t => this.parseType(t));
+    let typhenType = this.createTyphenType<Symbol.IntersectionType>(type, Symbol.IntersectionType);
+    let types = type.types.map(t => this.parseType(t));
     return typhenType.initialize(types);
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
-    var type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
-    var propertyType = this.parseType(type);
-    var isOptional = (<ts.PropertyDeclaration>symbol.valueDeclaration).questionToken != null;
-    var isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
+    let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    let propertyType = this.parseType(type);
+    let isOptional = (<ts.PropertyDeclaration>symbol.valueDeclaration).questionToken != null;
+    let isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
     return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected);
   }
 
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
-    var type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
-    var callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
-    var isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
-    var isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
-    var isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
+    let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    let callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
+    let isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
+    let isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
+    let isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isProtected, isAbstract);
   }
 
   private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {
-    var symbol = this.typeChecker.getSymbolAtLocation(signature.declaration);
+    let symbol = this.typeChecker.getSymbolAtLocation(signature.declaration);
 
-    var typeParameters = signature.typeParameters === undefined ? [] :
+    let typeParameters = signature.typeParameters === undefined ? [] :
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
-    var parameters = signature.getParameters().map(s => this.parseParameter(s));
-    var returnType = this.parseType(signature.getReturnType());
-    var typePredicate = signature.typePredicate === undefined ? null :
+    let parameters = signature.getParameters().map(s => this.parseParameter(s));
+    let returnType = this.parseType(signature.getReturnType());
+    let typePredicate = signature.typePredicate === undefined ? null :
       new Symbol.TypePredicate(this.parseType(signature.typePredicate.type),
         parameters[signature.typePredicate.parameterIndex]);
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
     return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate);
   }
 
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {
-    var type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
-    var parameterType = this.parseType(type);
+    let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    let parameterType = this.parseType(type);
 
-    var valueDecl = (<ts.ParameterDeclaration>symbol.valueDeclaration);
-    var isOptional = valueDecl.questionToken != null;
-    var isVariadic = valueDecl.dotDotDotToken != null;
+    let valueDecl = (<ts.ParameterDeclaration>symbol.valueDeclaration);
+    let isOptional = valueDecl.questionToken != null;
+    let isVariadic = valueDecl.dotDotDotToken != null;
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Parameter>(symbol, Symbol.Parameter);
     return typhenSymbol.initialize(parameterType, isOptional, isVariadic);
   }
 
   private parseVariable(symbol: ts.Symbol): Symbol.Variable {
-    var type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
-    var variableType: Symbol.Type = null;
-    var variableModule: Symbol.Module = null;
-    var isLet = symbol.valueDeclaration.parent.getChildren().filter(n => n.kind === ts.SyntaxKind.LetKeyword).length > 0;
-    var isConst = symbol.valueDeclaration.parent.getChildren().filter(n => n.kind === ts.SyntaxKind.ConstKeyword).length > 0;
+    let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    let variableType: Symbol.Type = null;
+    let variableModule: Symbol.Module = null;
+    let isLet = symbol.valueDeclaration.parent.getChildren().filter(n => n.kind === ts.SyntaxKind.LetKeyword).length > 0;
+    let isConst = symbol.valueDeclaration.parent.getChildren().filter(n => n.kind === ts.SyntaxKind.ConstKeyword).length > 0;
 
     if (_.isObject(type.symbol) && this.checkFlags(type.symbol.flags, ts.SymbolFlags.Module)) {
       variableModule = this.parseModule(type.symbol);
@@ -603,14 +603,14 @@ class TypeScriptParser {
       variableType = this.parseType(type);
     }
 
-    var typhenSymbol = this.createTyphenSymbol<Symbol.Variable>(symbol, Symbol.Variable);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Variable>(symbol, Symbol.Variable);
     return typhenSymbol.initialize(variableType, variableModule, isLet, isConst);
   }
 
   private parseTypeAlias(symbol: ts.Symbol): Symbol.TypeAlias {
-    var type = this.typeChecker.getDeclaredTypeOfSymbol(symbol);
-    var aliasedType = this.parseType(type);
-    var typhenSymbol = this.createTyphenSymbol<Symbol.TypeAlias>(symbol, Symbol.TypeAlias);
+    let type = this.typeChecker.getDeclaredTypeOfSymbol(symbol);
+    let aliasedType = this.parseType(type);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.TypeAlias>(symbol, Symbol.TypeAlias);
     return typhenSymbol.initialize(aliasedType);
   }
 }

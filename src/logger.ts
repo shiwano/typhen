@@ -9,7 +9,7 @@ namespace Logger {
     Silent
   }
 
-  export var level: LogLevel = LogLevel.Info;
+  export let level: LogLevel = LogLevel.Info;
   export function debug(...texts: any[]): void { logWithInfo(LogLevel.Debug, texts, chalk.gray('DEBUG').toString()); }
   export function info(...texts: any[]):  void { logWithInfo(LogLevel.Info, texts); }
   export function warn(...texts: any[]):  void { logWithInfo(LogLevel.Warning, texts, chalk.yellow('WARN').toString()); }
@@ -30,7 +30,7 @@ namespace Logger {
   }
 
   export function getDateTimeString(): string {
-    var date = new Date();
+    let date = new Date();
     return [date.getHours(), date.getMinutes(), date.getSeconds()]
       .map(n => n.toString())
       .map(n => n.length === 1 ? '0' + n : n)

@@ -27,7 +27,7 @@ class NodeJsEnvironment implements Environment {
   }
 
   readFile(fileName: string): string {
-    var resolvedPath = this.resolvePath(fileName);
+    let resolvedPath = this.resolvePath(fileName);
 
     if (resolvedPath === this.defaultLibFileName) {
       return this.getDefaultLibFileData();
@@ -38,14 +38,14 @@ class NodeJsEnvironment implements Environment {
   }
 
   writeFile(fileName: string, data: string): void {
-    var filePath = this.resolvePath(fileName);
+    let filePath = this.resolvePath(fileName);
     Logger.debug('Writing: ' + filePath);
     mkdirp.sync(path.dirname(filePath));
     fs.writeFileSync(filePath, data);
   }
 
   resolvePath(...pathSegments: string[]): string {
-    var args = _.flatten([this.currentDirectory, pathSegments], true);
+    let args = _.flatten([this.currentDirectory, pathSegments], true);
     return path.resolve.apply(null, args);
   }
 
@@ -62,7 +62,7 @@ class NodeJsEnvironment implements Environment {
   }
 
   exists(fileName: string): boolean {
-    var filePath = this.resolvePath(fileName);
+    let filePath = this.resolvePath(fileName);
     return pathExists.sync(filePath);
   }
 
@@ -79,8 +79,8 @@ class NodeJsEnvironment implements Environment {
   }
 
   eval(code: string): any {
-    var sandbox: any = {};
-    var resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
+    let sandbox: any = {};
+    let resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
     sandbox[resultKey] = {};
     vm.runInNewContext(resultKey + '=' + code, sandbox);
     return sandbox[resultKey];

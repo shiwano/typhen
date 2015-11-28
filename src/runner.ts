@@ -14,26 +14,26 @@ export class Runner {
   run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve, reject) => {
       Logger.log(Logger.underline('Parsing TypeScript files'));
-      var parser = new TypeScriptParser(this.config.src, this.config);
+      let parser = new TypeScriptParser(this.config.src, this.config);
       parser.parse();
       parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
-        var relative = this.config.env.relativePath(sourceFile.fileName);
+        let relative = this.config.env.relativePath(sourceFile.fileName);
         Logger.info('Parsed', Logger.cyan(relative));
       });
 
       Logger.log(Logger.underline('Generating files'));
 
-      var generator = new Generator(this.config.env, this.config.dest,
+      let generator = new Generator(this.config.env, this.config.dest,
           this.config.plugin.pluginDirectory, this.config.plugin.handlebarsOptions);
-      var generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);
+      let generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);
 
-      var afterGenerate = () => {
+      let afterGenerate = () => {
         generator.files.forEach(file => {
           if (!this.config.noWrite) {
             this.config.env.writeFile(file.path, file.contents.toString());
           }
-          var relative = this.config.env.relativePath(file.path);
+          let relative = this.config.env.relativePath(file.path);
           Logger.info('Generated', Logger.cyan(relative));
         });
         parser.types.forEach(t => t.destroy(true));

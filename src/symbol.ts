@@ -37,7 +37,7 @@ export class Tag {
   }
 
   get number(): number {
-    var n = Number(this.value);
+    let n = Number(this.value);
     return typeof n === 'number' ? n : 0;
   }
 
@@ -118,7 +118,7 @@ export class Symbol {
   }
 
   get name(): string {
-    var name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
+    let name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
     return this.config.plugin.rename(this, name);
   }
 
@@ -133,7 +133,7 @@ export class Symbol {
 
   get ancestorModules(): Module[] {
     return _.tap([], (results) => {
-      var parentModule = this.parentModule;
+      let parentModule = this.parentModule;
       while (_.isObject(parentModule)) {
         results.push(parentModule);
         parentModule = parentModule.parentModule;
@@ -149,7 +149,7 @@ export class Symbol {
 
   get tagTable(): ObjectTable<Tag> {
     return <ObjectTable<Tag>>_.reduce(this.docComment, (result, comment) => {
-      var matches = comment.match(Symbol.tagPattern);
+      let matches = comment.match(Symbol.tagPattern);
       if (matches != null) { result[matches[1]] = new Tag(matches[1], matches[2]); }
       return result;
     }, <ObjectTable<Tag>>{});
@@ -187,7 +187,7 @@ export class Symbol {
 
   get isGenerationTarget(): boolean {
     return this.declarationInfos.every(d => {
-      var resolvedPath = this.config.env.resolvePath(d.path);
+      let resolvedPath = this.config.env.resolvePath(d.path);
       return resolvedPath !== this.config.env.defaultLibFileName &&
         _.contains(resolvedPath, this.config.typingDirectory);
     });
@@ -232,7 +232,7 @@ export class Module extends Symbol {
   get isGlobalModule(): boolean { return this.rawName === '' && this.parentModule === null; }
 
   get name(): string {
-    var name = this.isGlobalModule ? 'Global' : this.rawName;
+    let name = this.isGlobalModule ? 'Global' : this.rawName;
 
     if (/^['"']/.test(name)) {
       name = name.replace(/['"]/g, '').replace('\\', '/');
@@ -357,9 +357,9 @@ export class TypeReference {
   }
 
   getTypeByTypeParameter(typeParameter: TypeParameter): Type {
-    var index = this.typeParameters.indexOf(typeParameter);
+    let index = this.typeParameters.indexOf(typeParameter);
     if (index < 0) { return null; }
-    var type = this.typeArguments[index];
+    let type = this.typeArguments[index];
     return _.isObject(type) && type.isTypeParameter ? null : type;
   }
 }
@@ -383,7 +383,7 @@ export class Interface extends ObjectType {
     if (this.typeArguments.length === 0) { return ''; }
 
     return this.rawName + this.typeArguments.map((type, index) => {
-      var prefix = index === 0 ? 'Of' : 'And';
+      let prefix = index === 0 ? 'Of' : 'And';
       return prefix + inflection.classify(type.name);
     }).join('');
   }

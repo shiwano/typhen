@@ -11,7 +11,7 @@ class CompilerHost implements ts.CompilerHost {
   getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
       onError?: (message: string) => void): ts.SourceFile {
     if (this.cachedSources[fileName] === undefined) {
-      var text: string;
+      let text: string;
 
       try {
         text = this.env.readFile(fileName);

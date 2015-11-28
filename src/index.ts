@@ -10,11 +10,11 @@ import Helpers = require('./helpers');
 
 namespace Typhen {
   export import SymbolKind = Symbol.SymbolKind;
-  export var logger = Logger;
-  export var helpers = Helpers;
+  export const logger = Logger;
+  export const helpers = Helpers;
 
   export function run(configArgs: Config.ConfigObject): Promise<Vinyl[]> {
-    var config = new Config.Config(configArgs);
+    let config = new Config.Config(configArgs);
     return new Runner.Runner(config).run();
   }
 
@@ -30,7 +30,7 @@ namespace Typhen {
     try {
       return <Plugin.Plugin>require(pluginName)(Typhen, options);
     } catch (e) {
-      var resolvedPath = path.resolve(pluginName);
+      let resolvedPath = path.resolve(pluginName);
       return <Plugin.Plugin>require(resolvedPath)(Typhen, options);
     }
   }

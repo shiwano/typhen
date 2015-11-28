@@ -6,8 +6,8 @@ import Helpers = require('./helpers');
 
 export namespace HandlebarsHelpers {
   export function and(...valuesAndOptions: any[]): any {
-    var options = _.last(valuesAndOptions);
-    var values = valuesAndOptions.filter((i: any) => i !== options);
+    let options = _.last(valuesAndOptions);
+    let values = valuesAndOptions.filter((i: any) => i !== options);
 
     if (_.every(values, (v: any) => !(<any>Handlebars).Utils.isEmpty(v))) {
       return options.fn(this);
@@ -17,8 +17,8 @@ export namespace HandlebarsHelpers {
   }
 
   export function or(...valuesAndOptions: any[]): any {
-    var options = _.last(valuesAndOptions);
-    var values = valuesAndOptions.filter((i: any) => i !== options);
+    let options = _.last(valuesAndOptions);
+    let values = valuesAndOptions.filter((i: any) => i !== options);
 
     if (_.any(values, (v: any) => !(<any>Handlebars).Utils.isEmpty(v))) {
       return options.fn(this);
@@ -58,5 +58,5 @@ export function registerHelpers(handlebars: typeof Handlebars): void {
   });
 }
 
-export var handlebars: typeof Handlebars = (<any>Handlebars).create();
+export let handlebars: typeof Handlebars = (<any>Handlebars).create();
 registerHelpers(handlebars);
