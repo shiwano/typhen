@@ -92,4 +92,7 @@ declare module Type {
 
   interface Cat {}
   function isCat(a: any): a is Cat;
+
+  let letString: string;
+  const constString: string;
 }

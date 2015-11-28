@@ -597,12 +597,14 @@ export class Variable extends Symbol {
 
   type: Type = null;
   module: Module = null;
-  isOptional: boolean = false;
+  isLet: boolean = false;
+  isConst: boolean = false;
 
-  initialize(type: Type, module: Module, isOptional: boolean): Variable {
+  initialize(type: Type, module: Module, isLet: boolean, isConst: boolean): Variable {
     this.type = type;
     this.module = module;
-    this.isOptional = isOptional;
+    this.isLet = isLet;
+    this.isConst = isConst;
     return this;
   }
 }

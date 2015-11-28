@@ -38,12 +38,18 @@ No Classes.
 * type
   * Type - None
   * Module - Type
+  * IsLet - false
+  * IsConst - false
 * baseUrl
   * Type - string
   * Module - None
+  * IsLet - false
+  * IsConst - false
 * anyAny
   * Type - any
   * Module - None
+  * IsLet - false
+  * IsConst - false
 
 ## TypeAliases
 

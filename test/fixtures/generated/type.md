@@ -53,6 +53,18 @@ No Modules.
 * ESSymbol
   * Type - symbol
   * Module - None
+  * IsLet - false
+  * IsConst - false
+* letString
+  * Type - string
+  * Module - None
+  * IsLet - true
+  * IsConst - false
+* constString
+  * Type - string
+  * Module - None
+  * IsLet - false
+  * IsConst - true
 
 ## TypeAliases
 
