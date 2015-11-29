@@ -1,4 +1,5 @@
 import * as helper from '../test_helper';
+import * as ts from 'typescript';
 
 import { Config } from '../../src/config';
 
@@ -40,6 +41,33 @@ describe('Config', () => {
       it('should return the cwd', () => {
         var args = ['foo/bar/test.ts', 'foo/bar.ts', 'baz/qux.ts'];
         assert(instance.getTypingDirectory(args) === process.cwd());
+      });
+    });
+  });
+
+  describe('#getCompilerOptionsEnum', () => {
+    context('with a enum name as string', () => {
+      it('should return a enum value', () => {
+        assert(instance.getCompilerOptionsEnum<ts.ScriptTarget>('ES6') === ts.ScriptTarget.ES6);
+      });
+    });
+
+    context('with a enum value', () => {
+      it('should return a enum value', () => {
+        assert(instance.getCompilerOptionsEnum<ts.ModuleKind>(1) === ts.ModuleKind.CommonJS);
+      });
+    });
+
+    context('with null or undefined', () => {
+      it('should return undefined', () => {
+        assert(instance.getCompilerOptionsEnum<ts.ModuleKind>(null) === undefined);
+        assert(instance.getCompilerOptionsEnum<ts.ModuleKind>(undefined) === undefined);
+      });
+    });
+
+    context('with a invalid value', () => {
+      it('should throw an error', () => {
+        assert.throws(() => instance.getCompilerOptionsEnum<ts.ModuleKind>(true));
       });
     });
   });
