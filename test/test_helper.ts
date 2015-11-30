@@ -89,7 +89,7 @@ export function createConfig(src: string | string[] = 'test/fixtures/typings/int
     dest: '.tmp/generated',
     compilerOptions: {
       module: <any>'commonjs',
-      target: <any>'ES6',
+      target: <any>'ES5',
       experimentalDecorators: true
     }
   });

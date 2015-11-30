@@ -48,15 +48,15 @@ export class Config implements ConfigObject {
     'linefeed': <number>ts.NewLineKind.LineFeed,
     // ModuleResolutionKind
     'classic': <number>ts.ModuleResolutionKind.Classic,
-    'nodejs': <number>ts.ModuleResolutionKind.NodeJs,
+    'nodejs': <number>ts.ModuleResolutionKind.NodeJs
   };
 
   constructor(args: ConfigObject) {
-    this.compilerOptions = <ts.CompilerOptions>_.defaults({
+    this.compilerOptions = <ts.CompilerOptions>_.defaults({}, args.compilerOptions, {
       module: ts.ModuleKind.CommonJS,
       noImplicitAny: true,
       target: ts.ScriptTarget.ES5
-    }, args.compilerOptions);
+    });
 
     this.compilerOptions.target = this.getCompilerOptionsEnum<ts.ScriptTarget>(this.compilerOptions.target);
     this.compilerOptions.module = this.getCompilerOptionsEnum<ts.ModuleKind>(this.compilerOptions.module);
@@ -64,7 +64,8 @@ export class Config implements ConfigObject {
     this.compilerOptions.moduleResolution = this.getCompilerOptionsEnum<ts.ModuleResolutionKind>(this.compilerOptions.moduleResolution);
 
     this.cwd = args.cwd || process.cwd();
-    this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine, args.defaultLibFileName);
+    this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine,
+        this.compilerOptions.target, args.defaultLibFileName);
     this.defaultLibFileName = this.env.defaultLibFileName;
 
     this.src = typeof args.src === 'string' ? [<string>args.src] : <string[]>args.src;

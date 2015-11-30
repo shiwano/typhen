@@ -3,6 +3,7 @@ import '../../test_helper';
 import * as fs from 'fs';
 import * as pathExists from 'path-exists';
 import * as glob from 'glob';
+import * as ts from 'typescript';
 
 import NodeJsEnvironment from '../../../src/environments/node_js';
 
@@ -13,7 +14,7 @@ describe('NodeJsEnvironment', () => {
   var newLine = '\n';
 
   beforeEach(() => {
-    instance = new NodeJsEnvironment(currentDirectory, newLine);
+    instance = new NodeJsEnvironment(currentDirectory, newLine, ts.ScriptTarget.ES5);
   });
 
   afterEach(() => {

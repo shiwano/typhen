@@ -5,6 +5,7 @@ import * as pathExists from 'path-exists';
 import * as mkdirp from 'mkdirp';
 import * as _ from 'lodash';
 import * as glob from 'glob';
+import * as ts from 'typescript';
 
 import * as Logger from '../logger';
 import { Environment } from './environment';
@@ -14,16 +15,13 @@ export default class NodeJsEnvironment implements Environment {
   useCaseSensitiveFileNames: boolean = false;
   defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
 
-  constructor(currentDirectory: string, public newLine: string, defaultLibFileName?: string) {
+  constructor(
+      currentDirectory: string,
+      public newLine: string,
+      scriptTarget: ts.ScriptTarget,
+      defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
-
-    if (typeof defaultLibFileName === 'string' && defaultLibFileName.length > 0) {
-      this.defaultLibFileName = this.resolvePath(defaultLibFileName);
-
-      if (!this.exists(this.defaultLibFileName)) {
-        this.defaultLibFileName = path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
-      }
-    }
+    this.defaultLibFileName = this.getDefaultLibFileName(defaultLibFileName, scriptTarget);
   }
 
   readFile(fileName: string): string {
@@ -84,5 +82,19 @@ export default class NodeJsEnvironment implements Environment {
     sandbox[resultKey] = {};
     vm.runInNewContext(resultKey + '=' + code, sandbox);
     return sandbox[resultKey];
+  }
+
+  private getDefaultLibFileName(defaultLibFileName: string, scriptTarget: ts.ScriptTarget): string {
+    if (typeof defaultLibFileName === 'string' && defaultLibFileName.length > 0) {
+      if (this.exists(this.defaultLibFileName)) {
+        return this.resolvePath(defaultLibFileName);
+      } else {
+        return path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
+      }
+    } else if (scriptTarget === ts.ScriptTarget.ES6) {
+      return path.join(path.dirname(require.resolve('typescript')), 'lib.es6.d.ts');
+    } else {
+      return path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
+    }
   }
 }
