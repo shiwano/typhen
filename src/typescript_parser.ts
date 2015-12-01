@@ -100,6 +100,8 @@ export default class TypeScriptParser {
     if (this.typeCache.get(type) === undefined) {
       if (type.flags & ts.TypeFlags.String) {
         this.parsePrimitiveType(type);
+      } else if (type.flags & ts.TypeFlags.StringLiteral) {
+        this.parseStringLiteralType(<ts.StringLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Number) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Boolean) {
@@ -540,6 +542,11 @@ export default class TypeScriptParser {
     let typhenType = this.createTyphenType<Symbol.IntersectionType>(type, Symbol.IntersectionType);
     let types = type.types.map(t => this.parseType(t));
     return typhenType.initialize(types);
+  }
+
+  private parseStringLiteralType(type: ts.StringLiteralType): Symbol.StringLiteralType {
+    let typhenType = this.createTyphenType<Symbol.StringLiteralType>(type, Symbol.StringLiteralType);
+    return typhenType.initialize(type.text);
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {

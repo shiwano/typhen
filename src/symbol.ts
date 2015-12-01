@@ -18,6 +18,7 @@ export enum SymbolKind {
   Tuple,
   UnionType,
   IntersectionType,
+  StringLiteralType,
   Property,
   Method,
   Signature,
@@ -178,6 +179,7 @@ export class Symbol {
   get isTuple(): boolean { return this.kind === SymbolKind.Tuple; }
   get isUnionType(): boolean { return this.kind === SymbolKind.UnionType; }
   get isIntersectionType(): boolean { return this.kind === SymbolKind.IntersectionType; }
+  get isStringLiteralType(): boolean { return this.kind === SymbolKind.StringLiteralType; }
   get isProperty(): boolean { return this.kind === SymbolKind.Property; }
   get isMethod(): boolean { return this.kind === SymbolKind.Method; }
   get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
@@ -507,6 +509,25 @@ export class IntersectionType extends Type {
     if (this.config.plugin.disallow.intersectionType) {
       return 'Disallow the intersection type';
     }
+  }
+}
+
+export class StringLiteralType extends Type {
+  kind: SymbolKind = SymbolKind.StringLiteralType;
+
+  text: string = '';
+
+  get rawText(): string {
+    return this.text.replace(/"/g, '');
+  }
+
+  get assumedName(): string {
+    return this.text;
+  }
+
+  initialize(text: string): StringLiteralType {
+    this.text = text;
+    return this;
   }
 }
 
