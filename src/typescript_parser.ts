@@ -405,6 +405,7 @@ export default class TypeScriptParser {
 
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
     let genericType = type.target === undefined ? type : type.target;
+    let ownMemberNames = _.values(genericType.symbol.members).map(s => s.name);
     let typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
     let typeParameters = genericType.typeParameters === undefined ? [] :
@@ -417,11 +418,11 @@ export default class TypeScriptParser {
     let properties = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseProperty(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
+        .map(s => this.parseProperty(s, _.contains(ownMemberNames, s.name)));
     let rawMethods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseMethod(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
+        .map(s => this.parseMethod(s, _.contains(ownMemberNames, s.name)));
     let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
     let stringIndexType = this.parseType(genericType.getStringIndexType());
@@ -534,8 +535,7 @@ export default class TypeScriptParser {
   private parseTuple(type: ts.TupleType): Symbol.Tuple {
     let typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
     let elementTypes = type.elementTypes.map(t => this.parseType(t));
-    let baseArrayType = this.parseType(type.baseArrayType);
-    return typhenType.initialize(elementTypes, baseArrayType);
+    return typhenType.initialize(elementTypes);
   }
 
   private parseUnionType(type: ts.UnionType): Symbol.UnionType {

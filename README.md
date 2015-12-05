@@ -245,7 +245,7 @@ If you want to add your project here, feel free to submit a pull request.
 * [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - Converts TypeScript Interfaces to JSON Schema
 
 ## TypeScript Version
-1.6.2
+1.7.3
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).

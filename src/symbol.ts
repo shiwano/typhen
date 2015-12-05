@@ -454,15 +454,13 @@ export class Tuple extends Type {
   kind: SymbolKind = SymbolKind.Tuple;
 
   types: Type[] = [];
-  baseArrayType: Type = null;
 
   get assumedName(): string {
     return this.types.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
   }
 
-  initialize(types: Type[], baseArrayType: Type): Tuple {
+  initialize(types: Type[]): Tuple {
     this.types = types;
-    this.baseArrayType = baseArrayType;
     return this;
   }
 
