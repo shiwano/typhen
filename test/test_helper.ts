@@ -62,8 +62,8 @@ export class TestEnvironment implements Environment {
 
 export function createEnum(config?: config.Config): symbol.Enum {
   if (config === undefined) { config = createConfig(); }
-  var appModule = new symbol.Module(config, 'App', [''], [], [], null, '').initialize({}, {}, [], [], [], []);
-  var typeModule = new symbol.Module(config, 'Type', [''], [], [], appModule, '').initialize({}, {}, [], [], [], []);
+  var appModule = new symbol.Module(config, 'App', [''], [], [], null, '').initialize(false, {}, {}, [], [], [], []);
+  var typeModule = new symbol.Module(config, 'Type', [''], [], [], appModule, '').initialize(false, {}, {}, [], [], [], []);
 
   var type = new symbol.Enum(config, 'FooType', ['awesome', '@default FooType.Bar', '@number 10',
       '@type Invalid', '@type Enum', '@true', '@false false'], [], [], typeModule, '');

@@ -1,12 +1,12 @@
-# Global
+# Type.Namespace
 
-No declarations.
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L99)
 
 No comment.
 
 ## NamespaceModule
 
-false
+true
 
 ## Imported Modules
 
@@ -18,8 +18,7 @@ No Imported Types.
 
 ## Modules
 
-* Type
-* Rpc
+No Modules.
 
 ## Enums
 
@@ -27,7 +26,7 @@ No Enums.
 
 ## Functions
 
-* emitLog
+No Functions.
 
 ## Interfaces
 

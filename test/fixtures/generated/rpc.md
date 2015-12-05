@@ -4,6 +4,10 @@
 
 No comment.
 
+## NamespaceModule
+
+false
+
 ## Imported Modules
 
 * RpcType - Type

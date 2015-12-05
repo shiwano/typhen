@@ -75,7 +75,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse modules', () => {
-        var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type'].sort();
+        var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type', 'Type.Namespace'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });

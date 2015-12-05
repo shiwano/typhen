@@ -218,6 +218,7 @@ export class Type extends Symbol {
 export class Module extends Symbol {
   kind: SymbolKind = SymbolKind.Module;
 
+  isNamespaceModule: boolean = false;
   importedModuleTable: ObjectTable<Module> = {};
   importedTypeTable: ObjectTable<Type> = {};
   modules: Module[] = [];
@@ -252,8 +253,10 @@ export class Module extends Symbol {
     return _.map(this.importedTypeTable, (v, k) => { return { name: k, type: v }; });
   }
 
-  initialize(importedModuleTable: ObjectTable<Module>, importedTypeTable: ObjectTable<Type>,
+  initialize(isNamespaceModule: boolean,
+      importedModuleTable: ObjectTable<Module>, importedTypeTable: ObjectTable<Type>,
       modules: Module[], types: Type[], variables: Variable[], typeAliases: TypeAlias[]): Module {
+    this.isNamespaceModule = isNamespaceModule;
     this.importedModuleTable = importedModuleTable;
     this.importedTypeTable = importedTypeTable;
     this.modules = modules;

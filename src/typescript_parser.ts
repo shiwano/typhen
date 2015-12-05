@@ -349,12 +349,14 @@ export default class TypeScriptParser {
     let typeAliases = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.TypeAlias)
       .map(s => this.parseTypeAlias(s));
 
-    typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables, typeAliases);
+    typhenSymbol.initialize(false, importedModuleTable, importedTypeTable,
+        modules, types, variables, typeAliases);
   }
 
   private parseModule(symbol: ts.Symbol): Symbol.Module {
     let typhenSymbol = this.getOrCreateTyphenModule(symbol);
 
+    let isNamespaceModule = this.checkFlags(symbol.flags, ts.SymbolFlags.NamespaceModule);
     let exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
     let modules = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
@@ -383,7 +385,8 @@ export default class TypeScriptParser {
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.TypeAlias))
       .map(s => this.parseTypeAlias(s));
 
-    return typhenSymbol.initialize(importedModuleTable, importedTypeTable, modules, types, variables, typeAliases);
+    return typhenSymbol.initialize(isNamespaceModule, importedModuleTable, importedTypeTable,
+        modules, types, variables, typeAliases);
   }
 
   private parseEnum(type: ts.Type): Symbol.Enum {

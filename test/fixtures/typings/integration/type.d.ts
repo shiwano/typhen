@@ -95,4 +95,6 @@ declare module Type {
 
   let letString: string;
   const constString: string;
+
+  namespace Namespace {}
 }

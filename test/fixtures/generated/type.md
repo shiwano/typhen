@@ -5,6 +5,10 @@
 
 No comment.
 
+## NamespaceModule
+
+false
+
 ## Imported Modules
 
 No Imported Modules.
@@ -15,7 +19,7 @@ No Imported Types.
 
 ## Modules
 
-No Modules.
+* Namespace
 
 ## Enums
 
