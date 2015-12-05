@@ -82,16 +82,17 @@ export function createPlugin(): plugin.Plugin {
   });
 }
 
-export function createConfig(src: string | string[] = 'test/fixtures/typings/integration/index.d.ts'): config.Config {
+export function createConfig(src: string | string[] = 'test/fixtures/typings/integration/index.d.ts',
+    compilerOptions: any = {}): config.Config {
   return new config.Config({
     plugin: createPlugin(),
     src: src,
     dest: '.tmp/generated',
-    compilerOptions: {
-      module: <any>'commonjs',
-      target: <any>'ES5',
+    compilerOptions: <any>_.defaults(compilerOptions, {
+      module: 'commonjs',
+      target: 'ES5',
       experimentalDecorators: true
-    }
+    })
   });
 }
 

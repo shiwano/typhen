@@ -328,16 +328,19 @@ export class ObjectType extends Type {
 
   properties: Property[] = [];
   methods: Method[] = [];
+  builtInSymbolMethods: Method[] = [];
   stringIndexType: Type = null;
   numberIndexType: Type = null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
-  initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
+  initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
+      stringIndexType: Type, numberIndexType: Type,
       ...forOverride: any[]): ObjectType {
     this.properties = properties;
     this.methods = methods;
+    this.builtInSymbolMethods = builtInSymbolMethods;
     this.stringIndexType = stringIndexType;
     this.numberIndexType = numberIndexType;
     return this;
@@ -390,11 +393,11 @@ export class Interface extends ObjectType {
     }).join('');
   }
 
-  initialize(properties: Property[], methods: Method[], stringIndexType: Type, numberIndexType: Type,
-      constructorSignatures: Signature[], callSignatures: Signature[], baseTypes: Interface[],
-      typeReference: TypeReference, staticProperties: Property[], staticMethods: Method[],
-      isAbstract: boolean): Interface {
-    super.initialize(properties, methods, stringIndexType, numberIndexType);
+  initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
+      stringIndexType: Type, numberIndexType: Type, constructorSignatures: Signature[],
+      callSignatures: Signature[], baseTypes: Interface[], typeReference: TypeReference,
+      staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndexType, numberIndexType);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;

@@ -158,7 +158,8 @@ export default class TypeScriptParser {
 
   private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol,
       typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
-    let name = _.isObject(symbol) ? symbol.name.replace(/^__.*$/, '') : '';
+    let name = _.isObject(symbol) ?
+        symbol.name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
     let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
       this.getAssumedName(symbol, assumedNameSuffix) : '';
     let typhenSymbol = <T>new typhenSymbolClass(this.config, name,
@@ -417,10 +418,12 @@ export default class TypeScriptParser {
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseProperty(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
-    let methods = genericType.getProperties()
+    let rawMethods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
         .map(s => this.parseMethod(s, _.values(genericType.symbol.members).indexOf(s) >= 0));
+    let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
+    let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
     let stringIndexType = this.parseType(genericType.getStringIndexType());
     let numberIndexType = this.parseType(genericType.getNumberIndexType());
 
@@ -461,9 +464,9 @@ export default class TypeScriptParser {
     }
 
     this.typeReferenceStack.pop();
-    return <T>typhenType.initialize(properties, methods, stringIndexType, numberIndexType,
-        constructorSignatures, callSignatures, baseTypes, typeReference,
-        staticProperties, staticMethods, isAbstract);
+    return <T>typhenType.initialize(properties, methods, builtInSymbolMethods,
+        stringIndexType, numberIndexType, constructorSignatures, callSignatures,
+        baseTypes, typeReference, staticProperties, staticMethods, isAbstract);
   }
 
   private parseObjectType(type: ts.ObjectType): Symbol.ObjectType {
@@ -472,13 +475,16 @@ export default class TypeScriptParser {
     let properties = type.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined)
         .map(s => this.parseProperty(s));
-    let methods = type.getProperties()
+    let rawMethods = type.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined)
         .map(s => this.parseMethod(s));
+    let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
+    let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
     let stringIndexType = this.parseType(type.getStringIndexType());
     let numberIndexType = this.parseType(type.getNumberIndexType());
 
-    return typhenType.initialize(properties, methods, stringIndexType, numberIndexType);
+    return typhenType.initialize(properties, methods, builtInSymbolMethods,
+        stringIndexType, numberIndexType);
   }
 
   private parseArray(type: ts.GenericType): Symbol.Array {

@@ -171,6 +171,36 @@ describe('TypeScriptParser', () => {
         assert.deepEqual(decoratedParameter.decorators[0].argumentTable, {});
       });
     });
+
+    context('when ES6 files are given', () => {
+      var definitionPath = 'test/fixtures/typings/es6/index.ts';
+
+      beforeEach(() => {
+        var config = helper.createConfig(definitionPath, { module: 'none', target: 'ES6' });
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should parse types', () => {
+        var expected = [
+          '\"default\"',
+          '\"number\"',
+          '\"string\"',
+          'number',
+          'string',
+          'ToPrimitive',
+          'StringAndNumberUnionType'
+        ].sort();
+        assert.deepEqual(instance.types.map(t => t.fullName), expected);
+      });
+
+      it('should parse @@toPrimitive method', () => {
+        var type = <symbol.Interface>instance.types
+            .filter(t => t.fullName === 'ToPrimitive')[0];
+        assert(type.methods.length === 0);
+        assert(type.builtInSymbolMethods[0].name === '@@toPrimitive');
+      });
+    });
   });
 
   describe('#validate', () => {
