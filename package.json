@@ -72,10 +72,12 @@
     "hashmap": "^2.0.4",
     "here": "0.0.2",
     "inflection": "^1.6.0",
+    "jshint": "^2.8.0",
     "lodash": "^3.5.0",
     "mkdirp": "^0.5.0",
     "nopt": "^3.0.1",
     "path-exists": "^2.0.0",
+    "tslint": "^3.1.1",
     "typescript": "1.7.3",
     "vinyl": "^1.1.0"
   }
