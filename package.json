@@ -34,13 +34,13 @@
     "gulp-changed": "^1.2.1",
     "gulp-copy": "0.0.2",
     "gulp-espower": "^1.0.1",
-    "gulp-jshint": "^1.9.2",
+    "gulp-jshint": "^2.0.0",
     "gulp-load-plugins": "^1.0.0",
     "gulp-plumber": "^1.0.0",
     "gulp-sourcemaps": "^1.5.0",
     "gulp-spawn-mocha": "^2.0.1",
     "gulp-tsconfig-update": "^1.1.1",
-    "gulp-tslint": "^3.5.0",
+    "gulp-tslint": "^4.1.1",
     "gulp-typescript": "^2.4.2",
     "merge-stream": "^1.0.0",
     "node-inspector": "^0.12.3",
@@ -49,7 +49,7 @@
     "rimraf": "^2.3.2",
     "run-sequence": "^1.0.2",
     "sinon": "^1.14.0",
-    "source-map-support": "^0.3.3"
+    "source-map-support": "^0.4.0"
   },
   "keywords": [
     "typescript",
@@ -67,7 +67,7 @@
   "dependencies": {
     "bluebird": "^3.0.2",
     "chalk": "^1.0.0",
-    "glob": "^5.0.14",
+    "glob": "^6.0.1",
     "handlebars": "^4.0.4",
     "hashmap": "^2.0.4",
     "here": "0.0.2",
