@@ -1,7 +1,10 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "experimentalDecorators": true,
-        "target": "es6"
-    }
+  "files": [
+    "typings/integration/index.d.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "target": "ES5"
+  }
 }

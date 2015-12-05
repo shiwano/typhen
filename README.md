@@ -53,6 +53,10 @@ $ typhen foo/bar/typhenfile.js
 ```
 
 ```sh
+$ typhen --plugin typhen-awesome-plugin --dest generated tsconfig.json
+```
+
+```sh
 $ typhen --plugin typhen-awesome-plugin --dest generated definitions.d.ts
 ```
 
@@ -71,12 +75,25 @@ Example:
 
 ```js
 module.exports = function(typhen) {
-  var plugin = typhen.loadPlugin('typhen-awesome-plugin', {
-    optionName: 'option value'
-  });
+  var tsconfig = require('./tsconfig.json');
 
+  return typhen.run({
+    plugin: typhen.loadPlugin('typhen-awesome-plugin', {
+      optionName: 'option value'
+    }),
+    src: tsconfig.files,
+    dest: 'generated',
+    compilerOptions: tsconfig.compilerOptions
+  });
+};
+```
+
+```js
+module.exports = function(typhen) {
   return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
-    plugin: plugin,
+    plugin: typhen.loadPlugin('typhen-awesome-plugin', {
+      optionName: 'option value'
+    }),
     src: 'typings/lib/definitions.d.ts', // string or string[]
     dest: 'generated',
     cwd: '../other/current',             // Optional. Default value is process.cwd().
