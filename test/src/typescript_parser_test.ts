@@ -183,13 +183,18 @@ describe('TypeScriptParser', () => {
 
       it('should parse types', () => {
         var expected = [
+          // ToPrimitive
           '\"default\"',
           '\"number\"',
           '\"string\"',
           'number',
           'string',
           'ToPrimitive',
-          'StringAndNumberUnionType'
+          'StringAndNumberUnionType',
+          // generator
+          'any',
+          'boolean',
+          'generator'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
