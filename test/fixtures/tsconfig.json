@@ -6,5 +6,13 @@
     "module": "commonjs",
     "experimentalDecorators": true,
     "target": "ES5"
+  },
+  "typhen": {
+    "test/fixtures/plugin/typhen-test": {
+      "out": "../../.tmp/generated",
+      "pluginOptions": {
+        "author": "shiwano"
+      }
+    }
   }
 }

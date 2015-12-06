@@ -2,7 +2,7 @@
 
 > Generates code or documentation from TypeScript.
 
-The definition and the template given:
+The definition and the template:
 
 ```ts
 interface Foo {
@@ -40,7 +40,7 @@ class Foo {
 ## Getting Started
 Install the module with: `npm install -g typhen`
 
-If typhenfile.js exists in the current directory:
+If tsconfig.json or typhenfile.js exists in the current directory:
 
 ```sh
 $ typhen
@@ -49,21 +49,39 @@ $ typhen
 Otherwise:
 
 ```sh
-$ typhen foo/bar/typhenfile.js
-```
-
-```sh
-$ typhen --plugin typhen-awesome-plugin --dest generated tsconfig.json
-```
-
-```sh
 $ typhen --plugin typhen-awesome-plugin --dest generated definitions.d.ts
 ```
 
 ## Documentation
 
+### tsconfig.json
+If you want to execute typhen by the tsconfig.json, you have to set `typhen` property to tsconfig.json, and make the typhen execution settings.
+
+Example:
+
+```json
+{
+  "files": [
+    "src/index.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES5"
+  },
+  "typhen": {
+    "typhen-awesome-plugin": {
+      "out": "output-directory",
+      "pluginOptions": {
+        "optionName": "option value"
+      }
+    }
+  }
+}
+```
+
 ### typhenfile.js
 The typhenfile.js is a valid JavaScript file that belongs in the root directory of your project, and should be committed with your project source.
+You can make complex settings that can not be in the tsconfig.json.
 
 The typhenfile.js is comprised of the following parts:
 
@@ -75,21 +93,6 @@ Example:
 
 ```js
 module.exports = function(typhen) {
-  var tsconfig = require('./tsconfig.json');
-
-  return typhen.run({
-    plugin: typhen.loadPlugin('typhen-awesome-plugin', {
-      optionName: 'option value'
-    }),
-    src: tsconfig.files,
-    dest: 'generated',
-    compilerOptions: tsconfig.compilerOptions
-  });
-};
-```
-
-```js
-module.exports = function(typhen) {
   return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
     plugin: typhen.loadPlugin('typhen-awesome-plugin', {
       optionName: 'option value'
@@ -98,7 +101,7 @@ module.exports = function(typhen) {
     dest: 'generated',
     cwd: '../other/current',             // Optional. Default value is process.cwd().
     typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
-    defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts.
+    defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts or lib.es6.d.ts.
     compilerOptions: {                   // Optional. Default value is { module: 'commonjs', noImplicitAny: true, target: 'ES5' }
       target: 'ES6'
     }

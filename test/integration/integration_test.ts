@@ -17,6 +17,10 @@ function addTestSuite(expectedFileNames: string[]) {
 
       fs.readFile(expectedFileName, {encoding: 'utf-8'}, (error, expected) => {
         fs.readFile(actualFileName, {encoding: 'utf-8'}, (error, actual) => {
+          // for tsconfig.json context that has the different current working directory.
+          actual = actual.replace(/test\/fixtures\/?/g, '');
+          expected = expected.replace(/test\/fixtures\/?/g, '');
+
           assert(actual === expected);
           done();
         });
@@ -111,9 +115,6 @@ describe('Integration Test', () => {
       before((done) => {
         rimraf('./.tmp/generated', () => {
           var command = childProcess.spawn('bin/typhen', [
-            '--plugin', 'test/fixtures/plugin/typhen-test',
-            '--plugin-options', '{"author": "shiwano"}',
-            '--dest', '.tmp/generated',
             '--__main', '.tmp/src/index',
             'test/fixtures/tsconfig.json'
           ], {

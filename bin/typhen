@@ -33,12 +33,10 @@ if (options.help) {
     'Version:\n  ' + require('../package.json').version + '\n\n' +
     here(/*
       Usage:
-        typhen [options] [typhenfile or declaration-source-file]
+        typhen [options] [tsconfig or typhenfile, typescript-file...]
 
       Examples:
         typhen
-        typhen typhenfile.js
-        typhen --plugin typhen-json-schema --dest generated tsconfig.json
         typhen --plugin typhen-json-schema --dest generated definitions.d.ts
 
       Options:
@@ -66,38 +64,29 @@ if (options.verbose) {
 if (options.argv.remain.length === 0) {
   if (pathExists.sync(process.cwd() + '/typhenfile.js')) {
     typhen.runByTyphenfile(process.cwd() + '/typhenfile.js').done(function() {}, function(e) { throw e; });
+  } else if (pathExists.sync(process.cwd() + '/tsconfig.json')) {
+    typhen.runByTSConfig(process.cwd() + '/tsconfig.json').done(function() {}, function(e) { throw e; });
   } else {
-    console.log('No typhenfile found');
+    console.log('No tsconfig or no typhenfile found');
   }
 } else {
   var fileNames = options.argv.remain.map(function (p) { return path.resolve(p); });
 
   if (fileNames.length === 1 && _.contains(fileNames[0], 'typhenfile')) {
     typhen.runByTyphenfile(fileNames[0]).done(function() {}, function(e) { throw e; });
+  } else if (fileNames.length === 1 && fileNames[0].match(/tsconfig.json$/) !== null) {
+    typhen.runByTSConfig(fileNames[0]).done(function() {}, function(e) { throw e; });
   } else if (_.isString(options.dest) && _.isString(options.plugin)) {
     var pluginOptions = _.isString(options['plugin-options']) ?  JSON.parse(options['plugin-options']) : {};
     var plugin = typhen.loadPlugin(options.plugin, pluginOptions);
+    var compilerOptions = _.isString(options['compiler-options']) ? JSON.parse(options['compiler-options']) : undefined;
 
-    if (fileNames.length === 1 && fileNames[0].match(/tsconfig.json$/)) {
-      var tsconfig = require(fileNames[0]);
-      var tsconfigDir = path.dirname(path.resolve(fileNames[0]));
-
-      typhen.run({
-        plugin: plugin,
-        src: tsconfig.files.map(function(f) { return path.join(tsconfigDir, f); }),
-        dest: options.dest,
-        compilerOptions: tsconfig.compilerOptions
-      }).done(function() {}, function(e) { throw e; });
-    } else {
-      var compilerOptions = _.isString(options['compiler-options']) ? JSON.parse(options['compiler-options']) : undefined;
-
-      typhen.run({
-        plugin: plugin,
-        src: fileNames,
-        dest: options.dest,
-        compilerOptions: compilerOptions
-      }).done(function() {}, function(e) { throw e; });
-    }
+    typhen.run({
+      plugin: plugin,
+      src: fileNames,
+      dest: options.dest,
+      compilerOptions: compilerOptions
+    }).done(function() {}, function(e) { throw e; });
   } else {
     console.log('No plugin and no dest found');
   }
