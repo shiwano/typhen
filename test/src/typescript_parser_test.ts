@@ -120,6 +120,20 @@ describe('TypeScriptParser', () => {
       });
     });
 
+    context('when *.tsx files are given', () => {
+      var definitionPath = 'test/fixtures/typings/tsx_files/index.tsx';
+
+      beforeEach(() => {
+        var config = helper.createConfig(definitionPath, { jsx: true });
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should parse types', () => {
+        assert(instance.types.length > 0);
+      });
+    });
+
     context('when ts files that includes decorators are given', () => {
       var definitionPath = 'test/fixtures/typings/decorators/index.ts';
       var decoratedClass: symbol.Class;

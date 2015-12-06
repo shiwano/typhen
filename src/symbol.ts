@@ -357,7 +357,7 @@ export class ObjectType extends Type {
 }
 
 export class TypeReference {
-  get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
+  get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => _.isObject(t) && !t.isTypeParameter); }
 
   constructor(
       public typeParameters: TypeParameter[],
@@ -367,7 +367,7 @@ export class TypeReference {
   getTypeByTypeParameter(typeParameter: TypeParameter): Type {
     let index = this.typeParameters.indexOf(typeParameter);
     if (index < 0) { return null; }
-    let type = this.typeArguments[index];
+    let type = this.rawTypeArguments[index];
     return _.isObject(type) && type.isTypeParameter ? null : type;
   }
 }
