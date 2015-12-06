@@ -19,6 +19,7 @@ namespace Typhen {
   interface TSConfigTyphenObject {
     out: string;
     pluginOptions: { [key: string]: any };
+    files?: string | string[];
     typingDirectory?: string;
     defaultLibFileName?: string;
   }
@@ -40,7 +41,7 @@ namespace Typhen {
     var promises = _.map(tsconfig.typhen, (config: TSConfigTyphenObject, key: string) => {
       return Typhen.run({
         plugin: Typhen.loadPlugin(key, config.pluginOptions),
-        src: tsconfig.files,
+        src: config.files || tsconfig.files,
         dest: config.out,
         compilerOptions: tsconfig.compilerOptions,
         cwd: fileName.replace(/tsconfig.json$/, ''),
