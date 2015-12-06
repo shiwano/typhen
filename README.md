@@ -73,7 +73,10 @@ Example:
       "out": "output-directory",
       "pluginOptions": {
         "optionName": "option value"
-      }
+      },
+      "files": [ // Optional. Default value is root files.
+        "src/typings/definitions.d.ts"
+      ]
     }
   }
 }
