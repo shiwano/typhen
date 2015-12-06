@@ -59,7 +59,7 @@ If you want to execute typhen by the tsconfig.json, you have to set `typhen` pro
 
 Example:
 
-```json
+```js
 {
   "files": [
     "src/index.ts"
