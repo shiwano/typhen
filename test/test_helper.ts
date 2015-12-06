@@ -13,8 +13,8 @@ import * as symbol from '../src/symbol';
 import * as plugin from '../src/plugin';
 import * as config from '../src/config';
 import * as logger from '../src/logger';
+import * as runner from '../src/runner';
 import { Environment } from '../src/environments/environment';
-import Runner from '../src/runner';
 import Generator from '../src/generator';
 
 logger.level = logger.LogLevel.Silent;
@@ -105,6 +105,6 @@ export function createGenerator(): Generator  {
   return new Generator(env, '/generated', '/plugin', {});
 }
 
-export function createRunner(): Runner {
-  return new Runner(createConfig());
+export function createRunner(): runner.Runner {
+  return new runner.Runner(createConfig());
 }

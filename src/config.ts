@@ -3,7 +3,6 @@ import * as ts from 'typescript';
 
 import * as plugin from './plugin';
 import { Environment } from './environments/environment';
-import Runner from './runner';
 import NodeJsEnvironment from './environments/node_js';
 import CompilerHost from './compiler_host';
 

@@ -1,10 +1,10 @@
 import helper = require('../test_helper');
 
-import Runner from '../../src/runner';
+import * as runner from '../../src/runner';
 
 describe('Runner', () => {
   var sandbox = sinon.sandbox.create();
-  var instance: Runner;
+  var instance: runner.Runner;
 
   beforeEach(() => {
     instance = helper.createRunner();
@@ -12,6 +12,14 @@ describe('Runner', () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  describe('#parse', () => {
+    it('should return a ParsedResult', () => {
+      var result = instance.parse();
+      assert(result.types.length > 0);
+      assert(result.modules.length > 0);
+    });
   });
 
   describe('#run', () => {

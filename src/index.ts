@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as _ from 'lodash';
 import * as Promise from 'bluebird';
+import * as ts from 'typescript';
 import Vinyl = require('vinyl');
 
 import * as plugin from './plugin';
@@ -8,7 +9,7 @@ import * as config from './config';
 import * as symbol from './symbol';
 import * as typhenLogger from './logger';
 import * as typhenHelpers from './helpers';
-import Runner from './runner';
+import * as runner from './runner';
 
 namespace Typhen {
   export import SymbolKind = symbol.SymbolKind;
@@ -24,7 +25,7 @@ namespace Typhen {
 
   export function run(configArgs: config.ConfigObject): Promise<Vinyl[]> {
     let runningConfig = new config.Config(configArgs);
-    return new Runner(runningConfig).run();
+    return new runner.Runner(runningConfig).run();
   }
 
   export function runByTyphenfile(fileName: string): Promise<Vinyl[]> {
@@ -48,6 +49,17 @@ namespace Typhen {
       });
     });
     return Promise.all<Vinyl[]>(promises);
+  }
+
+  export function parse(src: string | string[], compilerOptions?: ts.CompilerOptions): runner.ParsedResult {
+    let parsingConfig = new config.Config({
+      plugin: plugin.Plugin.Empty(),
+      src: src,
+      dest: '',
+      compilerOptions: compilerOptions,
+      noWrite: true
+    });
+    return new runner.Runner(parsingConfig).parse();
   }
 
   export function createPlugin(pluginArgs: plugin.PluginObject): plugin.Plugin {

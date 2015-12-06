@@ -51,6 +51,14 @@ describe('typhen', () => {
     });
   });
 
+  describe('.parse', () => {
+    it('should return a parsed result', () => {
+      var result = typhen.parse(process.cwd() + '/test/fixtures/typings/ts_files/foo.ts');
+      assert(result.types.length > 0);
+      assert(result.modules.length > 0);
+    });
+  });
+
   describe('.createPlugin', () => {
     it('should create the instance of Plugin', () => {
       var response = typhen.createPlugin({

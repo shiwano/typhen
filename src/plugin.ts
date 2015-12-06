@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 
 import * as symbol from './symbol';
-import Runner from './runner';
 import NodeJsEnvironment from './environments/node_js';
 import Generator from './generator';
 
@@ -41,6 +40,10 @@ export class Plugin implements PluginObject {
   customPrimitiveTypes: string[] = [];
   disallow: DisallowOptions = {};
   handlebarsOptions: HandlebarsOptions = {};
+
+  static Empty(): Plugin {
+    return new Plugin({pluginDirectory: '', generate: () => {}});
+  }
 
   constructor(args: PluginObject) {
     _.assign(this, args);

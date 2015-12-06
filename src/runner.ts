@@ -5,11 +5,33 @@ import Vinyl = require('vinyl');
 
 import * as config from './config';
 import * as logger from './logger';
+import * as symbol from './symbol';
 import Generator from './generator';
 import TypeScriptParser from './typescript_parser';
 
-export default class Runner {
+export interface ParsedResult {
+  types: symbol.Type[];
+  modules: symbol.Module[];
+}
+
+export class Runner {
   constructor(public config: config.Config) {}
+
+  parse(): ParsedResult {
+    logger.log(logger.underline('Parsing TypeScript files'));
+    let parser = new TypeScriptParser(this.config.src, this.config);
+    parser.parse();
+    parser.validate();
+    parser.sourceFiles.forEach(sourceFile => {
+      let relative = this.config.env.relativePath(sourceFile.fileName);
+      logger.info('Parsed', logger.cyan(relative));
+    });
+
+    return {
+      types: parser.types,
+      modules: parser.modules
+    };
+  }
 
   run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve, reject) => {
