@@ -47,9 +47,7 @@ describe('typhen', () => {
 
     it('should call .run with values in tsconfig.json', () => {
       assert((<Sinon.SinonStub>typhen.run).calledOnce);
-      assert.deepEqual((<Sinon.SinonStub>typhen.run).args[0][0].src, [
-        "typings/integration/index.d.ts"
-      ]);
+      assert.deepEqual((<Sinon.SinonStub>typhen.run).args[0][0].src, ['typings/integration/index.d.ts']);
     });
   });
 
