@@ -7,12 +7,11 @@
     "experimentalDecorators": true,
     "target": "ES5"
   },
-  "typhen": {
-    "test/fixtures/plugin/typhen-test": {
-      "outDir": "../../.tmp/generated",
-      "pluginOptions": {
-        "author": "shiwano"
-      }
+  "typhen": [
+    {
+      "plugin": "test/fixtures/plugin/typhen-test",
+      "pluginOptions": { "author": "shiwano" },
+      "outDir": "../../.tmp/generated"
     }
-  }
+  ]
 }

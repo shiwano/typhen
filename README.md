@@ -68,17 +68,14 @@ Example:
     "module": "commonjs",
     "target": "ES5"
   },
-  "typhen": {
-    "typhen-awesome-plugin": {
+  "typhen": [
+    {
+      "plugin": "typhen-awesome-plugin",
+      "pluginOptions": { "optionName": "option value" }, // Optional. Default value is {}.
       "outDir": "output-directory",
-      "pluginOptions": {
-        "optionName": "option value"
-      },
-      "files": [ // Optional. Default value is root files.
-        "src/typings/definitions.d.ts"
-      ]
+      "files": [ "src/typings/definitions.d.ts" ]        // Optional. Default value is root's files.
     }
-  }
+  ]
 }
 ```
 

@@ -17,8 +17,9 @@ namespace Typhen {
   export const helpers = typhenHelpers;
 
   interface TSConfigTyphenObject {
-    outDir: string;
+    plugin: string;
     pluginOptions: { [key: string]: any };
+    outDir: string;
     files?: string | string[];
     typingDirectory?: string;
     defaultLibFileName?: string;
@@ -33,14 +34,14 @@ namespace Typhen {
     return require(fileName)(Typhen);
   }
 
-  export function runByTSConfig(fileName: string): Promise<Vinyl[][]> {
+  export function runByTSConfig(fileName: string): Promise<Vinyl[]> {
     if (fileName.match(/tsconfig.json$/) === null) { throw new Error('No tsconfig file: ' + fileName); }
     var tsconfig = require(fileName);
     if (!_.isObject(tsconfig.typhen)) { throw new Error('tsconfig.json does not have typhen property'); }
 
-    var promises = _.map(tsconfig.typhen, (config: TSConfigTyphenObject, key: string) => {
+    var promises = _.map(tsconfig.typhen, (config: TSConfigTyphenObject) => {
       return Typhen.run({
-        plugin: Typhen.loadPlugin(key, config.pluginOptions),
+        plugin: Typhen.loadPlugin(config.plugin, config.pluginOptions),
         src: config.files || tsconfig.files,
         dest: config.outDir,
         compilerOptions: tsconfig.compilerOptions,
@@ -49,7 +50,7 @@ namespace Typhen {
         defaultLibFileName: config.defaultLibFileName
       });
     });
-    return Promise.all<Vinyl[]>(promises);
+    return promises.reduce((p: any, fn: any) => p.then(fn));
   }
 
   export function parse(src: string | string[], compilerOptions?: ts.CompilerOptions): runner.ParsedResult {
