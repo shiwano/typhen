@@ -70,7 +70,7 @@ Example:
   },
   "typhen": {
     "typhen-awesome-plugin": {
-      "out": "output-directory",
+      "outDir": "output-directory",
       "pluginOptions": {
         "optionName": "option value"
       },

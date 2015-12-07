@@ -17,7 +17,7 @@ namespace Typhen {
   export const helpers = typhenHelpers;
 
   interface TSConfigTyphenObject {
-    out: string;
+    outDir: string;
     pluginOptions: { [key: string]: any };
     files?: string | string[];
     typingDirectory?: string;
@@ -42,7 +42,7 @@ namespace Typhen {
       return Typhen.run({
         plugin: Typhen.loadPlugin(key, config.pluginOptions),
         src: config.files || tsconfig.files,
-        dest: config.out,
+        dest: config.outDir,
         compilerOptions: tsconfig.compilerOptions,
         cwd: fileName.replace(/tsconfig.json$/, ''),
         typingDirectory: config.typingDirectory,

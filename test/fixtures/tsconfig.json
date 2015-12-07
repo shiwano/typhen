@@ -9,7 +9,7 @@
   },
   "typhen": {
     "test/fixtures/plugin/typhen-test": {
-      "out": "../../.tmp/generated",
+      "outDir": "../../.tmp/generated",
       "pluginOptions": {
         "author": "shiwano"
       }
