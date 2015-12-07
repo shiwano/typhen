@@ -78,6 +78,11 @@ describe('TypeScriptParser', () => {
         var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type', 'Type.Namespace'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
+
+      it('should parse ancestor modules of a signature', () => {
+        var getRangeFunction = instance.types.filter(t => t.fullName === 'Rpc.Get.getRange')[0] as symbol.Function;
+        assert(getRangeFunction.callSignatures[0].namespace === 'Rpc.Get');
+      });
     });
 
     context('when *.d.ts files as external modules are given', () => {

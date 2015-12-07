@@ -213,10 +213,15 @@ export default class TypeScriptParser {
     return symbol.valueDeclaration.decorators.map(d => this.parseDecorator(d));
   }
 
-  private getParentModule(symbol: ts.Symbol): Symbol.Module {
-    if (!_.isObject(symbol)) { return null; }
+  private getParentModule(symbol: ts.Symbol): Symbol.Module;
+  private getParentModule(symbol: ts.Signature): Symbol.Module;
+  private getParentModule(symbolOrSignature: any): Symbol.Module {
+    if (!_.isObject(symbolOrSignature)) { return null; }
 
-    let parentDecl = symbol.declarations[0].parent;
+    let declaration = _.isObject(symbolOrSignature.declarations) ?
+      symbolOrSignature.declarations[0] :
+      symbolOrSignature.declaration;
+    let parentDecl = declaration.parent as ts.Node;
     while (parentDecl !== undefined) {
       let parentSymbol = this.getSymbolAtLocation(parentDecl);
 
@@ -591,6 +596,7 @@ export default class TypeScriptParser {
         parameters[signature.typePredicate.parameterIndex]);
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
+    typhenSymbol.parentModule = this.getParentModule(signature); // signature variable have a relevant declaration.
     return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate);
   }
 
