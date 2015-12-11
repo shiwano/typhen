@@ -156,9 +156,12 @@ export default class TypeScriptParser {
     }
   }
 
-  private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol, typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
-  private createTyphenSymbol<T extends Symbol.Symbol>(signature: ts.Signature, typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
-  private createTyphenSymbol<T extends Symbol.Symbol>(symbolOrSignature: any, typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
+  private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol,
+      typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
+  private createTyphenSymbol<T extends Symbol.Symbol>(signature: ts.Signature,
+      typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
+  private createTyphenSymbol<T extends Symbol.Symbol>(symbolOrSignature: any,
+      typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
     let name = _.isObject(symbolOrSignature) && typeof symbolOrSignature.name === 'string' ?
       (<ts.Symbol>symbolOrSignature).name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
     let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
