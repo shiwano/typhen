@@ -78,11 +78,6 @@ describe('TypeScriptParser', () => {
         var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type', 'Type.Namespace'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
-
-      it('should parse ancestor modules of a signature', () => {
-        var getRangeFunction = instance.types.filter(t => t.fullName === 'Rpc.Get.getRange')[0] as symbol.Function;
-        assert(getRangeFunction.callSignatures[0].namespace === 'Rpc.Get');
-      });
     });
 
     context('when *.d.ts files as external modules are given', () => {
@@ -223,6 +218,37 @@ describe('TypeScriptParser', () => {
             .filter(t => t.fullName === 'ToPrimitive')[0];
         assert(type.methods.length === 0);
         assert(type.builtInSymbolMethods[0].name === '@@toPrimitive');
+      });
+    });
+
+    context('when ts files for signature test are given', () => {
+      var definitionPath = 'test/fixtures/typings/signature/index.ts';
+
+      beforeEach(() => {
+        var config = helper.createConfig(definitionPath);
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should parse parent modules', () => {
+        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        assert(func.callSignatures[0].namespace, 'Module1.Module2');
+      });
+
+      it('should parse the assumed name', () => {
+        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        assert(func.callSignatures[0].name === 'FuncSignature');
+      });
+
+      it('should parse the documentation comment', () => {
+        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        assert(func.callSignatures[0].comment === 'Comment');
+      });
+
+      it('should parse decorators', () => {
+        var aClass = instance.types.filter(t => t.name === 'A')[0] as symbol.Class;
+        var decoratedMethod = aClass.methods.filter(m => m.name === 'method')[0];
+        assert(decoratedMethod.decorators.length === 1);
       });
     });
   });
