@@ -6,6 +6,15 @@ import { Environment } from './environments/environment';
 import NodeJsEnvironment from './environments/node_js';
 import CompilerHost from './compiler_host';
 
+export interface TSConfigTyphenObject {
+  plugin: string;
+  pluginOptions: { [key: string]: any };
+  outDir: string;
+  files?: string | string[];
+  typingDirectory?: string;
+  defaultLibFileName?: string;
+}
+
 export interface ConfigObject {
   plugin: plugin.Plugin;
   src: string | string[];
