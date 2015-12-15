@@ -27,10 +27,10 @@ namespace Typhen {
 
   export function runByTSConfig(fileName: string): Promise<Vinyl[]> {
     if (fileName.match(/tsconfig.json$/) === null) { throw new Error('No tsconfig file: ' + fileName); }
-    var tsconfig = require(fileName);
+    let tsconfig = require(fileName);
     if (!_.isObject(tsconfig.typhen)) { throw new Error('tsconfig.json does not have typhen property'); }
 
-    var promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
+    let promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
       return Typhen.run({
         plugin: Typhen.loadPlugin(config.plugin, config.pluginOptions),
         src: config.files || tsconfig.files,
