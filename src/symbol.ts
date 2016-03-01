@@ -115,12 +115,16 @@ export class Symbol {
       public declarationInfos: DeclarationInfo[],
       public decorators: Decorator[],
       public parentModule: Module,
-      public assumedName: string) {
+      protected rawAssumedName: string) {
   }
 
   get name(): string {
     let name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
     return this.config.plugin.rename(this, name);
+  }
+
+  get assumedName(): string {
+    return this.rawAssumedName;
   }
 
   get fullName(): string {

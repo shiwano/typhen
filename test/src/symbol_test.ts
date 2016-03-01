@@ -40,7 +40,8 @@ describe('symbol', () => {
 
       context('when it has assumedName', () => {
         beforeEach(() => {
-          instance.assumedName = 'SuperFooEnum';
+          var config = helper.createConfig();
+          instance = helper.createEnum(config, 'SuperFooEnum');
         });
 
         it('should return assumedName as name', () => {
