@@ -534,7 +534,7 @@ export class StringLiteralType extends Type {
   }
 
   initialize(text: string): StringLiteralType {
-    this.text = text;
+    this.text = '"' + text + '"';
     return this;
   }
 }
