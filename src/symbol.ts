@@ -95,11 +95,14 @@ export class Decorator {
 export class TypePredicate {
   constructor(
       public type: Type,
+      public thisType: Type,
       public parameter: Parameter) {
   }
 
   toString(): string {
-    return this.parameter.name + ' is ' + this.type.name;
+    return this.parameter ?
+      this.parameter.name + ' is ' + this.type.name :
+      this.thisType.toString() + ' is ' + this.type.name;
   }
 }
 

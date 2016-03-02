@@ -90,7 +90,11 @@ declare module Type {
   class DecoratedClass {
   }
 
-  interface Cat {}
+  interface Animal {
+    isCat(): this is Cat;
+  }
+  interface Cat extends Animal {
+  }
   function isCat(a: any): a is Cat;
 
   let letString: string;

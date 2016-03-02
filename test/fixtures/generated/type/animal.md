@@ -1,6 +1,6 @@
-# Type.Cat
+# Type.Animal
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L96)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L93)
 
 No comment.
 
@@ -10,7 +10,7 @@ Interface or Class (isGenericType: false, isAbstract: false)
 
 ## BaseTypes
 
-* Animal
+BaseTypes is empty.
 
 ## TypeParameters
 
@@ -36,7 +36,7 @@ Properties is empty.
 
 Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|isOwn|isProtected|isAbstract|TypePredicate|Comment
 ---|---|---|---|---|---|---|---|---
-isCat||boolean|false|false|false|false|Animal is Cat| 
+isCat||boolean|false|true|false|false|Animal is Cat| 
 
 ## Static Properties
 

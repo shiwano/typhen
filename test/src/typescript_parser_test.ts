@@ -69,7 +69,8 @@ describe('TypeScriptParser', () => {
           // Decorator
           'Type.TFunction', 'Type.classDecorator', 'Type.DecoratedClass',
           // Type Guard
-          'Type.Cat', 'Type.isCat'
+          'Type.Cat', 'Type.isCat', 'Type.Animal',
+          'Type.Animal' // This is a TypeParameter.
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

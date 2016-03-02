@@ -610,12 +610,23 @@ export default class TypeScriptParser {
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     let parameters = signature.getParameters().map(s => this.parseParameter(s));
     let returnType = this.parseType(signature.getReturnType());
-    let typePredicate = signature.typePredicate === undefined ? null :
-      new Symbol.TypePredicate(this.parseType(signature.typePredicate.type),
-        parameters[signature.typePredicate.parameterIndex]);
+
+    let typePredicate: Symbol.TypePredicate = null;
+    let typePredicateNodes = signature.declaration.getChildren().filter(n => n.kind === ts.SyntaxKind.TypePredicate);
+    if (typePredicateNodes.length > 0) {
+      typePredicate = this.parseTypePredicate(<ts.TypePredicateNode>typePredicateNodes[0], parameters);
+    }
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(signature, Symbol.Signature, suffixName);
     return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate);
+  }
+
+  private parseTypePredicate(node: ts.TypePredicateNode, parameters: Symbol.Parameter[]): Symbol.TypePredicate {
+    let type = this.parseType(this.typeChecker.getTypeAtLocation(node.type));
+    let thisType = this.parseType(this.typeChecker.getTypeAtLocation(node.parameterName));
+    let parameterNameText = node.parameterName.getText();
+    let parameter = parameters.filter(p => p.name === parameterNameText)[0] || null;
+    return new Symbol.TypePredicate(type, thisType, parameter);
   }
 
   private parseParameter(symbol: ts.Symbol): Symbol.Parameter {

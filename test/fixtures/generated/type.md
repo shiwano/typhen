@@ -43,6 +43,7 @@ No Imported Types.
 * A
 * B
 * C
+* Animal
 * Cat
 
 ## Classes
