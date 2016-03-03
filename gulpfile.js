@@ -107,33 +107,29 @@ function test(watching, debug, callback) {
   mochaOptions.debug = mochaOptions.debugBrk = debug;
   var isCompleted = false;
 
-  gulp.src(paths.defaultLibFiles)
-    .pipe(plugins.copy(paths.testDest))
+  gulp.src(paths.typescriptFiles)
+    .pipe(plugins.plumber({errorHandler: function() {
+      if (watching) {
+        this.emit('end');
+      } else {
+        process.exit(1);
+      }
+    }}))
+    .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.typescript(tsProject)).js
+    .pipe(plugins.espower())
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(paths.testDest))
     .on('end', function() {
-      gulp.src(paths.typescriptFiles)
-        .pipe(plugins.plumber({errorHandler: function() {
-          if (watching) {
-            this.emit('end');
-          } else {
-            process.exit(1);
-          }
-        }}))
-        .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
-        .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.typescript(tsProject)).js
-        .pipe(plugins.espower())
-        .pipe(plugins.sourcemaps.write())
-        .pipe(gulp.dest(paths.testDest))
-        .on('end', function() {
-          if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
-        })
-        .pipe(plugins.spawnMocha(mochaOptions))
-        .on('end', function() {
-          if (!isCompleted) {
-            callback();
-            isCompleted = true;
-          }
-        });
+      if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
+    })
+    .pipe(plugins.spawnMocha(mochaOptions))
+    .on('end', function() {
+      if (!isCompleted) {
+        callback();
+        isCompleted = true;
+      }
     });
 }
 
