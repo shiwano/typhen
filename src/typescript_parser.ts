@@ -98,7 +98,9 @@ export default class TypeScriptParser {
     if (!_.isObject(type)) { return null; }
 
     if (this.typeCache.get(type) === undefined) {
-      if (type.flags & ts.TypeFlags.String) {
+      if (type.flags & ts.TypeFlags.TypeParameter) {
+        this.parseTypeParameter(<ts.TypeParameter>type);
+      } else if (type.flags & ts.TypeFlags.String) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.StringLiteral) {
         this.parseStringLiteralType(<ts.StringLiteralType>type);
@@ -125,8 +127,6 @@ export default class TypeScriptParser {
         this.parseFunction(<ts.ObjectType>type);
       } else if (type.symbol.flags & ts.SymbolFlags.Enum) {
         this.parseEnum(type);
-      } else if (type.symbol.flags & ts.SymbolFlags.TypeParameter) {
-        this.parseTypeParameter(<ts.TypeParameter>type);
       } else if (type.symbol.flags & ts.SymbolFlags.Class) {
         this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
       } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
