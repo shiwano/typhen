@@ -100,6 +100,7 @@ describe('localHandlebars', () => {
         it('should return default value', () => {
           assert(localHandlebars.HandlebarsHelpers.defaultValue(null, 'defaultValue') === 'defaultValue');
           assert(localHandlebars.HandlebarsHelpers.defaultValue(undefined, 'defaultValue') === 'defaultValue');
+          assert(localHandlebars.HandlebarsHelpers.defaultValue("", 'defaultValue') === 'defaultValue');
         });
       });
     });

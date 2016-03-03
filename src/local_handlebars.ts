@@ -48,7 +48,7 @@ export namespace HandlebarsHelpers {
   }
 
   export function defaultValue(value: any, defaultValue: any): any {
-    return value !== null && value !== undefined ? value : defaultValue;
+    return value ? value : defaultValue;
   }
 }
 
