@@ -113,6 +113,10 @@ export default class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.Void) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Any) {
+        let anyType = this.types.filter(t => t.isPrimitiveType && t.name === 'any')[0];
+        if (anyType) {
+          return anyType;
+        }
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Tuple) {
         this.parseTuple(<ts.TupleType>type);
@@ -541,12 +545,13 @@ export default class TypeScriptParser {
       name = 'symbol';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Void)) {
       name = 'void';
+    } else if (this.checkFlags(type.flags, ts.TypeFlags.Any)) {
+      name = 'any';
     } else if (_.isObject(type.symbol)) {
       name = type.symbol.name;
     } else {
-      name = 'any';
+      throw new Error('Unknown primitive type: ' + type.flags);
     }
-
     let typhenType = this.createTyphenType<Symbol.PrimitiveType>(type, Symbol.PrimitiveType);
     return typhenType.initialize(name);
   }
