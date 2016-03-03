@@ -31,8 +31,16 @@ export namespace HandlebarsHelpers {
     return helpers.underscore(str);
   }
 
+  export function upperCamel(str: string): string {
+    return helpers.upperCamelCase(str);
+  }
+
   export function upperCamelCase(str: string): string {
     return helpers.upperCamelCase(str);
+  }
+
+  export function lowerCamel(str: string): string {
+    return helpers.lowerCamelCase(str);
   }
 
   export function lowerCamelCase(str: string): string {

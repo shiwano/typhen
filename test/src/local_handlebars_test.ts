@@ -57,10 +57,26 @@ describe('localHandlebars', () => {
       });
     });
 
+    describe('.upperCamel', () => {
+      it('should call Helpers.upperCamelCase', () => {
+        var spy = sandbox.spy(helpers, 'upperCamelCase');
+        localHandlebars.HandlebarsHelpers.upperCamel('app.foo_bar.qux');
+        assert(spy.calledWith('app.foo_bar.qux'));
+      });
+    });
+
     describe('.upperCamelCase', () => {
       it('should call Helpers.upperCamelCase', () => {
         var spy = sandbox.spy(helpers, 'upperCamelCase');
         localHandlebars.HandlebarsHelpers.upperCamelCase('app.foo_bar.qux');
+        assert(spy.calledWith('app.foo_bar.qux'));
+      });
+    });
+
+    describe('.lowerCamel', () => {
+      it('should call Helpers.lowerCamelCase', () => {
+        var spy = sandbox.spy(helpers, 'lowerCamelCase');
+        localHandlebars.HandlebarsHelpers.lowerCamel('app.foo_bar.qux');
         assert(spy.calledWith('app.foo_bar.qux'));
       });
     });
