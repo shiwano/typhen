@@ -14,11 +14,12 @@ interface Foo {
 ```hbs
 class {{name}} {
   {{#each properties}}
-  public {{type}} {{upperCamelCase name}} { get; set; }
+  public {{type}} {{upperCamel name}} { get; set; }
   {{/each}}
   {{#each methods}}
   {{#each callSignatures}}
-  public {{returnType}} {{upperCamelCase ../name}}({{#each parameters}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}): {
+  public {{returnType}} {{upperCamel ../name}}({{#each parameters}}{{type}} {{name}}{{#unless @last}}, {{/unless}}{{/each}}):
+  {
     // do something
   }
   {{/each}}
@@ -31,7 +32,8 @@ Will generate this below:
 ```cs
 class Foo {
   public string Bar { get; set; }
-  public void Baz(string qux) {
+  public void Baz(string qux)
+  {
     // do something
   }
 }
@@ -211,21 +213,21 @@ Usage:
                   foo_bar_baz
 ```
 
-#### upperCamelCase Helper
+#### upperCamel Helper
 Transforms a string to upper camel case.
 
 Usage:
 ```hbs
-    {{upperCamelCase 'foo_bar_baz'}}
+    {{upperCamel 'foo_bar_baz'}}
                       FooBarBaz
 ```
 
-#### lowerCamelCase Helper
+#### lowerCamel Helper
 Transforms a string to lower camel case.
 
 Usage:
 ```hbs
-    {{lowerCamelCase 'foo_bar_baz'}}
+    {{lowerCamel 'foo_bar_baz'}}
                       fooBarBaz
 ```
 
@@ -265,7 +267,7 @@ If you want to add your project here, feel free to submit a pull request.
 * [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - Converts TypeScript Interfaces to JSON Schema
 
 ## TypeScript Version
-1.7.3
+1.8.7
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).
