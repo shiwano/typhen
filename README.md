@@ -219,7 +219,7 @@ Transforms a string to upper camel case.
 Usage:
 ```hbs
     {{upperCamel 'foo_bar_baz'}}
-                      FooBarBaz
+                  FooBarBaz
 ```
 
 #### lowerCamel Helper
@@ -228,7 +228,7 @@ Transforms a string to lower camel case.
 Usage:
 ```hbs
     {{lowerCamel 'foo_bar_baz'}}
-                      fooBarBaz
+                  fooBarBaz
 ```
 
 #### pluralize
