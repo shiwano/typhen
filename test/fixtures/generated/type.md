@@ -79,6 +79,8 @@ No Imported Types.
   * Type - Predicate
 * IntersectionType
   * Type - AAndBAndCIntersectionType
+* stringLiteralType
+  * Type - &quot;foobar&quot;
 
 ## AnonymousTypes
 

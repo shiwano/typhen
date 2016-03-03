@@ -101,4 +101,6 @@ declare module Type {
   const constString: string;
 
   namespace Namespace {}
+
+  type stringLiteralType = "foobar";
 }
