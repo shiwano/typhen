@@ -17,7 +17,9 @@ var paths = {
   dest: 'lib/',
   testDest: '.tmp/',
   typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts'],
-  defaultLibFiles: ['lib.typhen.d.ts', 'lib.d.ts']
+  defaultLibFiles: ['lib.typhen.d.ts', 'lib.d.ts'],
+  generatedTestFiles: '.tmp/generated/**',
+  testFileDir: 'test/fixtures/generated',
 };
 
 var tsProject = plugins.typescript.createProject('tsconfig.json');
@@ -93,6 +95,12 @@ gulp.task('watch', function() {
 gulp.task('watch:debug', function() {
   spawn('node', ['node_modules/node-inspector/bin/inspector.js']);
   gulp.watch([paths.src, paths.test], ['test:watch:debug']);
+});
+
+gulp.task('updateTestFiles', function() {
+  return gulp.src(paths.generatedTestFiles)
+    .pipe(plugins.replace(/typings\/integration/g, 'test/fixtures/typings/integration'))
+    .pipe(gulp.dest(paths.testFileDir));
 });
 
 function test(watching, debug, callback) {
