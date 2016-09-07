@@ -113,7 +113,7 @@ export default class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.Void) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Any) {
-        let anyType = this.types.filter(t => t.isPrimitiveType && t.name === 'any')[0];
+        let anyType = this.typeCache.values().filter(t => t.isPrimitiveType && t.name === 'any')[0];
         if (anyType) {
           return anyType;
         }
