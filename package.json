@@ -78,7 +78,7 @@
     "mkdirp": "^0.5.0",
     "nopt": "^3.0.1",
     "path-exists": "^2.0.0",
-    "typescript": "1.8.7",
+    "typescript": "1.8.10",
     "vinyl": "^1.1.0"
   }
 }
