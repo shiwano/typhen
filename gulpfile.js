@@ -29,6 +29,10 @@ var mochaOptions = {
   timeout: 30000
 };
 
+var tslintOptions = {
+  formatter: 'verbose'
+};
+
 gulp.task('jshint', function() {
   return gulp.src(paths.gulpfile)
     .pipe(plugins.plumber())
@@ -40,8 +44,8 @@ gulp.task('jshint', function() {
 gulp.task('tslint', function() {
   return gulp.src(paths.typescriptFiles)
     .pipe(plugins.plumber())
-    .pipe(plugins.tslint())
-    .pipe(plugins.tslint.report('verbose'));
+    .pipe(plugins.tslint(tslintOptions))
+    .pipe(plugins.tslint.report());
 });
 
 gulp.task('test', ['clean:testDest'], function(callback) {
@@ -70,10 +74,12 @@ gulp.task('tsconfig', function() {
 
 gulp.task('compile', ['clean:dest', 'tsconfig'], function(){
   var tsStream = gulp.src(paths.src)
-      .pipe(plugins.plumber({errorHandler: function() {
-        process.exit(1);
-      }}))
-      .pipe(plugins.typescript(tsProject));
+      .pipe(plugins.plumber({
+        errorHandler: function() {
+          process.exit(1);
+        }
+      }))
+      .pipe(tsProject(plugins.typescript.reporter.defaultReporter()));
 
   var jsStream = tsStream.js
     .pipe(gulp.dest(paths.dest));
@@ -108,16 +114,21 @@ function test(watching, debug, callback) {
   var isCompleted = false;
 
   gulp.src(paths.typescriptFiles)
-    .pipe(plugins.plumber({errorHandler: function() {
-      if (watching) {
-        this.emit('end');
-      } else {
-        process.exit(1);
+    .pipe(plugins.plumber({
+      errorHandler: function() {
+        if (watching) {
+          this.emit('end');
+        } else {
+          process.exit(1);
+        }
       }
-    }}))
-    .pipe(plugins.changed(paths.testDest, {extension: '.js', hasChanged: hasChangedForTest}))
+    }))
+    .pipe(plugins.changed(paths.testDest, {
+      extension: '.js',
+      hasChanged: hasChangedForTest
+    }))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.typescript(tsProject)).js
+    .pipe(tsProject(plugins.typescript.reporter.defaultReporter())).js
     .pipe(plugins.espower())
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(paths.testDest))
