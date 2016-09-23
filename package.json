@@ -44,6 +44,7 @@
     "gulp-typescript": "~3.0.0",
     "jshint": "^2.8.0",
     "merge-stream": "^1.0.0",
+    "mocha": "^3.0.2",
     "node-inspector": "^0.12.3",
     "open": "0.0.5",
     "power-assert": "^1.1.0",
