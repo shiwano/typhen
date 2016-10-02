@@ -17,7 +17,6 @@ var paths = {
   dest: 'lib/',
   testDest: '.tmp/',
   typescriptFiles: ['{src,test}/**/*.ts', '!test/fixtures/**/*.ts'],
-  defaultLibFiles: ['lib.typhen.d.ts', 'lib.d.ts'],
   generatedTestFiles: '.tmp/generated/**',
   testFileDir: 'test/fixtures/generated',
 };
