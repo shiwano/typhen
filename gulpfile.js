@@ -12,7 +12,7 @@ var open = require('open');
 
 var paths = {
   gulpfile: 'gulpfile.js',
-  src: ['src/**/*.ts', 'typings/bundle.d.ts'],
+  src: 'src/**/*.ts',
   test: 'test/{src,integration}/**/*_test.ts',
   dest: 'lib/',
   testDest: '.tmp/',

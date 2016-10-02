@@ -9,8 +9,7 @@
         "outDir": "./lib"
     },
     "filesGlob": [
-        "./src/**/*.ts",
-        "./typings/bundle.d.ts"
+        "./src/**/*.ts"
     ],
     "exclude": [
         "node_modules"
@@ -28,7 +27,6 @@
         "src/symbol.ts",
         "src/typescript_parser.ts",
         "src/environments/environment.ts",
-        "src/environments/node_js.ts",
-        "typings/bundle.d.ts"
+        "src/environments/node_js.ts"
     ]
 }
