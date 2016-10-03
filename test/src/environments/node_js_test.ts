@@ -90,6 +90,19 @@ describe('NodeJsEnvironment', () => {
     });
   });
 
+  describe('#getDirectories', () => {
+    beforeEach(() => {
+      sandbox.stub(fs, 'readdirSync').returns(['baz']);
+      sandbox.stub(fs, 'statSync').returns({
+        isDirectory: () => true
+      });
+    });
+
+    it('should return sub directory paths', () => {
+      assert.deepEqual(instance.getDirectories('foo/bar'), ['foo/bar/baz']);
+    });
+  });
+
   describe('#getDefaultLibFileData', () => {
     it('should return the joined defaultLibFile data', () => {
       var actual = instance.getDefaultLibFileData();
