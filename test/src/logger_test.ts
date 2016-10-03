@@ -10,14 +10,14 @@ describe('logger', () => {
 
   beforeEach(() => {
     logger.enableColor(false);
-    // logger.level = logger.LogLevel.Info;
+    logger.setLevel(logger.LogLevel.Info);
     logStub = sandbox.stub(logger, 'log');
     sandbox.stub(logger, 'getDateTimeString').returns('00:00:00');
   });
 
   afterEach(() => {
     logger.enableColor(true);
-    // logger.level = logger.LogLevel.Silent;
+    logger.setLevel(logger.LogLevel.Silent);
     sandbox.restore();
   });
 
@@ -31,7 +31,7 @@ describe('logger', () => {
 
     context('when the level is LogLevel.Debug', () => {
       beforeEach(() => {
-        // logger.level = logger.LogLevel.Debug;
+        logger.setLevel(logger.LogLevel.Debug);
       });
       it('should call Logger.debug', () => {
         logger.debug('debug');

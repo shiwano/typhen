@@ -10,24 +10,31 @@ namespace Logger {
   }
 
   export let level: LogLevel = LogLevel.Info;
-  export function debug(...texts: any[]): void { logWithInfo(LogLevel.Debug, texts, chalk.gray('DEBUG').toString()); }
+  export function setLevel(logLevel: LogLevel): void {
+    level = logLevel;
+  }
+
+  export let colorEnabled: boolean = true;
+  export function enableColor(enabled: boolean): void {
+    colorEnabled = enabled;
+  }
+
+  export function debug(...texts: any[]): void { logWithInfo(LogLevel.Debug, texts, gray('DEBUG')); }
   export function info(...texts: any[]):  void { logWithInfo(LogLevel.Info, texts); }
-  export function warn(...texts: any[]):  void { logWithInfo(LogLevel.Warning, texts, chalk.yellow('WARN').toString()); }
-  export function error(...texts: any[]): void { logWithInfo(LogLevel.Error, texts, chalk.red('ERROR').toString()); }
+  export function warn(...texts: any[]):  void { logWithInfo(LogLevel.Warning, texts, yellow('WARN')); }
+  export function error(...texts: any[]): void { logWithInfo(LogLevel.Error, texts, red('ERROR')); }
 
   export function log(...texts: any[]): void {
     if (level === LogLevel.Silent) { return; }
     console.log(texts.join(' '));
   }
 
-  export function underline(text: string): string { return chalk.underline(text).toString(); }
-  export function green(text: string):     string { return chalk.green(text).toString(); }
-  export function red(text: string):       string { return chalk.red(text).toString(); }
-  export function cyan(text: string):      string { return chalk.cyan(text).toString(); }
-
-  export function enableColor(color: boolean): void {
-    // chalk.enabled = color;
-  }
+  export function underline(text: string): string { return colorEnabled ? chalk.underline(text).toString() : text; }
+  export function gray(text: string):      string { return colorEnabled ? chalk.gray(text).toString() : text; }
+  export function green(text: string):     string { return colorEnabled ? chalk.green(text).toString() : text; }
+  export function red(text: string):       string { return colorEnabled ? chalk.red(text).toString() : text; }
+  export function cyan(text: string):      string { return colorEnabled ? chalk.cyan(text).toString() : text; }
+  export function yellow(text: string):    string { return colorEnabled ? chalk.yellow(text).toString() : text; }
 
   export function getDateTimeString(): string {
     let date = new Date();
@@ -41,7 +48,7 @@ namespace Logger {
     if (logLevel < level) { return; }
 
     if (kind.length > 0) { kind = '[' + kind + ']'; }
-    Logger.log('[' + chalk.grey(Logger.getDateTimeString()) + ']' + kind, texts.join(' '));
+    Logger.log('[' + gray(Logger.getDateTimeString()) + ']' + kind, texts.join(' '));
   }
 }
 

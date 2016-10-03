@@ -58,7 +58,7 @@ if (options.version) {
 var typhen = _.isString(options.__main) ? require(options.__main) : require('../lib/index.js');
 
 if (options.verbose) {
-  typhen.logger.level = typhen.logger.LogLevel.Debug;
+  typhen.logger.setLevel(typhen.logger.LogLevel.Debug);
 }
 
 if (options.argv.remain.length === 0) {
