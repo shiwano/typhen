@@ -88,7 +88,13 @@ gulp.task('compile', ['clean:dest', 'tsconfig'], function(){
 });
 
 gulp.task('build', function(callback) {
-  runSequence(['jshint', 'tslint', 'test'], 'compile', callback);
+  runSequence(['jshint', 'tslint', 'test'], 'compile', function(err) {
+    if (err) {
+      process.exit(1);
+    } else {
+      callback();
+    }
+  });
 });
 
 gulp.task('default', ['build']);
