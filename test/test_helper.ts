@@ -1,10 +1,9 @@
-/// <reference path="../typings/bundle.d.ts" />
-/// <reference path="../node_modules/typescript/lib/typescript.d.ts" />
+/// <reference path="../node_modules/@types/mocha/index.d.ts" />
+/// <reference path="../node_modules/@types/assert/index.d.ts" />
 
 require('source-map-support').install();
 
 (<any>global).assert = require('power-assert');
-(<any>global).sinon = require('sinon');
 
 import * as _ from 'lodash';
 import * as path from 'path';
@@ -17,7 +16,7 @@ import * as runner from '../src/runner';
 import { Environment } from '../src/environments/environment';
 import Generator from '../src/generator';
 
-logger.level = logger.LogLevel.Silent;
+// logger.level = logger.LogLevel.Silent;
 
 export class TestEnvironment implements Environment {
   currentDirectory: string = process.cwd() + '/test/fixtures/typings';
@@ -56,7 +55,11 @@ export class TestEnvironment implements Environment {
   }
 
   exists(fileName: string): boolean {
-    return _.any(Object.keys(this.fileData), n => _.contains(fileName, n));
+    return !_.every(Object.keys(this.fileData), n => !_.includes(fileName, n));
+  }
+
+  getDirectories(basePath: string): string[] {
+    return [];
   }
 }
 

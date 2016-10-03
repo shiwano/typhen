@@ -1,5 +1,7 @@
 import * as ts from 'typescript';
 
+import * as fs from 'fs';
+import * as path from 'path';
 import * as logger from './logger';
 import { Environment } from './environments/environment';
 
@@ -43,6 +45,10 @@ export default class CompilerHost implements ts.CompilerHost {
 
   getCurrentDirectory(): string {
     return this.env.currentDirectory;
+  }
+
+  getDirectories(path: string): string[] {
+    return this.env.getDirectories(path);
   }
 
   useCaseSensitiveFileNames(): boolean {

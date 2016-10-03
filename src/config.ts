@@ -94,7 +94,7 @@ export class Config implements ConfigObject {
       let resolvedPath = this.env.resolvePath(s);
       return this.env.dirname(resolvedPath).replace('\\', '/');
     });
-    if (!dirnames.every(d => _.contains(d, this.cwd))) { return this.cwd; }
+    if (!dirnames.every(d => _.includes(d, this.cwd))) { return this.cwd; }
 
     let minDirCount = _.min(dirnames.map(d => d.split('/').length));
     let minDirnames = dirnames.filter(d => d.split('/').length === minDirCount);

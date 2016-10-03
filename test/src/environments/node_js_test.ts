@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as pathExists from 'path-exists';
 import * as glob from 'glob';
 import * as ts from 'typescript';
+import * as sinon from 'sinon';
 
 import NodeJsEnvironment from '../../../src/environments/node_js';
 

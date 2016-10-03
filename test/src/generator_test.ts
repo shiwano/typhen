@@ -1,4 +1,5 @@
 import * as helper from '../test_helper';
+import * as sinon from 'sinon';
 
 import Generator from '../../src/generator';
 

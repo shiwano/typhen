@@ -1,6 +1,7 @@
 import '../test_helper';
 
 import * as Promise from 'bluebird';
+import * as sinon from 'sinon';
 
 import * as typhen from '../../src/index';
 import * as plugin from '../../src/plugin';

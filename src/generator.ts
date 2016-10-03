@@ -88,7 +88,7 @@ export default class Generator {
     if (matches == null) { return str; }
 
     let inflect = (name: string, inflectionType: string): string => {
-      if (_.contains(name, '/')) { return name; }
+      if (_.includes(name, '/')) { return name; }
 
       switch (inflectionType) {
         case 'underscore':     return helpers.underscore(name);

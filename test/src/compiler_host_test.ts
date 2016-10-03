@@ -1,6 +1,7 @@
 import * as helper from '../test_helper';
 
 import * as ts from 'typescript';
+import * as sinon from 'sinon';
 
 import CompilerHost from '../../src/compiler_host';
 

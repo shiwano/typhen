@@ -198,7 +198,7 @@ export class Symbol {
     return this.declarationInfos.every(d => {
       let resolvedPath = this.config.env.resolvePath(d.path);
       return resolvedPath !== this.config.env.defaultLibFileName &&
-        _.contains(resolvedPath, this.config.typingDirectory);
+        _.includes(resolvedPath, this.config.typingDirectory);
     });
   }
 

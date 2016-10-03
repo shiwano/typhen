@@ -20,10 +20,10 @@ export namespace HandlebarsHelpers {
     let options = _.last(valuesAndOptions);
     let values = valuesAndOptions.filter((i: any) => i !== options);
 
-    if (_.any(values, (v: any) => !(<any>Handlebars).Utils.isEmpty(v))) {
-      return options.fn(this);
-    } else {
+    if (_.every(values, (v: any) => <any>Handlebars.Utils.isEmpty(v))) {
       return options.inverse(this);
+    } else {
+      return options.fn(this);
     }
   }
 

@@ -1,6 +1,7 @@
 import '../test_helper';
 
 import * as Handlebars from 'handlebars';
+import * as sinon from 'sinon';
 
 import * as helpers from '../../src/helpers';
 import * as localHandlebars from '../../src/local_handlebars';

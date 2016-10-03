@@ -26,7 +26,7 @@ namespace Logger {
   export function cyan(text: string):      string { return chalk.cyan(text).toString(); }
 
   export function enableColor(color: boolean): void {
-    chalk.enabled = color;
+    // chalk.enabled = color;
   }
 
   export function getDateTimeString(): string {

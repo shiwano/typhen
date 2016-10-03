@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as Promise from 'bluebird';
 
 import * as symbol from './symbol';
 import NodeJsEnvironment from './environments/node_js';

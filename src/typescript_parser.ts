@@ -27,7 +27,7 @@ export default class TypeScriptParser {
       .filter(s => {
         let resolvedPath = this.config.env.resolvePath(s.fileName);
         return resolvedPath !== this.config.env.defaultLibFileName &&
-          _.contains(resolvedPath, this.config.typingDirectory);
+          _.includes(resolvedPath, this.config.typingDirectory);
       });
   }
 
@@ -103,7 +103,7 @@ export default class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.String) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.StringLiteral) {
-        this.parseStringLiteralType(<ts.StringLiteralType>type);
+        this.parseStringLiteralType(<ts.LiteralType>type);
       } else if (type.flags & ts.TypeFlags.Number) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Boolean) {
@@ -119,7 +119,7 @@ export default class TypeScriptParser {
         }
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Tuple) {
-        this.parseTuple(<ts.TupleType>type);
+        this.parseTuple(<any>type);
       } else if (type.flags & ts.TypeFlags.Union) {
         this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Intersection) {
@@ -297,7 +297,7 @@ export default class TypeScriptParser {
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {
-    return _.isObject(type.symbol) && _.include(this.config.plugin.customPrimitiveTypes, type.symbol.name);
+    return _.isObject(type.symbol) && _.includes(this.config.plugin.customPrimitiveTypes, type.symbol.name);
   }
 
   private isArrayType(type: ts.Type): boolean {
@@ -312,7 +312,7 @@ export default class TypeScriptParser {
         return s.declarations.every(d => {
           let resolvedPath = this.config.env.resolvePath(d.getSourceFile().fileName);
           return resolvedPath !== this.config.env.defaultLibFileName &&
-            _.contains(resolvedPath, this.config.typingDirectory);
+            _.includes(resolvedPath, this.config.typingDirectory);
         });
       });
   }
@@ -446,11 +446,11 @@ export default class TypeScriptParser {
     let properties = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseProperty(s, _.contains(ownMemberNames, s.name)));
+        .map(s => this.parseProperty(s, _.includes(ownMemberNames, s.name)));
     let rawMethods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
             !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
-        .map(s => this.parseMethod(s, _.contains(ownMemberNames, s.name)));
+        .map(s => this.parseMethod(s, _.includes(ownMemberNames, s.name)));
     let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
     let stringIndexType = this.parseType(genericType.getStringIndexType());
@@ -561,10 +561,11 @@ export default class TypeScriptParser {
     return typhenType.initialize(this.parseType(type.constraint));
   }
 
-  private parseTuple(type: ts.TupleType): Symbol.Tuple {
+  private parseTuple(type: any): Symbol.Tuple {
     let typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
-    let elementTypes = type.elementTypes.map(t => this.parseType(t));
-    return typhenType.initialize(elementTypes);
+    // let elementTypes = type.elementTypes.map(t => this.parseType(t));
+    // return typhenType.initialize(elementTypes);
+    return typhenType.initialize([]);
   }
 
   private parseUnionType(type: ts.UnionType): Symbol.UnionType {
@@ -579,7 +580,7 @@ export default class TypeScriptParser {
     return typhenType.initialize(types);
   }
 
-  private parseStringLiteralType(type: ts.StringLiteralType): Symbol.StringLiteralType {
+  private parseStringLiteralType(type: ts.LiteralType): Symbol.StringLiteralType {
     let typhenType = this.createTyphenType<Symbol.StringLiteralType>(type, Symbol.StringLiteralType);
     return typhenType.initialize(type.text);
   }

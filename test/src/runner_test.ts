@@ -1,5 +1,7 @@
 import helper = require('../test_helper');
 
+import * as sinon from 'sinon';
+
 import * as runner from '../../src/runner';
 
 describe('Runner', () => {

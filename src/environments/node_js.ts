@@ -64,6 +64,11 @@ export default class NodeJsEnvironment implements Environment {
     return pathExists.sync(filePath);
   }
 
+  getDirectories(basePath: string): string[] {
+    return fs.readdirSync(basePath).map(d => path.join(basePath, d))
+      .filter(d => fs.statSync(d).isDirectory());
+  }
+
   getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
     return fs.readFileSync(this.defaultLibFileName, 'utf-8');
