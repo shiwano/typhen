@@ -34,7 +34,6 @@ var tslintOptions = {
 
 gulp.task('jshint', function() {
   return gulp.src(paths.gulpfile)
-    .pipe(plugins.plumber())
     .pipe(plugins.jshint())
     .pipe(plugins.jshint.reporter('default'))
     .pipe(plugins.jshint.reporter('fail'));
@@ -42,7 +41,6 @@ gulp.task('jshint', function() {
 
 gulp.task('tslint', function() {
   return gulp.src(paths.typescriptFiles)
-    .pipe(plugins.plumber())
     .pipe(plugins.tslint(tslintOptions))
     .pipe(plugins.tslint.report());
 });
@@ -73,11 +71,6 @@ gulp.task('tsconfig', function() {
 
 gulp.task('compile', ['clean:dest', 'tsconfig'], function(){
   var tsStream = gulp.src(paths.src)
-      .pipe(plugins.plumber({
-        errorHandler: function() {
-          process.exit(1);
-        }
-      }))
       .pipe(tsProject(plugins.typescript.reporter.defaultReporter()));
 
   var jsStream = tsStream.js
@@ -119,15 +112,6 @@ function test(watching, debug, callback) {
   var isCompleted = false;
 
   gulp.src(paths.typescriptFiles)
-    .pipe(plugins.plumber({
-      errorHandler: function() {
-        if (watching) {
-          this.emit('end');
-        } else {
-          process.exit(1);
-        }
-      }
-    }))
     .pipe(plugins.changed(paths.testDest, {
       extension: '.js',
       hasChanged: hasChangedForTest
@@ -141,6 +125,13 @@ function test(watching, debug, callback) {
       if (debug) { open('http://127.0.0.1:8080/debug?port=5858'); }
     })
     .pipe(plugins.spawnMocha(mochaOptions))
+    .on('error', function() {
+      if (watching) {
+        this.emit('end');
+      } else {
+        process.exit(1);
+      }
+    })
     .on('end', function() {
       if (!isCompleted) {
         callback();
