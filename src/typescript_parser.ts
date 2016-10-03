@@ -118,12 +118,13 @@ export default class TypeScriptParser {
           return anyType;
         }
         this.parsePrimitiveType(type);
-      } else if (type.flags & ts.TypeFlags.Tuple) {
-        this.parseTuple(<any>type);
       } else if (type.flags & ts.TypeFlags.Union) {
         this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Intersection) {
         this.parseIntersectionType(<ts.IntersectionType>type);
+      } else if (type.flags & ts.TypeFlags.Reference && type.symbol === undefined &&
+                (<ts.TypeReference>type).target.flags & ts.TypeFlags.Tuple) {
+        this.parseTuple(<ts.TypeReference>type);
       } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
@@ -561,11 +562,10 @@ export default class TypeScriptParser {
     return typhenType.initialize(this.parseType(type.constraint));
   }
 
-  private parseTuple(type: any): Symbol.Tuple {
+  private parseTuple(type: ts.TypeReference): Symbol.Tuple {
     let typhenType = this.createTyphenType<Symbol.Tuple>(type, Symbol.Tuple);
-    // let elementTypes = type.elementTypes.map(t => this.parseType(t));
-    // return typhenType.initialize(elementTypes);
-    return typhenType.initialize([]);
+    let elementTypes = type.typeArguments.map(t => this.parseType(t));
+    return typhenType.initialize(elementTypes);
   }
 
   private parseUnionType(type: ts.UnionType): Symbol.UnionType {
