@@ -72,7 +72,11 @@ describe('TypeScriptParser', () => {
           'Type.Cat', 'Type.isCat', 'Type.Animal',
           'Type.Animal', // This is a TypeParameter.
           // StringLiteralType
-          '"foobar"'
+          '"foobar"',
+          // BooleanLiteralType
+          'true',
+          // NumberLiteralType
+          '100'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

@@ -19,6 +19,8 @@ export enum SymbolKind {
   UnionType,
   IntersectionType,
   StringLiteralType,
+  BooleanLiteralType,
+  NumberLiteralType,
   Property,
   Method,
   Signature,
@@ -187,6 +189,8 @@ export class Symbol {
   get isUnionType(): boolean { return this.kind === SymbolKind.UnionType; }
   get isIntersectionType(): boolean { return this.kind === SymbolKind.IntersectionType; }
   get isStringLiteralType(): boolean { return this.kind === SymbolKind.StringLiteralType; }
+  get isBooleanLiteralType(): boolean { return this.kind === SymbolKind.BooleanLiteralType; }
+  get isNumberLiteralType(): boolean { return this.kind === SymbolKind.NumberLiteralType; }
   get isProperty(): boolean { return this.kind === SymbolKind.Property; }
   get isMethod(): boolean { return this.kind === SymbolKind.Method; }
   get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
@@ -538,6 +542,36 @@ export class StringLiteralType extends Type {
 
   initialize(text: string): StringLiteralType {
     this.text = '"' + text + '"';
+    return this;
+  }
+}
+
+export class BooleanLiteralType extends Type {
+  kind: SymbolKind = SymbolKind.BooleanLiteralType;
+
+  value: boolean = false;
+
+  get assumedName(): string {
+    return this.value.toString();
+  }
+
+  initialize(value: boolean): BooleanLiteralType {
+    this.value = value;
+    return this;
+  }
+}
+
+export class NumberLiteralType extends Type {
+  kind: SymbolKind = SymbolKind.NumberLiteralType;
+
+  value: number = 0;
+
+  get assumedName(): string {
+    return this.value.toString();
+  }
+
+  initialize(value: number): NumberLiteralType {
+    this.value = value;
     return this;
   }
 }

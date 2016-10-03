@@ -81,6 +81,10 @@ No Imported Types.
   * Type - AAndBAndCIntersectionType
 * stringLiteralType
   * Type - &quot;foobar&quot;
+* booleanLiteralType
+  * Type - true
+* numberLiteralType
+  * Type - 100
 
 ## AnonymousTypes
 

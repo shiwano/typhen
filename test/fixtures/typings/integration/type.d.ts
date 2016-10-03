@@ -103,4 +103,6 @@ declare module Type {
   namespace Namespace {}
 
   type stringLiteralType = "foobar";
+  type booleanLiteralType = true;
+  type numberLiteralType = 100;
 }

@@ -104,6 +104,10 @@ export default class TypeScriptParser {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.StringLiteral) {
         this.parseStringLiteralType(<ts.LiteralType>type);
+      } else if (type.flags & ts.TypeFlags.BooleanLiteral) {
+        this.parseBooleanLiteralType(<ts.LiteralType>type);
+      } else if (type.flags & ts.TypeFlags.NumberLiteral) {
+        this.parseNumberLiteralType(<ts.LiteralType>type);
       } else if (type.flags & ts.TypeFlags.Number) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Boolean) {
@@ -583,6 +587,17 @@ export default class TypeScriptParser {
   private parseStringLiteralType(type: ts.LiteralType): Symbol.StringLiteralType {
     let typhenType = this.createTyphenType<Symbol.StringLiteralType>(type, Symbol.StringLiteralType);
     return typhenType.initialize(type.text);
+  }
+
+  private parseBooleanLiteralType(type: ts.LiteralType): Symbol.BooleanLiteralType {
+    let typhenType = this.createTyphenType<Symbol.BooleanLiteralType>(type, Symbol.BooleanLiteralType);
+    let intrinsicName = (type as any).intrinsicName;
+    return typhenType.initialize(intrinsicName === 'true');
+  }
+
+  private parseNumberLiteralType(type: ts.LiteralType): Symbol.NumberLiteralType {
+    let typhenType = this.createTyphenType<Symbol.NumberLiteralType>(type, Symbol.NumberLiteralType);
+    return typhenType.initialize(Number(type.text));
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
