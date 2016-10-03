@@ -72,7 +72,7 @@ if (options.argv.remain.length === 0) {
 } else {
   var fileNames = options.argv.remain.map(function (p) { return path.resolve(p); });
 
-  if (fileNames.length === 1 && _.contains(fileNames[0], 'typhenfile')) {
+  if (fileNames.length === 1 && _.includes(fileNames[0], 'typhenfile')) {
     typhen.runByTyphenfile(fileNames[0]).done(function() {}, function(e) { throw e; });
   } else if (fileNames.length === 1 && fileNames[0].match(/tsconfig.json$/) !== null) {
     typhen.runByTSConfig(fileNames[0]).done(function() {}, function(e) { throw e; });
