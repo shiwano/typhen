@@ -108,6 +108,8 @@ export default class TypeScriptParser {
         this.parseBooleanLiteralType(<ts.LiteralType>type);
       } else if (type.flags & ts.TypeFlags.NumberLiteral) {
         this.parseNumberLiteralType(<ts.LiteralType>type);
+      } else if (type.flags & ts.TypeFlags.EnumLiteral) {
+        this.parseEnumLiteralType(<ts.EnumLiteralType>type);
       } else if (type.flags & ts.TypeFlags.Number) {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Boolean) {
@@ -122,6 +124,8 @@ export default class TypeScriptParser {
           return anyType;
         }
         this.parsePrimitiveType(type);
+      } else if (type.flags & ts.TypeFlags.Enum) {
+        this.parseEnum(type);
       } else if (type.flags & ts.TypeFlags.Union) {
         this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Intersection) {
@@ -134,8 +138,6 @@ export default class TypeScriptParser {
         return null;
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
         this.parseFunction(<ts.ObjectType>type);
-      } else if (type.symbol.flags & ts.SymbolFlags.Enum) {
-        this.parseEnum(type);
       } else if (type.symbol.flags & ts.SymbolFlags.Class) {
         this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
       } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
@@ -598,6 +600,13 @@ export default class TypeScriptParser {
   private parseNumberLiteralType(type: ts.LiteralType): Symbol.NumberLiteralType {
     let typhenType = this.createTyphenType<Symbol.NumberLiteralType>(type, Symbol.NumberLiteralType);
     return typhenType.initialize(Number(type.text));
+  }
+
+  private parseEnumLiteralType(type: ts.EnumLiteralType): Symbol.EnumLiteralType {
+    let typhenType = this.createTyphenType<Symbol.EnumLiteralType>(type, Symbol.EnumLiteralType);
+    let enumType = this.parseType(type.baseType) as Symbol.Enum;
+    let enumMember =  enumType.members.filter(m => m.rawName === type.symbol.name)[0];
+    return typhenType.initialize(enumType, enumMember);
   }
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {

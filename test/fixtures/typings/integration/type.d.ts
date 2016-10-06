@@ -105,4 +105,7 @@ declare module Type {
   type stringLiteralType = "foobar";
   type booleanLiteralType = true;
   type numberLiteralType = 100;
+
+  enum EnumLiterals { EnumLiteralA = 1, EnumLiteralB = 2, }
+  type enumLiteralType = EnumLiterals.EnumLiteralA;
 }

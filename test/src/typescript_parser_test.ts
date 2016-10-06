@@ -76,7 +76,10 @@ describe('TypeScriptParser', () => {
           // BooleanLiteralType
           'true',
           // NumberLiteralType
-          '100'
+          '100',
+          // EnumLiteralType
+          'Type.EnumLiterals',
+          'Type.EnumLiterals.EnumLiteralA'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

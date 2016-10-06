@@ -24,6 +24,7 @@ No Imported Types.
 ## Enums
 
 * Color
+* EnumLiterals
 
 ## Functions
 
@@ -85,6 +86,8 @@ No Imported Types.
   * Type - true
 * numberLiteralType
   * Type - 100
+* enumLiteralType
+  * Type - EnumLiterals.EnumLiteralA
 
 ## AnonymousTypes
 

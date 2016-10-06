@@ -21,6 +21,7 @@ export enum SymbolKind {
   StringLiteralType,
   BooleanLiteralType,
   NumberLiteralType,
+  EnumLiteralType,
   Property,
   Method,
   Signature,
@@ -191,6 +192,7 @@ export class Symbol {
   get isStringLiteralType(): boolean { return this.kind === SymbolKind.StringLiteralType; }
   get isBooleanLiteralType(): boolean { return this.kind === SymbolKind.BooleanLiteralType; }
   get isNumberLiteralType(): boolean { return this.kind === SymbolKind.NumberLiteralType; }
+  get isEnumLiteralType(): boolean { return this.kind === SymbolKind.EnumLiteralType; }
   get isProperty(): boolean { return this.kind === SymbolKind.Property; }
   get isMethod(): boolean { return this.kind === SymbolKind.Method; }
   get isSignature(): boolean { return this.kind === SymbolKind.Signature; }
@@ -572,6 +574,23 @@ export class NumberLiteralType extends Type {
 
   initialize(value: number): NumberLiteralType {
     this.value = value;
+    return this;
+  }
+}
+
+export class EnumLiteralType extends Type {
+  kind: SymbolKind = SymbolKind.EnumLiteralType;
+
+  enumType: Enum = null;
+  enumMember: EnumMember = null;
+
+  get assumedName(): string {
+    return [this.enumType.name, this.enumMember.name].join(this.config.plugin.namespaceSeparator);
+  }
+
+  initialize(enumType: Enum, enumMember: EnumMember): EnumLiteralType {
+    this.enumType = enumType;
+    this.enumMember = enumMember;
     return this;
   }
 }
