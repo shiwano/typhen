@@ -464,7 +464,7 @@ export default class TypeScriptParser {
     let numberIndexType = this.parseType(genericType.getNumberIndexType());
 
     let constructorSignatures = genericType.getConstructSignatures()
-      .filter(s => _.isObject(s.declaration)) // the constructor signature that has no declaration will be created by using typeof keyword.
+      .filter(s => _.isObject(s.declaration)) // constructor signature that has no declaration will be created by using typeof keyword.
       .map(s => this.parseSignature(s, 'Constructor'));
     let callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
@@ -614,9 +614,11 @@ export default class TypeScriptParser {
     let propertyType = this.parseType(type);
     let isOptional = (<ts.PropertyDeclaration>symbol.valueDeclaration).questionToken != null;
     let isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
+    let isReadOnly = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Readonly);
+    let isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
-    return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected);
+    return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected, isReadOnly, isAbstract);
   }
 
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {

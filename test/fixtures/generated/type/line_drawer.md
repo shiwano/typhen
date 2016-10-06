@@ -38,9 +38,9 @@ Methods is empty.
 
 ## Static Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-lines|ArrayOfLine|false|true|false||
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
+lines|ArrayOfLine|false|true|false|false|false||
 
 ## Static Methods
 

@@ -21,10 +21,10 @@ ObjectType
 ## Properties
 
 {{#if properties}}
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
 {{#each properties}}
-{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{isProtected}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
+{{name}}|{{type.name}}|{{isOptional}}|{{isOwn}}|{{isProtected}}|{{isReadonly}}|{{isAbstract}}|{{#each tags}}{{name}}:{{value}} {{/each}}|{{comment}}
 {{/each}}
 {{else}}
 Properties is empty.

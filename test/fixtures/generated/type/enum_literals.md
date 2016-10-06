@@ -1,6 +1,6 @@
 # Type.EnumLiterals
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L109)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L110)
 
 No comment.
 

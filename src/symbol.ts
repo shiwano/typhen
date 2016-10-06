@@ -609,12 +609,16 @@ export class Property extends Symbol {
   isOptional: boolean = false;
   isOwn: boolean = false;
   isProtected: boolean = false;
+  isReadonly: boolean = false;
+  isAbstract: boolean = false;
 
-  initialize(type: Type, isOptional: boolean, isOwn: boolean, isProtected: boolean): Property {
+  initialize(type: Type, isOptional: boolean, isOwn: boolean, isProtected: boolean, isReadonly: boolean, isAbstract: boolean): Property {
     this.type = type;
     this.isOptional = isOptional;
     this.isOwn = isOwn;
     this.isProtected = isProtected;
+    this.isReadonly = isReadonly;
+    this.isAbstract = isAbstract;
     return this;
   }
 }

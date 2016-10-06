@@ -1,6 +1,6 @@
 # Type.Cat
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L96)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L97)
 
 No comment.
 

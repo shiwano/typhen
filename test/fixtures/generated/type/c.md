@@ -1,6 +1,6 @@
 # Type.C
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L82)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L83)
 
 No comment.
 
@@ -30,9 +30,9 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-c|string|false|true|false||
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
+c|string|false|true|false|false|false||
 
 ## Methods
 

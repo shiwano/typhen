@@ -1,6 +1,6 @@
 # Type.classDecorator
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L87)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L88)
 
 No comment.
 

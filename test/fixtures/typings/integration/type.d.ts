@@ -13,8 +13,8 @@ declare module Type {
   }
 
   interface Point {
-    x: number;
-    y: number;
+    readonly x: number;
+    readonly y: number;
     set(x: number, y: number): void;
     set(args: [number, number]): void;
     new(x: number, y: number): Point;
@@ -73,6 +73,7 @@ declare module Type {
 
   abstract class AbstractClass {
     abstract abstractMethod(): void;
+    abstract abstractProperty: number;
   }
 
   type Predicate<T> = (element: T) => boolean;

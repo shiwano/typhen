@@ -30,7 +30,9 @@ CallSignatures is empty.
 
 ## Properties
 
-Properties is empty.
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
+abstractProperty|number|false|true|false|false|true||
 
 ## Methods
 

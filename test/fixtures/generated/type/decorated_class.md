@@ -1,6 +1,6 @@
 # Type.DecoratedClass
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L89)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L90)
 
 No comment.
 

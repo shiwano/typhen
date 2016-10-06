@@ -30,11 +30,11 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-center|Point|false|true|false||
-margin|number|true|true|false||
-size|integer|false|true|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
+center|Point|false|true|false|false|false||
+margin|number|true|true|false|false|false||
+size|integer|false|true|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 

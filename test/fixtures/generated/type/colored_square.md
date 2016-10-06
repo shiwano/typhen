@@ -30,12 +30,12 @@ CallSignatures is empty.
 
 ## Properties
 
-Name|TypeName|IsOptional|isOwn|isProtected|Tags|Comment
----|---|---|---|---|---|---
-color|Color|false|true|false|default:Color.Red |Default color is red.
-center|Point|false|false|false||
-margin|number|true|false|false||
-size|integer|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
+Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
+---|---|---|---|---|---|---|---|---
+color|Color|false|true|false|false|false|default:Color.Red |Default color is red.
+center|Point|false|false|false|false|false||
+margin|number|true|false|false|false|false||
+size|integer|false|false|false|false|false|minimum:1 maximum:5 |Size from 1 to 5 (highest).
 
 ## Methods
 
