@@ -47,6 +47,12 @@ module.exports = function(typhen, options) {
           case typhen.SymbolKind.Function:
             generator.generate('templates/function.hbs', 'underscore:**/*.md', type);
             break;
+          case typhen.SymbolKind.StringLiteralType:
+          case typhen.SymbolKind.BooleanLiteralType:
+          case typhen.SymbolKind.NumberLiteralType:
+          case typhen.SymbolKind.EnumLiteralType:
+            generator.generate('templates/literal_type.hbs', 'underscore:**/*.md', type);
+            break;
         }
       });
 

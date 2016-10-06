@@ -1,0 +1,66 @@
+# {{fullName}}
+
+{{#if declarationInfos}}
+{{#each declarationInfos}}
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+{{/each}}
+{{else}}
+No declarations.
+{{/if}}
+
+{{#if comment}}
+{{comment}}
+{{else}}
+No comment.
+{{/if}}
+
+## Type
+
+{{#if isStringLiteralType}}
+StringLiteralType
+
+## Text
+
+{{text}}
+{{/if}}
+{{#if isBooleanLiteralType}}
+BooleanLiteralType
+
+## Value
+
+{{value}}
+{{/if}}
+{{#if isNumberLiteralType}}
+NumberLiteralType
+
+## Value
+
+{{value}}
+{{/if}}
+{{#if isEnumLiteralType}}
+EnumLiteralType
+
+## EnumType
+
+{{#with enumType}}
+{{name}}
+
+{{#if declarationInfos}}
+{{#each declarationInfos}}
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+{{/each}}
+{{/if}}
+{{/with}}
+
+## EnumMember
+
+{{#with enumMember}}
+{{name}}
+
+{{#if declarationInfos}}
+{{#each declarationInfos}}
+* [{{fileName}}](/{{fileName}}#L{{lineAndCharacterNumber.line}})
+{{/each}}
+{{/if}}
+{{/with}}
+{{/if}}

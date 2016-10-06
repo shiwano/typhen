@@ -208,6 +208,13 @@ export class Symbol {
     });
   }
 
+  get isLiteralType(): boolean {
+    return this.isStringLiteralType ||
+      this.isBooleanLiteralType ||
+      this.isNumberLiteralType ||
+      this.isEnumLiteralType;
+  }
+
   toString(): string {
     return this.name;
   }
