@@ -219,10 +219,7 @@ export class Symbol {
   }
 
   get isLiteralType(): boolean {
-    return this.isStringLiteralType ||
-      this.isBooleanLiteralType ||
-      this.isNumberLiteralType ||
-      this.isEnumLiteralType;
+    return false;
   }
 
   toString(): string {
@@ -308,7 +305,7 @@ export class PrimitiveType extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.any && this.rawName === 'any') {
-      return 'Disallow the any type';
+      return 'Disallow to define the any type';
     }
   }
 }
@@ -349,9 +346,9 @@ export class Function extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.overload && this.callSignatures.length > 1) {
-      return 'Disallow the function overloading';
+      return 'Disallow to use function overloading';
     } else if (this.config.plugin.disallow.anonymousFunction && this.isAnonymousType) {
-      return 'Disallow the anonymous function';
+      return 'Disallow to define an anonymous function';
     }
   }
 }
@@ -381,7 +378,7 @@ export class ObjectType extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.anonymousObject && this.isAnonymousType) {
-      return 'Disallow the anonymous object';
+      return 'Disallow toe define an anonymous object';
     }
   }
 }
@@ -445,9 +442,9 @@ export class Interface extends ObjectType {
 
   validate(): void | string {
     if (this.config.plugin.disallow.generics && this.isGenericType) {
-      return 'Disallow the generics';
+      return 'Disallow to define a generic type';
     } else if (this.config.plugin.disallow.overload && (this.callSignatures.length > 1 || this.constructorSignatures.length > 1)) {
-      return 'Disallow the function overloading';
+      return 'Disallow to use function overloading';
     }
   }
 }
@@ -500,7 +497,7 @@ export class Tuple extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.tuple) {
-      return 'Disallow the tuple type';
+      return 'Disallow to define a tuple type';
     }
   }
 }
@@ -521,7 +518,7 @@ export class UnionType extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.unionType) {
-      return 'Disallow the union type';
+      return 'Disallow to define an union type';
     }
   }
 }
@@ -542,12 +539,24 @@ export class IntersectionType extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.intersectionType) {
-      return 'Disallow the intersection type';
+      return 'Disallow to define an intersection type';
     }
   }
 }
 
-export class StringLiteralType extends Type {
+export class LiteralType extends Type {
+  get isLiteralType(): boolean {
+    return true;
+  }
+
+  validate(): void | string {
+    if (this.config.plugin.disallow.literalType) {
+      return 'Disallow to define a literal type';
+    }
+  }
+}
+
+export class StringLiteralType extends LiteralType {
   kind: SymbolKind = SymbolKind.StringLiteralType;
 
   text: string = '';
@@ -566,7 +575,7 @@ export class StringLiteralType extends Type {
   }
 }
 
-export class BooleanLiteralType extends Type {
+export class BooleanLiteralType extends LiteralType {
   kind: SymbolKind = SymbolKind.BooleanLiteralType;
 
   value: boolean = false;
@@ -581,7 +590,7 @@ export class BooleanLiteralType extends Type {
   }
 }
 
-export class NumberLiteralType extends Type {
+export class NumberLiteralType extends LiteralType {
   kind: SymbolKind = SymbolKind.NumberLiteralType;
 
   value: number = 0;
@@ -596,7 +605,7 @@ export class NumberLiteralType extends Type {
   }
 }
 
-export class EnumLiteralType extends Type {
+export class EnumLiteralType extends LiteralType {
   kind: SymbolKind = SymbolKind.EnumLiteralType;
 
   enumType: Enum = null;
@@ -652,7 +661,7 @@ export class Method extends Symbol {
 
   validate(): void | string {
     if (this.config.plugin.disallow.overload && this.callSignatures.length > 1) {
-      return 'Disallow the function overloading';
+      return 'Disallow to use function overloading';
     }
   }
 }
@@ -678,7 +687,7 @@ export class Signature extends Symbol {
 
   validate(): void | string {
     if (this.config.plugin.disallow.generics && this.typeParameters.length > 0) {
-      return 'Disallow the generics';
+      return 'Disallow to define a generic function';
     }
   }
 }

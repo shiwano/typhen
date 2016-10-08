@@ -332,7 +332,7 @@ describe('TypeScriptParser', () => {
         config.plugin.disallow.generics = true;
       });
       it('should throw an error', () => {
-        assert.throws(() => instance.validate(), /generics/);
+        assert.throws(() => instance.validate(), /generic/);
       });
     });
 
@@ -360,6 +360,15 @@ describe('TypeScriptParser', () => {
       });
       it('should throw an error', () => {
         assert.throws(() => instance.validate(), /anonymous object/);
+      });
+    });
+
+    context('when dissalow#literalType is true', () => {
+      beforeEach(() => {
+        config.plugin.disallow.literalType = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /literal type/);
       });
     });
   });

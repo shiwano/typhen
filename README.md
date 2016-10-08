@@ -137,7 +137,8 @@ module.exports = function(typhen, options) {
       overload: true,
       generics: true,
       anonymousObject: true,
-      anonymousFunction: true
+      anonymousFunction: true,
+      literalType: true
     },
     handlebarsOptions: {               // Optional. Default value is null.
       data: options,                   // For details, see: http://handlebarsjs.com/execution.html

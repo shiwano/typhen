@@ -14,6 +14,7 @@ export interface DisallowOptions {
   generics?: boolean;
   anonymousFunction?: boolean;
   anonymousObject?: boolean;
+  literalType?: boolean;
 }
 
 // For details, see: http://handlebarsjs.com/execution.html
