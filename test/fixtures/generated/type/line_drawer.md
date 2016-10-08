@@ -48,13 +48,13 @@ Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|
 ---|---|---|---|---|---|---|---|---
 draw|src:Point:false:false dest:Point:false:false |Line|false|true|false|false|| 
 
-## StringIndexType
+## StringIndex
 
-StringIndexType is undefined.
+StringIndex is undefined.
 
-## NumberIndexType
+## NumberIndex
 
-NumberIndexType is undefined.
+NumberIndex is undefined.
 
 ## Decorators
 

@@ -46,13 +46,21 @@ Static Properties is empty.
 
 Static Methods is empty.
 
-## StringIndexType
+## StringIndex
 
 T
 
-## NumberIndexType
+### IsReadonly
+
+true
+
+## NumberIndex
 
 T
+
+### IsReadonly
+
+false
 
 ## Decorators
 

@@ -54,13 +54,13 @@ Static Properties is empty.
 
 Static Methods is empty.
 
-## StringIndexType
+## StringIndex
 
-StringIndexType is undefined.
+StringIndex is undefined.
 
-## NumberIndexType
+## NumberIndex
 
-NumberIndexType is undefined.
+NumberIndex is undefined.
 
 ## Decorators
 

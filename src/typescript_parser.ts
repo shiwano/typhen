@@ -438,6 +438,34 @@ export default class TypeScriptParser {
     return typhenType.initialize(members, isConst);
   }
 
+  private parseIndexInfos(type: ts.InterfaceTypeWithDeclaredMembers): { stringIndex: Symbol.IndexInfo, numberIndex: Symbol.IndexInfo } {
+    let indexSymbol = type.symbol.members['__index'] || null;
+    let stringIndex: Symbol.IndexInfo = null;
+    let numberIndex: Symbol.IndexInfo = null;
+
+    if (type.getStringIndexType() != null) {
+      let stringIndexType = this.parseType(type.getStringIndexType());
+      let isReadonly = false;
+      if (type.declaredStringIndexInfo != null) {
+        isReadonly = type.declaredStringIndexInfo.isReadonly;
+      } else if (indexSymbol != null) {
+        isReadonly = this.checkFlags(indexSymbol.declarations[0].flags, ts.NodeFlags.Readonly);
+      }
+      stringIndex = new Symbol.IndexInfo(stringIndexType, isReadonly);
+    }
+    if (type.getNumberIndexType() != null) {
+      let numberIndexType = this.parseType(type.getNumberIndexType());
+      let isReadonly = false;
+      if (type.declaredNumberIndexInfo != null) {
+        isReadonly = type.declaredNumberIndexInfo.isReadonly;
+      } else if (indexSymbol != null) {
+        isReadonly = this.checkFlags(indexSymbol.declarations[0].flags, ts.NodeFlags.Readonly);
+      }
+      numberIndex = new Symbol.IndexInfo(numberIndexType, isReadonly);
+    }
+    return { stringIndex: stringIndex, numberIndex: numberIndex };
+  }
+
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
     let genericType = type.target === undefined ? type : type.target;
     let ownMemberNames = _.values(genericType.symbol.members).map(s => s.name);
@@ -460,8 +488,10 @@ export default class TypeScriptParser {
         .map(s => this.parseMethod(s, _.includes(ownMemberNames, s.name)));
     let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
-    let stringIndexType = this.parseType(genericType.getStringIndexType());
-    let numberIndexType = this.parseType(genericType.getNumberIndexType());
+
+    let indexInfos = this.parseIndexInfos(<any>genericType as ts.InterfaceTypeWithDeclaredMembers);
+    let stringIndex = indexInfos.stringIndex;
+    let numberIndex = indexInfos.numberIndex;
 
     let constructorSignatures = genericType.getConstructSignatures()
       .filter(s => _.isObject(s.declaration)) // constructor signature that has no declaration will be created by using typeof keyword.
@@ -501,7 +531,7 @@ export default class TypeScriptParser {
 
     this.typeReferenceStack.pop();
     return <T>typhenType.initialize(properties, methods, builtInSymbolMethods,
-        stringIndexType, numberIndexType, constructorSignatures, callSignatures,
+        stringIndex, numberIndex, constructorSignatures, callSignatures,
         baseTypes, typeReference, staticProperties, staticMethods, isAbstract);
   }
 
@@ -516,11 +546,12 @@ export default class TypeScriptParser {
         .map(s => this.parseMethod(s));
     let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
-    let stringIndexType = this.parseType(type.getStringIndexType());
-    let numberIndexType = this.parseType(type.getNumberIndexType());
 
-    return typhenType.initialize(properties, methods, builtInSymbolMethods,
-        stringIndexType, numberIndexType);
+    let indexInfos = this.parseIndexInfos(<any>type as ts.InterfaceTypeWithDeclaredMembers);
+    let stringIndex = indexInfos.stringIndex;
+    let numberIndex = indexInfos.numberIndex;
+
+    return typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
   }
 
   private parseArray(type: ts.GenericType): Symbol.Array {

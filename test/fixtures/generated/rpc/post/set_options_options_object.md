@@ -16,10 +16,14 @@ Properties is empty.
 
 Methods is empty.
 
-## StringIndexType
+## StringIndex
 
 string
 
-## NumberIndexType
+### IsReadonly
 
-NumberIndexType is undefined.
+true
+
+## NumberIndex
+
+NumberIndex is undefined.

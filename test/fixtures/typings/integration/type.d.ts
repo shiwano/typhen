@@ -44,7 +44,7 @@ declare module Type {
   }
 
   interface SquareDictionary<T extends Square> {
-    [stringIndex: string]: T;
+    readonly [stringIndex: string]: T;
     [numberIndex: number]: T;
   }
 

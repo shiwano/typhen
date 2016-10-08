@@ -44,18 +44,26 @@ Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|
 Methods is empty.
 {{/if}}
 
-## StringIndexType
+## StringIndex
 
-{{#if stringIndexType}}
-{{stringIndexType.name}}
+{{#if stringIndex}}
+{{stringIndex.type}}
+
+### IsReadonly
+
+{{stringIndex.isReadonly}}
 {{else}}
-StringIndexType is undefined.
+StringIndex is undefined.
 {{/if}}
 
-## NumberIndexType
+## NumberIndex
 
-{{#if numberIndexType}}
-{{numberIndexType.name}}
+{{#if numberIndex}}
+{{numberIndex.type}}
+
+### IsReadonly
+
+{{numberIndex.isReadonly}}
 {{else}}
-NumberIndexType is undefined.
+NumberIndex is undefined.
 {{/if}}

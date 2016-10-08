@@ -109,6 +109,16 @@ export class TypePredicate {
   }
 }
 
+export class IndexInfo {
+  constructor(public type: Type,
+      public isReadonly: boolean = false) {
+  }
+
+  toString(): string {
+    return this.type.name;
+  }
+}
+
 export class Symbol {
   private static tagPattern: RegExp = /^\s*@([^\s@]+)\s*([^\s@]*)\s*$/m;
   kind: SymbolKind = SymbolKind.Invalid;
@@ -352,20 +362,20 @@ export class ObjectType extends Type {
   properties: Property[] = [];
   methods: Method[] = [];
   builtInSymbolMethods: Method[] = [];
-  stringIndexType: Type = null;
-  numberIndexType: Type = null;
+  stringIndex: IndexInfo = null;
+  numberIndex: IndexInfo = null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
-      stringIndexType: Type, numberIndexType: Type,
+      stringIndex: IndexInfo, numberIndex: IndexInfo,
       ...forOverride: any[]): ObjectType {
     this.properties = properties;
     this.methods = methods;
     this.builtInSymbolMethods = builtInSymbolMethods;
-    this.stringIndexType = stringIndexType;
-    this.numberIndexType = numberIndexType;
+    this.stringIndex = stringIndex;
+    this.numberIndex = numberIndex;
     return this;
   }
 
@@ -417,10 +427,11 @@ export class Interface extends ObjectType {
   }
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
-      stringIndexType: Type, numberIndexType: Type, constructorSignatures: Signature[],
+      stringIndex: IndexInfo, numberIndex: IndexInfo,
+      constructorSignatures: Signature[],
       callSignatures: Signature[], baseTypes: Interface[], typeReference: TypeReference,
       staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
-    super.initialize(properties, methods, builtInSymbolMethods, stringIndexType, numberIndexType);
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;

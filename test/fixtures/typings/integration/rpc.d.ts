@@ -14,6 +14,6 @@ declare module Rpc {
   }
 
   module Post {
-    function setOptions(options: { [index: string]: string }): boolean;
+    function setOptions(options: { readonly [index: string]: string }): boolean;
   }
 }
