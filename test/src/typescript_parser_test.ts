@@ -1,5 +1,7 @@
 import * as helper from '../test_helper';
 
+import * as ts from 'typescript';
+
 import * as symbol from '../../src/symbol';
 import TypeScriptParser from '../../src/typescript_parser';
 
@@ -200,7 +202,10 @@ describe('TypeScriptParser', () => {
       var definitionPath = 'test/fixtures/typings/es6/index.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath, { module: 'none', target: 'ES6' });
+        var config = helper.createConfig(definitionPath, {
+          module: ts.ModuleKind.None,
+          target: ts.ScriptTarget.ES6
+        });
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
