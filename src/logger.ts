@@ -9,7 +9,7 @@ namespace Logger {
     Silent
   }
 
-  export let level: LogLevel = LogLevel.Info;
+  export let level: LogLevel = LogLevel.Silent;
   export function setLevel(logLevel: LogLevel): void {
     level = logLevel;
   }

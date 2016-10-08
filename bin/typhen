@@ -59,6 +59,8 @@ var typhen = _.isString(options.__main) ? require(options.__main) : require('../
 
 if (options.verbose) {
   typhen.logger.setLevel(typhen.logger.LogLevel.Debug);
+} else {
+  typhen.logger.setLevel(typhen.logger.LogLevel.Info);
 }
 
 if (options.argv.remain.length === 0) {
