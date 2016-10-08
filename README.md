@@ -40,6 +40,8 @@ class Foo {
 ```
 
 ## Getting Started
+
+### Command Line Tool
 Install the module with: `npm install -g typhen`
 
 If tsconfig.json or typhenfile.js exists in the current directory:
@@ -52,6 +54,18 @@ Otherwise:
 
 ```sh
 $ typhen --plugin typhen-awesome-plugin --dest generated definitions.d.ts
+```
+
+### Node Module
+Install the module with: `npm install --save typhen`
+
+Example:
+
+```js
+var typhen = require('typhen');
+var result = typhen.parse(process.cwd() + '/foo.d.ts');
+console.log('Parsed types: ', result.types.map(t => t.fullName));
+console.log('Parsed modules: ', result.modules.map(m => m.fullName));
 ```
 
 ## Documentation
@@ -270,7 +284,7 @@ If you want to add your project here, feel free to submit a pull request.
 * [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - Converts TypeScript Interfaces to JSON Schema
 
 ## TypeScript Version
-1.8.10
+2.0.3
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).
