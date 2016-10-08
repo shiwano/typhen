@@ -39,37 +39,12 @@ export class Config implements ConfigObject {
   compilerOptions: ts.CompilerOptions;
   compilerHost: CompilerHost;
 
-  private enumStringTable: { [key: string]: number } = {
-    // ScriptTarget
-    'es3': <number>ts.ScriptTarget.ES3,
-    'es5': <number>ts.ScriptTarget.ES5,
-    'es6': <number>ts.ScriptTarget.ES6,
-    'latest': <number>ts.ScriptTarget.Latest,
-    // ModuleKind
-    'none': <number>ts.ModuleKind.None,
-    'commonjs': <number>ts.ModuleKind.CommonJS,
-    'amd': <number>ts.ModuleKind.AMD,
-    'umd': <number>ts.ModuleKind.UMD,
-    'system': <number>ts.ModuleKind.System,
-    // NewLineKind
-    'carriagereturnlinefeed': <number>ts.NewLineKind.CarriageReturnLineFeed,
-    'linefeed': <number>ts.NewLineKind.LineFeed,
-    // ModuleResolutionKind
-    'classic': <number>ts.ModuleResolutionKind.Classic,
-    'nodejs': <number>ts.ModuleResolutionKind.NodeJs
-  };
-
   constructor(args: ConfigObject) {
     this.compilerOptions = <ts.CompilerOptions>_.defaults({}, args.compilerOptions, {
       module: ts.ModuleKind.CommonJS,
       noImplicitAny: true,
       target: ts.ScriptTarget.ES5
     });
-
-    this.compilerOptions.target = this.getCompilerOptionsEnum<ts.ScriptTarget>(this.compilerOptions.target);
-    this.compilerOptions.module = this.getCompilerOptionsEnum<ts.ModuleKind>(this.compilerOptions.module);
-    this.compilerOptions.newLine = this.getCompilerOptionsEnum<ts.NewLineKind>(this.compilerOptions.newLine);
-    this.compilerOptions.moduleResolution = this.getCompilerOptionsEnum<ts.ModuleResolutionKind>(this.compilerOptions.moduleResolution);
 
     this.cwd = args.cwd || process.cwd();
     this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine,
@@ -99,17 +74,5 @@ export class Config implements ConfigObject {
     let minDirCount = _.min(dirnames.map(d => d.split('/').length));
     let minDirnames = dirnames.filter(d => d.split('/').length === minDirCount);
     return minDirnames.every(d => d === minDirnames[0]) ? minDirnames[0] : this.cwd;
-  }
-
-  getCompilerOptionsEnum<T>(enumValue: any): T {
-    if (enumValue === undefined || enumValue === null) {
-      return undefined;
-    } else if (typeof enumValue === 'string') {
-      return <any>this.enumStringTable[enumValue.toLowerCase()] as T;
-    } else if (typeof enumValue === 'number') {
-      return <any>enumValue as T;
-    } else {
-      throw new Error('Invalid compiler option enum value: ' + enumValue);
-    }
   }
 }
