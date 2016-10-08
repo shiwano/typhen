@@ -26,16 +26,25 @@ namespace Typhen {
   }
 
   export function runByTSConfig(fileName: string): Promise<Vinyl[]> {
-    if (fileName.match(/tsconfig.json$/) === null) { throw new Error('No tsconfig file: ' + fileName); }
+    if (fileName.match(/tsconfig.json$/) === null) {
+      throw new Error('No tsconfig file: ' + fileName);
+    }
     let tsconfig = require(fileName);
-    if (!_.isObject(tsconfig.typhen)) { throw new Error('tsconfig.json does not have typhen property'); }
+    if (!_.isObject(tsconfig.typhen)) {
+      throw new Error('tsconfig.json does not have typhen property');
+    }
+    let basePath = fileName.replace(/tsconfig.json$/, '');
+    let { options: compilerOptions, errors } = ts.convertCompilerOptionsFromJson(tsconfig.compilerOptions, basePath);
+    if (errors.length > 0) {
+      throw new Error('Failed to convert the compiler options: ' + errors);
+    }
 
     let promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
       return Typhen.run({
         plugin: Typhen.loadPlugin(config.plugin, config.pluginOptions),
         src: config.files || tsconfig.files,
         dest: config.outDir,
-        compilerOptions: tsconfig.compilerOptions,
+        compilerOptions: compilerOptions,
         cwd: fileName.replace(/tsconfig.json$/, ''),
         typingDirectory: config.typingDirectory,
         defaultLibFileName: config.defaultLibFileName
