@@ -94,6 +94,8 @@ The typhenfile.js is comprised of the following parts:
 Example:
 
 ```js
+import ts from 'typescript';
+
 module.exports = function(typhen) {
   return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
     plugin: typhen.loadPlugin('typhen-awesome-plugin', {
@@ -104,8 +106,8 @@ module.exports = function(typhen) {
     cwd: '../other/current',             // Optional. Default value is process.cwd().
     typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
     defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts or lib.es6.d.ts.
-    compilerOptions: {                   // Optional. Default value is { module: 'commonjs', noImplicitAny: true, target: 'ES5' }
-      target: 'ES6'
+    compilerOptions: {                   // Optional. Default value is { module: ts.ScriptTarget.CommonJS, noImplicitAny: true, target: ts.ScriptTarget.ES6 }
+      target: ts.ScriptTarget.ES6
     }
   }).then(function(files) {
     console.log('Done!');
