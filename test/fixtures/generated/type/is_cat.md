@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-isCat|a:any:false:false |boolean|a is Cat|
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+isCat|a:any:false:false |boolean|a is Cat|false|

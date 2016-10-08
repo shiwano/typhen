@@ -640,15 +640,12 @@ export class Method extends Symbol {
   callSignatures: Signature[] = [];
   isOptional: boolean = false;
   isOwn: boolean = false;
-  isProtected: boolean = false;
   isAbstract: boolean = false;
 
-  initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean,
-      isProtected: boolean, isAbstract: boolean): Method {
+  initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean, isAbstract: boolean): Method {
     this.callSignatures = callSignatures;
     this.isOptional = isOptional;
     this.isOwn = isOwn;
-    this.isProtected = isProtected;
     this.isAbstract = isAbstract;
     return this;
   }
@@ -667,13 +664,15 @@ export class Signature extends Symbol {
   parameters: Parameter[] = [];
   returnType: Type = null;
   typePredicate: TypePredicate = null;
+  isProtected: boolean = false;
 
   initialize(typeParameters: TypeParameter[], parameters: Parameter[],
-      returnType: Type, typePredicate: TypePredicate): Signature {
+      returnType: Type, typePredicate: TypePredicate, isProtected: boolean): Signature {
     this.typeParameters = typeParameters;
     this.parameters = parameters;
     this.returnType = returnType;
     this.typePredicate = typePredicate;
+    this.isProtected = isProtected;
     return this;
   }
 

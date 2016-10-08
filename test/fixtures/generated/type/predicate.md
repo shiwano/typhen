@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-Predicate|element:T:false:false |boolean||
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+Predicate|element:T:false:false |boolean||false|

@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-classDecorator|target:TFunction:false:false |TFunction||
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+classDecorator|target:TFunction:false:false |TFunction||false|

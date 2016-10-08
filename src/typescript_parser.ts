@@ -656,11 +656,10 @@ export default class TypeScriptParser {
     let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
     let callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     let isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
-    let isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
     let isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
-    return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isProtected, isAbstract);
+    return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isAbstract);
   }
 
   private parseSignature(signature: ts.Signature, suffixName: string = 'Signature'): Symbol.Signature {
@@ -668,6 +667,7 @@ export default class TypeScriptParser {
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     let parameters = signature.getParameters().map(s => this.parseParameter(s));
     let returnType = this.parseType(signature.getReturnType());
+    let isProtected = this.checkFlags(signature.declaration.flags, ts.NodeFlags.Protected);
 
     let typePredicate: Symbol.TypePredicate = null;
     let typePredicateNodes = signature.declaration.getChildren().filter(n => n.kind === ts.SyntaxKind.TypePredicate);
@@ -676,7 +676,7 @@ export default class TypeScriptParser {
     }
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(signature, Symbol.Signature, suffixName);
-    return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate);
+    return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate, isProtected);
   }
 
   private parseTypePredicate(node: ts.TypePredicateNode, parameters: Symbol.Parameter[]): Symbol.TypePredicate {

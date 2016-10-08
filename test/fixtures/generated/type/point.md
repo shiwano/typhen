@@ -22,11 +22,11 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-constructor|x:number:false:false y:number:false:false |Point||
-constructor|args:NumberAndNumberTuple:false:false |Point||
-constructor|variadicArgs:ArrayOfnumber:false:true |Point||
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+constructor|x:number:false:false y:number:false:false |Point||false|
+constructor|args:NumberAndNumberTuple:false:false |Point||false|
+constructor|variadicArgs:ArrayOfnumber:false:true |Point||false|
 
 ## CallSignatures
 

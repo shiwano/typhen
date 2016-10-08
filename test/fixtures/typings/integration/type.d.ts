@@ -54,7 +54,7 @@ declare module Type {
 
   class Line {
     color: Color;
-    constructor(src: Point, dest: Point);
+    protected constructor(src: Point, dest: Point);
     setColor(color: Color, callback?: (color: Color) => void): void;
     private ownColor;
     protected draw(): void;

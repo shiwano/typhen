@@ -55,10 +55,10 @@ TypeArguments is empty.
 ## ConstructorSignatures
 
 {{#if constructorSignatures}}
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
 {{#each constructorSignatures}}
-constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{typePredicate}}|{{comment}}
+constructor|{{#each parameters}}{{name}}:{{type}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType}}|{{typePredicate}}|{{isProtected}}|{{comment}}
 {{/each}}
 {{else}}
 ConstructorSignatures is empty.
@@ -95,7 +95,7 @@ Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|
 ---|---|---|---|---|---|---|---|---
 {{#each methods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}
@@ -121,7 +121,7 @@ Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|IsOptional|
 ---|---|---|---|---|---|---|---|---
 {{#each staticMethods}}
 {{#each callSignatures}}
-{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{../isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
+{{../name}}|{{#each parameters}}{{name}}:{{type.name}}:{{isOptional}}:{{isVariadic}} {{/each}}|{{returnType.name}}|{{../isOptional}}|{{../isOwn}}|{{isProtected}}|{{../isAbstract}}|{{typePredicate}}|{{../comment}} {{comment}}
 {{/each}}
 {{/each}}
 {{else}}

@@ -22,9 +22,9 @@ TypeArguments is empty.
 
 ## ConstructorSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-constructor|src:Point:false:false dest:Point:false:false |Line||
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+constructor|src:Point:false:false dest:Point:false:false |Line||true|
 
 ## CallSignatures
 

@@ -10,6 +10,6 @@ Function
 
 ## CallSignatures
 
-Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|Comment
----|---|---|---|---
-ColoredSquareSetColorCallbackFunction|color:Color:false:false |void||
+Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredicate|isProtected|Comment
+---|---|---|---|---|---
+ColoredSquareSetColorCallbackFunction|color:Color:false:false |void||false|
