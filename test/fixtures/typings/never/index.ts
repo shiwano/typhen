@@ -1,0 +1,1 @@
+type stringOrNeverType = string | never;

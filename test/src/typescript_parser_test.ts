@@ -261,6 +261,20 @@ describe('TypeScriptParser', () => {
         assert(decoratedMethod.decorators.length === 1);
       });
     });
+
+    context('when ts files for never type test are given', () => {
+      var definitionPath = 'test/fixtures/typings/never/index.ts';
+
+      beforeEach(() => {
+        var config = helper.createConfig(definitionPath);
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should ignore never type', () => {
+        assert.deepEqual(instance.types.map(t => t.name), ['string']);
+      });
+    });
   });
 
   describe('#validate', () => {
