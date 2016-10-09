@@ -63,7 +63,7 @@ Example:
 
 ```js
 var typhen = require('typhen');
-var result = typhen.parse(process.cwd() + '/foo.d.ts');
+var result = typhen.parse('./foo.d.ts');
 console.log('Parsed types: ', result.types.map(t => t.fullName));
 console.log('Parsed modules: ', result.modules.map(m => m.fullName));
 ```
@@ -108,7 +108,7 @@ The typhenfile.js is comprised of the following parts:
 Example:
 
 ```js
-import ts from 'typescript';
+var ts = require('typescript');
 
 module.exports = function(typhen) {
   return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
