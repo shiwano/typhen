@@ -286,6 +286,9 @@ If you want to add your project here, feel free to submit a pull request.
 ## TypeScript Version
 2.0.3
 
+## Migration Informations
+ * 2016-10-09   v1.0.0   Replaced ObjectType's stringIndexType and numberIndexType to stringIndex and numberIndex.
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp.js](http://gulpjs.com/).
 
