@@ -288,6 +288,7 @@ If you want to add your project here, feel free to submit a pull request.
 
 ## Migration Informations
  * 2016-10-09 v1.0.0
+   * Drop support for Node versions less than 4.0.0.
    * Replaced ObjectType's `stringIndexType` and `numberIndexType` to `stringIndex` and `numberIndex`.
 
 ## Contributing
