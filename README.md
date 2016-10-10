@@ -12,7 +12,8 @@ interface Foo {
 ```
 
 ```hbs
-class {{name}} {
+class {{name}}
+{
   {{#each properties}}
   public {{type}} {{upperCamel name}} { get; set; }
   {{/each}}
@@ -30,7 +31,8 @@ class {{name}} {
 Will generate this below:
 
 ```cs
-class Foo {
+class Foo
+{
   public string Bar { get; set; }
   public void Baz(string qux)
   {
