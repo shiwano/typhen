@@ -1,7 +1,7 @@
 import '../test_helper';
 
 import * as Promise from 'bluebird';
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import * as typhen from '../../src/index';
 import * as plugin from '../../src/plugin';
@@ -10,7 +10,7 @@ import * as logger from '../../src/logger';
 import * as helpers from '../../src/helpers';
 
 describe('typhen', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
 
   afterEach(() => {
     sandbox.restore();

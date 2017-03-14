@@ -1,10 +1,10 @@
 import * as helper from '../test_helper';
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import Generator from '../../src/generator';
 
 describe('Generator', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
   var instance: Generator;
 
   beforeEach(() => {

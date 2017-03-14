@@ -1,12 +1,12 @@
 import * as helper from '../test_helper';
 
 import * as ts from 'typescript';
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import CompilerHost from '../../src/compiler_host';
 
 describe('CompilerHost', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
   var instance: CompilerHost;
   var env = new helper.TestEnvironment({
     '/test.d.ts': '# test'

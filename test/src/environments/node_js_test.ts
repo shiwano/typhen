@@ -4,12 +4,12 @@ import * as fs from 'fs';
 import * as pathExists from 'path-exists';
 import * as glob from 'glob';
 import * as ts from 'typescript';
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import NodeJsEnvironment from '../../../src/environments/node_js';
 
 describe('NodeJsEnvironment', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
   var instance: NodeJsEnvironment;
   var currentDirectory = process.cwd() + '/test/fixtures/typings';
   var newLine = '\n';
