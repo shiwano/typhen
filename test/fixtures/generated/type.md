@@ -86,6 +86,10 @@ No Imported Types.
   * Type - true
 * numberLiteralType
   * Type - 100
+* nullLiteralType
+  * Type - null
+* neverLiteralType
+  * Type - never
 * enumLiteralType
   * Type - EnumLiterals.EnumLiteralA
 

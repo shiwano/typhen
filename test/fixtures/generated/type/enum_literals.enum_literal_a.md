@@ -1,6 +1,6 @@
 # Type.EnumLiterals.EnumLiteralA
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L110)
+* [typings/integration/type.d.ts](/typings/integration/type.d.ts#L112)
 
 No comment.
 
@@ -12,10 +12,10 @@ EnumLiteralType
 
 EnumLiterals
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L110)
+* [typings/integration/type.d.ts](/typings/integration/type.d.ts#L112)
 
 ## EnumMember
 
 EnumLiteralA
 
-* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L110)
+* [typings/integration/type.d.ts](/typings/integration/type.d.ts#L112)
