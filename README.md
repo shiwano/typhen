@@ -300,6 +300,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 * Shogo Iwano (@shiwano)
 * Sebastian Lasse (@sebilasse)
+* Zacarias F. Ojeda (@zojeda)
 
 ## License
 Copyright (c) 2014 Shogo Iwano
