@@ -1,11 +1,11 @@
 import helper = require('../test_helper');
 
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import * as runner from '../../src/runner';
 
 describe('Runner', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
   var instance: runner.Runner;
 
   beforeEach(() => {

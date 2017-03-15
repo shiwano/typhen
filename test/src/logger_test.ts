@@ -1,11 +1,11 @@
 import '../test_helper';
 
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import * as logger from '../../src/logger';
 
 describe('logger', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
   var logStub: Sinon.SinonStub;
 
   beforeEach(() => {

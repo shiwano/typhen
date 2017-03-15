@@ -25,8 +25,8 @@
     "npm": ">= 1.4.0"
   },
   "scripts": {
-    "prepublish": "./node_modules/gulp/bin/gulp.js",
-    "test": "./node_modules/gulp/bin/gulp.js"
+    "prepublish": "gulp",
+    "test": "gulp"
   },
   "devDependencies": {
     "@types/assert": "0.0.29",
@@ -36,7 +36,7 @@
     "@types/handlebars": "^4.0.31",
     "@types/hashmap": "^2.0.29",
     "@types/inflection": "^1.5.28",
-    "@types/lodash": "^4.14.36",
+    "@types/lodash": "4.14.36",
     "@types/minimatch": "^2.0.29",
     "@types/mkdirp": "^0.3.29",
     "@types/mocha": "^2.2.32",

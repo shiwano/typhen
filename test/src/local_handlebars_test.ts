@@ -1,13 +1,13 @@
 import '../test_helper';
 
 import * as Handlebars from 'handlebars';
-import * as sinon from 'sinon';
+import * as Sinon from 'sinon';
 
 import * as helpers from '../../src/helpers';
 import * as localHandlebars from '../../src/local_handlebars';
 
 describe('localHandlebars', () => {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = Sinon.sandbox.create();
 
   afterEach(() => {
     sandbox.restore();
