@@ -118,6 +118,10 @@ export default class TypeScriptParser {
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Void) {
         this.parsePrimitiveType(type);
+      } else if (type.flags & ts.TypeFlags.Null) {
+        this.parsePrimitiveType(type);
+      } else if (type.flags & ts.TypeFlags.Never) {
+        this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Any) {
         let anyType = this.typeCache.values().filter(t => t.isPrimitiveType && t.name === 'any')[0];
         if (anyType) {
@@ -583,6 +587,10 @@ export default class TypeScriptParser {
       name = 'symbol';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Void)) {
       name = 'void';
+    } else if (this.checkFlags(type.flags, ts.TypeFlags.Null)) {
+      name = 'null';
+    } else if (this.checkFlags(type.flags, ts.TypeFlags.Never)) {
+      name = 'never';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Any)) {
       name = 'any';
     } else if (_.isObject(type.symbol)) {

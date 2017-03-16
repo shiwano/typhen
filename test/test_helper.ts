@@ -16,7 +16,7 @@ import * as runner from '../src/runner';
 import { Environment } from '../src/environments/environment';
 import Generator from '../src/generator';
 
-logger.setLevel(logger.LogLevel.Silent);
+logger.setLevel(logger.LogLevel.Error);
 
 export class TestEnvironment implements Environment {
   currentDirectory: string = process.cwd() + '/test/fixtures/typings';
