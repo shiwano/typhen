@@ -79,9 +79,9 @@ describe('TypeScriptParser', () => {
           'true',
           // NumberLiteralType
           '100',
-          // NullLiteralType
+          // NullType
           'null',
-          // NeverLiteralType
+          // NeverType
           'never',
           // EnumLiteralType
           'Type.EnumLiterals',
