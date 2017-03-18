@@ -9,6 +9,7 @@ import * as rimraf from 'rimraf';
 import Vinyl = require('vinyl');
 
 import * as typhen from '../../src/index';
+import * as logger from '../../src/logger';
 
 function addTestSuite(expectedFileNames: string[]) {
   expectedFileNames.forEach((expectedFileName) => {
@@ -37,6 +38,17 @@ function addTestSuite(expectedFileNames: string[]) {
 }
 
 describe('Integration Test', () => {
+  let logLevelCache: logger.LogLevel;
+
+  before(() => {
+    logLevelCache = logger.level;
+    logger.setLevel(logger.LogLevel.Silent);
+  });
+
+  after(() => {
+    logger.setLevel(logLevelCache);
+  });
+
   describe('typhen-test plugin', () => {
     var expectedFileNames = glob.sync('./test/fixtures/generated/**/*.md');
     expectedFileNames.sort();
