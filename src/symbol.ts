@@ -6,6 +6,7 @@ import * as config from './config';
 export enum SymbolKind {
   Invalid,
   Module,
+  EmptyType,
   PrimitiveType,
   Enum,
   EnumMember,
@@ -187,6 +188,7 @@ export class Symbol {
   get isGlobalModule(): boolean { return false; }
 
   get isModule(): boolean { return this.kind === SymbolKind.Module; }
+  get isEmptyType(): boolean { return this.kind === SymbolKind.EmptyType; }
   get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
   get isEnum(): boolean { return this.kind === SymbolKind.Enum; }
   get isEnumMember(): boolean { return this.kind === SymbolKind.EnumMember; }
@@ -292,6 +294,10 @@ export class Module extends Symbol {
     this.typeAliases = typeAliases;
     return this;
   }
+}
+
+export class EmptyType extends Type {
+  kind: SymbolKind = SymbolKind.EmptyType;
 }
 
 export class PrimitiveType extends Type {

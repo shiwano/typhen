@@ -11,6 +11,7 @@ export default class TypeScriptParser {
   private program: ts.Program;
   private typeChecker: ts.TypeChecker;
 
+  private emptyType: Symbol.EmptyType;
   private moduleCache: HashMap<string, Symbol.Module> = new HashMap<string, Symbol.Module>();
   private typeCache: HashMap<ts.Type, Symbol.Type> = new HashMap<ts.Type, Symbol.Type>();
   private symbols: Symbol.Symbol[] = [];
@@ -20,7 +21,9 @@ export default class TypeScriptParser {
   private typeReferenceStack: Symbol.TypeReference[] = [];
   private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
 
-  constructor(private fileNames: string[], private config: config.Config) { }
+  constructor(private fileNames: string[], private config: config.Config) {
+    this.emptyType = new Symbol.EmptyType(config, '', [], [], [], null, '');
+  }
 
   get sourceFiles(): ts.SourceFile[] {
     return this.program.getSourceFiles()
@@ -108,7 +111,7 @@ export default class TypeScriptParser {
   }
 
   private parseType(type: ts.Type): Symbol.Type {
-    if (!_.isObject(type)) { return null; }
+    if (!_.isObject(type)) { return this.emptyType; }
 
     if (this.typeCache.get(type) === undefined) {
       if (type.flags & ts.TypeFlags.TypeParameter) {
@@ -152,12 +155,12 @@ export default class TypeScriptParser {
                 (<ts.TypeReference>type).target.objectFlags & ts.ObjectFlags.Tuple)  {
         this.parseTuple(<ts.TypeReference>type);
       } else if (type.flags & ts.TypeFlags.IndexedAccess) {
-        return null;
+        return this.emptyType;
       } else if (type.flags & ts.TypeFlags.Object &&
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
-        return null;
+        return this.emptyType;
       } else if (type.symbol === undefined) {
         throw this.makeErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
