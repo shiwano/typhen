@@ -257,9 +257,9 @@ describe('TypeScriptParser', () => {
         assert(func.callSignatures[0].namespace, 'Module1.Module2');
       });
 
-      it('should parse the assumed name', () => {
+      it('should parse the call signature name', () => {
         var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
-        assert(func.callSignatures[0].name === 'FuncSignature');
+        assert(func.callSignatures[0].name === 'func');
       });
 
       it('should parse the documentation comment', () => {

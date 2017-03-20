@@ -195,19 +195,15 @@ export default class TypeScriptParser {
   }
 
   private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol,
-      typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
-  private createTyphenSymbol<T extends Symbol.Symbol>(signature: ts.Signature,
-      typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T;
-  private createTyphenSymbol<T extends Symbol.Symbol>(symbolOrSignature: any,
       typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
-    let name = _.isObject(symbolOrSignature) && typeof symbolOrSignature.name === 'string' ?
-      (<ts.Symbol>symbolOrSignature).name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
+    let name = _.isObject(symbol) && typeof symbol.name === 'string' ?
+      symbol.name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
     let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
-      this.getAssumedName(symbolOrSignature, assumedNameSuffix) : '';
+      this.getAssumedName(symbol, assumedNameSuffix) : '';
 
     let typhenSymbol = <T>new typhenSymbolClass(this.config, name,
-      this.getDocComment(symbolOrSignature), this.getDeclarationInfos(symbolOrSignature),
-      this.getDecorators(symbolOrSignature), this.getParentModule(symbolOrSignature), assumedName);
+      this.getDocComment(symbol), this.getDeclarationInfos(symbol),
+      this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
     logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
       'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
       'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
@@ -247,28 +243,21 @@ export default class TypeScriptParser {
     });
   }
 
-  private getDecorators(symbol: ts.Symbol): Symbol.Decorator[];
-  private getDecorators(signature: ts.Signature): Symbol.Decorator[];
-  private getDecorators(symbolOrSignature: any): Symbol.Decorator[] {
-    if (!_.isObject(symbolOrSignature)) {
+  private getDecorators(symbol: ts.Symbol): Symbol.Decorator[] {
+    if (!_.isObject(symbol)) {
       return [];
     }
-    let declaration = _.isObject(symbolOrSignature.declarations) ?
-      (<ts.Symbol>symbolOrSignature).valueDeclaration :
-      (<ts.Signature>symbolOrSignature).declaration;
+    let declaration = symbol.valueDeclaration;
 
     return _.isObject(declaration) && _.isObject(declaration.decorators) ?
       declaration.decorators.map(d => this.parseDecorator(d)) : [];
   }
 
-  private getParentModule(symbol: ts.Symbol): Symbol.Module;
-  private getParentModule(signature: ts.Signature): Symbol.Module;
-  private getParentModule(symbolOrSignature: any): Symbol.Module {
-    if (!_.isObject(symbolOrSignature)) { return null; }
+  private getParentModule(symbol: ts.Symbol): Symbol.Module {
+    if (!_.isObject(symbol)) { return null; }
 
-    let parentDecl = _.isObject(symbolOrSignature.declarations) ?
-      (<ts.Symbol>symbolOrSignature).declarations[0].parent :
-      (<ts.Signature>symbolOrSignature).declaration;
+    let parentDecl = symbol.declarations !== undefined ?
+      symbol.declarations[0].parent : undefined;
 
     while (parentDecl !== undefined) {
       let parentSymbol = this.getSymbolAtLocation(parentDecl);
@@ -281,17 +270,11 @@ export default class TypeScriptParser {
     return null;
   }
 
-  private getDocComment(symbol: ts.Symbol): string[];
-  private getDocComment(signature: ts.Signature): string[];
-  private getDocComment(symbolOrSignature: ts.Symbol | ts.Signature): string[] {
+  private getDocComment(symbolOrSignature: ts.Symbol): string[] {
     return _.tap([], (results) => {
       if (!_.isObject(symbolOrSignature)) { return; }
 
-      let decls = _.isObject((symbolOrSignature as any).declarations) ?
-        (<ts.Symbol>symbolOrSignature).declarations :
-        [(<ts.Signature>symbolOrSignature).declaration].filter(d => _.isObject(d));
-
-      decls.forEach(decl => {
+      (symbolOrSignature.declarations || []).forEach(decl => {
         let jsDocs: ts.JSDoc[] = (decl as any).jsDoc || []; // FIXME: TypeScript does not export JSDoc getting API at present.
         jsDocs.forEach(jsDoc => {
           if (typeof jsDoc.comment === 'string') {
@@ -307,17 +290,14 @@ export default class TypeScriptParser {
     });
   }
 
-  private getAssumedName(symbol: ts.Symbol, typeName: string): string;
-  private getAssumedName(signature: ts.Signature, typeName: string): string;
-  private getAssumedName(symbolOrSignature: ts.Symbol | ts.Signature, typeName: string): string {
-    if (!_.isObject(symbolOrSignature)) {
+  private getAssumedName(symbol: ts.Symbol, typeName: string): string {
+    if (!_.isObject(symbol)) {
       return typeName;
     }
 
     let parentNames: string[] = [];
-    let parentDecl = _.isObject((<any>symbolOrSignature).declarations) ?
-      (<ts.Symbol>symbolOrSignature).declarations[0].parent :
-      (<ts.Signature>symbolOrSignature).declaration;
+    let parentDecl = symbol.declarations !== undefined ?
+      symbol.declarations[0].parent : undefined;
 
     while (parentDecl !== undefined) {
       let parentSymbol = this.getSymbolAtLocation(parentDecl);
@@ -718,7 +698,8 @@ export default class TypeScriptParser {
       typePredicate = this.parseTypePredicate(<ts.TypePredicateNode>typePredicateNodes[0], parameters);
     }
 
-    let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(signature, Symbol.Signature, suffixName);
+    let symbol = this.getSymbolAtLocation(signature.declaration);
+    let typhenSymbol = this.createTyphenSymbol<Symbol.Signature>(symbol, Symbol.Signature, suffixName);
     return typhenSymbol.initialize(typeParameters, parameters, returnType, typePredicate, isProtected);
   }
 
