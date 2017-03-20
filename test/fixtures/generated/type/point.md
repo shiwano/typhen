@@ -26,7 +26,7 @@ Name|Parameters (Name:TypeName:IsOptional:IsVariadic)|ReturnTypeName|TypePredica
 ---|---|---|---|---|---
 constructor|x:number:false:false y:number:false:false |Point||false|
 constructor|args:NumberAndNumberTuple:false:false |Point||false|
-constructor|variadicArgs:ArrayOfnumber:false:true |Point||false|
+constructor|variadicArgs:ArrayOfNumber:false:true |Point||false|
 
 ## CallSignatures
 
