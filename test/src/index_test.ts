@@ -12,6 +12,16 @@ import * as helpers from '../../src/helpers';
 
 describe('typhen', () => {
   const sandbox = Sinon.sandbox.create();
+  let logLevelCache: logger.LogLevel;
+
+  before(() => {
+    logLevelCache = logger.level;
+    logger.setLevel(logger.LogLevel.Silent);
+  });
+
+  after(() => {
+    logger.setLevel(logLevelCache);
+  });
 
   afterEach(() => {
     sandbox.restore();
