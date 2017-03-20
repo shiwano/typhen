@@ -88,6 +88,19 @@ export default class TypeScriptParser {
     return (flagsA & flagsB) > 0;
   }
 
+  private checkModifiers(modifiers: ts.ModifiersArray, kind: ts.SyntaxKind): boolean {
+    return _.values<ts.Modifier>(modifiers).some(x => x.kind === kind);
+  }
+
+  private throwErrorWithTypeInfo(message: string, type: ts.Type): void {
+    let messageWithInfo = message + ': TypeFlags: ' + type.flags;
+    if (type.symbol === undefined) {
+      this.throwErrorWithSymbolInfo(messageWithInfo, type.symbol);
+    } else {
+      throw new Error(messageWithInfo);
+    }
+  }
+
   private throwErrorWithSymbolInfo(message: string, symbol: ts.Symbol): void {
     let infos = this.getDeclarationInfos(symbol);
     let symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
@@ -129,17 +142,24 @@ export default class TypeScriptParser {
         }
         this.parsePrimitiveType(type);
       } else if (type.flags & ts.TypeFlags.Enum) {
-        this.parseEnum(type);
+        this.parseEnum(<ts.EnumType>type);
       } else if (type.flags & ts.TypeFlags.Union) {
         this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Intersection) {
         this.parseIntersectionType(<ts.IntersectionType>type);
-      } else if (type.flags & ts.TypeFlags.Reference && type.symbol === undefined &&
-                (<ts.TypeReference>type).target.flags & ts.TypeFlags.Tuple) {
+      } else if (type.flags & ts.TypeFlags.Object &&
+                (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Reference &&
+                (<ts.TypeReference>type).target.objectFlags & ts.ObjectFlags.Tuple)  {
         this.parseTuple(<ts.TypeReference>type);
-      } else if (type.flags & ts.TypeFlags.Anonymous && type.symbol === undefined) {
+      } else if (type.flags & ts.TypeFlags.IndexedAccess) {
+        return null;
+      } else if (type.flags & ts.TypeFlags.Object &&
+                (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
+                type.symbol === undefined) {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
+      } else if (type.symbol === undefined) {
+        this.throwErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
         this.parseFunction(<ts.ObjectType>type);
       } else if (type.symbol.flags & ts.SymbolFlags.Class) {
@@ -159,7 +179,7 @@ export default class TypeScriptParser {
           this.parseFunction(<ts.ObjectType>type);
         }
       } else {
-        this.throwErrorWithSymbolInfo('Unsupported type', type.symbol);
+        this.throwErrorWithTypeInfo('Unsupported type', type);
       }
     }
     let typhenType = this.typeCache.get(type);
@@ -263,26 +283,36 @@ export default class TypeScriptParser {
   private getDocComment(symbolOrSignature: ts.Symbol | ts.Signature): string[] {
     return _.tap([], (results) => {
       if (!_.isObject(symbolOrSignature)) { return; }
-      let docComment = symbolOrSignature.getDocumentationComment();
-      if (docComment === undefined) { return; }
 
-      _.chain(docComment)
-        .map(c => c.kind === 'text' ? c.text : null)
-        .compact()
-        .forEach(text => results.push(text))
-        .value();
+      let decls = _.isObject((symbolOrSignature as any).declarations) ?
+        (<ts.Symbol>symbolOrSignature).declarations :
+        [(<ts.Signature>symbolOrSignature).declaration].filter(d => _.isObject(d));
+
+      decls.forEach(decl => {
+        let jsDocs: ts.JSDoc[] = (decl as any).jsDoc || []; // FIXME: TypeScript does not export JSDoc getting API at present.
+        jsDocs.forEach(jsDoc => {
+          if (typeof jsDoc.comment === 'string') {
+            results.push(jsDoc.comment);
+          }
+          if (_.isObject(jsDoc.tags)) {
+            jsDoc.tags.forEach(tag => {
+              results.push('@' + tag.tagName.text + ' ' + tag.comment);
+            });
+          }
+        });
+      });
     });
   }
 
   private getAssumedName(symbol: ts.Symbol, typeName: string): string;
   private getAssumedName(signature: ts.Signature, typeName: string): string;
-  private getAssumedName(symbolOrSignature: any, typeName: string): string {
+  private getAssumedName(symbolOrSignature: ts.Symbol | ts.Signature, typeName: string): string {
     if (!_.isObject(symbolOrSignature)) {
       return typeName;
     }
 
     let parentNames: string[] = [];
-    let parentDecl = _.isObject(symbolOrSignature.declarations) ?
+    let parentDecl = _.isObject((<any>symbolOrSignature).declarations) ?
       (<ts.Symbol>symbolOrSignature).declarations[0].parent :
       (<ts.Signature>symbolOrSignature).declaration;
 
@@ -393,7 +423,7 @@ export default class TypeScriptParser {
     let typhenSymbol = this.getOrCreateTyphenModule(symbol);
 
     let isNamespaceModule = this.checkFlags(symbol.flags, ts.SymbolFlags.NamespaceModule);
-    let exportedSymbols = <ts.Symbol[]>_.values(symbol.exports);
+    let exportedSymbols = this.typeChecker.getExportsOfModule(symbol);
     let modules = exportedSymbols
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Module))
       .map(s => this.parseModule(s));
@@ -425,25 +455,24 @@ export default class TypeScriptParser {
         modules, types, variables, typeAliases);
   }
 
-  private parseEnum(type: ts.Type): Symbol.Enum {
+  private parseEnum(type: ts.EnumType): Symbol.Enum {
     let typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
     let symbol = type.symbol;
 
     let isConst = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Const);
-    let memberValue = -1;
-    let members = _(symbol.exports)
-      .map((memberSymbol: ts.Symbol, name: string) => {
-        let value = this.typeChecker.getConstantValue(<ts.EnumMember>memberSymbol.valueDeclaration);
-        memberValue = typeof value === 'number' ? value : memberValue + 1;
+    let members = _((<ts.EnumDeclaration>symbol.valueDeclaration).members)
+      .map((memberNode: ts.EnumMember) => {
+        let memberSymbol = this.getSymbolAtLocation(memberNode);
+        let value = this.typeChecker.getConstantValue(memberNode);
         return this.createTyphenSymbol<Symbol.EnumMember>(memberSymbol, Symbol.EnumMember)
-          .initialize(memberValue);
+          .initialize(value);
       }).value();
 
     return typhenType.initialize(members, isConst);
   }
 
   private parseIndexInfos(type: ts.InterfaceTypeWithDeclaredMembers): { stringIndex: Symbol.IndexInfo, numberIndex: Symbol.IndexInfo } {
-    let indexSymbol = type.symbol.members['__index'] || null;
+    let indexSymbol = type.symbol.members.get('__index') || null;
     let stringIndex: Symbol.IndexInfo = null;
     let numberIndex: Symbol.IndexInfo = null;
 
@@ -453,7 +482,7 @@ export default class TypeScriptParser {
       if (type.declaredStringIndexInfo != null) {
         isReadonly = type.declaredStringIndexInfo.isReadonly;
       } else if (indexSymbol != null) {
-        isReadonly = this.checkFlags(indexSymbol.declarations[0].flags, ts.NodeFlags.Readonly);
+        isReadonly = this.checkModifiers(indexSymbol.declarations[0].modifiers, ts.SyntaxKind.ReadonlyKeyword);
       }
       stringIndex = new Symbol.IndexInfo(stringIndexType, isReadonly);
     }
@@ -463,7 +492,7 @@ export default class TypeScriptParser {
       if (type.declaredNumberIndexInfo != null) {
         isReadonly = type.declaredNumberIndexInfo.isReadonly;
       } else if (indexSymbol != null) {
-        isReadonly = this.checkFlags(indexSymbol.declarations[0].flags, ts.NodeFlags.Readonly);
+        isReadonly = this.checkModifiers(indexSymbol.declarations[0].modifiers, ts.SyntaxKind.ReadonlyKeyword);
       }
       numberIndex = new Symbol.IndexInfo(numberIndexType, isReadonly);
     }
@@ -472,7 +501,7 @@ export default class TypeScriptParser {
 
   private parseGenericType<T extends Symbol.Interface>(type: ts.GenericType, typhenTypeClass: typeof Symbol.Interface): T {
     let genericType = type.target === undefined ? type : type.target;
-    let ownMemberNames = _.values(genericType.symbol.members).map(s => s.name);
+    let ownMemberNames = _.toArray<ts.Symbol>(genericType.symbol.members.values()).map(s => s.name);
     let typhenType = this.createTyphenType<T>(type, typhenTypeClass);
 
     let typeParameters = genericType.typeParameters === undefined ? [] :
@@ -484,11 +513,11 @@ export default class TypeScriptParser {
 
     let properties = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
-            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
+            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseProperty(s, _.includes(ownMemberNames, s.name)));
     let rawMethods = genericType.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
-            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
+            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseMethod(s, _.includes(ownMemberNames, s.name)));
     let methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     let builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
@@ -510,9 +539,10 @@ export default class TypeScriptParser {
     let isAbstract = false;
 
     if (genericType.symbol.flags & ts.SymbolFlags.Class) {
-      isAbstract = this.checkFlags(genericType.symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
+      let genericTypeDecl = <ts.ClassLikeDeclaration>genericType.symbol.valueDeclaration;
+      isAbstract = this.checkModifiers(genericTypeDecl.modifiers, ts.SyntaxKind.AbstractKeyword);
 
-      (<ts.Symbol[]>_.values(genericType.symbol.members))
+      _.toArray<ts.Symbol>(genericType.symbol.members.values())
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Constructor))
         .forEach(s => {
           s.declarations.forEach(d => {
@@ -521,15 +551,17 @@ export default class TypeScriptParser {
             constructorSignatures.push(constructorSignature);
         });
       });
-      let staticPropertySymbols = (<ts.Symbol[]>_.values(genericType.symbol.exports))
-        .filter(s => !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
-      staticProperties = staticPropertySymbols
+      let staticMemberSymbols = _.values<ts.ClassElement>(genericTypeDecl.members)
+        .filter(d => this.checkModifiers(d.modifiers, ts.SyntaxKind.StaticKeyword))
+        .map<ts.Symbol>(d => this.getSymbolAtLocation(d))
+        .filter(s => s && !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
+      staticProperties = staticMemberSymbols
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
-            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
+            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseProperty(s));
-      staticMethods = staticPropertySymbols
+      staticMethods = staticMemberSymbols
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
-            !this.checkFlags(s.valueDeclaration.flags, ts.NodeFlags.Private))
+            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseMethod(s));
     }
 
@@ -652,9 +684,9 @@ export default class TypeScriptParser {
     let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
     let propertyType = this.parseType(type);
     let isOptional = (<ts.PropertyDeclaration>symbol.valueDeclaration).questionToken != null;
-    let isProtected = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Protected);
-    let isReadOnly = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Readonly);
-    let isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
+    let isProtected = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.ProtectedKeyword);
+    let isReadOnly = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword);
+    let isAbstract = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
     return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected, isReadOnly, isAbstract);
@@ -664,7 +696,7 @@ export default class TypeScriptParser {
     let type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
     let callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
     let isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
-    let isAbstract = this.checkFlags(symbol.valueDeclaration.flags, ts.NodeFlags.Abstract);
+    let isAbstract = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 
     let typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isAbstract);
@@ -675,7 +707,7 @@ export default class TypeScriptParser {
       signature.typeParameters.map(t => <Symbol.TypeParameter>this.parseType(t));
     let parameters = signature.getParameters().map(s => this.parseParameter(s));
     let returnType = this.parseType(signature.getReturnType());
-    let isProtected = this.checkFlags(signature.declaration.flags, ts.NodeFlags.Protected);
+    let isProtected = this.checkModifiers(signature.declaration.modifiers, ts.SyntaxKind.ProtectedKeyword);
 
     let typePredicate: Symbol.TypePredicate = null;
     let typePredicateNodes = signature.declaration.getChildren().filter(n => n.kind === ts.SyntaxKind.TypePredicate);

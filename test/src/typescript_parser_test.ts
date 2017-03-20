@@ -37,10 +37,12 @@ describe('TypeScriptParser', () => {
 
       it('should parse types', () => {
         var expected = [
+          // Runtime
+          'StringAndString[]UnionType',
+          'string[]', // This type is created by UnionType declaration.
           // Array
           'Line[]',
           'number[]',
-          'string[]', // FIXME: Strange to say, this type is created by UnionType declaration.
           // Tuple
           'NumberAndNumberTuple',
           // UnionType
@@ -208,7 +210,7 @@ describe('TypeScriptParser', () => {
       beforeEach(() => {
         var config = helper.createConfig(definitionPath, {
           module: ts.ModuleKind.None,
-          target: ts.ScriptTarget.ES6
+          target: ts.ScriptTarget.ES2015
         });
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();

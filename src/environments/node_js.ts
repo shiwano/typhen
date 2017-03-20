@@ -96,8 +96,8 @@ export default class NodeJsEnvironment implements Environment {
       } else {
         return path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
       }
-    } else if (scriptTarget === ts.ScriptTarget.ES6) {
-      return path.join(path.dirname(require.resolve('typescript')), 'lib.es6.d.ts');
+    } else if (scriptTarget === ts.ScriptTarget.ES2015) {
+      return path.join(path.dirname(require.resolve('typescript')), 'lib.es2015.d.ts');
     } else {
       return path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
     }
