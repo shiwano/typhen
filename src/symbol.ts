@@ -678,11 +678,11 @@ export class Signature extends Symbol {
   typeParameters: TypeParameter[] = [];
   parameters: Parameter[] = [];
   returnType: Type;
-  typePredicate: TypePredicate;
+  typePredicate: TypePredicate | null;
   isProtected: boolean = false;
 
   initialize(typeParameters: TypeParameter[], parameters: Parameter[],
-      returnType: Type, typePredicate: TypePredicate, isProtected: boolean): Signature {
+      returnType: Type, typePredicate: TypePredicate | null, isProtected: boolean): Signature {
     this.typeParameters = typeParameters;
     this.parameters = parameters;
     this.returnType = returnType;
@@ -716,12 +716,12 @@ export class Parameter extends Symbol {
 export class Variable extends Symbol {
   kind: SymbolKind = SymbolKind.Variable;
 
-  type: Type;
-  module: Module;
+  type: Type | null;
+  module: Module | null;
   isLet: boolean = false;
   isConst: boolean = false;
 
-  initialize(type: Type, module: Module, isLet: boolean, isConst: boolean): Variable {
+  initialize(type: Type | null, module: Module | null, isLet: boolean, isConst: boolean): Variable {
     this.type = type;
     this.module = module;
     this.isLet = isLet;
