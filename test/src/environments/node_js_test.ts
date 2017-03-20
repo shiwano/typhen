@@ -5,6 +5,7 @@ import * as pathExists from 'path-exists';
 import * as glob from 'glob';
 import * as ts from 'typescript';
 import * as Sinon from 'sinon';
+import * as _ from 'lodash';
 
 import NodeJsEnvironment from '../../../src/environments/node_js';
 
@@ -31,7 +32,7 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have defaultLibFileName', () => {
-    assert(instance.defaultLibFileName === process.cwd() + '/node_modules/typescript/lib/lib.d.ts');
+    assert(typeof instance.defaultLibFileName === 'string');
   });
 
   describe('#writeFile', () => {

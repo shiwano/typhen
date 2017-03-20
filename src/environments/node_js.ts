@@ -13,26 +13,34 @@ import { Environment } from './environment';
 export default class NodeJsEnvironment implements Environment {
   currentDirectory: string;
   useCaseSensitiveFileNames: boolean = false;
-  defaultLibFileName: string = path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
+  defaultLibFileName: string = '@@__defaultLibFile.d.ts';
+
+  private libFilePattern: RegExp = new RegExp('^lib\.[a-z0-9.]+\.d\.ts$');
+  libFileNames: string[];
 
   constructor(
       currentDirectory: string,
       public newLine: string,
       scriptTarget: ts.ScriptTarget,
+      lib?: string[],
       defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
-    this.defaultLibFileName = this.getDefaultLibFileName(defaultLibFileName, scriptTarget);
+    this.libFileNames = this.getLibFileNames(scriptTarget, defaultLibFileName, lib);
   }
 
   readFile(fileName: string): string {
-    let resolvedPath = this.resolvePath(fileName);
-
-    if (resolvedPath === this.defaultLibFileName) {
+    if (fileName === this.defaultLibFileName) {
       return this.getDefaultLibFileData();
-    } else {
-      Logger.debug('Reading: ' + resolvedPath);
-      return fs.readFileSync(resolvedPath, 'utf-8');
     }
+    if (this.libFilePattern.test(fileName)) {
+      let resolvedTSLibPath = this.resolveTSLibPath(fileName);
+      if (this.exists(resolvedTSLibPath)) {
+        return fs.readFileSync(resolvedTSLibPath, 'utf-8');
+      }
+    }
+    let resolvedPath = this.resolvePath(fileName);
+    Logger.debug('Reading: ' + resolvedPath);
+    return fs.readFileSync(resolvedPath, 'utf-8');
   }
 
   writeFile(fileName: string, data: string): void {
@@ -71,7 +79,9 @@ export default class NodeJsEnvironment implements Environment {
 
   getDefaultLibFileData(): string {
     Logger.debug('Reading dafaultLibFile data');
-    return fs.readFileSync(this.defaultLibFileName, 'utf-8');
+    return this.libFileNames.map(fileName => {
+      return fs.readFileSync(fileName, 'utf-8');
+    }).join('\n');
   }
 
   glob(pattern: string, cwd: string = this.currentDirectory): string[] {
@@ -89,17 +99,32 @@ export default class NodeJsEnvironment implements Environment {
     return sandbox[resultKey];
   }
 
-  private getDefaultLibFileName(defaultLibFileName: string, scriptTarget: ts.ScriptTarget): string {
+  private getLibFileNames(scriptTarget: ts.ScriptTarget, defaultLibFileName?: string, lib?: string[]): string[] {
     if (typeof defaultLibFileName === 'string' && defaultLibFileName.length > 0) {
       if (this.exists(this.defaultLibFileName)) {
-        return this.resolvePath(defaultLibFileName);
+        return [this.resolvePath(defaultLibFileName)];
       } else {
-        return path.join(path.dirname(require.resolve('typescript')), defaultLibFileName);
+        return [this.resolveTSLibPath(defaultLibFileName)];
       }
-    } else if (scriptTarget === ts.ScriptTarget.ES2015) {
-      return path.join(path.dirname(require.resolve('typescript')), 'lib.es2015.d.ts');
-    } else {
-      return path.join(path.dirname(require.resolve('typescript')), 'lib.d.ts');
     }
+    if (_.isArray(lib)) {
+      return lib.map(libName => {
+        return this.resolveTSLibPath('lib.' + libName + '.d.ts');
+      });
+    }
+    switch (scriptTarget) {
+      case ts.ScriptTarget.ES2015:
+        return [this.resolveTSLibPath('lib.es2015.d.ts'), this.resolveTSLibPath('lib.dom.d.ts')];
+      case ts.ScriptTarget.ES2016:
+        return [this.resolveTSLibPath('lib.es2016.d.ts'), this.resolveTSLibPath('lib.dom.d.ts')];
+      case ts.ScriptTarget.ES2017:
+        return [this.resolveTSLibPath('lib.es2017.d.ts'), this.resolveTSLibPath('lib.dom.d.ts')];
+      default:
+        return [this.resolveTSLibPath('lib.d.ts')];
+    }
+  }
+
+  private resolveTSLibPath(fileName: string): string {
+    return path.join(path.dirname(require.resolve('typescript')), fileName);
   }
 }

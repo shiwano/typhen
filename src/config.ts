@@ -48,7 +48,7 @@ export class Config implements ConfigObject {
 
     this.cwd = args.cwd || process.cwd();
     this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine,
-        this.compilerOptions.target, args.defaultLibFileName);
+        this.compilerOptions.target, this.compilerOptions.lib, args.defaultLibFileName);
     this.defaultLibFileName = this.env.defaultLibFileName;
 
     this.src = typeof args.src === 'string' ? [<string>args.src] : <string[]>args.src;
