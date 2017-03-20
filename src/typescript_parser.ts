@@ -83,8 +83,14 @@ export default class TypeScriptParser {
     });
   }
 
-  private getSymbolAtLocation(node: ts.Node): ts.Symbol {
+  private tryGetSymbolAtLocation(node: ts.Node): ts.Symbol | undefined {
     return (node as any).symbol;
+  }
+
+  private getSymbolAtLocation(node: ts.Node): ts.Symbol {
+    let symbol = this.tryGetSymbolAtLocation(node);
+    if (symbol === undefined) { throw new Error('Failed to get a symbol'); }
+    return symbol;
   }
 
   private checkFlags(flagsA: number, flagsB: number): boolean {
@@ -194,16 +200,20 @@ export default class TypeScriptParser {
     }
   }
 
-  private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol,
+  private createTyphenSymbol<T extends Symbol.Symbol>(symbol: ts.Symbol | undefined,
       typhenSymbolClass: typeof Symbol.Symbol, assumedNameSuffix?: string): T {
-    let name = _.isObject(symbol) && typeof symbol.name === 'string' ?
-      symbol.name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
-    let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
-      this.getAssumedName(symbol, assumedNameSuffix) : '';
-
-    let typhenSymbol = <T>new typhenSymbolClass(this.config, name,
-      this.getDocComment(symbol), this.getDeclarationInfos(symbol),
-      this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
+    let typhenSymbol: T;
+    if (symbol === undefined) {
+      typhenSymbol = <T>new typhenSymbolClass(this.config, '', [], [], [], null, '');
+    } else {
+      let name = _.isObject(symbol) && typeof symbol.name === 'string' ?
+        symbol.name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
+      let assumedName = _.isEmpty(name) && assumedNameSuffix !== undefined ?
+        this.getAssumedName(symbol, assumedNameSuffix) : '';
+      typhenSymbol = <T>new typhenSymbolClass(this.config, name,
+        this.getDocComment(symbol), this.getDeclarationInfos(symbol),
+        this.getDecorators(symbol), this.getParentModule(symbol), assumedName);
+    }
     logger.debug('Creating', (<any>typhenSymbolClass).name + ':',
       'module=' + typhenSymbol.ancestorModules.map(s => s.name).join('.') + ',', 'name=' + typhenSymbol.rawName + ',',
       'declarations=' + typhenSymbol.declarationInfos.map(d => d.toString()).join(','));
@@ -260,7 +270,7 @@ export default class TypeScriptParser {
       symbol.declarations[0].parent : undefined;
 
     while (parentDecl !== undefined) {
-      let parentSymbol = this.getSymbolAtLocation(parentDecl);
+      let parentSymbol = this.tryGetSymbolAtLocation(parentDecl);
 
       if (parentSymbol && this.checkFlags(parentSymbol.flags, ts.SymbolFlags.Module)) {
         return this.getOrCreateTyphenModule(parentSymbol);
@@ -300,7 +310,7 @@ export default class TypeScriptParser {
       symbol.declarations[0].parent : undefined;
 
     while (parentDecl !== undefined) {
-      let parentSymbol = this.getSymbolAtLocation(parentDecl);
+      let parentSymbol = this.tryGetSymbolAtLocation(parentDecl);
 
       if (parentSymbol !== undefined) {
         if (this.checkFlags(parentSymbol.flags, ts.SymbolFlags.TypeAlias)) {
@@ -372,7 +382,7 @@ export default class TypeScriptParser {
   }
 
   private parseSourceFile(sourceFile: ts.SourceFile): void {
-    let sourceSymbol = this.getSymbolAtLocation(sourceFile);
+    let sourceSymbol = this.tryGetSymbolAtLocation(sourceFile);
     let typhenSymbol = this.getOrCreateTyphenModule(sourceSymbol);
 
     let modules = this.getSymbolsInScope(sourceFile, ts.SymbolFlags.Module)
