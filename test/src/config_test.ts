@@ -1,5 +1,6 @@
 import * as helper from '../test_helper';
 import * as ts from 'typescript';
+import * as assert from 'power-assert';
 
 import { Config } from '../../src/config';
 

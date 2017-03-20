@@ -1,6 +1,7 @@
 import '../test_helper';
 
 import * as Promise from 'bluebird';
+import * as assert from 'power-assert';
 import * as Sinon from 'sinon';
 
 import * as typhen from '../../src/index';

@@ -1,5 +1,7 @@
 import '../test_helper';
 
+import * as assert from 'power-assert';
+
 import * as helpers from '../../src/helpers';
 
 describe('helpers', () => {

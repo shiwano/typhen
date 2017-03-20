@@ -3,6 +3,7 @@ import '../test_helper';
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as rimraf from 'rimraf';
+import * as assert from 'power-assert';
 
 import typhen = require('../../src/index');
 import * as logger from '../../src/logger';

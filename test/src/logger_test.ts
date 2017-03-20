@@ -1,5 +1,6 @@
 import '../test_helper';
 
+import * as assert from 'power-assert';
 import * as Sinon from 'sinon';
 
 import * as logger from '../../src/logger';

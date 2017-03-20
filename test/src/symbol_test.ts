@@ -1,5 +1,7 @@
 import helper = require('../test_helper');
 
+import * as assert from 'power-assert';
+
 import * as config from '../../src/config';
 import * as symbol from '../../src/symbol';
 

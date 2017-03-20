@@ -1,4 +1,5 @@
 import * as helper from '../test_helper';
+import * as assert from 'power-assert';
 import * as Sinon from 'sinon';
 
 import Generator from '../../src/generator';

@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as pathExists from 'path-exists';
 import * as glob from 'glob';
 import * as ts from 'typescript';
+import * as assert from 'power-assert';
 import * as Sinon from 'sinon';
 import * as _ from 'lodash';
 

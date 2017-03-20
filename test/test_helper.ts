@@ -1,9 +1,6 @@
 /// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/assert/index.d.ts" />
 
 require('source-map-support').install();
-
-(<any>global).assert = require('power-assert');
 
 import * as _ from 'lodash';
 import * as path from 'path';

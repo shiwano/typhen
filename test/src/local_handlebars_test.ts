@@ -1,6 +1,7 @@
 import '../test_helper';
 
 import * as Handlebars from 'handlebars';
+import * as assert from 'power-assert';
 import * as Sinon from 'sinon';
 
 import * as helpers from '../../src/helpers';

@@ -29,7 +29,6 @@
     "test": "gulp"
   },
   "devDependencies": {
-    "@types/assert": "0.0.31",
     "@types/bluebird": "^3.0.33",
     "@types/chalk": "^0.4.30",
     "@types/glob": "^5.0.30",
@@ -82,6 +81,7 @@
     "handlebars"
   ],
   "dependencies": {
+    "@types/power-assert": "^1.4.29",
     "bluebird": "^3.0.2",
     "chalk": "^1.0.0",
     "glob": "^7.1.0",

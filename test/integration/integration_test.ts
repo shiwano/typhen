@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import * as glob from 'glob';
 import * as rimraf from 'rimraf';
 import Vinyl = require('vinyl');
+import * as assert from 'power-assert';
 
 import * as typhen from '../../src/index';
 import * as logger from '../../src/logger';
