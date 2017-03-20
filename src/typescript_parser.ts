@@ -19,7 +19,7 @@ export default class TypeScriptParser {
   private arrayTypeName: string = 'Array';
 
   private typeReferenceStack: Symbol.TypeReference[] = [];
-  private get currentTypeReference(): Symbol.TypeReference { return _.last(this.typeReferenceStack); }
+  private get currentTypeReference(): Symbol.TypeReference | null { return _.last(this.typeReferenceStack) || null; }
 
   constructor(private fileNames: string[], private config: config.Config) {
     this.emptyType = new Symbol.EmptyType(config, '', [], [], [], null, '');
@@ -57,7 +57,7 @@ export default class TypeScriptParser {
     const errors = ts.getPreEmitDiagnostics(this.program);
 
     errors.forEach(d => {
-      const info = _.isObject(d.file) ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
+      const info = d.file ? [d.file.fileName, '(', d.start, ',', d.length, '):'].join('') : '';
       logger.error(logger.red(info), d.messageText);
       throw new Error('Detect diagnostic messages of the TypeScript compiler');
     });
@@ -119,8 +119,6 @@ export default class TypeScriptParser {
   }
 
   private parseType(type: ts.Type): Symbol.Type {
-    if (!_.isObject(type)) { return this.emptyType; }
-
     if (this.typeCache.get(type) === undefined) {
       if (type.flags & ts.TypeFlags.TypeParameter) {
         this.parseTypeParameter(<ts.TypeParameter>type);
@@ -167,7 +165,6 @@ export default class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.Object &&
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
-        // Reach the scope if TypeParameter#constraint is not specified
         return this.emptyType;
       } else if (type.symbol === undefined) {
         throw this.makeErrorWithTypeInfo('Unsupported type', type);
@@ -195,7 +192,7 @@ export default class TypeScriptParser {
     }
     const typhenType = this.typeCache.get(type);
 
-    if (typhenType.isTypeParameter && _.isObject(this.currentTypeReference)) {
+    if (typhenType.isTypeParameter && this.currentTypeReference != null) {
       return this.currentTypeReference.getTypeByTypeParameter(<Symbol.TypeParameter>typhenType) || typhenType;
     } else {
       return typhenType;
@@ -208,7 +205,7 @@ export default class TypeScriptParser {
     if (symbol === undefined) {
       typhenSymbol = <T>new typhenSymbolClass(this.config, '', [], [], [], null, '');
     } else {
-      const name = _.isObject(symbol) && typeof symbol.name === 'string' ?
+      const name = typeof symbol.name === 'string' ?
         symbol.name.replace(/^__@/, '@@').replace(/^__.*$/, '') : '';
       const assumedName = _.isEmpty(name) && assumedNameSuffix ?
         this.getAssumedName(symbol, assumedNameSuffix) : '';
@@ -243,7 +240,7 @@ export default class TypeScriptParser {
   }
 
   private getDeclarationInfos(symbol: ts.Symbol): Symbol.DeclarationInfo[] {
-    if (!_.isObject(symbol) || symbol.declarations === undefined) { return []; }
+    if (symbol.declarations === undefined) { return []; }
 
     return symbol.declarations.map(d => {
       const sourceFile = d.getSourceFile();
@@ -275,11 +272,9 @@ export default class TypeScriptParser {
     return null;
   }
 
-  private getDocComment(symbolOrSignature: ts.Symbol): string[] {
+  private getDocComment(symbol: ts.Symbol): string[] {
     return _.tap([], (results: string[]) => {
-      if (!_.isObject(symbolOrSignature)) { return; }
-
-      (symbolOrSignature.declarations || []).forEach(decl => {
+      (symbol.declarations || []).forEach(decl => {
         const jsDocs: ts.JSDoc[] = (decl as any).jsDoc || []; // FIXME: TypeScript does not export JSDoc getting API at present.
         jsDocs.forEach(jsDoc => {
           if (typeof jsDoc.comment === 'string') {
@@ -296,10 +291,6 @@ export default class TypeScriptParser {
   }
 
   private getAssumedName(symbol: ts.Symbol, typeName: string): string {
-    if (!_.isObject(symbol)) {
-      return typeName;
-    }
-
     const parentNames: string[] = [];
     let parentDecl = symbol.declarations ? symbol.declarations[0].parent : undefined;
 
@@ -325,14 +316,13 @@ export default class TypeScriptParser {
   }
 
   private isTyphenPrimitiveType(type: ts.Type): boolean {
-    if (!type.symbol) { return false; }
-    return _.isObject(type.symbol) && _.includes(this.config.plugin.customPrimitiveTypes, type.symbol.name);
+    return type.symbol !== undefined && _.includes(this.config.plugin.customPrimitiveTypes, type.symbol.name);
   }
 
   private isArrayType(type: ts.Type): boolean {
-    if (!type.symbol) { return false; }
-    return type.symbol.name === this.arrayTypeName &&
-           this.getParentModule(type.symbol) === null;
+    return type.symbol !== undefined &&
+      type.symbol.name === this.arrayTypeName &&
+      this.getParentModule(type.symbol) === null;
   }
 
   private getSymbolsInScope(node: ts.Node, symbolFlags: ts.SymbolFlags): ts.Symbol[] {
@@ -526,7 +516,7 @@ export default class TypeScriptParser {
     const numberIndex = indexInfos.numberIndex;
 
     const constructorSignatures = genericType.getConstructSignatures()
-      .filter(s => _.isObject(s.declaration)) // constructor signature that has no declaration will be created by using typeof keyword.
+      .filter(s => s.declaration !== undefined) // constructor signature that has no declaration will be created by using typeof keyword.
       .map(s => this.parseSignature(s, 'Constructor'));
     const callSignatures = genericType.getCallSignatures().map(s => this.parseSignature(s));
 
@@ -626,7 +616,7 @@ export default class TypeScriptParser {
       name = 'never';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Any)) {
       name = 'any';
-    } else if (_.isObject(type.symbol)) {
+    } else if (type.symbol) {
       name = type.symbol.name;
     } else {
       throw new Error('Unknown primitive type: ' + type.flags);
@@ -637,7 +627,8 @@ export default class TypeScriptParser {
 
   private parseTypeParameter(type: ts.TypeParameter): Symbol.TypeParameter {
     const typhenType = this.createTyphenType<Symbol.TypeParameter>(type, Symbol.TypeParameter);
-    return typhenType.initialize(this.parseType(type.constraint));
+    let constraint = type.constraint ? this.parseType(type.constraint) : null;
+    return typhenType.initialize(constraint);
   }
 
   private parseTuple(type: ts.TypeReference): Symbol.Tuple {

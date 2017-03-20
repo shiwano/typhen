@@ -390,7 +390,7 @@ export class ObjectType extends Type {
 }
 
 export class TypeReference {
-  get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => _.isObject(t) && !t.isTypeParameter); }
+  get typeArguments(): Type[] { return this.rawTypeArguments.filter(t => !t.isTypeParameter); }
 
   constructor(
       public typeParameters: TypeParameter[],
@@ -401,7 +401,7 @@ export class TypeReference {
     const index = this.typeParameters.indexOf(typeParameter);
     if (index < 0) { return null; }
     const type = this.rawTypeArguments[index];
-    return _.isObject(type) && type.isTypeParameter ? null : type;
+    return type.isTypeParameter ? null : type;
   }
 }
 
@@ -479,9 +479,9 @@ export class Array extends Type {
 export class TypeParameter extends Type {
   kind: SymbolKind = SymbolKind.TypeParameter;
 
-  constraint: Type;
+  constraint: Type | null;
 
-  initialize(constraint: Type): TypeParameter {
+  initialize(constraint: Type | null): TypeParameter {
     this.constraint = constraint;
     return this;
   }
