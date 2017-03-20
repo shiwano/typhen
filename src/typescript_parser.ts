@@ -92,19 +92,19 @@ export default class TypeScriptParser {
     return _.values<ts.Modifier>(modifiers).some(x => x.kind === kind);
   }
 
-  private throwErrorWithTypeInfo(message: string, type: ts.Type): void {
-    let messageWithInfo = message + ': TypeFlags: ' + type.flags;
+  private makeErrorWithTypeInfo(message: string, type: ts.Type): Error {
+    let typeInfo = ': TypeFlags: ' + type.flags;
     if (type.symbol === undefined) {
-      this.throwErrorWithSymbolInfo(messageWithInfo, type.symbol);
+      return this.makeErrorWithSymbolInfo(message + typeInfo, type.symbol);
     } else {
-      throw new Error(messageWithInfo);
+      return new Error(message + typeInfo);
     }
   }
 
-  private throwErrorWithSymbolInfo(message: string, symbol: ts.Symbol): void {
+  private makeErrorWithSymbolInfo(message: string, symbol: ts.Symbol): Error {
     let infos = this.getDeclarationInfos(symbol);
     let symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
-    throw new Error(message + symbolInfo);
+    return new Error(message + symbolInfo);
   }
 
   private parseType(type: ts.Type): Symbol.Type {
@@ -159,7 +159,7 @@ export default class TypeScriptParser {
         // Reach the scope if TypeParameter#constraint is not specified
         return null;
       } else if (type.symbol === undefined) {
-        this.throwErrorWithTypeInfo('Unsupported type', type);
+        throw this.makeErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
         this.parseFunction(<ts.ObjectType>type);
       } else if (type.symbol.flags & ts.SymbolFlags.Class) {
@@ -179,7 +179,7 @@ export default class TypeScriptParser {
           this.parseFunction(<ts.ObjectType>type);
         }
       } else {
-        this.throwErrorWithTypeInfo('Unsupported type', type);
+        throw this.makeErrorWithTypeInfo('Unsupported type', type);
       }
     }
     let typhenType = this.typeCache.get(type);
@@ -215,7 +215,7 @@ export default class TypeScriptParser {
   private createTyphenType<T extends Symbol.Type>(type: ts.Type,
       typhenTypeClass: typeof Symbol.Type, assumedNameSuffix?: string): T {
     if (this.typeCache.get(type) !== undefined) {
-      this.throwErrorWithSymbolInfo('Already created the type', type.symbol);
+      throw this.makeErrorWithSymbolInfo('Already created the type', type.symbol);
     }
     let typhenType = this.createTyphenSymbol<T>(type.symbol, typhenTypeClass, assumedNameSuffix);
     this.typeCache.set(type, typhenType);

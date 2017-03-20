@@ -47,7 +47,7 @@ describe('Generator', () => {
       var generated = 'This is README.';
 
       it('should return the file data', () => {
-        assert(instance.generate('README.md', 'README.md').contents.toString() === generated);
+        assert((instance.generate('README.md', 'README.md').contents || '').toString() === generated);
       });
     });
 
@@ -55,7 +55,7 @@ describe('Generator', () => {
       var generated = 'FooType\nBar: 0\nBaz: 1\n';
 
       it('should return the generated data by Handlebars', () => {
-        assert(instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents.toString() === generated);
+        assert((instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents || '').toString() === generated);
       });
     });
 

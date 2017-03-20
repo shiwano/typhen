@@ -44,7 +44,7 @@ export default class Generator {
 
   generate(src: string, dest: string, overwrite?: boolean): Vinyl;
   generate(src: string, dest: string, context: symbol.Symbol, overwrite?: boolean): Vinyl;
-  generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl {
+  generate(src: string, dest: string, context: any, overwrite?: boolean): Vinyl | null {
     if (typeof context === 'boolean') {
       overwrite = context;
       context = null;
@@ -85,7 +85,9 @@ export default class Generator {
 
   replaceStars(str: string, symbol: symbol.Symbol, separator: string = '/'): string {
     let matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
-    if (matches == null) { return str; }
+    if (matches === null) { return str; }
+    let inflectionType = matches[1] || '';
+    let targetText = matches[2] || '';
 
     let inflect = (name: string, inflectionType: string): string => {
       if (_.includes(name, '/')) { return name; }
@@ -97,9 +99,9 @@ export default class Generator {
         default:               return name;
       }
     };
-    return matches[2]
-      .replace('**', symbol.ancestorModules.map(s => inflect(s.name, matches[1])).join(separator))
-      .replace('*', inflect(symbol.name, matches[1]))
+    return targetText
+      .replace('**', symbol.ancestorModules.map(s => inflect(s.name, inflectionType)).join(separator))
+      .replace('*', inflect(symbol.name, inflectionType))
       .replace(/^\//, ''); // Avoid making an absolute path
   }
 

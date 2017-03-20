@@ -3,7 +3,7 @@ import * as inflection from 'inflection';
 
 function applyHelperToStringWithSeparator(str: string, helper: (str: string) => string): string {
   str = str.toString();
-  let separators = _.uniq(str.match(/[^a-z_0-9]+/gi));
+  let separators = _.uniq(str.match(/[^a-z_0-9]+/gi) || []);
 
   if (separators.length === 1) {
     return str.split(separators[0]).map(s => helper(s)).join(separators[0]);

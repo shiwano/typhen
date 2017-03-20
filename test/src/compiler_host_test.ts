@@ -31,9 +31,9 @@ describe('CompilerHost', () => {
     });
 
     context('with a file name which does not exists', () => {
-      it('should return undefined', () => {
+      it('should throw the error', () => {
         var languageVersion = ts.ScriptTarget.ES5;
-        assert(instance.getSourceFile('', languageVersion) === undefined);
+        assert.throws(() => instance.getSourceFile('', languageVersion), /Failed to read/);
       });
     });
   });

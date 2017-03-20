@@ -130,7 +130,7 @@ export class Symbol {
       public docComment: string[],
       public declarationInfos: DeclarationInfo[],
       public decorators: Decorator[],
-      public parentModule: Module,
+      public parentModule: Module | null,
       protected rawAssumedName: string) {
   }
 
@@ -153,9 +153,9 @@ export class Symbol {
   }
 
   get ancestorModules(): Module[] {
-    return _.tap([], (results) => {
+    return _.tap([], (results: Module[]) => {
       let parentModule = this.parentModule;
-      while (_.isObject(parentModule)) {
+      while (parentModule !== null) {
         results.push(parentModule);
         parentModule = parentModule.parentModule;
       }
@@ -273,11 +273,11 @@ export class Module extends Symbol {
   }
 
   get importedModules(): { name: string; module: Module }[] {
-    return _.map(this.importedModuleTable, (v, k) => { return { name: k, module: v }; });
+    return _.map(this.importedModuleTable, (v, k) => { return { name: k || '', module: v }; });
   }
 
   get importedTypes(): { name: string; type: Type }[] {
-    return _.map(this.importedTypeTable, (v, k) => { return { name: k, type: v }; });
+    return _.map(this.importedTypeTable, (v, k) => { return { name: k || '', type: v }; });
   }
 
   initialize(isNamespaceModule: boolean,
@@ -359,14 +359,14 @@ export class ObjectType extends Type {
   properties: Property[] = [];
   methods: Method[] = [];
   builtInSymbolMethods: Method[] = [];
-  stringIndex: IndexInfo = null;
-  numberIndex: IndexInfo = null;
+  stringIndex: IndexInfo | null = null;
+  numberIndex: IndexInfo | null = null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
-      stringIndex: IndexInfo, numberIndex: IndexInfo,
+      stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       ...forOverride: any[]): ObjectType {
     this.properties = properties;
     this.methods = methods;
@@ -391,7 +391,7 @@ export class TypeReference {
       private rawTypeArguments: Type[]) {
   }
 
-  getTypeByTypeParameter(typeParameter: TypeParameter): Type {
+  getTypeByTypeParameter(typeParameter: TypeParameter): Type | null {
     let index = this.typeParameters.indexOf(typeParameter);
     if (index < 0) { return null; }
     let type = this.rawTypeArguments[index];
@@ -424,7 +424,7 @@ export class Interface extends ObjectType {
   }
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
-      stringIndex: IndexInfo, numberIndex: IndexInfo,
+      stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       constructorSignatures: Signature[],
       callSignatures: Signature[], baseTypes: Interface[], typeReference: TypeReference,
       staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
@@ -455,7 +455,7 @@ export class Class extends Interface {
 
 export class Array extends Type {
   kind: SymbolKind = SymbolKind.Array;
-  type: Type = null;
+  type: Type;
 
   get isGenerationTarget(): boolean { return true; }
 
@@ -473,7 +473,7 @@ export class Array extends Type {
 export class TypeParameter extends Type {
   kind: SymbolKind = SymbolKind.TypeParameter;
 
-  constraint: Type = null;
+  constraint: Type;
 
   initialize(constraint: Type): TypeParameter {
     this.constraint = constraint;
@@ -608,8 +608,8 @@ export class NumberLiteralType extends LiteralType {
 export class EnumLiteralType extends LiteralType {
   kind: SymbolKind = SymbolKind.EnumLiteralType;
 
-  enumType: Enum = null;
-  enumMember: EnumMember = null;
+  enumType: Enum;
+  enumMember: EnumMember;
 
   get assumedName(): string {
     return [this.enumType.name, this.enumMember.name].join(this.config.plugin.namespaceSeparator);
@@ -625,7 +625,7 @@ export class EnumLiteralType extends LiteralType {
 export class Property extends Symbol {
   kind: SymbolKind = SymbolKind.Property;
 
-  type: Type = null;
+  type: Type;
   isOptional: boolean = false;
   isOwn: boolean = false;
   isProtected: boolean = false;
@@ -671,8 +671,8 @@ export class Signature extends Symbol {
 
   typeParameters: TypeParameter[] = [];
   parameters: Parameter[] = [];
-  returnType: Type = null;
-  typePredicate: TypePredicate = null;
+  returnType: Type;
+  typePredicate: TypePredicate;
   isProtected: boolean = false;
 
   initialize(typeParameters: TypeParameter[], parameters: Parameter[],
@@ -695,7 +695,7 @@ export class Signature extends Symbol {
 export class Parameter extends Symbol {
   kind: SymbolKind = SymbolKind.Parameter;
 
-  type: Type = null;
+  type: Type;
   isOptional: boolean = false;
   isVariadic: boolean = false;
 
@@ -710,8 +710,8 @@ export class Parameter extends Symbol {
 export class Variable extends Symbol {
   kind: SymbolKind = SymbolKind.Variable;
 
-  type: Type = null;
-  module: Module = null;
+  type: Type;
+  module: Module;
   isLet: boolean = false;
   isConst: boolean = false;
 
@@ -727,7 +727,7 @@ export class Variable extends Symbol {
 export class TypeAlias extends Symbol {
   kind: SymbolKind = SymbolKind.TypeAlias;
 
-  type: Type = null;
+  type: Type;
 
   initialize(type: Type): TypeAlias {
     this.type = type;

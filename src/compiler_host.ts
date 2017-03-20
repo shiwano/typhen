@@ -14,12 +14,12 @@ export default class CompilerHost implements ts.CompilerHost {
   getSourceFile(fileName: string, languageVersion: ts.ScriptTarget,
       onError?: (message: string) => void): ts.SourceFile {
     if (this.cachedSources[fileName] === undefined) {
-      let text: string;
+      let text: string = '';
 
       try {
         text = this.env.readFile(fileName);
       } catch (e) {
-        return undefined;
+        throw new Error('Failed to read the file: fileName: ' + fileName + ' Error: ' + e);
       }
       this.cachedSources[fileName] = ts.createSourceFile(fileName, text, this.version, false);
     }

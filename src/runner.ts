@@ -52,6 +52,7 @@ export class Runner {
 
       let afterGenerate = () => {
         generator.files.forEach(file => {
+          if (file.contents === null) { return; }
           if (!this.config.noWrite) {
             this.config.env.writeFile(file.path, file.contents.toString());
           }
