@@ -33,25 +33,25 @@ export default class NodeJsEnvironment implements Environment {
       return this.getDefaultLibFileData();
     }
     if (this.libFilePattern.test(fileName)) {
-      let resolvedTSLibPath = this.resolveTSLibPath(fileName);
+      const resolvedTSLibPath = this.resolveTSLibPath(fileName);
       if (this.exists(resolvedTSLibPath)) {
         return fs.readFileSync(resolvedTSLibPath, 'utf-8');
       }
     }
-    let resolvedPath = this.resolvePath(fileName);
+    const resolvedPath = this.resolvePath(fileName);
     Logger.debug('Reading: ' + resolvedPath);
     return fs.readFileSync(resolvedPath, 'utf-8');
   }
 
   writeFile(fileName: string, data: string): void {
-    let filePath = this.resolvePath(fileName);
+    const filePath = this.resolvePath(fileName);
     Logger.debug('Writing: ' + filePath);
     mkdirp.sync(path.dirname(filePath));
     fs.writeFileSync(filePath, data);
   }
 
   resolvePath(...pathSegments: string[]): string {
-    let args = _.flatten([this.currentDirectory, pathSegments], true);
+    const args = _.flatten([this.currentDirectory, pathSegments], true);
     return path.resolve.apply(null, args);
   }
 
@@ -68,7 +68,7 @@ export default class NodeJsEnvironment implements Environment {
   }
 
   exists(fileName: string): boolean {
-    let filePath = this.resolvePath(fileName);
+    const filePath = this.resolvePath(fileName);
     return pathExists.sync(filePath);
   }
 
@@ -92,8 +92,8 @@ export default class NodeJsEnvironment implements Environment {
   }
 
   eval(code: string): any {
-    let sandbox: any = {};
-    let resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
+    const sandbox: any = {};
+    const resultKey = 'RESULT_' + Math.floor(Math.random() * 1000000);
     sandbox[resultKey] = {};
     vm.runInNewContext(resultKey + '=' + code, sandbox);
     return sandbox[resultKey];

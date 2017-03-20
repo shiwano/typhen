@@ -5,7 +5,7 @@ import * as assert from 'power-assert';
 import { Config } from '../../src/config';
 
 describe('Config', () => {
-  var instance: Config;
+  let instance: Config;
 
   beforeEach(() => {
     instance = helper.createConfig();
@@ -26,21 +26,21 @@ describe('Config', () => {
   describe('#getTypingDirectory', () => {
     context('in general', () => {
       it('should return the base directory name', () => {
-        var args = ['foo/bar/test.ts', 'foo/bar.ts', 'foo/baz.ts'];
+        const args = ['foo/bar/test.ts', 'foo/bar.ts', 'foo/baz.ts'];
         assert(instance.getTypingDirectory(args) === process.cwd() + '/foo');
       });
     });
 
     context('with paths those are not in the cwd', () => {
       it('should return the cwd', () => {
-        var args = ['foo/bar/test.ts', '../foo/bar.ts'];
+        const args = ['foo/bar/test.ts', '../foo/bar.ts'];
         assert(instance.getTypingDirectory(args) === process.cwd());
       });
     });
 
     context('with paths those do not have the same base directory', () => {
       it('should return the cwd', () => {
-        var args = ['foo/bar/test.ts', 'foo/bar.ts', 'baz/qux.ts'];
+        const args = ['foo/bar/test.ts', 'foo/bar.ts', 'baz/qux.ts'];
         assert(instance.getTypingDirectory(args) === process.cwd());
       });
     });

@@ -11,10 +11,10 @@ import * as _ from 'lodash';
 import NodeJsEnvironment from '../../../src/environments/node_js';
 
 describe('NodeJsEnvironment', () => {
-  var sandbox = Sinon.sandbox.create();
-  var instance: NodeJsEnvironment;
-  var currentDirectory = process.cwd() + '/test/fixtures/typings';
-  var newLine = '\n';
+  const sandbox = Sinon.sandbox.create();
+  let instance: NodeJsEnvironment;
+  const currentDirectory = process.cwd() + '/test/fixtures/typings';
+  const newLine = '\n';
 
   beforeEach(() => {
     instance = new NodeJsEnvironment(currentDirectory, newLine, ts.ScriptTarget.ES5);
@@ -63,7 +63,7 @@ describe('NodeJsEnvironment', () => {
 
   describe('#resolvePath', () => {
     it('should return the resolved path', () => {
-      var expected = currentDirectory + '/test/resolve.ts';
+      const expected = currentDirectory + '/test/resolve.ts';
       assert(instance.resolvePath('test', 'resolve.ts') === expected);
     });
   });
@@ -107,8 +107,8 @@ describe('NodeJsEnvironment', () => {
 
   describe('#getDefaultLibFileData', () => {
     it('should return the joined defaultLibFile data', () => {
-      var actual = instance.getDefaultLibFileData();
-      var expected = fs.readFileSync(process.cwd() + '/node_modules/typescript/lib/lib.d.ts', 'utf-8');
+      const actual = instance.getDefaultLibFileData();
+      const expected = fs.readFileSync(process.cwd() + '/node_modules/typescript/lib/lib.d.ts', 'utf-8');
       assert(actual === expected);
     });
   });

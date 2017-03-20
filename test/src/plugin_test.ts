@@ -5,7 +5,7 @@ import * as assert from 'power-assert';
 import * as plugin from '../../src/plugin';
 
 describe('plugin', () => {
-  var instance: plugin.Plugin;
+  let instance: plugin.Plugin;
 
   beforeEach(() => {
     instance = helper.createPlugin();

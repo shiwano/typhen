@@ -42,7 +42,7 @@ export class Tag {
   }
 
   get number(): number {
-    let n = Number(this.value);
+    const n = Number(this.value);
     return typeof n === 'number' ? n : 0;
   }
 
@@ -136,7 +136,7 @@ export class Symbol {
   }
 
   get name(): string {
-    let name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
+    const name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
     return this.config.plugin.rename(this, name);
   }
 
@@ -171,7 +171,7 @@ export class Symbol {
 
   get tagTable(): ObjectTable<Tag> {
     return <ObjectTable<Tag>>_.reduce(this.docComment, (result, comment) => {
-      let matches = comment.match(Symbol.tagPattern);
+      const matches = comment.match(Symbol.tagPattern);
       if (matches != null) { result[matches[1]] = new Tag(matches[1], matches[2]); }
       return result;
     }, <ObjectTable<Tag>>{});
@@ -214,7 +214,7 @@ export class Symbol {
 
   get isGenerationTarget(): boolean {
     return this.declarationInfos.every(d => {
-      let resolvedPath = this.config.env.resolvePath(d.path);
+      const resolvedPath = this.config.env.resolvePath(d.path);
       return resolvedPath !== this.config.env.defaultLibFileName &&
         _.includes(resolvedPath, this.config.typingDirectory);
     });
@@ -398,9 +398,9 @@ export class TypeReference {
   }
 
   getTypeByTypeParameter(typeParameter: TypeParameter): Type | null {
-    let index = this.typeParameters.indexOf(typeParameter);
+    const index = this.typeParameters.indexOf(typeParameter);
     if (index < 0) { return null; }
-    let type = this.rawTypeArguments[index];
+    const type = this.rawTypeArguments[index];
     return _.isObject(type) && type.isTypeParameter ? null : type;
   }
 }
@@ -424,7 +424,7 @@ export class Interface extends ObjectType {
     if (this.typeArguments.length === 0) { return ''; }
 
     return this.rawName + this.typeArguments.map((type, index) => {
-      let prefix = index === 0 ? 'Of' : 'And';
+      const prefix = index === 0 ? 'Of' : 'And';
       return prefix + inflection.classify(type.name);
     }).join('');
   }

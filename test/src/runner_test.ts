@@ -6,8 +6,8 @@ import * as Sinon from 'sinon';
 import * as runner from '../../src/runner';
 
 describe('Runner', () => {
-  var sandbox = Sinon.sandbox.create();
-  var instance: runner.Runner;
+  const sandbox = Sinon.sandbox.create();
+  let instance: runner.Runner;
 
   beforeEach(() => {
     instance = helper.createRunner();
@@ -19,7 +19,7 @@ describe('Runner', () => {
 
   describe('#parse', () => {
     it('should return a ParsedResult', () => {
-      var result = instance.parse();
+      const result = instance.parse();
       assert(result.types.length > 0);
       assert(result.modules.length > 0);
     });

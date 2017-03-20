@@ -11,7 +11,7 @@ import * as logger from '../../src/logger';
 import * as helpers from '../../src/helpers';
 
 describe('typhen', () => {
-  var sandbox = Sinon.sandbox.create();
+  const sandbox = Sinon.sandbox.create();
 
   afterEach(() => {
     sandbox.restore();
@@ -55,7 +55,7 @@ describe('typhen', () => {
 
   describe('.parse', () => {
     it('should return a parsed result', () => {
-      var result = typhen.parse(process.cwd() + '/test/fixtures/typings/ts_files/foo.ts');
+      const result = typhen.parse(process.cwd() + '/test/fixtures/typings/ts_files/foo.ts');
       assert(result.types.length > 0);
       assert(result.modules.length > 0);
     });
@@ -63,7 +63,7 @@ describe('typhen', () => {
 
   describe('.createPlugin', () => {
     it('should create the instance of Plugin', () => {
-      var response = typhen.createPlugin({
+      const response = typhen.createPlugin({
         pluginDirectory: 'templates',
         generate: function(types, generator) {}
       });
@@ -73,8 +73,8 @@ describe('typhen', () => {
 
   describe('.loadPlugin', () => {
     it('should load the specified instance of Plugin', () => {
-      var response = typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
-      var expected = process.cwd() + '/test/fixtures/plugin';
+      const response = typhen.loadPlugin('./test/fixtures/plugin/typhen-test');
+      const expected = process.cwd() + '/test/fixtures/plugin';
       assert(response instanceof plugin.Plugin);
       assert(response.pluginDirectory === expected);
     });

@@ -8,7 +8,7 @@ import * as helpers from '../../src/helpers';
 import * as localHandlebars from '../../src/local_handlebars';
 
 describe('localHandlebars', () => {
-  var sandbox = Sinon.sandbox.create();
+  const sandbox = Sinon.sandbox.create();
 
   afterEach(() => {
     sandbox.restore();
@@ -18,16 +18,16 @@ describe('localHandlebars', () => {
     describe('.and', () => {
       context('with truthy values', () => {
         it('should call options#fn', () => {
-          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
-          var response = localHandlebars.HandlebarsHelpers.and(true, ['foo'], 'bar', options);
+          const options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          const response = localHandlebars.HandlebarsHelpers.and(true, ['foo'], 'bar', options);
           assert(response === 'fn');
         });
       });
 
       context('with falsy values', () => {
         it('should call options#inverse', () => {
-          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
-          var response = localHandlebars.HandlebarsHelpers.and(true, [], 'bar', options);
+          const options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          const response = localHandlebars.HandlebarsHelpers.and(true, [], 'bar', options);
           assert(response === 'inverse');
         });
       });
@@ -36,16 +36,16 @@ describe('localHandlebars', () => {
     describe('.or', () => {
       context('with truthy values', () => {
         it('should call options#fn', () => {
-          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
-          var response = localHandlebars.HandlebarsHelpers.or(false, [], 0, options);
+          const options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          const response = localHandlebars.HandlebarsHelpers.or(false, [], 0, options);
           assert(response === 'fn');
         });
       });
 
       context('with falsy values', () => {
         it('should call options#inverse', () => {
-          var options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
-          var response = localHandlebars.HandlebarsHelpers.or(false, [], '', options);
+          const options = { fn: sandbox.stub().returns('fn'), inverse: sandbox.stub().returns('inverse') };
+          const response = localHandlebars.HandlebarsHelpers.or(false, [], '', options);
           assert(response === 'inverse');
         });
       });
@@ -53,7 +53,7 @@ describe('localHandlebars', () => {
 
     describe('.underscore', () => {
       it('should call Helpers.underscore', () => {
-        var spy = sandbox.spy(helpers, 'underscore');
+        const spy = sandbox.spy(helpers, 'underscore');
         localHandlebars.HandlebarsHelpers.underscore('App.FooBar.Qux');
         assert(spy.calledWith('App.FooBar.Qux'));
       });
@@ -61,7 +61,7 @@ describe('localHandlebars', () => {
 
     describe('.upperCamel', () => {
       it('should call Helpers.upperCamelCase', () => {
-        var spy = sandbox.spy(helpers, 'upperCamelCase');
+        const spy = sandbox.spy(helpers, 'upperCamelCase');
         localHandlebars.HandlebarsHelpers.upperCamel('app.foo_bar.qux');
         assert(spy.calledWith('app.foo_bar.qux'));
       });
@@ -69,7 +69,7 @@ describe('localHandlebars', () => {
 
     describe('.upperCamelCase', () => {
       it('should call Helpers.upperCamelCase', () => {
-        var spy = sandbox.spy(helpers, 'upperCamelCase');
+        const spy = sandbox.spy(helpers, 'upperCamelCase');
         localHandlebars.HandlebarsHelpers.upperCamelCase('app.foo_bar.qux');
         assert(spy.calledWith('app.foo_bar.qux'));
       });
@@ -77,7 +77,7 @@ describe('localHandlebars', () => {
 
     describe('.lowerCamel', () => {
       it('should call Helpers.lowerCamelCase', () => {
-        var spy = sandbox.spy(helpers, 'lowerCamelCase');
+        const spy = sandbox.spy(helpers, 'lowerCamelCase');
         localHandlebars.HandlebarsHelpers.lowerCamel('app.foo_bar.qux');
         assert(spy.calledWith('app.foo_bar.qux'));
       });
@@ -85,7 +85,7 @@ describe('localHandlebars', () => {
 
     describe('.lowerCamelCase', () => {
       it('should call Helpers.lowerCamelCase', () => {
-        var spy = sandbox.spy(helpers, 'lowerCamelCase');
+        const spy = sandbox.spy(helpers, 'lowerCamelCase');
         localHandlebars.HandlebarsHelpers.lowerCamelCase('app.foo_bar.qux');
         assert(spy.calledWith('app.foo_bar.qux'));
       });
@@ -93,7 +93,7 @@ describe('localHandlebars', () => {
 
     describe('.pluralize', () => {
       it('should call Helpers.pluralize', () => {
-        var spy = sandbox.spy(helpers, 'pluralize');
+        const spy = sandbox.spy(helpers, 'pluralize');
         localHandlebars.HandlebarsHelpers.pluralize('person');
         assert(spy.calledWith('person'));
       });
@@ -101,7 +101,7 @@ describe('localHandlebars', () => {
 
     describe('.singularize', () => {
       it('should call Helpers.singularize', () => {
-        var spy = sandbox.spy(helpers, 'singularize');
+        const spy = sandbox.spy(helpers, 'singularize');
         localHandlebars.HandlebarsHelpers.singularize('people');
         assert(spy.calledWith('people'));
       });
@@ -138,7 +138,7 @@ describe('localHandlebars', () => {
     });
 
     it('should register all helpers to Handlebars', () => {
-      var handlebarStub = (<Sinon.SinonStub>Handlebars.registerHelper);
+      const handlebarStub = (<Sinon.SinonStub>Handlebars.registerHelper);
 
       assert.deepEqual(handlebarStub.args.every(a => a[1] instanceof Function), true);
       assert.deepEqual(handlebarStub.args.map(a => a[0]), Object.keys(localHandlebars.HandlebarsHelpers));

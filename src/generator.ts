@@ -27,8 +27,8 @@ export default class Generator {
   }
 
   generateFiles(cwd: string, pattern: string, dest: string): void {
-    let resolvedCwd = this.env.resolvePath(this.pluginDirectory, cwd);
-    let resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
+    const resolvedCwd = this.env.resolvePath(this.pluginDirectory, cwd);
+    const resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
 
     this.env.glob(pattern, resolvedCwd).forEach(path => {
       this.generate(
@@ -53,7 +53,7 @@ export default class Generator {
     if (context instanceof symbol.Symbol) {
       dest = this.replaceStars(dest, <symbol.Symbol>context);
     }
-    let resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
+    const resolvedDest = this.env.resolvePath(this.outputDirectory, dest);
     let data: string;
 
     if (context !== null && /^.+\.hbs$/.test(src)) {
@@ -64,7 +64,7 @@ export default class Generator {
     }
 
     if (overwrite !== false || (!this.env.exists(resolvedDest) && this.files.every(f => f.path !== resolvedDest))) {
-      let file = this.createFile({
+      const file = this.createFile({
         cwd: this.env.currentDirectory,
         base: this.outputDirectory,
         path: resolvedDest,
@@ -84,12 +84,12 @@ export default class Generator {
   }
 
   replaceStars(str: string, symbol: symbol.Symbol, separator: string = '/'): string {
-    let matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
+    const matches = str.match(/(underscore|upperCamelCase|lowerCamelCase)?:?(.*\*.*)/);
     if (matches === null) { return str; }
-    let inflectionType = matches[1] || '';
-    let targetText = matches[2] || '';
+    const inflectionType = matches[1] || '';
+    const targetText = matches[2] || '';
 
-    let inflect = (name: string, inflectionType: string): string => {
+    const inflect = (name: string, inflectionType: string): string => {
       if (_.includes(name, '/')) { return name; }
 
       switch (inflectionType) {
@@ -106,7 +106,7 @@ export default class Generator {
   }
 
   private getFileFromPluginDirectory(fileName: string): string {
-    let filePath = this.env.resolvePath(this.pluginDirectory, fileName);
+    const filePath = this.env.resolvePath(this.pluginDirectory, fileName);
 
     if (!this.fileDataCache[filePath]) {
       this.fileDataCache[filePath] = this.env.readFile(filePath);
@@ -115,10 +115,10 @@ export default class Generator {
   }
 
   private getTemplate(templateName: string): HandlebarsTemplate {
-    let filePath = this.env.resolvePath(this.pluginDirectory, templateName);
+    const filePath = this.env.resolvePath(this.pluginDirectory, templateName);
 
     if (!this.templateCache[filePath]) {
-      let templateSource = this.getFileFromPluginDirectory(filePath);
+      const templateSource = this.getFileFromPluginDirectory(filePath);
       logger.debug('Compiling the Template: ' + templateName);
       this.templateCache[filePath] = localHandlebars.handlebars.compile(templateSource);
     }

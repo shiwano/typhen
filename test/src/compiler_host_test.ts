@@ -7,9 +7,9 @@ import * as Sinon from 'sinon';
 import CompilerHost from '../../src/compiler_host';
 
 describe('CompilerHost', () => {
-  var sandbox = Sinon.sandbox.create();
-  var instance: CompilerHost;
-  var env = new helper.TestEnvironment({
+  const sandbox = Sinon.sandbox.create();
+  let instance: CompilerHost;
+  const env = new helper.TestEnvironment({
     '/test.d.ts': '# test'
   });
 
@@ -24,15 +24,15 @@ describe('CompilerHost', () => {
   describe('#getSourceFile', () => {
     context('with a valid file name', () => {
       it('should return the instance of SourceFile which has the specified file data', () => {
-        var languageVersion = ts.ScriptTarget.ES5;
-        var expected = '# test';
+        const languageVersion = ts.ScriptTarget.ES5;
+        const expected = '# test';
         assert(instance.getSourceFile('/test.d.ts', languageVersion).text === expected);
       });
     });
 
     context('with a file name which does not exists', () => {
       it('should throw the error', () => {
-        var languageVersion = ts.ScriptTarget.ES5;
+        const languageVersion = ts.ScriptTarget.ES5;
         assert.throws(() => instance.getSourceFile('', languageVersion), /Failed to read/);
       });
     });
@@ -68,15 +68,15 @@ describe('CompilerHost', () => {
       });
 
       it('should return the given file name', () => {
-        var fileName = 'CanonicleFileName';
+        const fileName = 'CanonicleFileName';
         assert(instance.getCanonicalFileName(fileName) === fileName);
       });
     });
 
     context('when useCaseSensitiveFileNames is false', () => {
       it('should return the lower cased file name', () => {
-        var fileName = 'CanonicleFileName';
-        var expected = 'canoniclefilename';
+        const fileName = 'CanonicleFileName';
+        const expected = 'canoniclefilename';
         assert(instance.getCanonicalFileName(fileName) === expected);
       });
     });

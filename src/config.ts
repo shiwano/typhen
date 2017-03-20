@@ -66,14 +66,14 @@ export class Config implements ConfigObject {
   }
 
   getTypingDirectory(src: string[]): string {
-    let dirnames = src.map(s => {
-      let resolvedPath = this.env.resolvePath(s);
+    const dirnames = src.map(s => {
+      const resolvedPath = this.env.resolvePath(s);
       return this.env.dirname(resolvedPath).replace('\\', '/');
     });
     if (!dirnames.every(d => _.includes(d, this.cwd))) { return this.cwd; }
 
-    let minDirCount = _.min(dirnames.map(d => d.split('/').length));
-    let minDirnames = dirnames.filter(d => d.split('/').length === minDirCount);
+    const minDirCount = _.min(dirnames.map(d => d.split('/').length));
+    const minDirnames = dirnames.filter(d => d.split('/').length === minDirCount);
     return minDirnames.every(d => d === minDirnames[0]) ? minDirnames[0] : this.cwd;
   }
 }

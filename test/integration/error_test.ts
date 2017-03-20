@@ -9,7 +9,7 @@ import typhen = require('../../src/index');
 import * as logger from '../../src/logger';
 
 describe('Error Test', () => {
-  var errorFileNames = glob.sync('./test/fixtures/typings/errors/**/*.ts');
+  const errorFileNames = glob.sync('./test/fixtures/typings/errors/**/*.ts');
   let logLevelCache: logger.LogLevel;
 
   before(() => {
@@ -23,7 +23,7 @@ describe('Error Test', () => {
 
   errorFileNames.forEach((errorFileName) => {
     context(errorFileName.replace('./test/fixtures/typings/errors/', ''), () => {
-      var plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
+      const plugin = typhen.loadPlugin('./test/fixtures/plugin/typhen-test', {
         author: 'shiwano'
       });
 

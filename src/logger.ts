@@ -37,7 +37,7 @@ namespace Logger {
   export function yellow(text: string):    string { return colorEnabled ? chalk.yellow(text).toString() : text; }
 
   export function getDateTimeString(): string {
-    let date = new Date();
+    const date = new Date();
     return [date.getHours(), date.getMinutes(), date.getSeconds()]
       .map(n => n.toString())
       .map(n => n.length === 1 ? '0' + n : n)

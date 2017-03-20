@@ -5,8 +5,8 @@ import * as Sinon from 'sinon';
 import Generator from '../../src/generator';
 
 describe('Generator', () => {
-  var sandbox = Sinon.sandbox.create();
-  var instance: Generator;
+  const sandbox = Sinon.sandbox.create();
+  let instance: Generator;
 
   beforeEach(() => {
     instance = helper.createGenerator();
@@ -41,10 +41,10 @@ describe('Generator', () => {
   });
 
   describe('#generate', () => {
-    var data = helper.createEnum();
+    const data = helper.createEnum();
 
     context('with a file name', () => {
-      var generated = 'This is README.';
+      const generated = 'This is README.';
 
       it('should return the file data', () => {
         assert((instance.generate('README.md', 'README.md').contents || '').toString() === generated);
@@ -52,7 +52,7 @@ describe('Generator', () => {
     });
 
     context('with a Handlebars template file name', () => {
-      var generated = 'FooType\nBar: 0\nBaz: 1\n';
+      const generated = 'FooType\nBar: 0\nBaz: 1\n';
 
       it('should return the generated data by Handlebars', () => {
         assert((instance.generate('enum.hbs', 'underscore:**/*.txt', data).contents || '').toString() === generated);
@@ -60,7 +60,7 @@ describe('Generator', () => {
     });
 
     context('when overwrite argument is false', () => {
-      var generated = 'This is README.';
+      const generated = 'This is README.';
 
       it('should not overwrite a existing file', () => {
         instance.generate('README.md', 'README.md', false);
@@ -76,7 +76,7 @@ describe('Generator', () => {
   });
 
   describe('#replaceStars', () => {
-    var type = helper.createEnum();
+    const type = helper.createEnum();
 
     context('with a file name which does not have stars', () => {
       it('should return the given file name', () => {

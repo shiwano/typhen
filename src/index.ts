@@ -17,7 +17,7 @@ namespace Typhen {
   export const helpers = typhenHelpers;
 
   export function run(configArgs: config.ConfigObject): Promise<Vinyl[]> {
-    let runningConfig = new config.Config(configArgs);
+    const runningConfig = new config.Config(configArgs);
     return new runner.Runner(runningConfig).run();
   }
 
@@ -29,17 +29,17 @@ namespace Typhen {
     if (fileName.match(/tsconfig.json$/) === null) {
       throw new Error('No tsconfig file: ' + fileName);
     }
-    let tsconfig = require(fileName);
+    const tsconfig = require(fileName);
     if (!_.isObject(tsconfig.typhen)) {
       throw new Error('tsconfig.json does not have typhen property');
     }
-    let basePath = fileName.replace(/tsconfig.json$/, '');
-    let { options: compilerOptions, errors } = ts.convertCompilerOptionsFromJson(tsconfig.compilerOptions, basePath);
+    const basePath = fileName.replace(/tsconfig.json$/, '');
+    const { options: compilerOptions, errors } = ts.convertCompilerOptionsFromJson(tsconfig.compilerOptions, basePath);
     if (errors.length > 0) {
       throw new Error('Failed to convert the compiler options: ' + errors);
     }
 
-    let promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
+    const promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
       return Typhen.run({
         plugin: Typhen.loadPlugin(config.plugin, config.pluginOptions),
         src: config.files || tsconfig.files,
@@ -54,7 +54,7 @@ namespace Typhen {
   }
 
   export function parse(src: string | string[], compilerOptions?: ts.CompilerOptions): runner.ParsedResult {
-    let parsingConfig = new config.Config({
+    const parsingConfig = new config.Config({
       plugin: plugin.Plugin.Empty(),
       src: src,
       dest: '',
@@ -72,7 +72,7 @@ namespace Typhen {
     try {
       return <plugin.Plugin>require(pluginName)(Typhen, options);
     } catch (e) {
-      let resolvedPath = path.resolve(pluginName);
+      const resolvedPath = path.resolve(pluginName);
       return <plugin.Plugin>require(resolvedPath)(Typhen, options);
     }
   }

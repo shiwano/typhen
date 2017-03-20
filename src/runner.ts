@@ -19,11 +19,11 @@ export class Runner {
 
   parse(): ParsedResult {
     logger.log(logger.underline('Parsing TypeScript files'));
-    let parser = new TypeScriptParser(this.config.src, this.config);
+    const parser = new TypeScriptParser(this.config.src, this.config);
     parser.parse();
     parser.validate();
     parser.sourceFiles.forEach(sourceFile => {
-      let relative = this.config.env.relativePath(sourceFile.fileName);
+      const relative = this.config.env.relativePath(sourceFile.fileName);
       logger.info('Parsed', logger.cyan(relative));
     });
 
@@ -36,27 +36,27 @@ export class Runner {
   run(): Promise<Vinyl[]> {
     return new Promise<Vinyl[]>((resolve, reject) => {
       logger.log(logger.underline('Parsing TypeScript files'));
-      let parser = new TypeScriptParser(this.config.src, this.config);
+      const parser = new TypeScriptParser(this.config.src, this.config);
       parser.parse();
       parser.validate();
       parser.sourceFiles.forEach(sourceFile => {
-        let relative = this.config.env.relativePath(sourceFile.fileName);
+        const relative = this.config.env.relativePath(sourceFile.fileName);
         logger.info('Parsed', logger.cyan(relative));
       });
 
       logger.log(logger.underline('Generating files'));
 
-      let generator = new Generator(this.config.env, this.config.dest,
+      const generator = new Generator(this.config.env, this.config.dest,
           this.config.plugin.pluginDirectory, this.config.plugin.handlebarsOptions);
-      let generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);
+      const generateResult = this.config.plugin.generate(generator, parser.types, parser.modules);
 
-      let afterGenerate = () => {
+      const afterGenerate = () => {
         generator.files.forEach(file => {
           if (file.contents === null) { return; }
           if (!this.config.noWrite) {
             this.config.env.writeFile(file.path, file.contents.toString());
           }
-          let relative = this.config.env.relativePath(file.path);
+          const relative = this.config.env.relativePath(file.path);
           logger.info('Generated', logger.cyan(relative));
         });
         parser.types.forEach(t => t.destroy(true));

@@ -12,10 +12,10 @@ describe('symbol', () => {
   });
 
   describe('.Enum', () => {
-    var instance: symbol.Enum;
+    let instance: symbol.Enum;
 
     beforeEach(() => {
-      var config = helper.createConfig();
+      const config = helper.createConfig();
       instance = helper.createEnum(config);
     });
 
@@ -42,7 +42,7 @@ describe('symbol', () => {
 
       context('when it has assumedName', () => {
         beforeEach(() => {
-          var config = helper.createConfig();
+          const config = helper.createConfig();
           instance = helper.createEnum(config, 'SuperFooEnum');
         });
 

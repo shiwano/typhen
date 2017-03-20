@@ -6,8 +6,8 @@ import * as Sinon from 'sinon';
 import * as logger from '../../src/logger';
 
 describe('logger', () => {
-  var sandbox = Sinon.sandbox.create();
-  var logStub: Sinon.SinonStub;
+  const sandbox = Sinon.sandbox.create();
+  let logStub: Sinon.SinonStub;
 
   beforeEach(() => {
     logger.enableColor(false);

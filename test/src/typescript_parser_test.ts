@@ -7,18 +7,18 @@ import * as symbol from '../../src/symbol';
 import TypeScriptParser from '../../src/typescript_parser';
 
 describe('TypeScriptParser', () => {
-  var instance: TypeScriptParser;
-  var definitionPath = 'test/fixtures/typings/integration/index.d.ts';
+  let instance: TypeScriptParser;
+  const definitionPath = 'test/fixtures/typings/integration/index.d.ts';
 
   describe('#sourceFiles', () => {
     beforeEach(() => {
-      var config = helper.createConfig();
+      const config = helper.createConfig();
       instance = new TypeScriptParser([definitionPath], config);
       instance.parse();
     });
 
     it('should return loaded instances of ts.SourceFile', () => {
-      var expected = [
+      const expected = [
         'test/fixtures/typings/integration/color/color.d.ts',
         'test/fixtures/typings/integration/type.d.ts',
         'test/fixtures/typings/integration/rpc.d.ts',
@@ -31,13 +31,13 @@ describe('TypeScriptParser', () => {
   describe('#parse', () => {
     context('when *.d.ts files as non external modules are given', () => {
       beforeEach(() => {
-        var config = helper.createConfig();
-        var instance = new TypeScriptParser([definitionPath], config);
+        const config = helper.createConfig();
+        const instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse types', () => {
-        var expected = [
+        const expected = [
           // Runtime
           'StringAndString[]UnionType',
           'string[]', // This type is created by UnionType declaration.
@@ -94,56 +94,56 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse modules', () => {
-        var expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type', 'Type.Namespace'].sort();
+        const expected = ['Global', 'Rpc.Get', 'Rpc.Post', 'Rpc', 'Type', 'Type.Namespace'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
 
     context('when *.d.ts files as external modules are given', () => {
-      var definitionPath = 'test/fixtures/typings/externals/foo.d.ts';
+      const definitionPath = 'test/fixtures/typings/externals/foo.d.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath);
+        const config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse types', () => {
-        var expected = ['foo.A.Foo', 'bar.Bar'].sort();
+        const expected = ['foo.A.Foo', 'bar.Bar'].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
 
       it('should parse modules', () => {
-        var expected = ['foo', 'foo.A', 'bar'].sort();
+        const expected = ['foo', 'foo.A', 'bar'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
 
     context('when *.ts files are given', () => {
-      var definitionPath = 'test/fixtures/typings/ts_files/foo.ts';
+      const definitionPath = 'test/fixtures/typings/ts_files/foo.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath);
+        const config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse types', () => {
-        var expected = ['foo.A.Foo', 'bar.Bar', 'void', 'string'].sort();
+        const expected = ['foo.A.Foo', 'bar.Bar', 'void', 'string'].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
 
       it('should parse modules', () => {
-        var expected = ['foo', 'foo.A', 'bar'].sort();
+        const expected = ['foo', 'foo.A', 'bar'].sort();
         assert.deepEqual(instance.modules.map(t => t.fullName), expected);
       });
     });
 
     context('when *.tsx files are given', () => {
-      var definitionPath = 'test/fixtures/typings/tsx_files/index.tsx';
+      const definitionPath = 'test/fixtures/typings/tsx_files/index.tsx';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath, { jsx: true });
+        const config = helper.createConfig(definitionPath, { jsx: true });
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
@@ -154,11 +154,11 @@ describe('TypeScriptParser', () => {
     });
 
     context('when ts files that includes decorators are given', () => {
-      var definitionPath = 'test/fixtures/typings/decorators/index.ts';
-      var decoratedClass: symbol.Class;
+      const definitionPath = 'test/fixtures/typings/decorators/index.ts';
+      let decoratedClass: symbol.Class;
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath);
+        const config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
         decoratedClass = instance.types.filter(t => t.name === 'DecoratedClass')[0] as symbol.Class;
@@ -170,8 +170,8 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse property decorators', () => {
-        var decoratedProperty = decoratedClass.properties.filter(p => p.name === 'decoratedProperty')[0];
-        var decoratedProperty2 = decoratedClass.properties.filter(p => p.name === 'decoratedProperty2')[0];
+        const decoratedProperty = decoratedClass.properties.filter(p => p.name === 'decoratedProperty')[0];
+        const decoratedProperty2 = decoratedClass.properties.filter(p => p.name === 'decoratedProperty2')[0];
         assert(decoratedProperty.decorators.length === 1);
         assert(decoratedProperty2.decorators.length === 1);
         assert.deepEqual(decoratedProperty.decorators[0].argumentTable, {
@@ -189,7 +189,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse method decorators', () => {
-        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0];
+        const decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0];
         assert(decoratedMethod.decorators.length === 2);
         assert.deepEqual(decoratedMethod.decorators[0].argumentTable, {});
         assert.deepEqual(decoratedMethod.decorators[1].argumentTable, {});
@@ -198,18 +198,18 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse parameter decorators', () => {
-        var decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0] as symbol.Method;
-        var decoratedParameter =  decoratedMethod.callSignatures[0].parameters[0];
+        const decoratedMethod = decoratedClass.methods.filter(p => p.name === 'decoratedMethod')[0] as symbol.Method;
+        const decoratedParameter =  decoratedMethod.callSignatures[0].parameters[0];
         assert(decoratedParameter.decorators.length === 1);
         assert.deepEqual(decoratedParameter.decorators[0].argumentTable, {});
       });
     });
 
     context('when ES6 files are given', () => {
-      var definitionPath = 'test/fixtures/typings/es6/index.ts';
+      const definitionPath = 'test/fixtures/typings/es6/index.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath, {
+        const config = helper.createConfig(definitionPath, {
           module: ts.ModuleKind.None,
           target: ts.ScriptTarget.ES2015
         });
@@ -218,7 +218,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse types', () => {
-        var expected = [
+        const expected = [
           // ToPrimitive
           '\"default\"',
           '\"number\"',
@@ -236,7 +236,7 @@ describe('TypeScriptParser', () => {
       });
 
       it('should parse @@toPrimitive method', () => {
-        var type = <symbol.Interface>instance.types
+        const type = <symbol.Interface>instance.types
             .filter(t => t.fullName === 'ToPrimitive')[0];
         assert(type.methods.length === 0);
         assert(type.builtInSymbolMethods[0].name === '@@toPrimitive');
@@ -244,41 +244,41 @@ describe('TypeScriptParser', () => {
     });
 
     context('when ts files for signature test are given', () => {
-      var definitionPath = 'test/fixtures/typings/signature/index.ts';
+      const definitionPath = 'test/fixtures/typings/signature/index.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath);
+        const config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
 
       it('should parse parent modules', () => {
-        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        const func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
         assert(func.callSignatures[0].namespace, 'Module1.Module2');
       });
 
       it('should parse the call signature name', () => {
-        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        const func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
         assert(func.callSignatures[0].name === 'func');
       });
 
       it('should parse the documentation comment', () => {
-        var func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
+        const func = instance.types.filter(t => t.name === 'func')[0] as symbol.Function;
         assert(func.callSignatures[0].comment === 'Comment');
       });
 
       it('should parse decorators', () => {
-        var aClass = instance.types.filter(t => t.name === 'A')[0] as symbol.Class;
-        var decoratedMethod = aClass.methods.filter(m => m.name === 'method')[0];
+        const aClass = instance.types.filter(t => t.name === 'A')[0] as symbol.Class;
+        const decoratedMethod = aClass.methods.filter(m => m.name === 'method')[0];
         assert(decoratedMethod.decorators.length === 1);
       });
     });
 
     context('when ts files for never type test are given', () => {
-      var definitionPath = 'test/fixtures/typings/never/index.ts';
+      const definitionPath = 'test/fixtures/typings/never/index.ts';
 
       beforeEach(() => {
-        var config = helper.createConfig(definitionPath);
+        const config = helper.createConfig(definitionPath);
         instance = new TypeScriptParser([definitionPath], config);
         instance.parse();
       });
@@ -290,7 +290,7 @@ describe('TypeScriptParser', () => {
   });
 
   describe('#validate', () => {
-    var config = helper.createConfig();
+    const config = helper.createConfig();
 
     beforeEach(() => {
       instance = new TypeScriptParser([definitionPath], config);
