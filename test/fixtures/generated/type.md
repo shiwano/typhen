@@ -46,6 +46,7 @@ No Imported Types.
 * C
 * Animal
 * Cat
+* MappedTypeParam
 
 ## Classes
 
@@ -92,9 +93,15 @@ No Imported Types.
   * Type - never
 * enumLiteralType
   * Type - EnumLiterals.EnumLiteralA
+* MappedType
+  * Type - MappedType
+* RealMappedType
+  * Type - MappedTypeOfMappedTypeParam
 
 ## AnonymousTypes
 
 * ColoredSquareSetColorCallbackFunction
 * LineSetColorCallbackFunction
+* MappedType
+* MappedTypeOfMappedTypeParam
 * Predicate

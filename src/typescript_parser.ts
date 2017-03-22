@@ -94,6 +94,22 @@ export default class TypeScriptParser {
     return symbol;
   }
 
+  private getMappedTypeOrigin(symbol: ts.Symbol): ts.Symbol {
+    const mappedTypeOrigin = (symbol as any).mappedTypeOrigin;
+    if (mappedTypeOrigin === undefined) { throw new Error('Failed to get a mappedTypeOrigin'); }
+    return mappedTypeOrigin;
+  }
+
+  private tryGetMappedTypeNode(type: ts.Type): ts.MappedTypeNode | undefined {
+    const node = (type as any).declaration as ts.MappedTypeNode;
+    if (node === undefined || node.kind !== ts.SyntaxKind.MappedType) { return undefined; }
+    return node;
+  }
+
+  private tryGetTemplateType(type: ts.ObjectType): ts.Type | undefined {
+    return (type as any).templateType;
+  }
+
   private checkFlags(flagsA: number, flagsB: number): boolean {
     return (flagsA & flagsB) > 0;
   }
@@ -104,7 +120,7 @@ export default class TypeScriptParser {
   }
 
   private makeErrorWithTypeInfo(message: string, type: ts.Type): Error {
-    const typeInfo = ': TypeFlags: ' + type.flags;
+    const typeInfo = ': Type: ' + this.typeChecker.typeToString(type) + ' TypeFlags: ' + type.flags;
     if (type.symbol) {
       return this.makeErrorWithSymbolInfo(message + typeInfo, type.symbol);
     } else {
@@ -113,8 +129,11 @@ export default class TypeScriptParser {
   }
 
   private makeErrorWithSymbolInfo(message: string, symbol: ts.Symbol): Error {
+    let symbolInfo = 'Symbol: ' + this.typeChecker.symbolToString(symbol);
     const infos = this.getDeclarationInfos(symbol);
-    const symbolInfo = infos.length > 0 ? ': ' + infos.map(d => d.toString()).join(',') : '';
+    if (infos.length > 0) {
+      symbolInfo += ' DeclarationInfos: ' + infos.map(d => d.toString()).join(',');
+    }
     return new Error(message + symbolInfo);
   }
 
@@ -156,12 +175,14 @@ export default class TypeScriptParser {
         this.parseUnionType(<ts.UnionType>type);
       } else if (type.flags & ts.TypeFlags.Intersection) {
         this.parseIntersectionType(<ts.IntersectionType>type);
+      } else if (type.flags & ts.TypeFlags.Index) {
+        this.parseIndexType(<ts.IndexType>type);
       } else if (type.flags & ts.TypeFlags.Object &&
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Reference &&
                 (<ts.TypeReference>type).target.objectFlags & ts.ObjectFlags.Tuple)  {
         this.parseTuple(<ts.TypeReference>type);
       } else if (type.flags & ts.TypeFlags.IndexedAccess) {
-        return this.emptyType;
+        return this.parseIndexedAccessType(<ts.IndexedAccessType>type);
       } else if (type.flags & ts.TypeFlags.Object &&
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
@@ -180,7 +201,8 @@ export default class TypeScriptParser {
         } else {
           this.parseGenericType<Symbol.Interface>(<ts.GenericType>type, Symbol.Interface);
         }
-      } else if (type.symbol.flags & ts.SymbolFlags.TypeLiteral) {
+      } else if ((type.flags & ts.TypeFlags.Object && (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous) ||
+          type.symbol.flags & ts.SymbolFlags.TypeLiteral) {
         if (_.isEmpty(type.getCallSignatures())) {
           this.parseObjectType(<ts.ObjectType>type);
         } else {
@@ -556,27 +578,45 @@ export default class TypeScriptParser {
 
     this.typeReferenceStack.pop();
     return <T>typhenType.initialize(properties, methods, builtInSymbolMethods,
-        stringIndex, numberIndex, constructorSignatures, callSignatures,
-        baseTypes, typeReference, staticProperties, staticMethods, isAbstract);
+        stringIndex, numberIndex, null, typeReference, constructorSignatures, callSignatures,
+        baseTypes, staticProperties, staticMethods, isAbstract);
   }
 
   private parseObjectType(type: ts.ObjectType): Symbol.ObjectType {
     const typhenType = this.createTyphenType<Symbol.ObjectType>(type, Symbol.ObjectType, 'Object');
+    const mappedTypeNode = this.tryGetMappedTypeNode(type);
+    const hasReadonlyToken = mappedTypeNode && mappedTypeNode.readonlyToken !== undefined;
+    const hasQuestionToken = mappedTypeNode && mappedTypeNode.readonlyToken !== undefined;
+    const rawTemplateType = this.tryGetTemplateType(type);
 
+    const templateType = rawTemplateType ? this.parseType(rawTemplateType) : null;
     const properties = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined)
-        .map(s => this.parseProperty(s));
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property))
+        .map(s => this.parseProperty(s, true, hasQuestionToken, hasReadonlyToken));
     const rawMethods = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined)
-        .map(s => this.parseMethod(s));
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method))
+        .map(s => this.parseMethod(s, true, hasQuestionToken));
     const methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     const builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
 
     const indexInfos = this.parseIndexInfos(<any>type as ts.InterfaceTypeWithDeclaredMembers);
     const stringIndex = indexInfos.stringIndex;
     const numberIndex = indexInfos.numberIndex;
+    return typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, templateType);
+  }
 
-    return typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
+  private parseIndexType(type: ts.IndexType): Symbol.IndexType {
+    const typhenType = this.createTyphenType<Symbol.IndexType>(type, Symbol.IndexType);
+    const containedType = this.parseType(type.type);
+    return typhenType.initialize(containedType);
+  }
+
+  private parseIndexedAccessType(type: ts.IndexedAccessType): Symbol.IndexedAccessType {
+    const typhenType = this.createTyphenType<Symbol.IndexedAccessType>(type, Symbol.IndexedAccessType);
+    const objectType = this.parseType(type.objectType);
+    const indexType = this.parseType(type.indexType);
+    const constraint = type.constraint ? this.parseType(type.constraint) : null;
+    return typhenType.initialize(objectType, indexType, constraint);
   }
 
   private parseArray(type: ts.GenericType): Symbol.Array {
@@ -676,29 +716,32 @@ export default class TypeScriptParser {
     return typhenType.initialize(enumType, enumMember);
   }
 
-  private parseProperty(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Property {
-    if (!symbol.valueDeclaration) {
+  private parseProperty(symbol: ts.Symbol, isOwn: boolean = true,
+      isOptional: boolean = false, isReadonly: boolean = false): Symbol.Property {
+    let valueDeclaration = symbol.valueDeclaration || this.getMappedTypeOrigin(symbol).valueDeclaration;
+    if (!valueDeclaration) {
       throw this.makeErrorWithSymbolInfo('Failed to parse property', symbol);
     }
-    const type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    const type = this.typeChecker.getTypeAtLocation(valueDeclaration);
     const propertyType = this.parseType(type);
-    const isOptional = (<ts.PropertyDeclaration>symbol.valueDeclaration).questionToken != null;
-    const isProtected = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.ProtectedKeyword);
-    const isReadOnly = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword);
-    const isAbstract = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
+    isOptional = isOptional || (<ts.PropertyDeclaration>valueDeclaration).questionToken != null;
+    isReadonly = isReadonly || this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword);
+    const isProtected = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ProtectedKeyword);
+    const isAbstract = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 
     const typhenSymbol = this.createTyphenSymbol<Symbol.Property>(symbol, Symbol.Property);
-    return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected, isReadOnly, isAbstract);
+    return typhenSymbol.initialize(propertyType, isOptional, isOwn, isProtected, isReadonly, isAbstract);
   }
 
-  private parseMethod(symbol: ts.Symbol, isOwn: boolean = true): Symbol.Method {
-    if (!symbol.valueDeclaration) {
+  private parseMethod(symbol: ts.Symbol, isOwn: boolean = true, isOptional: boolean = false): Symbol.Method {
+    let valueDeclaration = symbol.valueDeclaration || this.getMappedTypeOrigin(symbol).valueDeclaration;
+    if (!valueDeclaration) {
       throw this.makeErrorWithSymbolInfo('Failed to parse method', symbol);
     }
-    const type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+    const type = this.typeChecker.getTypeAtLocation(valueDeclaration);
     const callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
-    const isOptional = (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
-    const isAbstract = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
+    isOptional = isOptional || (<ts.MethodDeclaration>valueDeclaration).questionToken != null;
+    const isAbstract = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 
     const typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isAbstract);

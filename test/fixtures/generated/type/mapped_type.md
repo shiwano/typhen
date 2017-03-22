@@ -1,6 +1,6 @@
-# Rpc.Post.SetOptionsOptionsObject
+# Type.MappedType
 
-* [test/fixtures/typings/integration/rpc.d.ts](/test/fixtures/typings/integration/rpc.d.ts#L17)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L115)
 
 No comment.
 
@@ -10,7 +10,8 @@ ObjectType
 
 ## TemplateType
 
-No templateType.
+ObjectType|IndexType|Constraint
+T|P|
 
 ## Properties
 
@@ -22,11 +23,7 @@ Methods is empty.
 
 ## StringIndex
 
-string
-
-### IsReadonly
-
-true
+StringIndex is undefined.
 
 ## NumberIndex
 

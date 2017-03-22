@@ -1,6 +1,6 @@
-# Rpc.Get.GetRangeObject
+# Type.MappedTypeOfMappedTypeParam
 
-* [test/fixtures/typings/integration/rpc.d.ts](/test/fixtures/typings/integration/rpc.d.ts#L13)
+* [test/fixtures/typings/integration/type.d.ts](/test/fixtures/typings/integration/type.d.ts#L115)
 
 No comment.
 
@@ -10,13 +10,15 @@ ObjectType
 
 ## TemplateType
 
-No templateType.
+ObjectType|IndexType|Constraint
+MappedTypeParam|P|
 
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
 ---|---|---|---|---|---|---|---|---
-range|RangeOfNumber|false|true|false|false|false||
+property|number|true|true|false|true|false||
+method|method|true|true|false|true|false||
 
 ## Methods
 

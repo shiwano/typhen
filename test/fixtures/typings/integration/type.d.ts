@@ -111,4 +111,13 @@ declare module Type {
 
   enum EnumLiterals { EnumLiteralA = 1, EnumLiteralB = 2, }
   type enumLiteralType = EnumLiterals.EnumLiteralA;
+
+  type MappedType<T> = {
+    readonly [P in keyof T]?: T[P];
+  };
+  interface MappedTypeParam {
+    property: number;
+    method(): boolean;
+  }
+  type RealMappedType = MappedType<MappedTypeParam>;
 }

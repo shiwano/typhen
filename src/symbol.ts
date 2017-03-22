@@ -19,6 +19,8 @@ export enum SymbolKind {
   Tuple,
   UnionType,
   IntersectionType,
+  IndexType,
+  IndexedAccessType,
   StringLiteralType,
   BooleanLiteralType,
   NumberLiteralType,
@@ -201,6 +203,8 @@ export class Symbol {
   get isTuple(): boolean { return this.kind === SymbolKind.Tuple; }
   get isUnionType(): boolean { return this.kind === SymbolKind.UnionType; }
   get isIntersectionType(): boolean { return this.kind === SymbolKind.IntersectionType; }
+  get isIndexType(): boolean { return this.kind === SymbolKind.IndexType; }
+  get isIndexedAccessType(): boolean { return this.kind === SymbolKind.IndexedAccessType; }
   get isStringLiteralType(): boolean { return this.kind === SymbolKind.StringLiteralType; }
   get isBooleanLiteralType(): boolean { return this.kind === SymbolKind.BooleanLiteralType; }
   get isNumberLiteralType(): boolean { return this.kind === SymbolKind.NumberLiteralType; }
@@ -367,24 +371,48 @@ export class ObjectType extends Type {
   builtInSymbolMethods: Method[] = [];
   stringIndex: IndexInfo | null = null;
   numberIndex: IndexInfo | null = null;
+  templateType: Type | null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
+  get assumedName(): string {
+    if (this.templateType instanceof IndexedAccessType) {
+      return this.getAssumedNameFromIndexedAccessType(this.templateType);
+    } else if (this.templateType instanceof UnionType &&
+        this.templateType.types.some(t => t.isIndexedAccessType)) {
+      const indexedAccessType = this.templateType.types.filter(t => t.isIndexedAccessType)[0] as IndexedAccessType;
+      return this.getAssumedNameFromIndexedAccessType(indexedAccessType);
+    } else {
+      return this.rawAssumedName;
+    }
+  }
+
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
+      templateType: Type | null,
       ...forOverride: any[]): ObjectType {
     this.properties = properties;
     this.methods = methods;
     this.builtInSymbolMethods = builtInSymbolMethods;
     this.stringIndex = stringIndex;
     this.numberIndex = numberIndex;
+    this.templateType = templateType;
     return this;
   }
 
   validate(): void | string {
     if (this.config.plugin.disallow.anonymousObject && this.isAnonymousType) {
       return 'Disallow toe define an anonymous object';
+    }
+  }
+
+  private getAssumedNameFromIndexedAccessType(indexedAccessType: IndexedAccessType) {
+    if (indexedAccessType.objectType.isTypeParameter) {
+      return this.rawAssumedName;
+    } else {
+      const objectTypeName = inflection.classify(indexedAccessType.objectType.name);
+      return this.rawAssumedName + 'Of' + objectTypeName;
     }
   }
 }
@@ -431,10 +459,11 @@ export class Interface extends ObjectType {
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
-      constructorSignatures: Signature[],
-      callSignatures: Signature[], baseTypes: Interface[], typeReference: TypeReference,
+      indexedAccessType: IndexedAccessType | null,
+      typeReference: TypeReference, constructorSignatures: Signature[],
+      callSignatures: Signature[], baseTypes: Interface[],
       staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
-    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, indexedAccessType);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;
@@ -547,6 +576,40 @@ export class IntersectionType extends Type {
     if (this.config.plugin.disallow.intersectionType) {
       return 'Disallow to define an intersection type';
     }
+  }
+}
+
+export class IndexType extends Type {
+  kind: SymbolKind = SymbolKind.IndexType;
+
+  type: Type;
+
+  get assumedName(): string {
+    return 'Keyof' + this.type.name;
+  }
+
+  initialize(type: Type): IndexType {
+    this.type = type;
+    return this;
+  }
+}
+
+export class IndexedAccessType extends Type {
+  kind: SymbolKind = SymbolKind.IndexedAccessType;
+
+  objectType: Type;
+  indexType: Type;
+  constraint: Type | null;
+
+  get assumedName(): string {
+    return this.objectType.name + '[' + this.indexType.name + ']';
+  }
+
+  initialize(objectType: Type, indexType: Type, constraint: Type | null): IndexedAccessType {
+    this.objectType = objectType;
+    this.indexType = indexType;
+    this.constraint = constraint;
+    return this;
   }
 }
 

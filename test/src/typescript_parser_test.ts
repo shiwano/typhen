@@ -68,7 +68,7 @@ describe('TypeScriptParser', () => {
           // Abstract Class
           'Type.AbstractClass',
           // TypeParameter
-          'Type.T', 'Type.T', 'Type.T',
+          'Type.T', 'Type.T', 'Type.T', 'Type.T', 'Type.P',
           // PrimitiveType
           'boolean', 'number', 'symbol', 'string', 'void', 'any', 'integer',
           // Decorator
@@ -88,7 +88,17 @@ describe('TypeScriptParser', () => {
           'never',
           // EnumLiteralType
           'Type.EnumLiterals',
-          'Type.EnumLiterals.EnumLiteralA'
+          'Type.EnumLiterals.EnumLiteralA',
+          // Types for MappedType
+          'Type.MappedType',
+          'Type.MappedTypeParam',
+          'Type.MappedTypeOfMappedTypeParam',
+          'Type.method', // MappedType convert interface method to anonymous function.
+          // IndexedAccessType
+          'T[P]',
+          'MappedTypeParam[P]',
+          // IndexType
+          'KeyofT'
         ].sort();
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });

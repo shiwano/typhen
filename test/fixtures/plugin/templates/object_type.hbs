@@ -18,6 +18,15 @@ No comment.
 
 ObjectType
 
+## TemplateType
+
+{{#if templateType}}
+ObjectType|IndexType|Constraint
+{{templateType.objectType}}|{{templateType.indexType}}|{{templateType.constraint}}
+{{else}}
+No templateType.
+{{/if}}
+
 ## Properties
 
 {{#if properties}}
