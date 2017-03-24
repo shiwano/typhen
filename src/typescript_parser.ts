@@ -468,14 +468,15 @@ export default class TypeScriptParser {
     }
     const typhenType = this.createTyphenType<Symbol.Enum>(type, Symbol.Enum);
     const isConst = this.checkFlags(type.symbol.valueDeclaration.flags, ts.NodeFlags.Const);
+    let memberValue = -1;
     const members = _((<ts.EnumDeclaration>type.symbol.valueDeclaration).members)
       .map((memberNode: ts.EnumMember) => {
         const memberSymbol = this.getSymbolAtLocation(memberNode);
         const value = this.typeChecker.getConstantValue(memberNode);
+        memberValue = typeof value === 'number' ? value : memberValue + 1;
         return this.createTyphenSymbol<Symbol.EnumMember>(memberSymbol, Symbol.EnumMember)
-          .initialize(value);
+          .initialize(memberValue);
       }).value();
-
     return typhenType.initialize(members, isConst);
   }
 
