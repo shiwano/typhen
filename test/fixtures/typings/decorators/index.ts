@@ -18,7 +18,7 @@ function methodDecorator2(target: Object, propertyKey: string, descriptor: Typed
 class DecoratedClass {
   @propertyDecorator(1, 'foo', true, function() { return '1'; })
   decoratedProperty: number;
-  @propertyDecorator(-1, null, false, () => '2')
+  @propertyDecorator(-1, '', false, () => '2')
   decoratedProperty2: number;
   @methodDecorator2
   @methodDecorator

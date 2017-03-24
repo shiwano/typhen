@@ -192,7 +192,7 @@ describe('TypeScriptParser', () => {
         });
         assert.deepEqual(decoratedProperty2.decorators[0].argumentTable, {
           num: -1,
-          str: null,
+          str: '',
           bool: false,
           func: '() => \'2\''
         });
