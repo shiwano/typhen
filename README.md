@@ -64,8 +64,8 @@ Install the module with: `npm install --save typhen`
 Example:
 
 ```js
-var typhen = require('typhen');
-var result = typhen.parse('./foo.d.ts');
+const typhen = require('typhen');
+const result = typhen.parse('./foo.d.ts');
 console.log('Parsed types: ', result.types.map(t => t.fullName));
 console.log('Parsed modules: ', result.modules.map(m => m.fullName));
 ```
@@ -154,7 +154,8 @@ module.exports = function(typhen, options) {
       generics: true,
       anonymousObject: true,
       anonymousFunction: true,
-      literalType: true
+      literalType: true,
+      mappedType: true
     },
     handlebarsOptions: {               // Optional. Default value is null.
       data: options,                   // For details, see: http://handlebarsjs.com/execution.html
@@ -286,7 +287,7 @@ If you want to add your project here, feel free to submit a pull request.
 * [typhen-json-schema](https://github.com/shiwano/typhen-json-schema) - Converts TypeScript Interfaces to JSON Schema
 
 ## TypeScript Version
-2.0.3
+2.2.1
 
 ## Migration Informations
  * 2016-10-09 v1.0.0
