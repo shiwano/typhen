@@ -417,5 +417,14 @@ describe('TypeScriptParser', () => {
         assert.throws(() => instance.validate(), /literal type/);
       });
     });
+
+    context('when dissalow#mappedType is true', () => {
+      beforeEach(() => {
+        config.plugin.disallow.mappedType = true;
+      });
+      it('should throw an error', () => {
+        assert.throws(() => instance.validate(), /mapped type/);
+      });
+    });
   });
 });

@@ -403,7 +403,9 @@ export class ObjectType extends Type {
 
   validate(): void | string {
     if (this.config.plugin.disallow.anonymousObject && this.isAnonymousType) {
-      return 'Disallow toe define an anonymous object';
+      return 'Disallow to define an anonymous object';
+    } else if (this.config.plugin.disallow.mappedType && this.templateType !== null) {
+      return 'Disallow to define a mapped type';
     }
   }
 

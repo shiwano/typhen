@@ -14,6 +14,7 @@ export interface DisallowOptions {
   generics?: boolean;
   anonymousFunction?: boolean;
   anonymousObject?: boolean;
+  mappedType?: boolean;
   literalType?: boolean;
 }
 
