@@ -94,10 +94,11 @@ export default class TypeScriptParser {
     return symbol;
   }
 
-  private getMappedTypeOrigin(symbol: ts.Symbol): ts.Symbol {
+  private getSymbolLinksOfMappedType(symbol: ts.Symbol): { type: ts.Type, mappedTypeOrigin: ts.Symbol } {
+    const type = (symbol as any).type;
     const mappedTypeOrigin = (symbol as any).mappedTypeOrigin;
-    if (mappedTypeOrigin === undefined) { throw new Error('Failed to get a mappedTypeOrigin'); }
-    return mappedTypeOrigin;
+    if (type === undefined || mappedTypeOrigin === undefined) { throw new Error('Failed to get a symbol links of mapped type'); }
+    return { type: type, mappedTypeOrigin: mappedTypeOrigin };
   }
 
   private tryGetMappedTypeNode(type: ts.Type): ts.MappedTypeNode | undefined {
@@ -724,11 +725,19 @@ export default class TypeScriptParser {
 
   private parseProperty(symbol: ts.Symbol, isOwn: boolean = true,
       isOptional: boolean = false, isReadonly: boolean = false): Symbol.Property {
-    let valueDeclaration = symbol.valueDeclaration || this.getMappedTypeOrigin(symbol).valueDeclaration;
-    if (!valueDeclaration) {
+    let type: ts.Type;
+    let valueDeclaration: ts.Node;
+    if (symbol.valueDeclaration) {
+      type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
+      valueDeclaration = symbol.valueDeclaration;
+    } else {
+      const symbolLinks = this.getSymbolLinksOfMappedType(symbol);
+      type = symbolLinks.type;
+      valueDeclaration = symbolLinks.mappedTypeOrigin.valueDeclaration as ts.Node;
+    }
+    if (!valueDeclaration || !type) {
       throw this.makeErrorWithSymbolInfo('Failed to parse property', symbol);
     }
-    const type = this.typeChecker.getTypeAtLocation(valueDeclaration);
     const propertyType = this.parseType(type);
     isOptional = isOptional || (<ts.PropertyDeclaration>valueDeclaration).questionToken != null;
     isReadonly = isReadonly || this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword);
@@ -740,14 +749,13 @@ export default class TypeScriptParser {
   }
 
   private parseMethod(symbol: ts.Symbol, isOwn: boolean = true, isOptional: boolean = false): Symbol.Method {
-    let valueDeclaration = symbol.valueDeclaration || this.getMappedTypeOrigin(symbol).valueDeclaration;
-    if (!valueDeclaration) {
+    if (!symbol.valueDeclaration) {
       throw this.makeErrorWithSymbolInfo('Failed to parse method', symbol);
     }
-    const type = this.typeChecker.getTypeAtLocation(valueDeclaration);
+    const type = this.typeChecker.getTypeAtLocation(symbol.valueDeclaration);
     const callSignatures = type.getCallSignatures().map(s => this.parseSignature(s));
-    isOptional = isOptional || (<ts.MethodDeclaration>valueDeclaration).questionToken != null;
-    const isAbstract = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
+    isOptional = isOptional || (<ts.MethodDeclaration>symbol.valueDeclaration).questionToken != null;
+    const isAbstract = this.checkModifiers(symbol.valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 
     const typhenSymbol = this.createTyphenSymbol<Symbol.Method>(symbol, Symbol.Method);
     return typhenSymbol.initialize(callSignatures, isOptional, isOwn, isAbstract);

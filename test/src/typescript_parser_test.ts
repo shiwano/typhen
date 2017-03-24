@@ -253,7 +253,7 @@ describe('TypeScriptParser', () => {
       });
     });
 
-    context('when ts files for signature test are given', () => {
+    context('when *.ts files for signature test are given', () => {
       const definitionPath = 'test/fixtures/typings/signature/index.ts';
 
       beforeEach(() => {
@@ -284,7 +284,7 @@ describe('TypeScriptParser', () => {
       });
     });
 
-    context('when ts files for never type test are given', () => {
+    context('when *.ts files for never type test are given', () => {
       const definitionPath = 'test/fixtures/typings/never/index.ts';
 
       beforeEach(() => {
@@ -295,6 +295,35 @@ describe('TypeScriptParser', () => {
 
       it('should ignore never type', () => {
         assert.deepEqual(instance.types.map(t => t.name), ['string']);
+      });
+    });
+
+    context('when *.d.ts files for strictNullChecks test are given', () => {
+      const definitionPath = 'test/fixtures/typings/strict_null_checks/index.d.ts';
+
+      beforeEach(() => {
+        const config = helper.createConfig(definitionPath, { strictNullChecks: true });
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should parse types', () => {
+        const expected = [
+          'KeyofT',
+          'MappedType',
+          'MappedTypeOfMappedTypeParam',
+          'MappedTypeParam',
+          'MappedTypeParam[P]',
+          'P',
+          'T',
+          'T[P]',
+          'UndefinedAndMappedTypeParam[P]UnionType',
+          'UndefinedAndNumberUnionType',
+          'UndefinedAndT[P]UnionType',
+          'number',
+          'undefined'
+        ].sort();
+        assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
     });
   });
