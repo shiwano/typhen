@@ -215,7 +215,9 @@ export default class TypeScriptParser {
       }
     }
     const typhenType = this.typeCache.get(type);
-
+    if (!typhenType) {
+      throw this.makeErrorWithTypeInfo('Failed to parse type', type);
+    }
     if (typhenType.isTypeParameter && this.currentTypeReference != null) {
       return this.currentTypeReference.getTypeByTypeParameter(<Symbol.TypeParameter>typhenType) || typhenType;
     } else {
