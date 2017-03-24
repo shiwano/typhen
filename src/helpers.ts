@@ -16,11 +16,19 @@ export function underscore(str: string): string {
   return applyHelperToStringWithSeparator(str, inflection.underscore);
 }
 
-export function upperCamelCase(str: string): string {
+export function upperCamel(str: string): string {
   return applyHelperToStringWithSeparator(str, inflection.camelize);
 }
 
+export function upperCamelCase(str: string): string {
+  return upperCamel(str);
+}
+
 export function lowerCamelCase(str: string): string {
+  return lowerCamel(str);
+}
+
+export function lowerCamel(str: string): string {
   return applyHelperToStringWithSeparator(str, s => {
     return inflection.camelize(s, true);
   });

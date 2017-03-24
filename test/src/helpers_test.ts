@@ -17,9 +17,21 @@ describe('helpers', () => {
     });
   });
 
+  describe('.upperCamel', () => {
+    it('should return a upperCamelCaseed string', () => {
+      assert(helpers.upperCamel('app1.foo_bar.qux') === 'App1.FooBar.Qux');
+    });
+  });
+
   describe('.lowerCamelCase', () => {
     it('should return a lowerCamelCaseed string', () => {
       assert(helpers.lowerCamelCase('app1.foo_bar.qux') === 'app1.fooBar.qux');
+    });
+  });
+
+  describe('.lowerCamel', () => {
+    it('should return a lowerCamelCaseed string', () => {
+      assert(helpers.lowerCamel('app1.foo_bar.qux') === 'app1.fooBar.qux');
     });
   });
 
