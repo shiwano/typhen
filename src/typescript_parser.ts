@@ -575,19 +575,18 @@ export default class TypeScriptParser {
         .filter(s => s && !this.checkFlags(s.flags, ts.SymbolFlags.Prototype));
       staticProperties = staticMemberSymbols
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
-            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
+          !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseProperty(s));
       staticMethods = staticMemberSymbols
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
-            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
+          !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseMethod(s));
     }
 
     this.typeReferenceStack.pop();
-    return <T>typhenType.initialize(properties, methods, builtInSymbolMethods,
-        stringIndex, numberIndex, null, null,
-        typeReference, constructorSignatures, callSignatures,
-        baseTypes, staticProperties, staticMethods, isAbstract);
+    return <T>typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex,
+      typeReference, constructorSignatures, callSignatures,
+      baseTypes, staticProperties, staticMethods, isAbstract);
   }
 
   private parseObjectType(type: ts.ObjectType): Symbol.ObjectType {
@@ -600,11 +599,11 @@ export default class TypeScriptParser {
     const templateType = rawTemplateType ? this.parseType(rawTemplateType) : null;
     const mappedType = mappedTypeNode ? this.mappedTypes.get((mappedTypeNode as any).id) || null : null;
     const properties = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property))
-        .map(s => this.parseProperty(s, true, hasQuestionToken, hasReadonlyToken));
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property))
+      .map(s => this.parseProperty(s, true, hasQuestionToken, hasReadonlyToken));
     const rawMethods = type.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method))
-        .map(s => this.parseMethod(s, true, hasQuestionToken));
+      .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method))
+      .map(s => this.parseMethod(s, true, hasQuestionToken));
     const methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     const builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
 

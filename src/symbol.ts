@@ -363,19 +363,39 @@ export class Function extends Type {
   }
 }
 
-export class ObjectType extends Type {
-  kind: SymbolKind = SymbolKind.ObjectType;
-
+export class ObjectLikeType extends Type {
   properties: Property[] = [];
   methods: Method[] = [];
   builtInSymbolMethods: Method[] = [];
   stringIndex: IndexInfo | null = null;
   numberIndex: IndexInfo | null = null;
-  templateType: Type | null;
-  basedMappedType: ObjectType | null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
+
+  initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
+      stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
+      ...forOverride: any[]): ObjectLikeType {
+    this.properties = properties;
+    this.methods = methods;
+    this.builtInSymbolMethods = builtInSymbolMethods;
+    this.stringIndex = stringIndex;
+    this.numberIndex = numberIndex;
+    return this;
+  }
+
+  validate(): void | string {
+    if (this.config.plugin.disallow.anonymousObject && this.isAnonymousType) {
+      return 'Disallow to define an anonymous object';
+    }
+  }
+}
+
+export class ObjectType extends ObjectLikeType {
+  kind: SymbolKind = SymbolKind.ObjectType;
+
+  templateType: Type | null;
+  basedMappedType: ObjectType | null;
 
   get assumedName(): string {
     if (this.indexedAccessType == null) {
@@ -404,11 +424,7 @@ export class ObjectType extends Type {
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       templateType: Type | null, basedMappedType: ObjectType | null,
       ...forOverride: any[]): ObjectType {
-    this.properties = properties;
-    this.methods = methods;
-    this.builtInSymbolMethods = builtInSymbolMethods;
-    this.stringIndex = stringIndex;
-    this.numberIndex = numberIndex;
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
     this.templateType = templateType;
     this.basedMappedType = basedMappedType;
     return this;
@@ -448,7 +464,7 @@ export class TypeReference {
   }
 }
 
-export class Interface extends ObjectType {
+export class Interface extends ObjectLikeType {
   kind: SymbolKind = SymbolKind.Interface;
 
   constructorSignatures: Signature[] = [];
@@ -474,11 +490,10 @@ export class Interface extends ObjectType {
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
-      templateType: Type | null, basedMappedType: ObjectType | null,
       typeReference: TypeReference, constructorSignatures: Signature[],
       callSignatures: Signature[], baseTypes: Interface[],
       staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
-    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, templateType, basedMappedType);
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;
