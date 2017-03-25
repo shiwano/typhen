@@ -58,7 +58,12 @@ export default class Generator {
 
     if (context !== null && /^.+\.hbs$/.test(src)) {
       logger.debug('Rendering: ' + src + ', ' + context);
-      data = this.getTemplate(src)(context, this.handlebarsOptions);
+      try {
+        data = this.getTemplate(src)(context, this.handlebarsOptions);
+      } catch (e) {
+        logger.error(`Failed to generate a file: src: ${src}, dest: ${dest}, resolvedDest: ${resolvedDest}, context: ${context ? context.name : ''}`);
+        throw e;
+      }
     } else {
       data = this.getFileFromPluginDirectory(src);
     }
