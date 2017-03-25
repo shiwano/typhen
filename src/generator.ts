@@ -61,7 +61,8 @@ export default class Generator {
       try {
         data = this.getTemplate(src)(context, this.handlebarsOptions);
       } catch (e) {
-        logger.error(`Failed to generate a file: src: ${src}, dest: ${dest}, resolvedDest: ${resolvedDest}, context: ${context ? context.name : ''}`);
+        logger.error(`Failed to generate a file: src: ${src}, dest: ${dest},` +
+          `resolvedDest: ${resolvedDest}, context: ${context ? context.name : ''}`);
         throw e;
       }
     } else {
