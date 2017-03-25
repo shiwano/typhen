@@ -12,6 +12,10 @@ ObjectType
 
 No templateType.
 
+## BasedMappedType
+
+No basedMappedType.
+
 ## Properties
 
 Properties is empty.

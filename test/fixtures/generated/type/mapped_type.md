@@ -13,6 +13,10 @@ ObjectType
 ObjectType|IndexType|Constraint
 T|P|
 
+## BasedMappedType
+
+No basedMappedType.
+
 ## Properties
 
 Properties is empty.

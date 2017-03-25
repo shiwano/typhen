@@ -372,25 +372,37 @@ export class ObjectType extends Type {
   stringIndex: IndexInfo | null = null;
   numberIndex: IndexInfo | null = null;
   templateType: Type | null;
+  basedMappedType: ObjectType | null;
 
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
   get assumedName(): string {
+    if (this.indexedAccessType == null) {
+      return this.rawAssumedName;
+    } else {
+      return this.getAssumedNameFromIndexedAccessType(this.indexedAccessType);
+    }
+  }
+
+  get indexedAccessType(): IndexedAccessType | null {
     if (this.templateType instanceof IndexedAccessType) {
-      return this.getAssumedNameFromIndexedAccessType(this.templateType);
+      return this.templateType;
     } else if (this.templateType instanceof UnionType &&
         this.templateType.types.some(t => t.isIndexedAccessType)) {
-      const indexedAccessType = this.templateType.types.filter(t => t.isIndexedAccessType)[0] as IndexedAccessType;
-      return this.getAssumedNameFromIndexedAccessType(indexedAccessType);
+      return this.templateType.types.filter(t => t.isIndexedAccessType)[0] as IndexedAccessType;
     } else {
-      return this.rawAssumedName;
+      return null;
     }
+  }
+
+  get isMappedType(): boolean {
+    return this.indexedAccessType != null && this.indexedAccessType.objectType.isTypeParameter;
   }
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
-      templateType: Type | null,
+      templateType: Type | null, basedMappedType: ObjectType | null,
       ...forOverride: any[]): ObjectType {
     this.properties = properties;
     this.methods = methods;
@@ -398,6 +410,7 @@ export class ObjectType extends Type {
     this.stringIndex = stringIndex;
     this.numberIndex = numberIndex;
     this.templateType = templateType;
+    this.basedMappedType = basedMappedType;
     return this;
   }
 
@@ -461,11 +474,11 @@ export class Interface extends ObjectType {
 
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
-      indexedAccessType: IndexedAccessType | null,
+      templateType: Type | null, basedMappedType: ObjectType | null,
       typeReference: TypeReference, constructorSignatures: Signature[],
       callSignatures: Signature[], baseTypes: Interface[],
       staticProperties: Property[], staticMethods: Method[], isAbstract: boolean): Interface {
-    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, indexedAccessType);
+    super.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, templateType, basedMappedType);
 
     this.constructorSignatures = constructorSignatures;
     this.callSignatures = callSignatures;

@@ -15,6 +15,7 @@ export default class TypeScriptParser {
   private moduleCache: HashMap<string, Symbol.Module> = new HashMap<string, Symbol.Module>();
   private typeCache: HashMap<ts.Type, Symbol.Type> = new HashMap<ts.Type, Symbol.Type>();
   private symbols: Symbol.Symbol[] = [];
+  private mappedTypes: HashMap<number, Symbol.ObjectType> = new HashMap<number, Symbol.ObjectType>();
 
   private arrayTypeName: string = 'Array';
 
@@ -584,7 +585,8 @@ export default class TypeScriptParser {
 
     this.typeReferenceStack.pop();
     return <T>typhenType.initialize(properties, methods, builtInSymbolMethods,
-        stringIndex, numberIndex, null, typeReference, constructorSignatures, callSignatures,
+        stringIndex, numberIndex, null, null,
+        typeReference, constructorSignatures, callSignatures,
         baseTypes, staticProperties, staticMethods, isAbstract);
   }
 
@@ -596,6 +598,7 @@ export default class TypeScriptParser {
     const rawTemplateType = this.tryGetTemplateType(type);
 
     const templateType = rawTemplateType ? this.parseType(rawTemplateType) : null;
+    const mappedType = mappedTypeNode ? this.mappedTypes.get((mappedTypeNode as any).id) || null : null;
     const properties = type.getProperties()
         .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property))
         .map(s => this.parseProperty(s, true, hasQuestionToken, hasReadonlyToken));
@@ -608,7 +611,11 @@ export default class TypeScriptParser {
     const indexInfos = this.parseIndexInfos(<any>type as ts.InterfaceTypeWithDeclaredMembers);
     const stringIndex = indexInfos.stringIndex;
     const numberIndex = indexInfos.numberIndex;
-    return typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, templateType);
+    const parsed = typhenType.initialize(properties, methods, builtInSymbolMethods, stringIndex, numberIndex, templateType, mappedType);
+    if (mappedTypeNode && parsed.isMappedType) {
+      this.mappedTypes.set((mappedTypeNode as any).id, parsed);
+    }
+    return parsed;
   }
 
   private parseIndexType(type: ts.IndexType): Symbol.IndexType {

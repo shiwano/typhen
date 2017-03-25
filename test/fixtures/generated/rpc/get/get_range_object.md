@@ -12,6 +12,10 @@ ObjectType
 
 No templateType.
 
+## BasedMappedType
+
+No basedMappedType.
+
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment

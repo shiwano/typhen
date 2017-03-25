@@ -13,6 +13,10 @@ ObjectType
 ObjectType|IndexType|Constraint
 MappedTypeParam|P|
 
+## BasedMappedType
+
+MappedType
+
 ## Properties
 
 Name|TypeName|IsOptional|isOwn|isProtected|isReadonly|isAbstract|Tags|Comment
