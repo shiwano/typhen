@@ -151,6 +151,11 @@ export class Symbol {
     return [this.namespace, this.name].join(this.config.plugin.namespaceSeparator);
   }
 
+  get rawFullName(): string {
+    if (this.parentModule === null) { return this.name; }
+    return [this.namespace, this.name].join('.');
+  }
+
   get namespace(): string {
     return this.ancestorModules.map(s => s.name).join(this.config.plugin.namespaceSeparator);
   }
