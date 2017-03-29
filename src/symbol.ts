@@ -138,8 +138,11 @@ export class Symbol {
   }
 
   get name(): string {
-    const name = _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
-    return this.config.plugin.rename(this, name);
+    return this.config.plugin.rename(this, this.nameWithoutRenaming);
+  }
+
+  private get nameWithoutRenaming(): string {
+    return _.isEmpty(this.assumedName) ? this.rawName : this.assumedName;
   }
 
   get assumedName(): string {
@@ -152,8 +155,8 @@ export class Symbol {
   }
 
   get rawFullName(): string {
-    if (this.parentModule === null) { return this.name; }
-    return [this.namespace, this.name].join('.');
+    const namespace = this.ancestorModules.map(s => s.nameWithoutRenaming).join('.');
+    return [namespace, this.nameWithoutRenaming].join('.');
   }
 
   get namespace(): string {
