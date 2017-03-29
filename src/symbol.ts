@@ -779,6 +779,8 @@ export class Signature extends Symbol {
   typePredicate: TypePredicate | null;
   isProtected: boolean = false;
 
+  get isGenericSignature(): boolean { return this.typeParameters.length > 0; }
+
   initialize(typeParameters: TypeParameter[], parameters: Parameter[],
       returnType: Type, typePredicate: TypePredicate | null, isProtected: boolean): Signature {
     this.typeParameters = typeParameters;
