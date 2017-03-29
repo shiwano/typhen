@@ -1,7 +1,7 @@
 {
   "name": "typhen",
   "description": "Generates code or documentation from TypeScript.",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "homepage": "https://github.com/shiwano/typhen",
   "author": {
     "name": "Shogo Iwano",
