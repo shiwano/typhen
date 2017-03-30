@@ -4,8 +4,10 @@ import * as inflection from 'inflection';
 import * as config from './config';
 
 export enum SymbolKind {
+  /** @internal */
   Invalid,
   Module,
+  /** @internal */
   EmptyType,
   PrimitiveType,
   Enum,
@@ -197,8 +199,10 @@ export class Symbol {
   get isGenericType(): boolean { return false; }
   get isGlobalModule(): boolean { return false; }
 
-  get isModule(): boolean { return this.kind === SymbolKind.Module; }
+  /** @internal */
   get isEmptyType(): boolean { return this.kind === SymbolKind.EmptyType; }
+
+  get isModule(): boolean { return this.kind === SymbolKind.Module; }
   get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
   get isEnum(): boolean { return this.kind === SymbolKind.Enum; }
   get isEnumMember(): boolean { return this.kind === SymbolKind.EnumMember; }
@@ -243,6 +247,7 @@ export class Symbol {
   validate(): void {
   }
 
+  /** @internal */
   destroy(ok: boolean = false): void {
     if (!ok || this.isDestroyed) { return; }
     Object.keys(this).forEach((key) => {
@@ -294,6 +299,7 @@ export class Module extends Symbol {
     return _.map(this.importedTypeTable, (v, k) => { return { name: k || '', type: v }; });
   }
 
+  /** @internal */
   initialize(isNamespaceModule: boolean,
       importedModuleTable: ObjectTable<Module>, importedTypeTable: ObjectTable<Type>,
       modules: Module[], types: Type[], variables: Variable[], typeAliases: TypeAlias[]): Module {
@@ -308,6 +314,7 @@ export class Module extends Symbol {
   }
 }
 
+/** @internal */
 export class EmptyType extends Type {
   kind: SymbolKind = SymbolKind.EmptyType;
 }
@@ -316,6 +323,7 @@ export class PrimitiveType extends Type {
   kind: SymbolKind = SymbolKind.PrimitiveType;
   get isGenerationTarget(): boolean { return true; }
 
+  /** @internal */
   initialize(rawName: string): PrimitiveType {
     this.rawName = rawName;
     return this;
@@ -334,6 +342,7 @@ export class Enum extends Type {
   members: EnumMember[] = [];
   isConst: boolean = false;
 
+  /** @internal */
   initialize(members: EnumMember[], isConst: boolean): Enum {
     this.members = members;
     this.isConst = isConst;
@@ -346,6 +355,7 @@ export class EnumMember extends Symbol {
 
   value: number;
 
+  /** @internal */
   initialize(value: number): EnumMember {
     this.value = value;
     return this;
@@ -357,6 +367,7 @@ export class Function extends Type {
 
   callSignatures: Signature[] = [];
 
+  /** @internal */
   initialize(callSignatures: Signature[]): Function {
     this.callSignatures = callSignatures;
     return this;
@@ -381,6 +392,7 @@ export class ObjectLikeType extends Type {
   get ownProperties(): Property[] { return this.properties.filter(p => p.isOwn); }
   get ownMethods(): Method[] { return this.methods.filter(m => m.isOwn); }
 
+  /** @internal */
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       ...forOverride: any[]): ObjectLikeType {
@@ -428,6 +440,7 @@ export class ObjectType extends ObjectLikeType {
     return this.indexedAccessType != null && this.indexedAccessType.objectType.isTypeParameter;
   }
 
+  /** @internal */
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       templateType: Type | null, basedMappedType: ObjectType | null,
@@ -496,6 +509,7 @@ export class Interface extends ObjectLikeType {
     }).join('');
   }
 
+  /** @internal */
   initialize(properties: Property[], methods: Method[], builtInSymbolMethods: Method[],
       stringIndex: IndexInfo | null, numberIndex: IndexInfo | null,
       typeReference: TypeReference, constructorSignatures: Signature[],
@@ -537,6 +551,7 @@ export class Array extends Type {
     return this.type.name + '[]';
   }
 
+  /** @internal */
   initialize(type: Type): Array {
     this.type = type;
     return this;
@@ -548,6 +563,7 @@ export class TypeParameter extends Type {
 
   constraint: Type | null;
 
+  /** @internal */
   initialize(constraint: Type | null): TypeParameter {
     this.constraint = constraint;
     return this;
@@ -563,6 +579,7 @@ export class Tuple extends Type {
     return this.types.map(t => inflection.classify(t.name)).join('And') + 'Tuple';
   }
 
+  /** @internal */
   initialize(types: Type[]): Tuple {
     this.types = types;
     return this;
@@ -584,6 +601,7 @@ export class UnionType extends Type {
     return this.types.map(t => inflection.classify(t.name)).join('And') + 'UnionType';
   }
 
+  /** @internal */
   initialize(types: Type[]): UnionType {
     this.types = types;
     return this;
@@ -605,6 +623,7 @@ export class IntersectionType extends Type {
     return this.types.map(t => inflection.classify(t.name)).join('And') + 'IntersectionType';
   }
 
+  /** @internal */
   initialize(types: Type[]): UnionType {
     this.types = types;
     return this;
@@ -626,6 +645,7 @@ export class IndexType extends Type {
     return 'Keyof' + this.type.name;
   }
 
+  /** @internal */
   initialize(type: Type): IndexType {
     this.type = type;
     return this;
@@ -643,6 +663,7 @@ export class IndexedAccessType extends Type {
     return this.objectType.name + '[' + this.indexType.name + ']';
   }
 
+  /** @internal */
   initialize(objectType: Type, indexType: Type, constraint: Type | null): IndexedAccessType {
     this.objectType = objectType;
     this.indexType = indexType;
@@ -676,6 +697,7 @@ export class StringLiteralType extends LiteralType {
     return this.text;
   }
 
+  /** @internal */
   initialize(text: string): StringLiteralType {
     this.text = '"' + text + '"';
     return this;
@@ -691,6 +713,7 @@ export class BooleanLiteralType extends LiteralType {
     return this.value.toString();
   }
 
+  /** @internal */
   initialize(value: boolean): BooleanLiteralType {
     this.value = value;
     return this;
@@ -706,6 +729,7 @@ export class NumberLiteralType extends LiteralType {
     return this.value.toString();
   }
 
+  /** @internal */
   initialize(value: number): NumberLiteralType {
     this.value = value;
     return this;
@@ -722,6 +746,7 @@ export class EnumLiteralType extends LiteralType {
     return [this.enumType.name, this.enumMember.name].join(this.config.plugin.namespaceSeparator);
   }
 
+  /** @internal */
   initialize(enumType: Enum, enumMember: EnumMember): EnumLiteralType {
     this.enumType = enumType;
     this.enumMember = enumMember;
@@ -739,6 +764,7 @@ export class Property extends Symbol {
   isReadonly: boolean = false;
   isAbstract: boolean = false;
 
+  /** @internal */
   initialize(type: Type, isOptional: boolean, isOwn: boolean, isProtected: boolean, isReadonly: boolean, isAbstract: boolean): Property {
     this.type = type;
     this.isOptional = isOptional;
@@ -758,6 +784,7 @@ export class Method extends Symbol {
   isOwn: boolean = false;
   isAbstract: boolean = false;
 
+  /** @internal */
   initialize(callSignatures: Signature[], isOptional: boolean, isOwn: boolean, isAbstract: boolean): Method {
     this.callSignatures = callSignatures;
     this.isOptional = isOptional;
@@ -784,6 +811,7 @@ export class Signature extends Symbol {
 
   get isGenericSignature(): boolean { return this.typeParameters.length > 0; }
 
+  /** @internal */
   initialize(typeParameters: TypeParameter[], parameters: Parameter[],
       returnType: Type, typePredicate: TypePredicate | null, isProtected: boolean): Signature {
     this.typeParameters = typeParameters;
@@ -808,6 +836,7 @@ export class Parameter extends Symbol {
   isOptional: boolean = false;
   isVariadic: boolean = false;
 
+  /** @internal */
   initialize(type: Type, isOptional: boolean, isVariadic: boolean): Parameter {
     this.type = type;
     this.isOptional = isOptional;
@@ -824,6 +853,7 @@ export class Variable extends Symbol {
   isLet: boolean = false;
   isConst: boolean = false;
 
+  /** @internal */
   initialize(type: Type | null, module: Module | null, isLet: boolean, isConst: boolean): Variable {
     this.type = type;
     this.module = module;
@@ -838,6 +868,7 @@ export class TypeAlias extends Symbol {
 
   type: Type;
 
+  /** @internal */
   initialize(type: Type): TypeAlias {
     this.type = type;
     return this;
