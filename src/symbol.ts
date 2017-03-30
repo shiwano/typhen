@@ -196,6 +196,7 @@ export class Symbol {
   get isType(): boolean { return false; }
   get isGenericType(): boolean { return false; }
   get isGlobalModule(): boolean { return false; }
+  get isObjectLikeType(): boolean { return this instanceof ObjectLikeType; }
 
   get isModule(): boolean { return this.kind === SymbolKind.Module; }
   get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
