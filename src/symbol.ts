@@ -193,15 +193,15 @@ export class Symbol {
 
   get isAnonymous(): boolean { return this.rawName.length <= 0; }
   get isAnonymousType(): boolean { return this.isType && this.isAnonymous; }
-  get isType(): boolean { return false; }
   get isGenericType(): boolean { return false; }
   get isGlobalModule(): boolean { return false; }
-  get isObjectLikeType(): boolean { return this instanceof ObjectLikeType; }
 
+  get isType(): boolean { return this instanceof Type; }
   get isModule(): boolean { return this.kind === SymbolKind.Module; }
   get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
   get isEnum(): boolean { return this.kind === SymbolKind.Enum; }
   get isEnumMember(): boolean { return this.kind === SymbolKind.EnumMember; }
+  get isObjectLikeType(): boolean { return this instanceof ObjectLikeType; }
   get isObjectType(): boolean { return this.kind === SymbolKind.ObjectType; }
   get isInterface(): boolean { return this.kind === SymbolKind.Interface; }
   get isClass(): boolean { return this.kind === SymbolKind.Class; }
@@ -213,6 +213,7 @@ export class Symbol {
   get isIntersectionType(): boolean { return this.kind === SymbolKind.IntersectionType; }
   get isIndexType(): boolean { return this.kind === SymbolKind.IndexType; }
   get isIndexedAccessType(): boolean { return this.kind === SymbolKind.IndexedAccessType; }
+  get isLiteralType(): boolean { return this instanceof LiteralType; }
   get isStringLiteralType(): boolean { return this.kind === SymbolKind.StringLiteralType; }
   get isBooleanLiteralType(): boolean { return this.kind === SymbolKind.BooleanLiteralType; }
   get isNumberLiteralType(): boolean { return this.kind === SymbolKind.NumberLiteralType; }
@@ -232,10 +233,6 @@ export class Symbol {
     });
   }
 
-  get isLiteralType(): boolean {
-    return false;
-  }
-
   toString(): string {
     return this.name;
   }
@@ -253,9 +250,7 @@ export class Symbol {
   }
 }
 
-export class Type extends Symbol {
-  get isType(): boolean { return true; }
-}
+export class Type extends Symbol { }
 
 export class Module extends Symbol {
   kind: SymbolKind = SymbolKind.Module;
@@ -672,10 +667,6 @@ export class IndexedAccessType extends Type {
 }
 
 export class LiteralType extends Type {
-  get isLiteralType(): boolean {
-    return true;
-  }
-
   validate(): void | string {
     if (this.config.plugin.disallow.literalType) {
       return 'Disallow to define a literal type';
