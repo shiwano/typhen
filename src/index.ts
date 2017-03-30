@@ -12,6 +12,7 @@ import * as typhenHelpers from './helpers';
 import * as runner from './runner';
 
 namespace Typhen {
+  export import Symbol = symbol;
   export import SymbolKind = symbol.SymbolKind;
   export const logger = typhenLogger;
   export const helpers = typhenHelpers;
