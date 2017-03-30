@@ -7,8 +7,6 @@ export enum SymbolKind {
   /** @internal */
   Invalid,
   Module,
-  /** @internal */
-  EmptyType,
   PrimitiveType,
   Enum,
   EnumMember,
@@ -199,9 +197,6 @@ export class Symbol {
   get isGenericType(): boolean { return false; }
   get isGlobalModule(): boolean { return false; }
 
-  /** @internal */
-  get isEmptyType(): boolean { return this.kind === SymbolKind.EmptyType; }
-
   get isModule(): boolean { return this.kind === SymbolKind.Module; }
   get isPrimitiveType(): boolean { return this.kind === SymbolKind.PrimitiveType; }
   get isEnum(): boolean { return this.kind === SymbolKind.Enum; }
@@ -312,11 +307,6 @@ export class Module extends Symbol {
     this.typeAliases = typeAliases;
     return this;
   }
-}
-
-/** @internal */
-export class EmptyType extends Type {
-  kind: SymbolKind = SymbolKind.EmptyType;
 }
 
 export class PrimitiveType extends Type {
@@ -438,6 +428,11 @@ export class ObjectType extends ObjectLikeType {
 
   get isMappedType(): boolean {
     return this.indexedAccessType != null && this.indexedAccessType.objectType.isTypeParameter;
+  }
+
+  static createEmptyObjectType(config: config.Config): ObjectType {
+    const result = new ObjectType(config, '', [], [], [], null, 'Object');
+    return result.initialize([], [], [], null, null, null, null);
   }
 
   /** @internal */

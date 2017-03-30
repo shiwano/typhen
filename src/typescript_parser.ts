@@ -11,7 +11,7 @@ export default class TypeScriptParser {
   private program: ts.Program;
   private typeChecker: ts.TypeChecker;
 
-  private emptyType: Symbol.EmptyType;
+  private emptyObjectType: Symbol.ObjectType;
   private moduleCache: HashMap<string, Symbol.Module> = new HashMap<string, Symbol.Module>();
   private typeCache: HashMap<ts.Type, Symbol.Type> = new HashMap<ts.Type, Symbol.Type>();
   private symbols: Symbol.Symbol[] = [];
@@ -22,7 +22,7 @@ export default class TypeScriptParser {
   private get currentTypeReference(): Symbol.TypeReference | null { return _.last(this.typeReferenceStack) || null; }
 
   constructor(private fileNames: string[], private config: config.Config) {
-    this.emptyType = new Symbol.EmptyType(config, '', [], [], [], null, '');
+    this.emptyObjectType = Symbol.ObjectType.createEmptyObjectType(config);
   }
 
   get sourceFiles(): ts.SourceFile[] {
@@ -189,7 +189,7 @@ export default class TypeScriptParser {
       } else if (type.flags & ts.TypeFlags.Object &&
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
-        return this.emptyType;
+        return this.emptyObjectType;
       } else if (type.symbol === undefined) {
         throw this.makeErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
