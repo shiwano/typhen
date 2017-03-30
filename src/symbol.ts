@@ -481,9 +481,8 @@ export class TypeReference {
   }
 }
 
-export class Interface extends ObjectLikeType {
-  kind: SymbolKind = SymbolKind.Interface;
-
+/** @internal */
+export class ClassOrInterface extends ObjectLikeType {
   constructorSignatures: Signature[] = [];
   callSignatures: Signature[] = [];
   baseTypes: Interface[] = [];
@@ -532,7 +531,11 @@ export class Interface extends ObjectLikeType {
   }
 }
 
-export class Class extends Interface {
+export class Interface extends ClassOrInterface {
+  kind: SymbolKind = SymbolKind.Interface;
+}
+
+export class Class extends ClassOrInterface {
   kind: SymbolKind = SymbolKind.Class;
 }
 
