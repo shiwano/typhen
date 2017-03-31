@@ -130,7 +130,7 @@ export default class TypeScriptParser {
   }
 
   private makeErrorWithSymbolInfo(message: string, symbol: ts.Symbol): Error {
-    let symbolInfo = 'Symbol: ' + this.typeChecker.symbolToString(symbol);
+    let symbolInfo = ' Symbol: ' + this.typeChecker.symbolToString(symbol);
     const infos = this.getDeclarationInfos(symbol);
     if (infos.length > 0) {
       symbolInfo += ' DeclarationInfos: ' + infos.map(d => d.toString()).join(',');
@@ -482,10 +482,10 @@ export default class TypeScriptParser {
 
   private parseIndexInfos(type: ts.InterfaceTypeWithDeclaredMembers):
       { stringIndex: Symbol.IndexInfo | null, numberIndex: Symbol.IndexInfo | null } {
-    if (!type.symbol || !type.symbol.members) {
+    if (!type.symbol) {
       throw this.makeErrorWithTypeInfo('Failed to parse index info', type);
     }
-    const indexSymbol = type.symbol.members.get('__index') || null;
+    const indexSymbol = type.symbol.members ? type.symbol.members.get('__index') || null : null;
     let stringIndex: Symbol.IndexInfo | null = null;
     let numberIndex: Symbol.IndexInfo | null = null;
 
