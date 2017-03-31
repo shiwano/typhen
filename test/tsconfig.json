@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "files": [
+    "test_helper.ts"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
