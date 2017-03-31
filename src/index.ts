@@ -43,7 +43,9 @@ namespace Typhen {
     const promises = _.map(tsconfig.typhen, (config: config.TSConfigTyphenObject) => {
       return Typhen.run({
         plugin: Typhen.loadPlugin(config.plugin, config.pluginOptions),
-        src: config.files || tsconfig.files,
+        src: config.files ? config.files : tsconfig.files || [],
+        include: config.include ? config.include : tsconfig.include || [],
+        exclude: config.exclude ? config.exclude : tsconfig.exclude || [],
         dest: config.outDir,
         compilerOptions: compilerOptions,
         cwd: fileName.replace(/tsconfig.json$/, ''),

@@ -10,7 +10,9 @@ export interface TSConfigTyphenObject {
   plugin: string;
   pluginOptions: { [key: string]: any };
   outDir: string;
-  files?: string | string[];
+  files?: string[];
+  include?: string[];
+  exclude?: string[];
   typingDirectory?: string;
   defaultLibFileName?: string;
 }
@@ -18,6 +20,8 @@ export interface TSConfigTyphenObject {
 export interface ConfigObject {
   plugin: plugin.Plugin;
   src: string | string[];
+  include?: string[];
+  exclude?: string[];
   dest: string;
   cwd?: string;
   typingDirectory?: string;
@@ -27,7 +31,7 @@ export interface ConfigObject {
   compilerOptions?: ts.CompilerOptions;
 }
 
-export class Config implements ConfigObject {
+export class Config {
   plugin: plugin.Plugin;
   src: string[];
   dest: string;
@@ -48,12 +52,16 @@ export class Config implements ConfigObject {
 
     this.cwd = args.cwd || process.cwd();
     this.env = args.env || new NodeJsEnvironment(this.cwd, args.plugin.newLine,
-        this.compilerOptions.target || ts.ScriptTarget.ES3,
-        this.compilerOptions.lib, args.defaultLibFileName);
+      this.compilerOptions.target || ts.ScriptTarget.ES3,
+      this.compilerOptions.lib, args.defaultLibFileName);
     this.defaultLibFileName = this.env.defaultLibFileName;
 
-    this.src = typeof args.src === 'string' ? [<string>args.src] : <string[]>args.src;
-    this.src = this.src.map(s => this.env.resolvePath(s));
+    const exclude = this.resolveGlobPatterns(args.exclude ? args.exclude : []);
+    const include = this.resolveGlobPatterns(args.include ? args.include : []);
+    this.src = (typeof args.src === 'string' ? [args.src] : args.src)
+      .concat(include)
+      .map(s => this.env.resolvePath(s))
+      .filter(s => exclude.every(e => !_.startsWith(s, e)));
     this.dest = this.env.resolvePath(args.dest);
     this.cwd = this.env.resolvePath(this.cwd);
 
@@ -75,5 +83,12 @@ export class Config implements ConfigObject {
     const minDirCount = _.min(dirnames.map(d => d.split('/').length));
     const minDirnames = dirnames.filter(d => d.split('/').length === minDirCount);
     return minDirnames.every(d => d === minDirnames[0]) ? minDirnames[0] : this.cwd;
+  }
+
+  resolveGlobPatterns(globPatterns: string[]): string[] {
+    return globPatterns
+      .map(s => s.indexOf('*') > -1 || s.indexOf('?') > -1 ?  this.env.glob(s) : [s])
+      .reduce((a, b) => a.concat(b), [])
+      .map(s => this.env.resolvePath(s));
   }
 }
