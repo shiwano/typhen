@@ -92,6 +92,8 @@ Example:
       "pluginOptions": { "optionName": "option value" }, // Optional. Default value is {}.
       "outDir": "output-directory",
       "files": [ "src/typings/definitions.d.ts" ]        // Optional. Default value is root's files.
+      "include": [ "src/typings/include/**/*" ]          // Optional. Default value is root's include.
+      "exclude": [ "src/typings/exclude/**/*" ]          // Optional. Default value is root's exclude.
     }
   ]
 }
@@ -119,6 +121,8 @@ module.exports = function(typhen) {
     }),
     src: 'typings/lib/definitions.d.ts', // string or string[]
     dest: 'generated',
+    include: ['typings/include/**/*'],   // Optional. Default value is [].
+    exclude: ['typings/exclude/**/*'],   // Optional. Default value is [].
     cwd: '../other/current',             // Optional. Default value is process.cwd().
     typingDirectory: 'typings',          // Optional. Default value is the directory name of the src.
     defaultLibFileName: 'lib.core.d.ts', // Optional. Default value is undefined, then the typhen uses the lib.d.ts or lib.es6.d.ts.
