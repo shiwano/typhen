@@ -1,3 +1,4 @@
+import * as util from 'util';
 import * as _ from 'lodash';
 import * as inflection from 'inflection';
 import Vinyl = require('vinyl');
@@ -62,7 +63,7 @@ export default class Generator {
         data = this.getTemplate(src)(context, this.handlebarsOptions);
       } catch (e) {
         logger.error(`Failed to generate a file: src: ${src}, dest: ${dest}, ` +
-          `resolvedDest: ${resolvedDest}, context: ${context ? context.name : ''}`);
+          `resolvedDest: ${resolvedDest}, context: ${context.name}\n${util.inspect(context, false, 2, true)}`);
         throw e;
       }
     } else {
