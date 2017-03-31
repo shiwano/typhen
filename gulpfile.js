@@ -65,11 +65,7 @@ gulp.task('clean:testDest', function() {
   return del(paths.testDest);
 });
 
-gulp.task('tsconfig', function() {
-  return gulp.src(paths.src).pipe(plugins.tsconfigUpdate());
-});
-
-gulp.task('compile', ['clean:dest', 'tsconfig'], function(){
+gulp.task('compile', ['clean:dest'], function(){
   var tsStream = gulp.src(paths.src)
       .pipe(tsProject(plugins.typescript.reporter.defaultReporter()));
 

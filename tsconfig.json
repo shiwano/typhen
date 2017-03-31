@@ -1,34 +1,19 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "declaration": true,
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "stripInternal": true,
-        "outDir": "./lib"
-    },
-    "filesGlob": [
-        "./src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ],
-    "files": [
-        "src/compiler_host.ts",
-        "src/config.ts",
-        "src/generator.ts",
-        "src/helpers.ts",
-        "src/index.ts",
-        "src/local_handlebars.ts",
-        "src/logger.ts",
-        "src/plugin.ts",
-        "src/runner.ts",
-        "src/symbol.ts",
-        "src/typescript_parser.ts",
-        "src/environments/environment.ts",
-        "src/environments/node_js.ts"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "declaration": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "stripInternal": true,
+    "outDir": "./lib"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
