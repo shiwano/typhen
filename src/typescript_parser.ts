@@ -529,12 +529,14 @@ export default class TypeScriptParser {
     this.typeReferenceStack.push(typeReference);
 
     const properties = genericType.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Property) && s.valueDeclaration !== undefined &&
-            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
+        .filter(s => (this.checkFlags(s.flags, ts.SymbolFlags.Property) || this.checkFlags(s.flags, ts.SymbolFlags.Accessor)) &&
+          s.valueDeclaration !== undefined &&
+          !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseProperty(s, _.includes(ownMemberNames, s.name)));
     const rawMethods = genericType.getProperties()
-        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) && s.valueDeclaration !== undefined &&
-            !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
+        .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method) &&
+          s.valueDeclaration !== undefined &&
+          !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseMethod(s, _.includes(ownMemberNames, s.name)));
     const methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
     const builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
@@ -743,7 +745,8 @@ export default class TypeScriptParser {
     }
     const propertyType = this.parseType(type);
     isOptional = isOptional || (<ts.PropertyDeclaration>valueDeclaration).questionToken != null;
-    isReadonly = isReadonly || this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword);
+    isReadonly = isReadonly || this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ReadonlyKeyword) ||
+      (this.checkFlags(symbol.flags, ts.SymbolFlags.GetAccessor) && !this.checkFlags(symbol.flags, ts.SymbolFlags.SetAccessor));
     const isProtected = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.ProtectedKeyword);
     const isAbstract = this.checkModifiers(valueDeclaration.modifiers, ts.SyntaxKind.AbstractKeyword);
 

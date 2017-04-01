@@ -326,6 +326,27 @@ describe('TypeScriptParser', () => {
         assert.deepEqual(instance.types.map(t => t.fullName), expected);
       });
     });
+
+    context('when *.ts files for getter and setter test are given', () => {
+      const definitionPath = 'test/fixtures/typings/getter_setter/index.ts';
+
+      beforeEach(() => {
+        const config = helper.createConfig(definitionPath);
+        instance = new TypeScriptParser([definitionPath], config);
+        instance.parse();
+      });
+
+      it('should parse types', () => {
+        const type = instance.types.filter(t => t.name === 'GetterSetterClass')[0] as symbol.Class;
+        assert(type.properties.length === 3);
+        assert(type.properties[0].name === 'foo');
+        assert(type.properties[0].isReadonly === false);
+        assert(type.properties[1].name === 'bar');
+        assert(type.properties[1].isReadonly === true);
+        assert(type.properties[2].name === 'baz');
+        assert(type.properties[2].isReadonly === false);
+      });
+    });
   });
 
   describe('#validate', () => {
