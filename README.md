@@ -112,9 +112,9 @@ The typhenfile.js is comprised of the following parts:
 Example:
 
 ```js
-var ts = require('typescript');
+const ts = require('typescript');
 
-module.exports = function(typhen) {
+module.exports = (typhen) => {
   return typhen.run({                    // typhen.run returns a Promise object of the bluebird.
     plugin: typhen.loadPlugin('typhen-awesome-plugin', {
       optionName: 'option value'
@@ -129,9 +129,9 @@ module.exports = function(typhen) {
     compilerOptions: {                   // Optional. Default value is { module: ts.ScriptTarget.CommonJS, noImplicitAny: true, target: ts.ScriptTarget.ES6 }
       target: ts.ScriptTarget.ES6
     }
-  }).then(function(files) {
+  }).then((files) => {
     console.log('Done!');
-  }).catch(function(e) {
+  }).catch((e) => {
     console.error(e);
   });
 };
@@ -143,7 +143,7 @@ A typhen plugin can be defined in the typhenfile.js or an external module.
 Example:
 
 ```js
-module.exports = function(typhen, options) {
+module.exports = (typhen, options) => {
   return typhen.createPlugin({
     pluginDirectory: __dirname,
     newLine: '\r\n',                   // Optional. Default value is '\n'.
@@ -164,23 +164,23 @@ module.exports = function(typhen, options) {
     handlebarsOptions: {               // Optional. Default value is null.
       data: options,                   // For details, see: http://handlebarsjs.com/execution.html
       helpers: {
-        baz: function(str) {
+        baz: (str) => {
           return str + '-baz';
         }
       }
     },
 
-    rename: function(symbol, name) { // Optional. Default value is a function that returns just the name.
+    rename: (symbol, name) => { // Optional. Default value is a function that returns just the name.
       if (symbol.kind === typhen.SymbolKind.Array) {
         return '[]';
       }
       return name;
     },
 
-    generate: function(generator, types, modules) {
+    generate: (generator, types, modules) => {
       generator.generateUnlessExist('templates/README.md', 'README.md');
 
-      types.forEach(function(type) {
+      types.forEach((type) => {
         switch (type.kind) {
           case typhen.SymbolKind.Enum:
             generator.generate('templates/enum.hbs', 'underscore:**/*.rb', type);
@@ -191,13 +191,13 @@ module.exports = function(typhen, options) {
             break;
         }
       });
-      modules.forEach(function(module) {
+      modules.forEach((module) => {
         generator.generate('templates/module.hbs', 'underscore:**/*.rb', module);
       });
       generator.files.forEach((file) => {
         // Change a file that will be written.
       });
-      return new Promise(function(resolve, reject) { // If you want async processing, return a Promise object.
+      return new Promise((resolve, reject) => { // If you want async processing, return a Promise object.
         // Do async processing.
       });
     }
