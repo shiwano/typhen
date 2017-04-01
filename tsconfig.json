@@ -15,5 +15,11 @@
   ],
   "exclude": [
     "node_modules"
+  ],
+  "typhen": [
+    {
+      "plugin": "./test/fixtures/plugin/typhen-test.js",
+      "outDir": "./.tmp/typhen_gen"
+    }
   ]
 }
