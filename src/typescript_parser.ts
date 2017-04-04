@@ -190,6 +190,9 @@ export default class TypeScriptParser {
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
         return this.emptyObjectType;
+      } else if (type.flags & ts.TypeFlags.NonPrimitive &&
+                type.symbol === undefined) {
+        return this.emptyObjectType;  // intrinsic object type
       } else if (type.symbol === undefined) {
         throw this.makeErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
