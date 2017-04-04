@@ -541,8 +541,8 @@ export default class TypeScriptParser {
           s.valueDeclaration !== undefined &&
           !this.checkModifiers(s.valueDeclaration.modifiers, ts.SyntaxKind.PrivateKeyword))
         .map(s => this.parseMethod(s, _.includes(ownMemberNames, s.name)));
-    const methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
-    const builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
+    const methods = rawMethods.filter(m => m.rawName.indexOf('@@') !== 0);
+    const builtInSymbolMethods = rawMethods.filter(m => m.rawName.indexOf('@@') === 0);
 
     const indexInfos = this.parseIndexInfos(<any>genericType as ts.InterfaceTypeWithDeclaredMembers);
     const stringIndex = indexInfos.stringIndex;
@@ -609,8 +609,8 @@ export default class TypeScriptParser {
     const rawMethods = type.getProperties()
       .filter(s => this.checkFlags(s.flags, ts.SymbolFlags.Method))
       .map(s => this.parseMethod(s, true, hasQuestionToken));
-    const methods = rawMethods.filter(m => m.name.indexOf('@@') !== 0);
-    const builtInSymbolMethods = rawMethods.filter(m => m.name.indexOf('@@') === 0);
+    const methods = rawMethods.filter(m => m.rawName.indexOf('@@') !== 0);
+    const builtInSymbolMethods = rawMethods.filter(m => m.rawName.indexOf('@@') === 0);
 
     const indexInfos = this.parseIndexInfos(<any>type as ts.InterfaceTypeWithDeclaredMembers);
     const stringIndex = indexInfos.stringIndex;
@@ -792,7 +792,7 @@ export default class TypeScriptParser {
     const type = this.parseType(this.typeChecker.getTypeAtLocation(node.type));
     const thisType = this.parseType(this.typeChecker.getTypeAtLocation(node.parameterName));
     const parameterNameText = node.parameterName.getText();
-    const parameter = parameters.filter(p => p.name === parameterNameText)[0] || null;
+    const parameter = parameters.filter(p => p.rawName === parameterNameText)[0] || null;
     return new Symbol.TypePredicate(type, thisType, parameter);
   }
 
