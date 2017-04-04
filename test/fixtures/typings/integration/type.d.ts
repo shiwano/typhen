@@ -120,4 +120,6 @@ declare module Type {
     method(): boolean;
   }
   type RealMappedType = MappedType<MappedTypeParam>;
+
+  type intrinsicObjectType = object;
 }

@@ -97,6 +97,8 @@ No Imported Types.
   * Type - MappedType
 * RealMappedType
   * Type - MappedTypeOfMappedTypeParam
+* intrinsicObjectType
+  * Type - object
 
 ## AnonymousTypes
 

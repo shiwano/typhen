@@ -190,9 +190,8 @@ export default class TypeScriptParser {
                 (<ts.ObjectType>type).objectFlags & ts.ObjectFlags.Anonymous &&
                 type.symbol === undefined) {
         return this.emptyObjectType;
-      } else if (type.flags & ts.TypeFlags.NonPrimitive &&
-                type.symbol === undefined) {
-        return this.emptyObjectType;  // intrinsic object type
+      } else if (type.flags & ts.TypeFlags.NonPrimitive) { // intrinsic object type
+        this.parsePrimitiveType(type);
       } else if (type.symbol === undefined) {
         throw this.makeErrorWithTypeInfo('Unsupported type', type);
       } else if (type.symbol.flags & ts.SymbolFlags.Function) {
@@ -201,7 +200,7 @@ export default class TypeScriptParser {
         this.parseGenericType<Symbol.Class>(<ts.GenericType>type, Symbol.Class);
       } else if (type.symbol.flags & ts.SymbolFlags.Interface) {
         if (this.isTyphenPrimitiveType(type)) {
-          this.parsePrimitiveType(<ts.GenericType>type);
+          this.parsePrimitiveType(type);
         } else if (this.isArrayType(<ts.GenericType>type)) {
           this.parseArray(<ts.GenericType>type);
         } else {
@@ -648,9 +647,7 @@ export default class TypeScriptParser {
     return typhenType.initialize(callSignatures);
   }
 
-  private parsePrimitiveType(type: ts.GenericType): Symbol.PrimitiveType; // For TyphenPrimitiveType
-  private parsePrimitiveType(type: ts.Type): Symbol.PrimitiveType;
-  private parsePrimitiveType(type: any): Symbol.PrimitiveType {
+  private parsePrimitiveType(type: ts.Type): Symbol.PrimitiveType {
     let name: string;
 
     if (this.checkFlags(type.flags, ts.TypeFlags.String)) {
@@ -667,10 +664,15 @@ export default class TypeScriptParser {
       name = 'null';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Undefined)) {
       name = 'undefined';
+    // any, never and object types are not really a Primitive Type, but those are
+    // treated as a Primitive Type for convenience.
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Never)) {
       name = 'never';
     } else if (this.checkFlags(type.flags, ts.TypeFlags.Any)) {
       name = 'any';
+    } else if (this.checkFlags(type.flags, ts.TypeFlags.NonPrimitive)) {
+      name = 'object';
+    // For TyphenPrimitiveType
     } else if (type.symbol) {
       name = type.symbol.name;
     } else {

@@ -70,7 +70,7 @@ describe('TypeScriptParser', () => {
           // TypeParameter
           'Type.T', 'Type.T', 'Type.T', 'Type.T', 'Type.P',
           // PrimitiveType
-          'boolean', 'number', 'symbol', 'string', 'void', 'any', 'integer',
+          'boolean', 'number', 'symbol', 'string', 'void', 'any', 'integer', 'object',
           // Decorator
           'Type.TFunction', 'Type.classDecorator', 'Type.DecoratedClass',
           // Type Guard
