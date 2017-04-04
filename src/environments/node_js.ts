@@ -13,7 +13,7 @@ import { Environment } from './environment';
 export default class NodeJsEnvironment implements Environment {
   currentDirectory: string;
   useCaseSensitiveFileNames: boolean = false;
-  defaultLibFileName: string = '@@__defaultLibFile.d.ts';
+  defaultLibFileName: string;
 
   private libFilePattern: RegExp = new RegExp('^lib\.[a-z0-9.]+\.d\.ts$');
   libFileNames: string[];
@@ -26,6 +26,7 @@ export default class NodeJsEnvironment implements Environment {
       defaultLibFileName?: string) {
     this.currentDirectory = path.resolve(currentDirectory);
     this.libFileNames = this.getLibFileNames(scriptTarget, defaultLibFileName, lib);
+    this.defaultLibFileName = this.resolveTSLibPath('@@__typhen.lib.d.ts');
   }
 
   readFile(fileName: string): string {

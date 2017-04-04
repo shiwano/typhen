@@ -1,6 +1,7 @@
 import '../../test_helper';
 
 import * as fs from 'fs';
+import * as path from 'path';
 import * as pathExists from 'path-exists';
 import * as glob from 'glob';
 import * as ts from 'typescript';
@@ -33,7 +34,8 @@ describe('NodeJsEnvironment', () => {
   });
 
   it('should have defaultLibFileName', () => {
-    assert(typeof instance.defaultLibFileName === 'string');
+    const typeScriptDir = path.dirname(require.resolve('typescript'));
+    assert(_.startsWith(instance.defaultLibFileName, typeScriptDir));
   });
 
   describe('#writeFile', () => {
