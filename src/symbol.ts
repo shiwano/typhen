@@ -476,7 +476,6 @@ export class TypeReference {
   }
 }
 
-/** @internal */
 export class ClassOrInterface extends ObjectLikeType {
   constructorSignatures: Signature[] = [];
   callSignatures: Signature[] = [];
